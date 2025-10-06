@@ -1,23 +1,37 @@
-const { app, BrowserWindow, Menu, shell } = require('electron');
+const { app, BrowserWindow, Menu, shell, dialog, ipcMain } = require('electron');
 const path = require('path');
+const SettingsManager = require('./lib/settings');
+const DatabaseManager = require('./lib/database');
+
+// Initialize managers
+let settingsManager;
+let databaseManager;
+let mainWindow;
 
 function createWindow() {
+  // Load saved window size or use defaults
+  const windowSize = settingsManager.get('windowSize');
+  
   const win = new BrowserWindow({
-    width: 1280,
-    height: 720,
+    width: windowSize.width,
+    height: windowSize.height,
     minWidth: 800,
     minHeight: 600,
     webPreferences: {
       nodeIntegration: false,
       contextIsolation: true,
       enableRemoteModule: false,
-      webSecurity: true
+      webSecurity: true,
+      preload: path.join(__dirname, 'preload.js') // We'll create this
     },
-    icon: path.join(__dirname, 'assets/icon.png'), // Optional: add app icon
-    show: false, // Don't show until ready
+    icon: path.join(__dirname, 'assets/icon.ico'),
+    show: false,
     titleBarStyle: 'default',
     autoHideMenuBar: false
   });
+
+  // Save window reference
+  mainWindow = win;
 
   win.loadFile('dist/index.html');
   
@@ -25,6 +39,15 @@ function createWindow() {
   win.once('ready-to-show', () => {
     win.show();
     win.focus();
+    
+    // Update last opened time
+    settingsManager.set('lastOpened', new Date().toISOString());
+  });
+
+  // Save window size when it changes
+  win.on('resize', () => {
+    const [width, height] = win.getSize();
+    settingsManager.set('windowSize', { width, height });
   });
 
   // Handle external links
@@ -50,12 +73,93 @@ function createMenu() {
         {
           label: 'About ForTheWeebs',
           click: () => {
-            require('electron').dialog.showMessageBox({
+            const stats = databaseManager.getStats();
+            const settings = settingsManager.getAll();
+            dialog.showMessageBox(mainWindow, {
               type: 'info',
               title: 'About ForTheWeebs',
               message: 'ForTheWeebs v1.0.0',
-              detail: 'A modern desktop application for anime enthusiasts.\n\nBuilt with Electron and Vite.'
+              detail: `A modern desktop application for anime enthusiasts.
+
+📊 Your Stats:
+• Anime Watched: ${stats.totalWatched}
+• Total Episodes: ${stats.totalEpisodes}
+• Hours Watched: ${stats.totalHours}h
+• Average Rating: ${stats.averageRating}/10
+
+🎨 Theme: ${settings.theme}
+📍 Last Opened: ${new Date(settings.lastOpened).toLocaleDateString()}
+
+Built with Electron and Vite.`
+
             });
+          }
+        },
+        { type: 'separator' },
+        {
+          label: 'Settings',
+          accelerator: 'CmdOrCtrl+,',
+          click: () => {
+            // Open settings window - we'll implement this
+            createSettingsWindow();
+          }
+        },
+        {
+          label: 'Export Data',
+          click: async () => {
+            const result = await dialog.showSaveDialog(mainWindow, {
+              title: 'Export Anime Data',
+              defaultPath: 'fortheweebs-export.json',
+              filters: [
+                { name: 'JSON Files', extensions: ['json'] },
+                { name: 'All Files', extensions: ['*'] }
+              ]
+            });
+            
+            if (!result.canceled) {
+              const fs = require('fs');
+              try {
+                fs.writeFileSync(result.filePath, databaseManager.exportData());
+                dialog.showMessageBox(mainWindow, {
+                  type: 'info',
+                  title: 'Export Successful',
+                  message: 'Your anime data has been exported successfully!'
+                });
+              } catch (error) {
+                dialog.showErrorBox('Export Failed', 'Failed to export data: ' + error.message);
+              }
+            }
+          }
+        },
+        {
+          label: 'Import Data',
+          click: async () => {
+            const result = await dialog.showOpenDialog(mainWindow, {
+              title: 'Import Anime Data',
+              filters: [
+                { name: 'JSON Files', extensions: ['json'] },
+                { name: 'All Files', extensions: ['*'] }
+              ]
+            });
+            
+            if (!result.canceled && result.filePaths.length > 0) {
+              const fs = require('fs');
+              try {
+                const data = fs.readFileSync(result.filePaths[0], 'utf-8');
+                if (databaseManager.importData(data)) {
+                  dialog.showMessageBox(mainWindow, {
+                    type: 'info',
+                    title: 'Import Successful',
+                    message: 'Your anime data has been imported successfully!'
+                  });
+                  mainWindow.reload();
+                } else {
+                  throw new Error('Invalid data format');
+                }
+              } catch (error) {
+                dialog.showErrorBox('Import Failed', 'Failed to import data: ' + error.message);
+              }
+            }
           }
         },
         { type: 'separator' },
@@ -106,7 +210,102 @@ function createMenu() {
   Menu.setApplicationMenu(menu);
 }
 
+// Create settings window
+function createSettingsWindow() {
+  const settingsWindow = new BrowserWindow({
+    width: 600,
+    height: 500,
+    parent: mainWindow,
+    modal: true,
+    show: false,
+    webPreferences: {
+      nodeIntegration: false,
+      contextIsolation: true,
+      preload: path.join(__dirname, 'preload.js')
+    }
+  });
+
+  settingsWindow.loadFile('settings.html'); // We'll create this
+  settingsWindow.once('ready-to-show', () => {
+    settingsWindow.show();
+  });
+}
+
+// IPC Handlers for communication with renderer
+function setupIPC() {
+  // Settings IPC
+  ipcMain.handle('get-settings', () => {
+    return settingsManager.getAll();
+  });
+
+  ipcMain.handle('update-settings', (event, updates) => {
+    settingsManager.update(updates);
+    return settingsManager.getAll();
+  });
+
+  // Database IPC
+  ipcMain.handle('get-all-anime', () => {
+    return databaseManager.getAllAnime();
+  });
+
+  ipcMain.handle('add-anime', (event, anime) => {
+    return databaseManager.addAnime(anime);
+  });
+
+  ipcMain.handle('update-anime', (event, id, updates) => {
+    return databaseManager.updateAnime(id, updates);
+  });
+
+  ipcMain.handle('delete-anime', (event, id) => {
+    return databaseManager.deleteAnime(id);
+  });
+
+  ipcMain.handle('search-anime', (event, query) => {
+    return databaseManager.searchAnime(query);
+  });
+
+  ipcMain.handle('get-stats', () => {
+    return databaseManager.getStats();
+  });
+
+  ipcMain.handle('get-watchlist', () => {
+    return databaseManager.getWatchlist();
+  });
+
+  ipcMain.handle('add-to-watchlist', (event, animeId) => {
+    databaseManager.addToWatchlist(animeId);
+    return true;
+  });
+
+  ipcMain.handle('remove-from-watchlist', (event, animeId) => {
+    databaseManager.removeFromWatchlist(animeId);
+    return true;
+  });
+
+  ipcMain.handle('get-favorites', () => {
+    return databaseManager.getFavorites();
+  });
+
+  ipcMain.handle('add-to-favorites', (event, animeId) => {
+    databaseManager.addToFavorites(animeId);
+    return true;
+  });
+
+  ipcMain.handle('remove-from-favorites', (event, animeId) => {
+    databaseManager.removeFromFavorites(animeId);
+    return true;
+  });
+}
+
 app.whenReady().then(() => {
+  // Initialize managers
+  settingsManager = new SettingsManager();
+  databaseManager = new DatabaseManager();
+  
+  // Setup IPC
+  setupIPC();
+  
+  // Create UI
   createMenu();
   createWindow();
 });
