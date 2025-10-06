@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "main": "electron.js",
   "scripts": {
+    "start": "electron .",
     "dev": "vite",
     "build": "vite build",
     "package": "electron-packager . Fortheweebs --platform=win32 --arch=x64 --out=release-build"
