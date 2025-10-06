@@ -5,13 +5,19 @@
   "scripts": {
     "start": "electron .",
     "dev": "vite",
+    "dev:electron": "concurrently \"npm run dev\" \"wait-on http://localhost:5173 && electron .\"",
     "build": "vite build",
-    "package": "electron-packager . Fortheweebs --platform=win32 --arch=x64 --out=release-build"
+    "build:all": "npm run build && npm run package",
+    "package": "electron-packager . Fortheweebs --platform=win32 --arch=x64 --out=release-build",
+    "package:all": "npm run build && npm run package -- --overwrite",
+    "clean": "rimraf dist release-build"
   },
   "devDependencies": {
     "concurrently": "^9.2.1",
     "electron": "^28.1.0",
     "electron-packager": "^17.1.2",
-    "vite": "^5.0.0"
+    "rimraf": "^5.0.5",
+    "vite": "^5.0.0",
+    "wait-on": "^7.2.0"
   }
 }
