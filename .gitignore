@@ -51,3 +51,5 @@ app/dist/
 
 # Large binary files (your code.txt seems to be a large PDF)
 code.txt
+# Project archives
+*.zip
