@@ -1,0 +1,2 @@
+const path = require('path');
+win.loadFile(path.join(__dirname, 'dist', 'index.html'));

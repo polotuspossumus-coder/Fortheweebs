@@ -1,0 +1,16 @@
+{
+  "name": "fortheweebs",
+  "version": "1.0.0",
+  "main": "electron.js",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "package": "electron-packager . Fortheweebs --platform=win32 --arch=x64 --out=release-build"
+  },
+  "devDependencies": {
+    "concurrently": "^9.2.1",
+    "electron": "^28.1.0",
+    "electron-packager": "^17.1.2",
+    "vite": "^5.0.0"
+  }
+}
