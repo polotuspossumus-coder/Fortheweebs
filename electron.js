@@ -2,10 +2,12 @@ const { app, BrowserWindow, Menu, shell, dialog, ipcMain } = require('electron')
 const path = require('path');
 const SettingsManager = require('./lib/settings');
 const DatabaseManager = require('./lib/database');
+const APIManager = require('./lib/api');
 
 // Initialize managers
 let settingsManager;
 let databaseManager;
+let apiManager;
 let mainWindow;
 
 function createWindow() {
@@ -295,12 +297,85 @@ function setupIPC() {
     databaseManager.removeFromFavorites(animeId);
     return true;
   });
+
+  // API IPC Handlers
+  ipcMain.handle('search-api-anime', async (event, query, limit) => {
+    try {
+      return await apiManager.searchAnime(query, limit);
+    } catch (error) {
+      console.error('API search error:', error);
+      return { error: error.message };
+    }
+  });
+
+  ipcMain.handle('get-anime-details', async (event, animeId) => {
+    try {
+      return await apiManager.getAnimeDetails(animeId);
+    } catch (error) {
+      console.error('API details error:', error);
+      return { error: error.message };
+    }
+  });
+
+  ipcMain.handle('get-top-anime', async (event, type, limit) => {
+    try {
+      return await apiManager.getTopAnime(type, limit);
+    } catch (error) {
+      console.error('API top anime error:', error);
+      return { error: error.message };
+    }
+  });
+
+  ipcMain.handle('get-seasonal-anime', async (event, year, season, limit) => {
+    try {
+      return await apiManager.getSeasonalAnime(year, season, limit);
+    } catch (error) {
+      console.error('API seasonal anime error:', error);
+      return { error: error.message };
+    }
+  });
+
+  ipcMain.handle('get-random-anime', async (event) => {
+    try {
+      return await apiManager.getRandomAnime();
+    } catch (error) {
+      console.error('API random anime error:', error);
+      return { error: error.message };
+    }
+  });
+
+  ipcMain.handle('add-api-anime-to-library', async (event, apiAnime) => {
+    try {
+      // Convert API anime format to local database format
+      const localAnime = {
+        title: apiAnime.title,
+        englishTitle: apiAnime.englishTitle || '',
+        episodes: apiAnime.episodes || 0,
+        status: 'Not Started',
+        rating: 0,
+        genres: apiAnime.genres || [],
+        description: apiAnime.synopsis || '',
+        image: apiAnime.image || '',
+        apiId: apiAnime.id,
+        apiScore: apiAnime.score || 0,
+        year: apiAnime.year || null,
+        type: apiAnime.type || '',
+        studios: apiAnime.studios || []
+      };
+      
+      return databaseManager.addAnime(localAnime);
+    } catch (error) {
+      console.error('Error adding API anime to library:', error);
+      return { error: error.message };
+    }
+  });
 }
 
 app.whenReady().then(() => {
   // Initialize managers
   settingsManager = new SettingsManager();
   databaseManager = new DatabaseManager();
+  apiManager = new APIManager();
   
   // Setup IPC
   setupIPC();

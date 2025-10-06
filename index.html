@@ -11,7 +11,25 @@
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         color: white;
-        display: flex;
+          <div class="features">
+          <div class="feature-card" onclick="showTab('library')">
+            <div class="feature-icon">📚</div>
+            <div class="feature-title">My Library</div>
+            <div class="feature-desc">Manage your anime collection</div>
+          </div>
+          
+          <div class="feature-card" onclick="showTab('discover')">
+            <div class="feature-icon">🌟</div>
+            <div class="feature-title">Discover</div>
+            <div class="feature-desc">Find new anime to watch</div>
+          </div>
+          
+          <div class="feature-card" onclick="showTab('stats')">
+            <div class="feature-icon">📊</div>
+            <div class="feature-title">Statistics</div>
+            <div class="feature-desc">View your viewing stats</div>
+          </div>
+        </div>;
         justify-content: center;
         align-items: center;
         min-height: 100vh;
@@ -369,7 +387,177 @@
         font-size: 1.5rem;
       }
 
-      /* Responsive Design */
+      /* Discover Tab Styles */
+      .discover-sections {
+        display: flex;
+        flex-direction: column;
+        gap: 3rem;
+      }
+
+      .discover-section {
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 20px;
+        padding: 2rem;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      .discover-section h3 {
+        margin: 0 0 1.5rem 0;
+        text-align: center;
+        font-size: 1.5rem;
+        color: #4ade80;
+      }
+
+      .category-tabs {
+        display: flex;
+        gap: 0.5rem;
+        margin-bottom: 2rem;
+        justify-content: center;
+        flex-wrap: wrap;
+      }
+
+      .category-btn {
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        color: white;
+        padding: 8px 16px;
+        border-radius: 15px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-size: 12px;
+      }
+
+      .category-btn:hover, .category-btn.active {
+        background: linear-gradient(45deg, #4ade80, #22c55e);
+        transform: translateY(-1px);
+      }
+
+      .season-controls {
+        display: flex;
+        gap: 1rem;
+        margin-bottom: 2rem;
+        justify-content: center;
+        flex-wrap: wrap;
+      }
+
+      .season-controls select {
+        padding: 8px 12px;
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        border-radius: 10px;
+        background: rgba(255, 255, 255, 0.1);
+        color: white;
+        font-size: 14px;
+      }
+
+      .season-controls select option {
+        background: #1f2937;
+        color: white;
+      }
+
+      .api-anime-item {
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 15px;
+        padding: 1.5rem;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        transition: all 0.3s ease;
+        cursor: pointer;
+        position: relative;
+      }
+
+      .api-anime-item:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+      }
+
+      .api-anime-image {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+        border-radius: 10px;
+        margin-bottom: 1rem;
+      }
+
+      .api-anime-title {
+        font-size: 1.1rem;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+        color: #4ade80;
+        line-height: 1.3;
+      }
+
+      .api-anime-score {
+        background: linear-gradient(45deg, #fbbf24, #f59e0b);
+        color: white;
+        padding: 4px 8px;
+        border-radius: 10px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        display: inline-block;
+        margin-bottom: 0.5rem;
+      }
+
+      .api-anime-details {
+        font-size: 0.9rem;
+        opacity: 0.9;
+        margin-bottom: 1rem;
+      }
+
+      .api-anime-genres {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.25rem;
+        margin-bottom: 1rem;
+      }
+
+      .genre-tag {
+        background: rgba(139, 69, 19, 0.3);
+        color: #fbbf24;
+        padding: 2px 8px;
+        border-radius: 10px;
+        font-size: 0.7rem;
+        font-weight: 500;
+      }
+
+      .add-to-library-btn {
+        background: linear-gradient(45deg, #10b981, #059669);
+        border: none;
+        color: white;
+        padding: 8px 16px;
+        border-radius: 15px;
+        cursor: pointer;
+        font-weight: 600;
+        font-size: 0.9rem;
+        transition: all 0.3s ease;
+        width: 100%;
+      }
+
+      .add-to-library-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+      }
+
+      .add-to-library-btn:disabled {
+        background: #6b7280;
+        cursor: not-allowed;
+        transform: none;
+      }
+
+      .loading-spinner {
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        border-radius: 50%;
+        border-top-color: #4ade80;
+        animation: spin 1s linear infinite;
+        margin-right: 0.5rem;
+      }
+
+      @keyframes spin {
+        to { transform: rotate(360deg); }
+      }
+
+      /* Responsive Design Enhancements */
       @media (max-width: 768px) {
         .container {
           padding: 2rem 1rem;
@@ -408,6 +596,7 @@
       <div class="nav-tabs">
         <button class="nav-tab active" onclick="showTab('home')">🏠 Home</button>
         <button class="nav-tab" onclick="showTab('library')">📚 Library</button>
+        <button class="nav-tab" onclick="showTab('discover')">🌟 Discover</button>
         <button class="nav-tab" onclick="showTab('watchlist')">👀 Watchlist</button>
         <button class="nav-tab" onclick="showTab('stats')">📊 Stats</button>
       </div>
@@ -451,6 +640,62 @@
         </div>
         <div id="animeGrid" class="anime-grid">
           <!-- Anime items will be loaded here -->
+        </div>
+      </div>
+
+      <!-- Discover Tab -->
+      <div id="discoverTab" class="tab-content">
+        <div class="section-header">
+          <h2>🌟 Discover Anime</h2>
+          <p>Find your next favorite anime</p>
+        </div>
+        
+        <div class="discover-sections">
+          <!-- Search Section -->
+          <div class="discover-section">
+            <h3>🔍 Search MyAnimeList</h3>
+            <div class="search-bar">
+              <input type="text" id="apiSearchInput" placeholder="Search for anime..." onkeyup="handleAPISearch(event)">
+              <button class="btn" onclick="searchAPIAnime()">Search</button>
+              <button class="btn secondary" onclick="getRandomAnime()">🎲 Random</button>
+            </div>
+            <div id="apiSearchResults" class="anime-grid">
+              <!-- API search results will appear here -->
+            </div>
+          </div>
+
+          <!-- Top Anime Section -->
+          <div class="discover-section">
+            <h3>🏆 Top Anime</h3>
+            <div class="category-tabs">
+              <button class="category-btn active" onclick="loadTopAnime('all')">All Time</button>
+              <button class="category-btn" onclick="loadTopAnime('airing')">Currently Airing</button>
+              <button class="category-btn" onclick="loadTopAnime('upcoming')">Upcoming</button>
+              <button class="category-btn" onclick="loadTopAnime('bypopularity')">Most Popular</button>
+            </div>
+            <div id="topAnimeGrid" class="anime-grid">
+              <!-- Top anime will be loaded here -->
+            </div>
+          </div>
+
+          <!-- Seasonal Anime Section -->
+          <div class="discover-section">
+            <h3>📅 Seasonal Anime</h3>
+            <div class="season-controls">
+              <select id="seasonYear" onchange="loadSeasonalAnime()">
+                <!-- Years will be populated by JavaScript -->
+              </select>
+              <select id="seasonSelect" onchange="loadSeasonalAnime()">
+                <option value="winter">❄️ Winter</option>
+                <option value="spring">🌸 Spring</option>
+                <option value="summer">☀️ Summer</option>
+                <option value="fall">🍂 Fall</option>
+              </select>
+            </div>
+            <div id="seasonalAnimeGrid" class="anime-grid">
+              <!-- Seasonal anime will be loaded here -->
+            </div>
+          </div>
         </div>
       </div>
 
@@ -511,6 +756,7 @@
       let currentWatchlist = [];
       let currentFavorites = [];
       let currentStats = {};
+      let apiSearchTimeout = null;
 
       // Initialize app
       document.addEventListener('DOMContentLoaded', async () => {
@@ -520,6 +766,9 @@
           
           // Setup animations
           setupAnimations();
+          
+          // Initialize discover tab
+          initializeDiscoverTab();
           
           // Show notification
           if (window.electronAPI) {
@@ -552,6 +801,12 @@
         switch(tabName) {
           case 'library':
             displayAnimeLibrary();
+            break;
+          case 'discover':
+            if (!document.getElementById('discoverTab').hasAttribute('data-loaded')) {
+              loadDiscoverContent();
+              document.getElementById('discoverTab').setAttribute('data-loaded', 'true');
+            }
             break;
           case 'watchlist':
             displayWatchlist();
@@ -816,6 +1071,259 @@
           card.style.animationDelay = `${index * 0.1}s`;
           card.style.animation = 'fadeInUp 0.6s ease forwards';
         });
+      }
+
+      // Initialize Discover Tab
+      function initializeDiscoverTab() {
+        // Populate year dropdown
+        const currentYear = new Date().getFullYear();
+        const yearSelect = document.getElementById('seasonYear');
+        for (let year = currentYear; year >= 1990; year--) {
+          const option = document.createElement('option');
+          option.value = year;
+          option.textContent = year;
+          if (year === currentYear) option.selected = true;
+          yearSelect.appendChild(option);
+        }
+
+        // Set current season
+        const seasonSelect = document.getElementById('seasonSelect');
+        const currentMonth = new Date().getMonth() + 1;
+        let currentSeason = 'winter';
+        if (currentMonth >= 4 && currentMonth <= 6) currentSeason = 'spring';
+        else if (currentMonth >= 7 && currentMonth <= 9) currentSeason = 'summer';
+        else if (currentMonth >= 10 && currentMonth <= 12) currentSeason = 'fall';
+        seasonSelect.value = currentSeason;
+      }
+
+      // Load Discover Content
+      async function loadDiscoverContent() {
+        // Load top anime by default
+        await loadTopAnime('all');
+        
+        // Load current seasonal anime
+        await loadSeasonalAnime();
+      }
+
+      // API Search Functions
+      function handleAPISearch(event) {
+        if (event.key === 'Enter') {
+          searchAPIAnime();
+        } else {
+          // Debounce search
+          clearTimeout(apiSearchTimeout);
+          apiSearchTimeout = setTimeout(searchAPIAnime, 500);
+        }
+      }
+
+      async function searchAPIAnime() {
+        const query = document.getElementById('apiSearchInput').value.trim();
+        const resultsContainer = document.getElementById('apiSearchResults');
+        
+        if (!query || query.length < 2) {
+          resultsContainer.innerHTML = '';
+          return;
+        }
+
+        if (!window.electronAPI) {
+          resultsContainer.innerHTML = '<div class="empty-state"><h3>API not available</h3></div>';
+          return;
+        }
+
+        // Show loading
+        resultsContainer.innerHTML = '<div class="empty-state"><div class="loading-spinner"></div>Searching...</div>';
+
+        try {
+          const results = await window.electronAPI.searchAPIAnime(query, 12);
+          
+          if (results.error) {
+            resultsContainer.innerHTML = `<div class="empty-state"><h3>❌ Error</h3><p>${results.error}</p></div>`;
+            return;
+          }
+
+          if (!results || results.length === 0) {
+            resultsContainer.innerHTML = '<div class="empty-state"><h3>🔍 No results found</h3><p>Try a different search term</p></div>';
+            return;
+          }
+
+          displayAPIResults(results, resultsContainer);
+        } catch (error) {
+          console.error('Search error:', error);
+          resultsContainer.innerHTML = '<div class="empty-state"><h3>❌ Search failed</h3><p>Please try again</p></div>';
+        }
+      }
+
+      async function getRandomAnime() {
+        const resultsContainer = document.getElementById('apiSearchResults');
+        
+        if (!window.electronAPI) {
+          resultsContainer.innerHTML = '<div class="empty-state"><h3>API not available</h3></div>';
+          return;
+        }
+
+        resultsContainer.innerHTML = '<div class="empty-state"><div class="loading-spinner"></div>Finding random anime...</div>';
+
+        try {
+          const anime = await window.electronAPI.getRandomAnime();
+          
+          if (anime.error) {
+            resultsContainer.innerHTML = `<div class="empty-state"><h3>❌ Error</h3><p>${anime.error}</p></div>`;
+            return;
+          }
+
+          displayAPIResults([anime], resultsContainer);
+          document.getElementById('apiSearchInput').value = anime.title;
+        } catch (error) {
+          console.error('Random anime error:', error);
+          resultsContainer.innerHTML = '<div class="empty-state"><h3>❌ Failed to get random anime</h3></div>';
+        }
+      }
+
+      async function loadTopAnime(type) {
+        const resultsContainer = document.getElementById('topAnimeGrid');
+        
+        // Update active button
+        document.querySelectorAll('.category-btn').forEach(btn => btn.classList.remove('active'));
+        event.target.classList.add('active');
+
+        if (!window.electronAPI) {
+          resultsContainer.innerHTML = '<div class="empty-state"><h3>API not available</h3></div>';
+          return;
+        }
+
+        resultsContainer.innerHTML = '<div class="empty-state"><div class="loading-spinner"></div>Loading top anime...</div>';
+
+        try {
+          const results = await window.electronAPI.getTopAnime(type, 12);
+          
+          if (results.error) {
+            resultsContainer.innerHTML = `<div class="empty-state"><h3>❌ Error</h3><p>${results.error}</p></div>`;
+            return;
+          }
+
+          displayAPIResults(results, resultsContainer);
+        } catch (error) {
+          console.error('Top anime error:', error);
+          resultsContainer.innerHTML = '<div class="empty-state"><h3>❌ Failed to load top anime</h3></div>';
+        }
+      }
+
+      async function loadSeasonalAnime() {
+        const resultsContainer = document.getElementById('seasonalAnimeGrid');
+        const year = document.getElementById('seasonYear').value;
+        const season = document.getElementById('seasonSelect').value;
+
+        if (!window.electronAPI) {
+          resultsContainer.innerHTML = '<div class="empty-state"><h3>API not available</h3></div>';
+          return;
+        }
+
+        resultsContainer.innerHTML = '<div class="empty-state"><div class="loading-spinner"></div>Loading seasonal anime...</div>';
+
+        try {
+          const results = await window.electronAPI.getSeasonalAnime(year, season, 12);
+          
+          if (results.error) {
+            resultsContainer.innerHTML = `<div class="empty-state"><h3>❌ Error</h3><p>${results.error}</p></div>`;
+            return;
+          }
+
+          displayAPIResults(results, resultsContainer);
+        } catch (error) {
+          console.error('Seasonal anime error:', error);
+          resultsContainer.innerHTML = '<div class="empty-state"><h3>❌ Failed to load seasonal anime</h3></div>';
+        }
+      }
+
+      function displayAPIResults(results, container) {
+        if (!results || results.length === 0) {
+          container.innerHTML = '<div class="empty-state"><h3>🔍 No results found</h3></div>';
+          return;
+        }
+
+        container.innerHTML = results.map(anime => `
+          <div class="api-anime-item">
+            ${anime.image ? `<img src="${anime.image}" alt="${anime.title}" class="api-anime-image" onerror="this.style.display='none'">` : ''}
+            <div class="api-anime-title">${anime.title}</div>
+            ${anime.englishTitle && anime.englishTitle !== anime.title ? `<div class="api-anime-english">${anime.englishTitle}</div>` : ''}
+            ${anime.score ? `<div class="api-anime-score">⭐ ${anime.score}</div>` : ''}
+            <div class="api-anime-details">
+              ${anime.episodes ? `<div>Episodes: ${anime.episodes}</div>` : ''}
+              ${anime.year ? `<div>Year: ${anime.year}</div>` : ''}
+              ${anime.type ? `<div>Type: ${anime.type}</div>` : ''}
+              ${anime.status ? `<div>Status: ${anime.status}</div>` : ''}
+            </div>
+            ${anime.genres && anime.genres.length > 0 ? `
+              <div class="api-anime-genres">
+                ${anime.genres.slice(0, 3).map(genre => `<span class="genre-tag">${genre}</span>`).join('')}
+              </div>
+            ` : ''}
+            <button class="add-to-library-btn" onclick="addAPIAnimeToLibrary(${anime.id}, this)">
+              + Add to Library
+            </button>
+          </div>
+        `).join('');
+      }
+
+      async function addAPIAnimeToLibrary(animeId, buttonElement) {
+        if (!window.electronAPI) {
+          alert('API not available');
+          return;
+        }
+
+        const originalText = buttonElement.textContent;
+        buttonElement.disabled = true;
+        buttonElement.innerHTML = '<div class="loading-spinner"></div>Adding...';
+
+        try {
+          // First get detailed anime info
+          const animeDetails = await window.electronAPI.getAnimeDetails(animeId);
+          
+          if (animeDetails.error) {
+            throw new Error(animeDetails.error);
+          }
+
+          // Check if already in library
+          const existingAnime = currentAnime.find(a => a.apiId === animeId);
+          if (existingAnime) {
+            buttonElement.innerHTML = '✅ Already in Library';
+            buttonElement.style.background = '#6b7280';
+            return;
+          }
+
+          // Add to library
+          const result = await window.electronAPI.addAPIAnimeToLibrary(animeDetails);
+          
+          if (result.error) {
+            throw new Error(result.error);
+          }
+
+          // Update local data
+          currentAnime.push(result);
+          currentStats = await window.electronAPI.getStats();
+          updateStatusText();
+
+          // Update button
+          buttonElement.innerHTML = '✅ Added to Library';
+          buttonElement.style.background = '#10b981';
+          
+          // Show notification
+          window.electronAPI.showNotification(
+            'Anime Added', 
+            `${animeDetails.title} has been added to your library!`
+          );
+
+        } catch (error) {
+          console.error('Error adding anime:', error);
+          buttonElement.innerHTML = '❌ Failed';
+          buttonElement.style.background = '#ef4444';
+          
+          setTimeout(() => {
+            buttonElement.innerHTML = originalText;
+            buttonElement.style.background = '';
+            buttonElement.disabled = false;
+          }, 2000);
+        }
       }
 
       // CSS animation
