@@ -1,0 +1,42 @@
+
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Build All: Backend",
+      "type": "shell",
+      "command": "npm run build-backend",
+      "group": "build"
+    },
+    {
+      "label": "Build All: Frontend",
+      "type": "shell",
+      "command": "npm run build-frontend",
+      "group": "build"
+    },
+    {
+      "label": "Build All: Plugins",
+      "type": "shell",
+      "command": "npm run build-plugins",
+      "group": "build"
+    },
+    {
+      "label": "Build All: Docs",
+      "type": "shell",
+      "command": "npm run build-docs",
+      "group": "build"
+    },
+    {
+      "label": "Build Everything",
+      "type": "shell",
+      "dependsOn": [
+        "Build All: Backend",
+        "Build All: Frontend",
+        "Build All: Plugins",
+        "Build All: Docs"
+      ],
+      "group": "build",
+      "isDefault": true
+    }
+  ]
+}

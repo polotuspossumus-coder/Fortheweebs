@@ -1,0 +1,39 @@
+{
+  "name": "fortheweebs-runtime",
+  "version": "1.0.0",
+  "main": "index.js",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node server.js",
+    "package:exe": "ts-node scripts/packageEXE.ts"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.75.0",
+    "chart.js": "^4.5.0",
+    "express": "^5.1.0",
+    "react-chartjs-2": "^5.3.0",
+    "stripe": "^19.1.0"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.3",
+    "eslint": "^9.37.0",
+    "ts-node": "^10.9.2"
+  },
+  "creatorId": "jacob",
+  "dashboard": {
+    "theme": "dark",
+    "modules": [
+      "overview",
+      "overlays",
+      "payments",
+      "codex",
+      "map"
+    ],
+    "defaultOverlay": "anime-stream-v2"
+  },
+  "sovereign": {
+    "remixLineage": true,
+    "badgePropagation": true,
+    "genesisProtocol": true
+  }
+}
