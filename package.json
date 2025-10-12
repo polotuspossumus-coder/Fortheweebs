@@ -1,10 +1,11 @@
 {
   "name": "fortheweebs-runtime",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "server.js",
   "type": "commonjs",
   "scripts": {
     "start": "node server.js",
+    "test": "echo \"No tests yet\" && exit 0",
     "package:exe": "ts-node scripts/packageEXE.ts"
   },
   "dependencies": {
