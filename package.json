@@ -1,4 +1,5 @@
 {
+<<<<<<< HEAD
   "name": "fortheweebs-runtime",
   "version": "1.0.0",
   "main": "server.js",
@@ -36,5 +37,27 @@
     "remixLineage": true,
     "badgePropagation": true,
     "genesisProtocol": true
+=======
+  "name": "fortheweebs",
+  "version": "1.0.0",
+  "main": "electron.js",
+  "scripts": {
+    "start": "electron .",
+    "dev": "vite",
+    "dev:electron": "concurrently \"npm run dev\" \"wait-on http://localhost:5173 && electron .\"",
+    "build": "vite build",
+    "build:all": "npm run build && npm run package",
+    "package": "electron-packager . Fortheweebs --platform=win32 --arch=x64 --out=release-build",
+    "package:all": "npm run build && npm run package -- --overwrite",
+    "clean": "rimraf dist release-build"
+  },
+  "devDependencies": {
+    "concurrently": "^9.2.1",
+    "electron": "^28.1.0",
+    "electron-packager": "^17.1.2",
+    "rimraf": "^5.0.5",
+    "vite": "^5.0.0",
+    "wait-on": "^7.2.0"
+>>>>>>> 1aad70a27340fd9e6cb6b8b1b3bf7114cf4a757b
   }
 }
