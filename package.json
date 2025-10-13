@@ -1,12 +1,11 @@
 {
-<<<<<<< HEAD
   "name": "fortheweebs-runtime",
   "version": "1.0.0",
   "main": "server.js",
   "type": "commonjs",
   "scripts": {
     "start": "node server.js",
-    "test": "echo \"No tests yet\" && exit 0",
+    "test": "jest",
     "package:exe": "ts-node scripts/packageEXE.ts"
   },
   "dependencies": {
@@ -14,12 +13,24 @@
     "chart.js": "^4.5.0",
     "express": "^5.1.0",
     "react-chartjs-2": "^5.3.0",
-    "stripe": "^19.1.0"
+    "stripe": "^19.1.0",
+    "winston": "^3.18.3"
   },
   "devDependencies": {
+    "@babel/preset-env": "^7.28.3",
+    "@babel/preset-typescript": "^7.27.1",
     "@types/express": "^5.0.3",
+    "@types/jest": "^30.0.0",
+    "babel-jest": "^30.2.0",
+    "concurrently": "^9.2.1",
+    "electron": "^28.1.0",
+    "electron-packager": "^17.1.2",
     "eslint": "^9.37.0",
-    "ts-node": "^10.9.2"
+    "jest": "^30.2.0",
+    "rimraf": "^5.0.5",
+    "ts-node": "^10.9.2",
+    "vite": "^5.0.0",
+    "wait-on": "^7.2.0"
   },
   "creatorId": "jacob",
   "dashboard": {
@@ -37,27 +48,5 @@
     "remixLineage": true,
     "badgePropagation": true,
     "genesisProtocol": true
-=======
-  "name": "fortheweebs",
-  "version": "1.0.0",
-  "main": "electron.js",
-  "scripts": {
-    "start": "electron .",
-    "dev": "vite",
-    "dev:electron": "concurrently \"npm run dev\" \"wait-on http://localhost:5173 && electron .\"",
-    "build": "vite build",
-    "build:all": "npm run build && npm run package",
-    "package": "electron-packager . Fortheweebs --platform=win32 --arch=x64 --out=release-build",
-    "package:all": "npm run build && npm run package -- --overwrite",
-    "clean": "rimraf dist release-build"
-  },
-  "devDependencies": {
-    "concurrently": "^9.2.1",
-    "electron": "^28.1.0",
-    "electron-packager": "^17.1.2",
-    "rimraf": "^5.0.5",
-    "vite": "^5.0.0",
-    "wait-on": "^7.2.0"
->>>>>>> 1aad70a27340fd9e6cb6b8b1b3bf7114cf4a757b
   }
 }

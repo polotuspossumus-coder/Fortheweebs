@@ -1,4 +1,4 @@
 module.exports = {
-  testEnvironment: 'node',
-  roots: ['<rootDir>/src', '<rootDir>/tests'],
+module.exports = {
+  
 };
