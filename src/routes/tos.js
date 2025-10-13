@@ -42,30 +42,25 @@
  * Accounts will only be terminated for posting illegal content, as required by law. No account will be taken down for copyright violations; instead, any copyright complaints or takedown requests will be directed to the creator who posted the content. The creator is responsible for removing infringing material or facing the legal consequences. The platform acts solely as a conduit and does not mediate copyright disputes. All responsibility for copyright compliance rests with the content creator.
  */
 // ...existing code...
-import express from "express";
 
 const acceptanceLog = [];
 
-const router = express.Router();
-
-// POST /api/tos/accept
-router.post("/api/tos/accept", (req, res) => {
-  const { userId, ipAddress, version } = req.body;
-  if (!userId || !ipAddress || !version) return res.status(400).json({ error: "Missing required fields" });
-  acceptanceLog.push({
-    userId,
-    timestamp: Date.now(),
-    ipAddress,
-    version,
-  });
-  res.json({ success: true });
-});
-
-// GET /api/tos/accepted/:userId
-router.get("/api/tos/accepted/:userId", (req, res) => {
-  const { userId } = req.params;
-  const history = acceptanceLog.filter((entry) => entry.userId === userId);
-  res.json({ accepted: history.length > 0, history });
-});
-
-export default router;
+export default function handler(req, res) {
+  if (req.method === "POST") {
+    const { userId, ipAddress, version } = req.body;
+    if (!userId || !ipAddress || !version) return res.status(400).json({ error: "Missing required fields" });
+    acceptanceLog.push({
+      userId,
+      timestamp: Date.now(),
+      ipAddress,
+      version,
+    });
+    return res.status(200).json({ success: true });
+  }
+  if (req.method === "GET") {
+    const { userId } = req.query;
+    const history = acceptanceLog.filter((entry) => entry.userId === userId);
+    return res.status(200).json({ accepted: history.length > 0, history });
+  }
+  res.status(405).json({ error: "Method not allowed" });
+}
