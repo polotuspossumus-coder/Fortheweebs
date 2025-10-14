@@ -1,7 +1,12 @@
 
 const signupLog = [];
 
-export default function handler(req, res) {
+// Health check endpoint for diagnostics
+function healthCheck(res) {
+  res.status(200).json({ status: "ok", message: "signup.js loaded and running" });
+}
+
+function handler(req, res) {
   try {
     if (req.method === "POST") {
       let body = req.body;
@@ -33,3 +38,5 @@ export default function handler(req, res) {
     res.status(500).json({ error: "Server error", details: err.message });
   }
 }
+
+module.exports = handler;

@@ -29,7 +29,59 @@ export const CreatorDashboard = ({ userId = "demo_user", ipAddress = "127.0.0.1"
       />
     );
   }
+    return (
+      <Tabs defaultValue="overview" className="dashboard-tabs">
+        <TabsList>
+          <TabsTrigger value="overview">Overview</TabsTrigger>
+          <TabsTrigger value="overlays">Overlays</TabsTrigger>
+          <TabsTrigger value="payments">Payments</TabsTrigger>
+          <TabsTrigger value="legal">Legal</TabsTrigger>
+          {userId === "owner" && (
+            <TabsTrigger value="earnings">Earnings</TabsTrigger>
+          )}
+        </TabsList>
+        <TabsContent value="overview">
+          <OverviewPanel />
+        </TabsContent>
+        <TabsContent value="overlays">
+          <OverlayPanel />
+        </TabsContent>
+        <TabsContent value="payments">
+          <PaymentPanel />
+        </TabsContent>
+        <TabsContent value="legal">
+          <LegalDocumentsList userId={userId} />
+        </TabsContent>
+        {userId === "owner" && (
+          <TabsContent value="earnings">
+            <OwnerEarningsPanel />
+          </TabsContent>
+        )}
+      </Tabs>
+    );
+export const OwnerEarningsPanel = () => {
+  // TODO: Replace with real backend data
+  const [topEarners, setTopEarners] = useState([
+    { username: "creator1", profit: 1200 },
+    { username: "creator2", profit: 950 },
+    { username: "creator3", profit: 800 },
+  ]);
   return (
+    <div style={{ padding: 24 }}>
+      <h2>Top Earning Creators</h2>
+      <ul>
+        {topEarners.map((c) => (
+          <li key={c.username}>
+            <strong>{c.username}</strong>: ${c.profit.toLocaleString()}
+          </li>
+        ))}
+      </ul>
+      <p style={{ marginTop: 24, color: '#888' }}>
+        Only visible to platform owner. Replace with real data for live tracking.
+      </p>
+    </div>
+  );
+};
     <Tabs defaultValue="overview" className="dashboard-tabs">
       <TabsList>
         <TabsTrigger value="overview">Overview</TabsTrigger>
@@ -70,12 +122,47 @@ export const OverlayPanel = () => {
 // Functions moved to utils/dashboardActions.js for Fast Refresh compliance
 
 // Stub panels for demonstration
-export const OverviewPanel = () => (
-  <div style={{ padding: 24 }}>
-    <h2>Overview</h2>
-    <p>Creator stats and summary will appear here.</p>
-  </div>
-);
+import { useEffect } from 'react';
+
+export const OverviewPanel = () => {
+  const [stats, setStats] = useState(null);
+
+  useEffect(() => {
+    let isMounted = true;
+    const fetchStats = async () => {
+      try {
+        // Replace with your backend endpoint if available
+        const res = await fetch('/api/stats');
+        if (!res.ok) throw new Error('Failed to fetch stats');
+        const data = await res.json();
+        if (isMounted) setStats(data);
+      } catch (err) {
+        if (isMounted) setStats({ error: err.message });
+      }
+    };
+    fetchStats();
+    const interval = setInterval(fetchStats, 5000); // Poll every 5 seconds
+    return () => {
+      isMounted = false;
+      clearInterval(interval);
+    };
+  }, []);
+
+  return (
+    <div style={{ padding: 24 }}>
+      <h2>Overview</h2>
+      {stats ? (
+        stats.error ? (
+          <p style={{ color: 'red' }}>Error: {stats.error}</p>
+        ) : (
+          <pre>{JSON.stringify(stats, null, 2)}</pre>
+        )
+      ) : (
+        <p>Loading live stats...</p>
+      )}
+    </div>
+  );
+};
 
 export const PaymentPanel = () => (
   <div style={{ padding: 24 }}>
