@@ -18,7 +18,7 @@ export const RemixMap = ({ badges }) => {
   const angleStep = (2 * Math.PI) / badges.length;
 
   return (
-    <svg width={300} height={300} style={{ background: "#111", borderRadius: "12px" }}>
+    <svg width={300} height={300} className="remix-map-svg">
       <circle cx={center.x} cy={center.y} r={4} fill="#fff" />
       {badges.map((badge, i) => {
         const angle = i * angleStep;

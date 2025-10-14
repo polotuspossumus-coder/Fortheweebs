@@ -43,12 +43,23 @@
  */
 // ...existing code...
 
-const acceptanceLog = [];
+let acceptanceLog = [];
 
-export default function handler(req, res) {
+export default async function handler(req, res) {
   if (req.method === "POST") {
-    const { userId, ipAddress, version } = req.body;
-    if (!userId || !ipAddress || !version) return res.status(400).json({ error: "Missing required fields" });
+    let body = req.body;
+    // Vercel may parse body as string, so handle JSON
+    if (typeof body === "string") {
+      try {
+        body = JSON.parse(body);
+      } catch {
+        return res.status(400).json({ error: "Invalid JSON" });
+      }
+    }
+    const { userId, ipAddress, version } = body || {};
+    if (!userId || !ipAddress || !version) {
+      return res.status(400).json({ error: "Missing required fields" });
+    }
     acceptanceLog.push({
       userId,
       timestamp: Date.now(),
@@ -58,7 +69,7 @@ export default function handler(req, res) {
     return res.status(200).json({ success: true });
   }
   if (req.method === "GET") {
-    const { userId } = req.query;
+    const userId = req.query?.userId || (req.query && req.query.get("userId"));
     const history = acceptanceLog.filter((entry) => entry.userId === userId);
     return res.status(200).json({ accepted: history.length > 0, history });
   }

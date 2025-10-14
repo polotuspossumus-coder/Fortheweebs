@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 // import { motion } from 'framer-motion';
 import { remixConfig } from '../config/remix.config';
 import { supabase } from '../lib/supabase';
+import "./OverlayVisualizer.css";
 
 export const OverlayVisualizer = ({ userId }) => {
   const [preset, setPreset] = useState(null);
@@ -22,11 +23,8 @@ export const OverlayVisualizer = ({ userId }) => {
   if (!preset) return <p>Loading overlay preview...</p>;
 
   return (
-    <motion.div
-      className="overlay-preview"
-      initial={{ opacity: 0, scale: 0.95 }}
-      animate={{ opacity: 1, scale: 1 }}
-      transition={{ duration: 0.4, ease: 'easeOut' }}
+    <div
+      className="overlay-visualizer"
       style={{
         backgroundImage: `url(${preset.background_url})`,
         color: preset.text_color,
@@ -36,6 +34,6 @@ export const OverlayVisualizer = ({ userId }) => {
       <h2>{preset.title}</h2>
       <p>{preset.subtitle}</p>
       <span className="remix-anchor">🔗 {remixConfig.remixAnchor}</span>
-    </motion.div>
+    </div>
   );
 };

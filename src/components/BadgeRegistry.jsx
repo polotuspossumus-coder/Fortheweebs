@@ -11,36 +11,21 @@
  * @param {{ badges: RemixBadge[] }} props
  */
 import React from "react";
+import "./BadgeRegistry.css";
 
 export const BadgeRegistry = ({ badges }) => {
   return (
-    <div
-      style={{
-        display: "grid",
-        gridTemplateColumns: "repeat(auto-fill, minmax(160px, 1fr))",
-        gap: "16px",
-        padding: "16px",
-      }}
-    >
+    <div className="badge-list">
       {badges.map((badge) => (
         <div
           key={badge.lineageHash}
-          style={{
-            backgroundColor: badge.badge.color,
-            borderRadius: "8px",
-            padding: "12px",
-            color: "#fff",
-            boxShadow: "0 2px 6px rgba(0,0,0,0.2)",
-          }}
+          className="badge-item"
+          style={{ backgroundColor: badge.badge.color }}
         >
-          <div style={{ fontSize: "1.5rem" }}>{badge.badge.icon}</div>
-          <div style={{ fontWeight: "bold", marginTop: "4px" }}>{badge.badge.label}</div>
-          <div style={{ fontSize: "0.75rem", opacity: 0.8 }}>
-            {new Date(badge.timestamp).toLocaleDateString()}
-          </div>
-          <div style={{ fontSize: "0.6rem", wordBreak: "break-word", marginTop: "6px" }}>
-            {badge.lineageHash.slice(0, 12)}…
-          </div>
+          <div className="badge-icon">{badge.badge.icon}</div>
+          <div className="badge-label">{badge.badge.label}</div>
+          <div className="badge-desc">{new Date(badge.timestamp).toLocaleDateString()}</div>
+          <div className="badge-id">{badge.lineageHash.slice(0, 12)}…</div>
         </div>
       ))}
     </div>

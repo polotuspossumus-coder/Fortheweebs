@@ -1,14 +1,9 @@
 {
   "version": 2,
-  "builds": [
-    { "src": "src/index.js", "use": "@vercel/node" },
-    { "src": "src/routes/signup.js", "use": "@vercel/node" },
-    { "src": "src/routes/tos.js", "use": "@vercel/node" }
-  ],
   "routes": [
     { "src": "/api/signup", "dest": "src/routes/signup.js" },
     { "src": "/api/tos/accept", "dest": "src/routes/tos.js" },
     { "src": "/api/tos/accepted/:userId", "dest": "src/routes/tos.js" },
-    { "src": "/(.*)", "dest": "src/index.js" }
+  { "src": "/(.*)", "dest": "public/index.html" }
   ]
 }

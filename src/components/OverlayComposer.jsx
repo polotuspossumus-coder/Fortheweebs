@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { remixConfig } from '../config/remix.config';
 import { supabase } from '../lib/supabase';
+import "./OverlayComposer.css";
 
 export const OverlayComposer = ({ userId }) => {
   const [presets, setPresets] = useState([]);
@@ -22,11 +23,11 @@ export const OverlayComposer = ({ userId }) => {
   };
 
   return (
-    <div className="overlay-composer">
+  <div className="overlay-composer">
       <h2>🎼 Sovereign Overlay Composer</h2>
       <div className="preset-selector">
         {presets.map((preset) => (
-          <button key={preset.id} onClick={() => applyPreset(preset)}>
+          <button key={preset.id} className="overlay-button" onClick={() => applyPreset(preset)}>
             🎨 {preset.name || preset.title}
           </button>
         ))}

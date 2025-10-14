@@ -14,30 +14,22 @@
  */
 
 import React from "react";
+import "./RemixLineageTimeline.css";
 
 export const RemixLineageTimeline = ({ badges }) => {
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
+  <div className="lineage-container">
       {badges
         .sort((a, b) => b.timestamp - a.timestamp)
         .map((badge) => (
           <div
             key={badge.lineageHash}
-            style={{
-              backgroundColor: badge.badge.color,
-              padding: "12px",
-              borderRadius: "8px",
-              color: "#fff",
-              boxShadow: "0 2px 6px rgba(0,0,0,0.2)",
-            }}
+            className="lineage-item"
+            style={{ backgroundColor: badge.badge.color }}
           >
-            <div style={{ fontSize: "1.2rem" }}>{badge.badge.icon} {badge.badge.label}</div>
-            <div style={{ fontSize: "0.8rem", opacity: 0.8 }}>
-              {new Date(badge.timestamp).toLocaleString()}
-            </div>
-            <div style={{ fontSize: "0.7rem", wordBreak: "break-all", marginTop: "4px" }}>
-              <strong>Hash:</strong> {badge.lineageHash}
-            </div>
+            <div className="lineage-icon">{badge.badge.icon} {badge.badge.label}</div>
+            <div className="lineage-desc">{new Date(badge.timestamp).toLocaleString()}</div>
+            <div className="lineage-id"><strong>Hash:</strong> {badge.lineageHash}</div>
           </div>
         ))}
     </div>
