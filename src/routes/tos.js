@@ -46,32 +46,43 @@
 let acceptanceLog = [];
 
 export default async function handler(req, res) {
-  if (req.method === "POST") {
-    let body = req.body;
-    // Vercel may parse body as string, so handle JSON
-    if (typeof body === "string") {
-      try {
-        body = JSON.parse(body);
-      } catch {
-        return res.status(400).json({ error: "Invalid JSON" });
+  try {
+    if (req.method === "POST") {
+      let body = req.body;
+      // Vercel may parse body as string, so handle JSON
+      if (typeof body === "string") {
+        try {
+          body = JSON.parse(body);
+        } catch {
+          return res.status(400).json({ error: "Invalid JSON" });
+        }
       }
+      const { userId, ipAddress, version } = body || {};
+      if (!userId || !ipAddress || !version) {
+        return res.status(400).json({ error: "Missing required fields" });
+      }
+      acceptanceLog.push({
+        userId,
+        timestamp: Date.now(),
+        ipAddress,
+        version,
+      });
+      return res.status(200).json({ success: true });
     }
-    const { userId, ipAddress, version } = body || {};
-    if (!userId || !ipAddress || !version) {
-      return res.status(400).json({ error: "Missing required fields" });
+    if (req.method === "GET") {
+      let userId = req.query?.userId;
+      if (!userId && req.query && typeof req.query.get === "function") {
+        userId = req.query.get("userId");
+      }
+      if (!userId) {
+        return res.status(400).json({ error: "Missing userId in query" });
+      }
+      const history = acceptanceLog.filter((entry) => entry.userId === userId);
+      return res.status(200).json({ accepted: history.length > 0, history });
     }
-    acceptanceLog.push({
-      userId,
-      timestamp: Date.now(),
-      ipAddress,
-      version,
-    });
-    return res.status(200).json({ success: true });
+    res.status(405).json({ error: "Method not allowed" });
+  } catch (err) {
+    console.error("tos.js serverless error:", err);
+    res.status(500).json({ error: "Server error", details: err.message });
   }
-  if (req.method === "GET") {
-    const userId = req.query?.userId || (req.query && req.query.get("userId"));
-    const history = acceptanceLog.filter((entry) => entry.userId === userId);
-    return res.status(200).json({ accepted: history.length > 0, history });
-  }
-  res.status(405).json({ error: "Method not allowed" });
 }
