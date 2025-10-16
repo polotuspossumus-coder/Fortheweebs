@@ -37,9 +37,9 @@ export const OverlayComposer = ({ userId }) => {
         <div
           className="overlay-preview"
           style={{
-            backgroundImage: `url(${activePreset.background_url})`,
-            color: activePreset.text_color,
-            fontFamily: activePreset.font_family,
+            ['--overlay-bg']: activePreset.background_url ? `url(${activePreset.background_url})` : undefined,
+            ['--overlay-text-color']: activePreset.text_color || undefined,
+            ['--overlay-font-family']: activePreset.font_family || undefined,
           }}
         >
           <h3>{activePreset.title}</h3>

@@ -1,10 +1,2 @@
-import React from "react";
-import ReactDOM from "react-dom";
-import CreatorSignup from "./CreatorSignup.jsx";
-
-ReactDOM.render(
-  <React.StrictMode>
-    <CreatorSignup />
-  </React.StrictMode>,
-  document.getElementById("root")
-);
+// Editor artifact placeholder. The real app lives at /src.
+console.log('This is a workspace editor copy placeholder for index.js');

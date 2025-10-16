@@ -1,0 +1,76 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`LineageVisualizer snapshot 1`] = `
+"[36m<svg[39m
+  [33mheight[39m=[32m"120"[39m
+  [33mviewBox[39m=[32m"0 0 320 120"[39m
+  [33mwidth[39m=[32m"320"[39m
+[36m>[39m
+  [36m<defs>[39m
+    [36m<marker[39m
+      [33mid[39m=[32m"arrow"[39m
+      [33mmarkerHeight[39m=[32m"10"[39m
+      [33mmarkerWidth[39m=[32m"10"[39m
+      [33morient[39m=[32m"auto"[39m
+      [33mrefX[39m=[32m"10"[39m
+      [33mrefY[39m=[32m"5"[39m
+    [36m>[39m
+      [36m<path[39m
+        [33md[39m=[32m"M0,0 L10,5 L0,10 z"[39m
+        [33mfill[39m=[32m"#333"[39m
+      [36m/>[39m
+    [36m</marker>[39m
+  [36m</defs>[39m
+  [36m<line[39m
+    [33mmarker-end[39m=[32m"url(#arrow)"[39m
+    [33mstroke[39m=[32m"#888"[39m
+    [33mstroke-width[39m=[32m"2"[39m
+    [33mx1[39m=[32m"0"[39m
+    [33mx2[39m=[32m"320"[39m
+    [33my1[39m=[32m"60"[39m
+    [33my2[39m=[32m"60"[39m
+  [36m/>[39m
+  [36m<g[39m
+    [33mtransform[39m=[32m"translate(0, 60)"[39m
+  [36m>[39m
+    [36m<circle[39m
+      [33mcx[39m=[32m"0"[39m
+      [33mcy[39m=[32m"0"[39m
+      [33mfill[39m=[32m"#fff"[39m
+      [33mr[39m=[32m"18"[39m
+      [33mstroke[39m=[32m"#333"[39m
+      [33mstroke-width[39m=[32m"2"[39m
+    [36m/>[39m
+    [36m<text[39m
+      [33mfill[39m=[32m"#111"[39m
+      [33mfont-size[39m=[32m"10"[39m
+      [33mtext-anchor[39m=[32m"middle"[39m
+      [33mx[39m=[32m"0"[39m
+      [33my[39m=[32m"4"[39m
+    [36m>[39m
+      [0mRoot with a v…[0m
+    [36m</text>[39m
+  [36m</g>[39m
+  [36m<g[39m
+    [33mtransform[39m=[32m"translate(320, 60)"[39m
+  [36m>[39m
+    [36m<circle[39m
+      [33mcx[39m=[32m"0"[39m
+      [33mcy[39m=[32m"0"[39m
+      [33mfill[39m=[32m"#fff"[39m
+      [33mr[39m=[32m"18"[39m
+      [33mstroke[39m=[32m"#333"[39m
+      [33mstroke-width[39m=[32m"2"[39m
+    [36m/>[39m
+    [36m<text[39m
+      [33mfill[39m=[32m"#111"[39m
+      [33mfont-size[39m=[32m"10"[39m
+      [33mtext-anchor[39m=[32m"middle"[39m
+      [33mx[39m=[32m"0"[39m
+      [33my[39m=[32m"4"[39m
+    [36m>[39m
+      [0mChild 1 with …[0m
+    [36m</text>[39m
+  [36m</g>[39m
+[36m</svg>[39m"
+`;

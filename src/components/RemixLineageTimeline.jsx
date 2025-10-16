@@ -25,7 +25,7 @@ export const RemixLineageTimeline = ({ badges }) => {
           <div
             key={badge.lineageHash}
             className="lineage-item"
-            style={{ backgroundColor: badge.badge.color }}
+            style={badge.badge.color ? { ['--badge-color']: badge.badge.color } : undefined}
           >
             <div className="lineage-icon">{badge.badge.icon} {badge.badge.label}</div>
             <div className="lineage-desc">{new Date(badge.timestamp).toLocaleString()}</div>

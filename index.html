@@ -2,30 +2,11 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <title>Fortheweebs</title>
-    <style>
-      body {
-        margin: 0;
-        padding: 0;
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        color: white;
-        justify-content: center;
-        align-items: center;
-        min-height: 100vh;
-      }
-      
-      .container {
-        text-align: center;
-        background: rgba(255, 255, 255, 0.1);
-  -webkit-backdrop-filter: blur(10px);
-  backdrop-filter: blur(10px);
-        border-radius: 20px;
-        padding: 3rem;
-        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
-        border: 1px solid rgba(255, 255, 255, 0.2);
-      }
+    <link rel="stylesheet" href="/style.css">
       
       h1 {
         font-size: 3rem;
@@ -136,10 +117,7 @@
         font-weight: 500;
       }
 
-      .nav-tab:hover, .nav-tab.active {
-        background: linear-gradient(45deg, #4ade80, #22c55e);
-        transform: translateY(-2px);
-      }
+      .nav-tab:hover, .nav-tab.active { background: linear-gradient(45deg, #4ade80, #22c55e); transform: translateY(-2px); }
 
       /* Tab Content */
       .tab-content {
@@ -277,18 +255,7 @@
       }
 
       /* Modal Styles */
-      .modal {
-        display: none;
-        position: fixed;
-        z-index: 1000;
-        left: 0;
-        top: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(0, 0, 0, 0.5);
-  -webkit-backdrop-filter: blur(5px);
-  backdrop-filter: blur(5px);
-      }
+  .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); }
 
       .modal-content {
         background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -818,12 +785,13 @@
 
       function updateStatusText() {
         const statusElement = document.getElementById('statusText');
+        statusElement.classList.remove('status-warn','status-ok');
         if (currentAnime.length === 0) {
           statusElement.textContent = '🚀 Ready to start your anime journey!';
-          statusElement.style.color = '#fbbf24';
+          statusElement.classList.add('status-warn');
         } else {
-          statusElement.textContent = `� ${currentAnime.length} anime in your library!`;
-          statusElement.style.color = '#4ade80';
+          statusElement.textContent = `${currentAnime.length} anime in your library!`;
+          statusElement.classList.add('status-ok');
         }
       }
 
@@ -912,11 +880,11 @@
             .slice(0, 3);
             
           statsContent.innerHTML += `
-            <div class="stat-card" style="grid-column: 1 / -1;">
-              <div class="stat-label">Top Genres</div>
-              <div style="margin-top: 1rem;">
+        <div class="stat-card stat-full">
+          <div class="stat-label">Top Genres</div>
+          <div class="top-genres">
                 ${topGenres.map(([genre, count]) => 
-                  `<span style="display: inline-block; margin: 0.25rem; padding: 0.5rem 1rem; background: rgba(255,255,255,0.2); border-radius: 15px;">${genre} (${count})</span>`
+                  `<span class="genre-pill">${genre} (${count})</span>`
                 ).join('')}
               </div>
             </div>
@@ -1166,8 +1134,8 @@
         const resultsContainer = document.getElementById('topAnimeGrid');
         
         // Update active button
-        document.querySelectorAll('.category-btn').forEach(btn => btn.classList.remove('active'));
-        event.target.classList.add('active');
+  document.querySelectorAll('.category-btn').forEach(btn => btn.classList.remove('active'));
+  if (event && event.target) event.target.classList.add('active');
 
         if (!window.electronAPI) {
           resultsContainer.innerHTML = '<div class="empty-state"><h3>API not available</h3></div>';

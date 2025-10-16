@@ -70,18 +70,18 @@ export const CreatorAgreementGate = ({ userId, ipAddress, version, onAccepted })
   };
 
   return (
-    <div style={{ maxWidth: 600, margin: "40px auto", background: "#222", color: "#fff", borderRadius: 12, padding: 32, boxShadow: "0 2px 12px rgba(0,0,0,0.2)" }}>
+    <div className="container-card agreement-card">
       <h2>Creator Agreement</h2>
-      <div style={{ maxHeight: 320, overflowY: "auto", background: "#181818", padding: 16, borderRadius: 8, marginBottom: 24 }}>
-        <pre style={{ whiteSpace: "pre-wrap", fontSize: "0.95rem" }}>{CREATOR_AGREEMENT_TEXT}</pre>
+      <div className="terms-content">
+        <pre className="terms-pre">{CREATOR_AGREEMENT_TEXT}</pre>
       </div>
-      <label style={{ display: "flex", alignItems: "center", gap: 8 }}>
+      <label className="terms-label">
         <input type="checkbox" checked={accepted} onChange={e => setAccepted(e.target.checked)} />
         I accept the Creator Agreement
       </label>
       <button
         disabled={!accepted}
-        style={{ marginTop: 24, padding: "10px 24px", background: accepted ? "#FFD700" : "#888", color: "#222", border: "none", borderRadius: 6, fontWeight: "bold", cursor: accepted ? "pointer" : "not-allowed" }}
+        className="primary-btn"
         onClick={() => accepted && handleAccept()}
       >
         Continue

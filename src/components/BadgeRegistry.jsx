@@ -20,7 +20,7 @@ export const BadgeRegistry = ({ badges }) => {
         <div
           key={badge.lineageHash}
           className="badge-item"
-          style={{ backgroundColor: badge.badge.color }}
+          style={badge.badge.color ? { ['--badge-color']: badge.badge.color } : undefined}
         >
           <div className="badge-icon">{badge.badge.icon}</div>
           <div className="badge-label">{badge.badge.label}</div>

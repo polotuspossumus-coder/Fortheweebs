@@ -6,13 +6,20 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "start": "node server.js"
+    "start": "node server.js",
+    "test": "vitest run",
+    "lint": "eslint \"../src/**/*.{js,jsx}\" \"../tests/**/*.js\" --fix"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },
   "devDependencies": {
-    "vite": "^4.0.0"
+    "@testing-library/react": "^13.4.0",
+    "eslint": "^8.57.1",
+    "jsdom": "^27.0.0",
+    "vite": "^4.0.0",
+    "vitest": "^1.0.0"
   }
 }

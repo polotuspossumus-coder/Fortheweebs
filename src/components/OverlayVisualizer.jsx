@@ -26,9 +26,9 @@ export const OverlayVisualizer = ({ userId }) => {
     <div
       className="overlay-visualizer"
       style={{
-        backgroundImage: `url(${preset.background_url})`,
-        color: preset.text_color,
-        fontFamily: preset.font_family,
+        ['--overlay-bg']: preset.background_url ? `url(${preset.background_url})` : undefined,
+        ['--overlay-text-color']: preset.text_color || undefined,
+        ['--overlay-font-family']: preset.font_family || undefined,
       }}
     >
       <h2>{preset.title}</h2>
