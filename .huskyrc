@@ -1,0 +1,5 @@
+{
+  "hooks": {
+    "pre-commit": "npx prettier --check . && npm run lint && npm test"
+  }
+}

@@ -11,12 +11,27 @@
       <canvas id="bg-canvas" class="bg-canvas"></canvas>
     </div>
     <main>
-      <section class="hero">
+      <section class="hero animated-hero">
         <img src="/assets/logo.png" alt="Fortheweebs Logo" class="hero-logo" />
-        <h1 class="hero-title">Welcome to Fortheweebs</h1>
-        <p class="hero-sub">A free, friendly social media platform for creators and fans. Onboard, sign documents, and enjoy the community. Donations are always welcome!</p>
-        <a href="#signup" class="cta-btn">Get Started</a>
+        <h1 class="hero-title gradient-text">Welcome to Fortheweebs</h1>
+        <p class="hero-sub">A free, friendly social media platform for creators and fans.<br>Onboard, sign documents, and enjoy the community.<br>Donations are always welcome!</p>
+        <div class="stats-row">
+          <div class="stat-card"><span class="stat-value" id="stat-users">2,345</span><span class="stat-label">Users</span></div>
+          <div class="stat-card"><span class="stat-value" id="stat-creators">128</span><span class="stat-label">Creators</span></div>
+          <div class="stat-card"><span class="stat-value" id="stat-badges">1,024</span><span class="stat-label">Badges Minted</span></div>
+        </div>
+        <a href="#signup" class="cta-btn pulse">Join Now</a>
       </section>
+      <style>
+        .animated-hero { text-align: center; padding: 3rem 1rem 2rem; }
+        .gradient-text { background: linear-gradient(90deg,#7f5af0,#2cb67d); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-size: 2.5rem; font-weight: bold; }
+        .stats-row { display: flex; justify-content: center; gap: 2rem; margin: 2rem 0; }
+        .stat-card { background: #222; border-radius: 1rem; padding: 1rem 2rem; color: #fff; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+        .stat-value { font-size: 2rem; font-weight: bold; display: block; }
+        .stat-label { font-size: 1rem; color: #aaa; }
+        .cta-btn.pulse { animation: pulse 1.5s infinite; }
+        @keyframes pulse { 0% { box-shadow: 0 0 0 0 #7f5af0; } 70% { box-shadow: 0 0 0 10px rgba(127,90,240,0); } 100% { box-shadow: 0 0 0 0 rgba(127,90,240,0); } }
+      </style>
       <div id="root" class="container-card"></div>
       <footer class="site-footer">
         &copy; 2025 Fortheweebs. All rights reserved.
