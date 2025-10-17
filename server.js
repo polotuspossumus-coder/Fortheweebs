@@ -15,6 +15,18 @@ app.use((req, res, next) => {
   next();
 });
 
+// Performance monitor: log slow requests (>500ms)
+app.use((req, res, next) => {
+  const start = Date.now();
+  res.on('finish', () => {
+    const duration = Date.now() - start;
+    if (duration > 500) {
+      console.warn(`[SLOW REQUEST] ${req.method} ${req.originalUrl} took ${duration}ms`);
+    }
+  });
+  next();
+});
+
 // Serve live API docs at /api/docs
 app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use(express.json());
