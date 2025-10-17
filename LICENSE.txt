@@ -1,0 +1,11 @@
+Fortheweebs Proprietary License v1.0
+
+Copyright © 2025 Jacob
+
+This software and all associated code, logic, and protocol artifacts are the exclusive property of Jacob, the sole proprietor and founder of Fortheweebs.
+
+No part of this software may be copied, modified, distributed, or reused without explicit written permission.
+
+All forks, remixes, and integrations must be authorized by Jacob. Unauthorized use constitutes breach of sovereign protocol and may trigger legal escalation.
+
+Jacob bears zero liability for any use, misuse, or derivative deployment of this software.

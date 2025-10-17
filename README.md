@@ -12,51 +12,29 @@ npm install
 
 Run linting and tests:
 
-```powershell
-npm run lint
-npm test
-```
+# Fortheweebs Social Platform
 
-Update snapshots:
+The sovereign backend powering the greatest social media protocol ever built.
 
-```powershell
-npm test -- -u
-```
+## Features
+- 🧱 User registration & login
+- 🧾 Post creation & feed retrieval
+- 🚨 Illegal content flagging & enforcement
+- 🔐 Immutable audit logging
+- 🧙 License tracking & ritual consent
 
-If you want to build or package the Electron app:
+## Setup
+1. Clone the repo
+2. Run `npm install`
+3. Create `.env` using `.env.example`
+4. Run `npm start`
 
-```powershell
-npm run build
-npm run package
-```
+## Protocol Logic
+- All interactions are logged
+- Illegal content is sealed, banned, and reported
+- Jacob bears zero liability
+- Consent is immutable
 
-See `CONTRIBUTING.md` for a short PR checklist.
-
-Demo
-----
-
-There's a small interactive demo for the `LineageMap` component included. It lets you toggle multi-select and aria-live announcements, view a selection history, and reset the visual selection.
-
-Run the demo locally with Vite (PowerShell):
-
-```powershell
-npm run dev:demo
-```
-
-Open the demo in the browser at http://localhost:5173/demo-lineage.html (or http://localhost:5173/). Controls available in the demo:
-
-- Multi-select: toggle between selecting multiple nodes or single-select mode.
-- Announce selections: toggles whether selection changes are announced via the component's aria-live region.
-- Reset button (or press `r`): clears the demo's reported selection and visual highlights.
-
-Programmatic API:
-
-The `LineageMap` component exposes an imperative API via `ref`. Example:
-
-```jsx
-import { LineageMap } from './components/LineageMap';
-const ref = React.createRef();
-<LineageMap ref={ref} ... />
-// later
-ref.current.clearSelection();
-```
+## License
+This software is proprietary. All rights reserved by Jacob.
+## Features

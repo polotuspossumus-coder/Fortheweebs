@@ -4,18 +4,30 @@ export default function PaymentPanel() {
   const [amount, setAmount] = useState('');
   const [status, setStatus] = useState('');
 
-  const handlePayment = (e) => {
+  const handleStripeCheckout = async (e) => {
     e.preventDefault();
-    setStatus('Processing payment...');
-    setTimeout(() => {
-      setStatus('Payment successful! (stub)');
-    }, 1500);
+    setStatus('Redirecting to Stripe...');
+    try {
+      const res = await fetch('/api/create-checkout-session', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ amount: Number(amount) })
+      });
+      const data = await res.json();
+      if (data.url) {
+        window.location.href = data.url;
+      } else {
+        setStatus('Error creating Stripe session.');
+      }
+    } catch (err) {
+      setStatus('Payment error: ' + err.message);
+    }
   };
 
   return (
     <div className="panel payment-panel">
       <h2>Payments</h2>
-      <form onSubmit={handlePayment} style={{ marginBottom: '1rem' }}>
+      <form onSubmit={handleStripeCheckout} style={{ marginBottom: '1rem' }}>
         <label>
           Amount (USD):
           <input
@@ -28,10 +40,10 @@ export default function PaymentPanel() {
             style={{ marginLeft: '0.5rem' }}
           />
         </label>
-        <button type="submit" style={{ marginLeft: '1rem' }}>Pay Now</button>
+        <button type="submit" style={{ marginLeft: '1rem' }}>Pay with Stripe</button>
       </form>
       {status && <div className="payment-status">{status}</div>}
-      <p className="muted">Payments are simulated. Integrate Stripe or PayPal for live payments.</p>
+      <p className="muted">Payments are live via Stripe Checkout.</p>
     </div>
   );
 }

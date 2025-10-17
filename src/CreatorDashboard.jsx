@@ -10,8 +10,17 @@ const OverlayPanel = lazy(() => import('./OverlayPanel'));
 const OverviewPanel = lazy(() => import('./OverviewPanel'));
 const PaymentPanel = lazy(() => import('./PaymentPanel'));
 const OwnerEarningsPanel = lazy(() => import('./OwnerEarningsPanel'));
+import LegalConsentWall from "./LegalConsentWall";
 
 export const CreatorDashboard = ({ userId = "demo_user", ipAddress = "127.0.0.1" }) => {
+  const [consented, setConsented] = useState(
+    localStorage.getItem("fortheweebs_legal_consent") === "true"
+  );
+
+  if (!consented) {
+    return <LegalConsentWall onConsent={() => setConsented(true)} />;
+  }
+
   const [tosAccepted, setTosAccepted] = useState(false);
   const [creatorAgreementAccepted, setCreatorAgreementAccepted] = useState(false);
   const version = "2025.10";
