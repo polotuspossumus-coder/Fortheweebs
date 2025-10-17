@@ -4,6 +4,14 @@
     { "src": "/api/signup", "dest": "src/routes/signup.js" },
     { "src": "/api/tos/accept", "dest": "src/routes/tos.js" },
     { "src": "/api/tos/accepted/:userId", "dest": "src/routes/tos.js" },
-  { "src": "/(.*)", "dest": "public/index.html" }
+    { "src": "/(.*)", "dest": "public/index.html" }
+  ],
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        { "key": "Cache-Control", "value": "no-store, max-age=0" }
+      ]
+    }
   ]
 }
