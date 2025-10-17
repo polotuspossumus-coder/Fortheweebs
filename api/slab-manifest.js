@@ -2,20 +2,18 @@ const express = require('express');
 const router = express.Router();
 const db = require('../lib/database');
 
-router.get('/slab-manifest', async (req, res) => {
+router.get('/', async (_req, res) => {
   try {
-    const slabs = await db.slabs.find().toArray();
-    const manifest = slabs.map(s => ({
+    const slabs = await db.slabs.find({}).toArray();
+  res.json(slabs.map(s => ({
+      id: s._id,
       name: s.name,
-      endpoint: s.endpoint,
-      lineage: s.parent ? `Fork of ${s.parent}` : 'Original',
-      createdBy: s.createdBy,
-    }));
-    require('../../utils/logger').info('Slab manifest served', { count: manifest.length });
-    res.json(manifest);
+      tags: s.tags,
+      remixOf: s.remixOf,
+      creator: s.creator,
+    })));
   } catch (err) {
-    require('../../utils/logger').error('Slab manifest fetch failed', { error: err });
-    res.status(500).json({ error: 'Failed to fetch slab manifest.' });
+  res.status(500).json({ error: 'Failed to fetch slab manifest', details: typeof err === 'object' && err !== null && 'message' in err ? err.message : String(err) });
   }
 });
 
