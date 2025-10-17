@@ -1,4 +1,5 @@
 const express = require("express");
+const helmet = require("helmet");
 const path = require("path");
 const signupRouter = require("./src/routes/signup.js").default;
 const tosRouter = require("./src/routes/tos.js").default;
@@ -8,6 +9,8 @@ const swaggerDocument = require('./swagger.json');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+// Set HTTP security headers
+app.use(helmet());
 // Set global headers for caching and CORS
 app.use((req, res, next) => {
   res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
