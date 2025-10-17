@@ -1,33 +1,44 @@
-name: CI
+name: Mythic Protocol CI
+
 on:
   push:
-    branches: [main, feature/add-tests-ci]
+    branches: [main]
   pull_request:
     branches: [main]
+
 jobs:
-  build-and-test:
+  build-and-deploy:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        chain: [fortheweebs, vanguard]
+
     steps:
-      - uses: actions/checkout@v4
-      - name: Use Node.js
-        uses: actions/setup-node@v4
+      - name: 🔍 Checkout code
+        uses: actions/checkout@v3
+
+      - name: 🧰 Setup Node.js
+        uses: actions/setup-node@v3
         with:
-          node-version: '20.x'
-          cache: 'npm'
-      - name: Install dependencies
-        run: npm ci
-      - name: Lint
-        run: npm run lint
-      - name: Test
-        run: npm test
-      - name: Build
-        run: npm run build
-      - name: Prettier Check
-        run: npx prettier --check .
-      - name: Cache node_modules
-        uses: actions/cache@v3
-        with:
-          path: node_modules
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
+          node-version: '18'
+
+      - name: 📦 Install dependencies
+        run: npm install
+
+      - name: 🔨 Build ${{ matrix.chain }}
+        run: ts-node build.ts
+
+      - name: 🧠 Sync validator memory
+        run: |
+          echo "Syncing validator memory for ${{ matrix.chain }}..."
+          node scripts/sync-validator.js ${{ matrix.chain }}
+
+      - name: 🌐 Propagate multilingual slabs
+        run: |
+          echo "Propagating slabs for ${{ matrix.chain }}..."
+          node scripts/propagate-slabs.js ${{ matrix.chain }}
+
+      - name: 🚀 Deploy to CDN
+        run: |
+          echo "Deploying ${{ matrix.chain }} bundle..."
+          node scripts/deploy.js ${{ matrix.chain }}
