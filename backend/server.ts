@@ -41,6 +41,8 @@ const swaggerOptions = {
     info: {
       title: 'Fortheweebs API',
       version: '1.0.0',
+import monitoringMiddleware from '../../backend/monitoring';
+app.use(monitoringMiddleware);
     },
   },
   definition: {
