@@ -15,7 +15,8 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+// Serve live API docs at /api/docs
+app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use(express.json());
 app.use(express.static(path.join(process.cwd(), "src")));
 app.use(express.static(path.join(process.cwd(), ".vscode")));
