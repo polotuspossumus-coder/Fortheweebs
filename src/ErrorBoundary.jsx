@@ -21,7 +21,12 @@ export default class ErrorBoundary extends React.Component {
         <div className="p-8 text-center text-red-700 bg-red-100 rounded-lg">
           <h2 className="text-2xl font-bold mb-2">Something went wrong.</h2>
           <p className="mb-4">{this.state.error?.message || 'An unexpected error occurred.'}</p>
-          <button className="bg-indigo-600 text-white px-4 py-2 rounded" onClick={() => window.location.reload()}>Reload</button>
+          <button
+            className="bg-indigo-600 text-white px-4 py-2 rounded"
+            onClick={() => window.location.reload()}
+          >
+            Reload
+          </button>
         </div>
       );
     }

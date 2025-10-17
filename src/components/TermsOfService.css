@@ -6,7 +6,7 @@
   color: #fff;
   border-radius: 12px;
   padding: 32px;
-  box-shadow: 0 2px 12px rgba(0,0,0,0.2);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.2);
 }
 .terms-content {
   max-height: 320px;
@@ -28,7 +28,7 @@
 .terms-button {
   margin-top: 24px;
   padding: 10px 24px;
-  background: #FFD700;
+  background: #ffd700;
   color: #222;
   border: none;
   border-radius: 6px;

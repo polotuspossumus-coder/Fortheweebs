@@ -17,6 +17,7 @@ Run linting and tests:
 The sovereign backend powering the greatest social media protocol ever built.
 
 ## Features
+
 - 🧱 User registration & login
 - 🧾 Post creation & feed retrieval
 - 🚨 Illegal content flagging & enforcement
@@ -24,17 +25,21 @@ The sovereign backend powering the greatest social media protocol ever built.
 - 🧙 License tracking & ritual consent
 
 ## Setup
+
 1. Clone the repo
 2. Run `npm install`
 3. Create `.env` using `.env.example`
 4. Run `npm start`
 
 ## Protocol Logic
+
 - All interactions are logged
 - Illegal content is sealed, banned, and reported
 - Jacob bears zero liability
 - Consent is immutable
 
 ## License
+
 This software is proprietary. All rights reserved by Jacob.
+
 ## Features

@@ -37,7 +37,7 @@ function immortalize(chain: string) {
 
 function buildAll() {
   clean();
-  chains.forEach(chain => {
+  chains.forEach((chain) => {
     compile(chain);
     bundle(chain);
     immortalize(chain);

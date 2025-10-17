@@ -13,7 +13,11 @@ router.get('/:slabId', async (req, res) => {
     }, {});
     res.json(heatmap);
   } catch (err) {
-    res.status(500).json({ error: 'Failed to fetch slab heatmap', details: typeof err === 'object' && err !== null && 'message' in err ? err.message : String(err) });
+    res.status(500).json({
+      error: 'Failed to fetch slab heatmap',
+      details:
+        typeof err === 'object' && err !== null && 'message' in err ? err.message : String(err),
+    });
   }
 });
 

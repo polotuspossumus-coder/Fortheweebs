@@ -1,1 +1,1 @@
-export * from "./utils/mintBadge";
+export * from './utils/mintBadge';

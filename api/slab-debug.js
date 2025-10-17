@@ -9,7 +9,11 @@ router.post('/', async (req, res) => {
     const explanation = await ai.explainSlab({ logic, ui });
     res.json(explanation);
   } catch (err) {
-    res.status(500).json({ error: 'Failed to debug slab', details: typeof err === 'object' && err !== null && 'message' in err ? err.message : String(err) });
+    res.status(500).json({
+      error: 'Failed to debug slab',
+      details:
+        typeof err === 'object' && err !== null && 'message' in err ? err.message : String(err),
+    });
   }
 });
 

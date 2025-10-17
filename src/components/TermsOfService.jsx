@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import "./TermsOfService.css";
+import React, { useState } from 'react';
+import './TermsOfService.css';
 
 const TERMS_TEXT = `# Fortheweebs Terms of Service
 
@@ -62,18 +62,18 @@ export const TermsOfService = ({ onAccept }) => {
   const [accepted, setAccepted] = useState(false);
 
   return (
-  <div className="terms-container">
+    <div className="terms-container">
       <h2>Terms of Service</h2>
       <div className="terms-content">
         <pre className="terms-pre">{TERMS_TEXT}</pre>
       </div>
-  <label className="terms-label">
-        <input type="checkbox" checked={accepted} onChange={e => setAccepted(e.target.checked)} />
+      <label className="terms-label">
+        <input type="checkbox" checked={accepted} onChange={(e) => setAccepted(e.target.checked)} />
         I accept the Terms of Service
       </label>
       <button
         disabled={!accepted}
-        className={`terms-button${!accepted ? " disabled" : ""}`}
+        className={`terms-button${!accepted ? ' disabled' : ''}`}
         onClick={() => accepted && onAccept()}
       >
         Continue

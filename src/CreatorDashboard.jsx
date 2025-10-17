@@ -1,20 +1,19 @@
-import React, { useState, useEffect } from 'react';
-import { Suspense, lazy, useState, useEffect } from 'react';
+import React, { Suspense, lazy, useState } from 'react';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@radix-ui/react-tabs';
 import { Switch } from '@radix-ui/react-switch';
 
 const TermsOfService = lazy(() => import('./components/TermsOfService'));
 const CreatorAgreementGate = lazy(() => import('./components/CreatorAgreementGate'));
 const LegalDocumentsList = lazy(() => import('./components/LegalDocumentsList'));
-const OverlayPanel = lazy(() => import('./OverlayPanel'));
-const OverviewPanel = lazy(() => import('./OverviewPanel'));
+// const OverlayPanel = lazy(() => import('./OverlayPanel'));
+// const OverviewPanel = lazy(() => import('./OverviewPanel'));
 const PaymentPanel = lazy(() => import('./PaymentPanel'));
 const OwnerEarningsPanel = lazy(() => import('./OwnerEarningsPanel'));
-import LegalConsentWall from "./LegalConsentWall";
+import LegalConsentWall from './LegalConsentWall';
 
-export const CreatorDashboard = ({ userId = "demo_user", ipAddress = "127.0.0.1" }) => {
+export const CreatorDashboard = ({ userId = 'demo_user', ipAddress = '127.0.0.1' }) => {
   const [consented, setConsented] = useState(
-    localStorage.getItem("fortheweebs_legal_consent") === "true"
+    localStorage.getItem('fortheweebs_legal_consent') === 'true'
   );
 
   if (!consented) {
@@ -23,7 +22,7 @@ export const CreatorDashboard = ({ userId = "demo_user", ipAddress = "127.0.0.1"
 
   const [tosAccepted, setTosAccepted] = useState(false);
   const [creatorAgreementAccepted, setCreatorAgreementAccepted] = useState(false);
-  const version = "2025.10";
+  const version = '2025.10';
 
   if (!tosAccepted) {
     return (
@@ -51,31 +50,29 @@ export const CreatorDashboard = ({ userId = "demo_user", ipAddress = "127.0.0.1"
         <TabsTrigger value="overlays">Overlays</TabsTrigger>
         <TabsTrigger value="payments">Payments</TabsTrigger>
         <TabsTrigger value="legal">Legal</TabsTrigger>
-        {userId === "owner" && (
-          <TabsTrigger value="earnings">Earnings</TabsTrigger>
-        )}
+        {userId === 'owner' && <TabsTrigger value="earnings">Earnings</TabsTrigger>}
       </TabsList>
       <TabsContent value="overview">
         <Suspense fallback={<div>Loading Overview...</div>}>
-            {/* <OverviewPanel /> */}
+          {/* OverviewPanel unavailable */}
         </Suspense>
       </TabsContent>
       <TabsContent value="overlays">
         <Suspense fallback={<div>Loading Overlays...</div>}>
-            {/* <OverlayPanel /> */}
+          {/* OverlayPanel unavailable */}
         </Suspense>
       </TabsContent>
       <TabsContent value="payments">
-    <Suspense fallback={<div>Loading Payments...</div>}>
-      <PaymentPanel />
-    </Suspense>
+        <Suspense fallback={<div>Loading Payments...</div>}>
+          <PaymentPanel />
+        </Suspense>
       </TabsContent>
       <TabsContent value="legal">
         <Suspense fallback={<div>Loading Legal...</div>}>
           <LegalDocumentsList userId={userId} />
         </Suspense>
       </TabsContent>
-      {userId === "owner" && (
+      {userId === 'owner' && (
         <TabsContent value="earnings">
           <Suspense fallback={<div>Loading Earnings...</div>}>
             <OwnerEarningsPanel />

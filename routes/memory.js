@@ -11,12 +11,14 @@ const requireTier = require('../middleware/requireTier');
 router.get('/feed', requireTier('80'), async (req, res) => {
   try {
     const logs = await ValidatorMemory.find().sort({ timestamp: -1 }).limit(50);
-    res.json(logs.map(log => ({
-      action: log.action,
-      user: log.userId,
-      artifact: log.assetId,
-      time: new Date(log.timestamp).toLocaleString(),
-    })));
+    res.json(
+      logs.map((log) => ({
+        action: log.action,
+        user: log.userId,
+        artifact: log.assetId,
+        time: new Date(log.timestamp).toLocaleString(),
+      }))
+    );
   } catch {
     res.status(500).json({ error: 'Failed to fetch memory feed' });
   }

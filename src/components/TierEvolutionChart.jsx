@@ -1,5 +1,5 @@
-import React from "react";
-import { Line } from "react-chartjs-2";
+import React from 'react';
+import { Line } from 'react-chartjs-2';
 import {
   Chart as ChartJS,
   LineElement,
@@ -8,7 +8,7 @@ import {
   LinearScale,
   Tooltip,
   Legend,
-} from "chart.js";
+} from 'chart.js';
 
 ChartJS.register(LineElement, PointElement, CategoryScale, LinearScale, Tooltip, Legend);
 
@@ -23,10 +23,10 @@ ChartJS.register(LineElement, PointElement, CategoryScale, LinearScale, Tooltip,
  */
 export const TierEvolutionChart = ({ entries }) => {
   const tierColorMap = {
-    Founding25: "#FFD700",
-    Standard: "#00BFFF",
-    MidTier: "#32CD32",
-    AdultAccess: "#FF69B4",
+    Founding25: '#FFD700',
+    Standard: '#00BFFF',
+    MidTier: '#32CD32',
+    AdultAccess: '#FF69B4',
   };
 
   const labels = entries.map((e) => new Date(e.timestamp).toLocaleDateString());
@@ -38,10 +38,10 @@ export const TierEvolutionChart = ({ entries }) => {
         labels,
         datasets: [
           {
-            label: "Tier Evolution",
+            label: 'Tier Evolution',
             data,
-            borderColor: "#888",
-            backgroundColor: "#ccc",
+            borderColor: '#888',
+            backgroundColor: '#ccc',
             pointBackgroundColor: entries.map((e) => tierColorMap[e.tier]),
             pointRadius: 6,
             fill: false,

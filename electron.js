@@ -13,7 +13,7 @@ let mainWindow;
 function createWindow() {
   // Load saved window size or use defaults
   const windowSize = settingsManager.get('windowSize');
-  
+
   const win = new BrowserWindow({
     width: windowSize.width,
     height: windowSize.height,
@@ -24,24 +24,24 @@ function createWindow() {
       contextIsolation: true,
       enableRemoteModule: false,
       webSecurity: true,
-      preload: path.join(__dirname, 'preload.js') // We'll create this
+      preload: path.join(__dirname, 'preload.js'), // We'll create this
     },
     icon: path.join(__dirname, 'assets/icon.ico'),
     show: false,
     titleBarStyle: 'default',
-    autoHideMenuBar: false
+    autoHideMenuBar: false,
   });
 
   // Save window reference
   mainWindow = win;
 
   win.loadFile('dist/index.html');
-  
+
   // Show window when ready to prevent visual flash
   win.once('ready-to-show', () => {
     win.show();
     win.focus();
-    
+
     // Update last opened time
     settingsManager.set('lastOpened', new Date().toISOString());
   });
@@ -92,10 +92,9 @@ function createMenu() {
 🎨 Theme: ${settings.theme}
 📍 Last Opened: ${new Date(settings.lastOpened).toLocaleDateString()}
 
-Built with Electron and Vite.`
-
+Built with Electron and Vite.`,
             });
-          }
+          },
         },
         { type: 'separator' },
         {
@@ -104,7 +103,7 @@ Built with Electron and Vite.`
           click: () => {
             // Open settings window - we'll implement this
             createSettingsWindow();
-          }
+          },
         },
         {
           label: 'Export Data',
@@ -114,10 +113,10 @@ Built with Electron and Vite.`
               defaultPath: 'fortheweebs-export.json',
               filters: [
                 { name: 'JSON Files', extensions: ['json'] },
-                { name: 'All Files', extensions: ['*'] }
-              ]
+                { name: 'All Files', extensions: ['*'] },
+              ],
             });
-            
+
             if (!result.canceled) {
               const fs = require('fs');
               try {
@@ -125,13 +124,13 @@ Built with Electron and Vite.`
                 dialog.showMessageBox(mainWindow, {
                   type: 'info',
                   title: 'Export Successful',
-                  message: 'Your anime data has been exported successfully!'
+                  message: 'Your anime data has been exported successfully!',
                 });
               } catch (error) {
                 dialog.showErrorBox('Export Failed', 'Failed to export data: ' + error.message);
               }
             }
-          }
+          },
         },
         {
           label: 'Import Data',
@@ -140,10 +139,10 @@ Built with Electron and Vite.`
               title: 'Import Anime Data',
               filters: [
                 { name: 'JSON Files', extensions: ['json'] },
-                { name: 'All Files', extensions: ['*'] }
-              ]
+                { name: 'All Files', extensions: ['*'] },
+              ],
             });
-            
+
             if (!result.canceled && result.filePaths.length > 0) {
               const fs = require('fs');
               try {
@@ -152,7 +151,7 @@ Built with Electron and Vite.`
                   dialog.showMessageBox(mainWindow, {
                     type: 'info',
                     title: 'Import Successful',
-                    message: 'Your anime data has been imported successfully!'
+                    message: 'Your anime data has been imported successfully!',
                   });
                   mainWindow.reload();
                 } else {
@@ -162,7 +161,7 @@ Built with Electron and Vite.`
                 dialog.showErrorBox('Import Failed', 'Failed to import data: ' + error.message);
               }
             }
-          }
+          },
         },
         { type: 'separator' },
         {
@@ -170,9 +169,9 @@ Built with Electron and Vite.`
           accelerator: 'CmdOrCtrl+Q',
           click: () => {
             app.quit();
-          }
-        }
-      ]
+          },
+        },
+      ],
     },
     {
       label: 'Edit',
@@ -182,8 +181,8 @@ Built with Electron and Vite.`
         { type: 'separator' },
         { role: 'cut' },
         { role: 'copy' },
-        { role: 'paste' }
-      ]
+        { role: 'paste' },
+      ],
     },
     {
       label: 'View',
@@ -196,16 +195,13 @@ Built with Electron and Vite.`
         { role: 'zoomIn' },
         { role: 'zoomOut' },
         { type: 'separator' },
-        { role: 'togglefullscreen' }
-      ]
+        { role: 'togglefullscreen' },
+      ],
     },
     {
       label: 'Window',
-      submenu: [
-        { role: 'minimize' },
-        { role: 'close' }
-      ]
-    }
+      submenu: [{ role: 'minimize' }, { role: 'close' }],
+    },
   ];
 
   const menu = Menu.buildFromTemplate(template);
@@ -223,8 +219,8 @@ function createSettingsWindow() {
     webPreferences: {
       nodeIntegration: false,
       contextIsolation: true,
-      preload: path.join(__dirname, 'preload.js')
-    }
+      preload: path.join(__dirname, 'preload.js'),
+    },
   });
 
   settingsWindow.loadFile('settings.html'); // We'll create this
@@ -360,9 +356,9 @@ function setupIPC() {
         apiScore: apiAnime.score || 0,
         year: apiAnime.year || null,
         type: apiAnime.type || '',
-        studios: apiAnime.studios || []
+        studios: apiAnime.studios || [],
       };
-      
+
       return databaseManager.addAnime(localAnime);
     } catch (error) {
       console.error('Error adding API anime to library:', error);
@@ -376,10 +372,10 @@ app.whenReady().then(() => {
   settingsManager = new SettingsManager();
   databaseManager = new DatabaseManager();
   apiManager = new APIManager();
-  
+
   // Setup IPC
   setupIPC();
-  
+
   // Create UI
   createMenu();
   createWindow();

@@ -17,8 +17,18 @@ router.post('/fork', async (req, res) => {
       timestamp: Date.now(),
     };
     await db.artifacts.insertOne(forked);
-    require('../../utils/logger').info('Artifact forked', { artifactId, userId, forkedId: forked.id });
-    require('../../utils/remixLogger')({ userId, originalAsset: artifactId, changes, timestamp: Date.now(), forkedId: forked.id });
+    require('../../utils/logger').info('Artifact forked', {
+      artifactId,
+      userId,
+      forkedId: forked.id,
+    });
+    require('../../utils/remixLogger')({
+      userId,
+      originalAsset: artifactId,
+      changes,
+      timestamp: Date.now(),
+      forkedId: forked.id,
+    });
     res.json({ forkedId: forked.id });
   } catch (err) {
     require('../../utils/logger').error('Artifact fork failed', { error: err });

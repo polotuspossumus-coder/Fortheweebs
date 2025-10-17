@@ -12,13 +12,14 @@ export const MultiverseBadgeMap = () => {
         .select('user_id, badge, minted_at')
         .order('minted_at', { ascending: true });
 
-      const nodes = data?.map((badge, i) => ({
-        id: badge.badge,
-        user: badge.user_id,
-        x: 100 + (i % 10) * 80,
-        y: 100 + Math.floor(i / 10) * 80,
-        minted: badge.minted_at,
-      })) || [];
+      const nodes =
+        data?.map((badge, i) => ({
+          id: badge.badge,
+          user: badge.user_id,
+          x: 100 + (i % 10) * 80,
+          y: 100 + Math.floor(i / 10) * 80,
+          minted: badge.minted_at,
+        })) || [];
 
       const svg = d3.select(svgRef.current);
       svg.selectAll('*').remove();

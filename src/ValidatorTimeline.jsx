@@ -3,7 +3,8 @@ function ValidatorTimeline({ logs }) {
     <ul className="timeline">
       {logs.map((log, i) => (
         <li key={i}>
-          <strong>{log.action}</strong> by {log.userId} at {new Date(log.timestamp).toLocaleString()}
+          <strong>{log.action}</strong> by {log.userId} at{' '}
+          {new Date(log.timestamp).toLocaleString()}
         </li>
       ))}
     </ul>

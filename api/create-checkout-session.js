@@ -1,6 +1,15 @@
-const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+let stripe;
+try {
+  stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+} catch {
+  stripe = null;
+}
 
 module.exports = async (req, res) => {
+  if (!stripe) {
+    res.status(500).json({ error: 'Stripe library not loaded' });
+    return;
+  }
   if (req.method !== 'POST') {
     res.status(405).json({ error: 'Method not allowed' });
     return;
@@ -25,6 +34,14 @@ module.exports = async (req, res) => {
     });
     res.status(200).json({ url: session.url });
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    let msg = 'Unknown error';
+    if (err && typeof err === 'object' && err !== null && 'message' in err) {
+      msg = String(err.message);
+    } else if (typeof err === 'string') {
+      msg = err;
+    } else {
+      msg = String(err);
+    }
+    res.status(500).json({ error: msg });
   }
 };

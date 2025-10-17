@@ -10,7 +10,7 @@ router.get('/', async (req, res) => {
     if (!q) return res.status(400).json({ error: 'Missing search query' });
     // Find users matching the query for username
     const users = await User.find({ username: { $regex: q, $options: 'i' } });
-    const userIds = users.map(u => u._id.toString());
+    const userIds = users.map((u) => u._id.toString());
     // Search posts
     const results = await Post.find({
       $or: [

@@ -7,7 +7,7 @@ router.get('/:postId', async (req, res) => {
   try {
     const lineage = await Post.find({ remixOf: req.params.postId });
     const nodes = [{ id: req.params.postId }];
-    const links = lineage.map(child => ({ source: req.params.postId, target: child._id }));
+    const links = lineage.map((child) => ({ source: req.params.postId, target: child._id }));
     res.json({ nodes, links });
   } catch {
     res.status(500).json({ error: 'Failed to fetch remix lineage' });

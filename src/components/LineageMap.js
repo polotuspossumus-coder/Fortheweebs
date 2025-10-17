@@ -9,15 +9,13 @@ export const LineageMap = forwardRef(function LineageMap(props, ref) {
     clearSelection: () => {
       setSelected([]);
       if (onSelectionChange) onSelectionChange([]);
-    }
+    },
   }));
 
   function handleClick(id) {
     let newSelected;
     if (multiSelect) {
-      newSelected = selected.includes(id)
-        ? selected.filter(s => s !== id)
-        : [...selected, id];
+      newSelected = selected.includes(id) ? selected.filter((s) => s !== id) : [...selected, id];
     } else {
       newSelected = [id];
     }
@@ -28,7 +26,7 @@ export const LineageMap = forwardRef(function LineageMap(props, ref) {
 
   return (
     <svg ref={svgRef}>
-      {nodes.map(node => (
+      {nodes.map((node) => (
         <circle
           key={node.id}
           id={node.id}

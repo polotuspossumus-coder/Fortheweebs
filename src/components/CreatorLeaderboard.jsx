@@ -16,17 +16,11 @@ export const CreatorLeaderboard = () => {
         .select('user_id, count:user_id')
         .group('user_id');
 
-      const remixMap = Object.fromEntries(
-        remixData.map((r) => [r.user_id, r.count])
-      );
+      const remixMap = Object.fromEntries(remixData.map((r) => [r.user_id, r.count]));
 
-      const badgeMap = Object.fromEntries(
-        badgeData.map((b) => [b.user_id, b.count])
-      );
+      const badgeMap = Object.fromEntries(badgeData.map((b) => [b.user_id, b.count]));
 
-      const allUsers = Array.from(
-        new Set([...Object.keys(remixMap), ...Object.keys(badgeMap)])
-      );
+      const allUsers = Array.from(new Set([...Object.keys(remixMap), ...Object.keys(badgeMap)]));
 
       const ranked = allUsers.map((userId) => ({
         userId,
@@ -47,7 +41,10 @@ export const CreatorLeaderboard = () => {
       <ol>
         {leaders.map((leader, i) => (
           <li key={leader.userId}>
-            <strong>#{i + 1} {leader.userId}</strong> — Remix: {leader.remixCount}, Badges: {leader.badgeCount}, Score: {leader.score}
+            <strong>
+              #{i + 1} {leader.userId}
+            </strong>{' '}
+            — Remix: {leader.remixCount}, Badges: {leader.badgeCount}, Score: {leader.score}
           </li>
         ))}
       </ol>

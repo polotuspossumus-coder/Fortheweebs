@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 export default function PaymentPanel() {
   const [amount, setAmount] = useState('');
@@ -11,7 +11,7 @@ export default function PaymentPanel() {
       const res = await fetch('/api/create-checkout-session', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ amount: Number(amount) })
+        body: JSON.stringify({ amount: Number(amount) }),
       });
       const data = await res.json();
       if (data.url) {
@@ -20,7 +20,13 @@ export default function PaymentPanel() {
         setStatus('Error creating Stripe session.');
       }
     } catch (err) {
-      setStatus('Payment error: ' + err.message);
+      let msg = 'Unknown error';
+      if (err && typeof err === 'object' && 'message' in err) {
+        msg = err.message;
+      } else if (typeof err === 'string') {
+        msg = err;
+      }
+      setStatus('Payment error: ' + msg);
     }
   };
 
@@ -35,12 +41,14 @@ export default function PaymentPanel() {
             min="1"
             step="0.01"
             value={amount}
-            onChange={e => setAmount(e.target.value)}
+            onChange={(e) => setAmount(e.target.value)}
             required
             style={{ marginLeft: '0.5rem' }}
           />
         </label>
-        <button type="submit" style={{ marginLeft: '1rem' }}>Pay with Stripe</button>
+        <button type="submit" style={{ marginLeft: '1rem' }}>
+          Pay with Stripe
+        </button>
       </form>
       {status && <div className="payment-status">{status}</div>}
       <p className="muted">Payments are live via Stripe Checkout.</p>

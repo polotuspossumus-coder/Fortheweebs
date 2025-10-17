@@ -83,9 +83,9 @@ router.post('/:id/unfollow', async (req, res) => {
     const user = await User.findById(req.params.id);
     const follower = await User.findById(req.body.followerId);
     if (!user || !follower) return res.status(404).json({ error: 'User not found' });
-    user.followers = user.followers.filter(id => id !== req.body.followerId);
+    user.followers = user.followers.filter((id) => id !== req.body.followerId);
     await user.save();
-    follower.following = follower.following.filter(id => id !== req.params.id);
+    follower.following = follower.following.filter((id) => id !== req.params.id);
     await follower.save();
     res.json({ message: 'Unfollowed user' });
   } catch {

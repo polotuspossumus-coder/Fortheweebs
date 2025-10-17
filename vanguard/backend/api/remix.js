@@ -17,7 +17,7 @@ router.post('/remix', async (req, res) => {
   const { originalId, userId, changes } = req.body;
   await remixDb.read();
   remixDb.data ||= { remixes: [] };
-  const remixId = `remix_${Date.now()}_${Math.random().toString(36).slice(2,8)}`;
+  const remixId = `remix_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
   remixDb.data.remixes.push({ remixId, originalId, userId, changes, timestamp: Date.now() });
   await remixDb.write();
   await validatorDb.read();

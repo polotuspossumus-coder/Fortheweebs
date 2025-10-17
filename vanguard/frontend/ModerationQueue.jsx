@@ -5,15 +5,19 @@ export default function ModerationQueue({ files, onModerate }) {
     <div className="moderation-queue">
       <h3>Moderation Queue</h3>
       <ul>
-        {files.filter(f => f.status === 'pending' || f.status === 'flagged').map(file => (
-          <li key={file.fileName}>
-            <span>{file.originalName} ({file.mediaType})</span>
-            <span>Status: {file.status || 'pending'}</span>
-            <button onClick={() => onModerate(file, 'approved')}>Approve</button>
-            <button onClick={() => onModerate(file, 'rejected')}>Reject</button>
-            <button onClick={() => onModerate(file, 'flagged')}>Flag</button>
-          </li>
-        ))}
+        {files
+          .filter((f) => f.status === 'pending' || f.status === 'flagged')
+          .map((file) => (
+            <li key={file.fileName}>
+              <span>
+                {file.originalName} ({file.mediaType})
+              </span>
+              <span>Status: {file.status || 'pending'}</span>
+              <button onClick={() => onModerate(file, 'approved')}>Approve</button>
+              <button onClick={() => onModerate(file, 'rejected')}>Reject</button>
+              <button onClick={() => onModerate(file, 'flagged')}>Flag</button>
+            </li>
+          ))}
       </ul>
       <style>{`
         .moderation-queue { background: #23233a; color: #fff; padding: 1.5rem; border-radius: 1rem; margin: 2rem 0; }

@@ -10,8 +10,8 @@
 /**
  * @param {{ badges: RemixBadge[] }} props
  */
-import React from "react";
-import "./BadgeRegistry.css";
+import React from 'react';
+import './BadgeRegistry.css';
 
 export const BadgeRegistry = ({ badges }) => {
   return (

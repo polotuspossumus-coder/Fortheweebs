@@ -38,7 +38,11 @@ router.post('/api/webhook', bodyParser.raw({ type: 'application/json' }), async 
   const sig = req.headers['stripe-signature'];
   if (!process.env.STRIPE_SECRET_KEY) return res.status(500).send('stripe not configured');
   let Stripe;
-  try { Stripe = require('stripe'); } catch (e) { return res.status(500).send('stripe package missing'); }
+  try {
+    Stripe = require('stripe');
+  } catch (e) {
+    return res.status(500).send('stripe package missing');
+  }
   const stripe = Stripe(process.env.STRIPE_SECRET_KEY);
   const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
 

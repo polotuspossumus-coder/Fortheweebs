@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 
 /**
  * @param {{ tier: string, label: string, color: string, icon: string }} props

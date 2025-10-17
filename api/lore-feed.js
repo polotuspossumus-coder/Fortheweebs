@@ -7,7 +7,7 @@ router.get('/lore-feed', async (req, res) => {
   try {
     const logs = await db.validatorMemory.find().sort({ timestamp: -1 }).limit(50);
     require('../../utils/logger').info('Lore feed fetched', { count: logs.length });
-    const lore = logs.map(log => ({
+    const lore = logs.map((log) => ({
       user: log.userId,
       action: log.action,
       artifact: log.assetId,

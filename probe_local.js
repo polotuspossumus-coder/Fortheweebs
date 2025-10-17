@@ -4,13 +4,21 @@ const timeoutMs = 3000;
 
 function probePort(host, port) {
   return new Promise((resolve) => {
-    const req = http.request({ hostname: host, port, path: '/', method: 'GET', timeout: timeoutMs }, (res) => {
-      let data = '';
-      res.on('data', (c) => (data += c));
-      res.on('end', () => resolve({ ok: true, port, status: res.statusCode, snippet: data.slice(0, 200) }));
-    });
+    const req = http.request(
+      { hostname: host, port, path: '/', method: 'GET', timeout: timeoutMs },
+      (res) => {
+        let data = '';
+        res.on('data', (c) => (data += c));
+        res.on('end', () =>
+          resolve({ ok: true, port, status: res.statusCode, snippet: data.slice(0, 200) })
+        );
+      }
+    );
     req.on('error', (err) => resolve({ ok: false, port, error: String(err) }));
-    req.on('timeout', () => { req.destroy(); resolve({ ok: false, port, error: 'timeout' }); });
+    req.on('timeout', () => {
+      req.destroy();
+      resolve({ ok: false, port, error: 'timeout' });
+    });
     req.end();
   });
 }
@@ -26,7 +34,7 @@ async function findServer() {
   return null;
 }
 
-(async function(){
+(async function () {
   const found = await findServer();
   if (found) {
     console.log(`FOUND: http://127.0.0.1:${found.port}/ -> ${found.status}`);

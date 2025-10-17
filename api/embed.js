@@ -7,7 +7,9 @@ router.get('/:postId', async (req, res) => {
   try {
     const post = await Post.findById(req.params.postId);
     if (!post) return res.status(404).send('Post not found');
-    res.send(`<!DOCTYPE html><html><body><img src="${post.mediaUrl}" alt="media" style="max-width:100%" /><p>${post.caption}</p></body></html>`);
+    res.send(
+      `<!DOCTYPE html><html><body><img src="${post.mediaUrl}" alt="media" style="max-width:100%" /><p>${post.caption}</p></body></html>`
+    );
   } catch {
     res.status(500).send('Failed to load embed');
   }

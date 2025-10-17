@@ -2,8 +2,20 @@ const express = require('express');
 const multer = require('multer');
 let GIFEncoder, createCanvas, loadImage;
 if (process.env.NODE_ENV === 'test') {
-  GIFEncoder = function() { return { createReadStream: () => ({ pipe: () => {} }), start: () => {}, setRepeat: () => {}, setDelay: () => {}, setQuality: () => {}, addFrame: () => {}, finish: () => {} }; };
-  createCanvas = () => ({ getContext: () => ({ drawImage: () => {}, font: '', fillStyle: '', fillText: () => {} }) });
+  GIFEncoder = function () {
+    return {
+      createReadStream: () => ({ pipe: () => {} }),
+      start: () => {},
+      setRepeat: () => {},
+      setDelay: () => {},
+      setQuality: () => {},
+      addFrame: () => {},
+      finish: () => {},
+    };
+  };
+  createCanvas = () => ({
+    getContext: () => ({ drawImage: () => {}, font: '', fillStyle: '', fillText: () => {} }),
+  });
   loadImage = async () => ({});
 } else {
   GIFEncoder = require('gifencoder');
@@ -17,7 +29,6 @@ const uploadToS3 = require('../../utils/uploadToS3');
 const validateUpload = require('../../middleware/validateUpload');
 const router = express.Router();
 const upload = multer({ dest: 'uploads/' });
-
 
 router.post('/create', upload.array('images'), validateUpload, async (req, res) => {
   try {

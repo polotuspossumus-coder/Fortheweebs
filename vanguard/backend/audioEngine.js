@@ -5,7 +5,7 @@ async function mixTracks(tracks, bpm, effects) {
   // Combine tracks, apply effects, export
   return new Promise((resolve, reject) => {
     const command = ffmpeg();
-    tracks.forEach(t => command.input(t.url));
+    tracks.forEach((t) => command.input(t.url));
     command
       .complexFilter(effects)
       .output('output.mp3')

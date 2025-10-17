@@ -11,7 +11,11 @@ router.post('/edit', (req, res) => {
   let command = ffmpeg(videoUrl);
   if (edits.trim) command = command.setStartTime(edits.trim.start).setDuration(edits.trim.duration);
   if (edits.text) command = command.videoFilters(`drawtext=text='${edits.text}':x=10:y=H-th-10`);
-  command.output(output).on('end', () => res.json({ url: output })).on('error', err => res.status(500).json({ error: err.message })).run();
+  command
+    .output(output)
+    .on('end', () => res.json({ url: output }))
+    .on('error', (err) => res.status(500).json({ error: err.message }))
+    .run();
 });
 
 module.exports = router;

@@ -10,7 +10,7 @@
 /**
  * @param {{ badges: RemixBadge[] }} props
  */
-import React from "react";
+import React from 'react';
 
 export const RemixMap = ({ badges }) => {
   const radius = 120;
@@ -27,22 +27,9 @@ export const RemixMap = ({ badges }) => {
 
         return (
           <g key={badge.lineageHash}>
-            <line
-              x1={center.x}
-              y1={center.y}
-              x2={x}
-              y2={y}
-              stroke="#555"
-              strokeDasharray="2,2"
-            />
+            <line x1={center.x} y1={center.y} x2={x} y2={y} stroke="#555" strokeDasharray="2,2" />
             <circle cx={x} cy={y} r={10} fill={badge.badge.color} />
-            <text
-              x={x}
-              y={y - 14}
-              fill="#fff"
-              fontSize="0.7rem"
-              textAnchor="middle"
-            >
+            <text x={x} y={y - 14} fill="#fff" fontSize="0.7rem" textAnchor="middle">
               {badge.badge.icon}
             </text>
           </g>

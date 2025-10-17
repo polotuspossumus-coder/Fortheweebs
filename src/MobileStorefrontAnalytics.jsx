@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 /**
  * @param {{ stats: {total: number, sold: number, topSlab: string, tier: string|number, profitShare: number} }} props
  */
@@ -9,7 +9,9 @@ export default function MobileStorefrontAnalytics({ stats }) {
       <p className="text-sm">Total Earnings: ${stats.total}</p>
       <p className="text-sm">Slabs Sold: {stats.sold}</p>
       <p className="text-sm">Top Slab: {stats.topSlab}</p>
-      <p className="text-sm">Tier: {stats.tier} – {stats.profitShare}% Profit</p>
+      <p className="text-sm">
+        Tier: {stats.tier} – {stats.profitShare}% Profit
+      </p>
     </div>
   );
 }

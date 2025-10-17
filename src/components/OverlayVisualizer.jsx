@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 // import { motion } from 'framer-motion';
 import { remixConfig } from '../config/remix.config';
 import { supabase } from '../lib/supabase';
-import "./OverlayVisualizer.css";
+import './OverlayVisualizer.css';
 
 export const OverlayVisualizer = ({ userId }) => {
   const [preset, setPreset] = useState(null);

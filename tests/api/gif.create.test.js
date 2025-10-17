@@ -15,9 +15,7 @@ describe.skip('GIF API', () => {
   });
 
   it('should return 400 if no images uploaded', async () => {
-    const res = await request(app)
-      .post('/gif/create')
-      .send({});
+    const res = await request(app).post('/gif/create').send({});
     expect(res.statusCode).toBe(400);
     expect(res.body.error).toBe('No images uploaded');
   });

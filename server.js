@@ -1,25 +1,26 @@
-const express = require("express");
-const helmet = require("helmet");
-const rateLimit = require("express-rate-limit");
-const path = require("path");
-const signupRouter = require("./src/routes/signup.js").default;
-const tosRouter = require("./src/routes/tos.js").default;
+const express = require('express');
+const helmet = require('helmet');
+const rateLimit = require('express-rate-limit');
+const path = require('path');
+const signupRouter = require('./src/routes/signup.js').default;
+const tosRouter = require('./src/routes/tos.js').default;
 
-const swaggerUi = require('swagger-ui-express');
-const swaggerDocument = require('./swagger.json');
+const { setupSwagger } = require('./server/swagger');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
 // Set HTTP security headers
 app.use(helmet());
 // Rate limiting: 100 requests per 15 minutes per IP
-app.use(rateLimit({
-  windowMs: 15 * 60 * 1000,
-  max: 100,
-  standardHeaders: true,
-  legacyHeaders: false,
-  message: 'Too many requests from this IP, please try again later.'
-}));
+app.use(
+  rateLimit({
+    windowMs: 15 * 60 * 1000,
+    max: 100,
+    standardHeaders: true,
+    legacyHeaders: false,
+    message: 'Too many requests from this IP, please try again later.',
+  })
+);
 // Set global headers for caching and CORS
 app.use((req, res, next) => {
   res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
@@ -39,11 +40,11 @@ app.use((req, res, next) => {
   next();
 });
 
-// Serve live API docs at /api/docs
-app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+// Serve live API docs at /api-docs
+setupSwagger(app);
 app.use(express.json());
-app.use(express.static(path.join(process.cwd(), "src")));
-app.use(express.static(path.join(process.cwd(), ".vscode")));
+app.use(express.static(path.join(process.cwd(), 'src')));
+app.use(express.static(path.join(process.cwd(), '.vscode')));
 // Mount routers (signup, tos)
 app.use(signupRouter);
 app.use(tosRouter);
@@ -59,8 +60,8 @@ try {
   console.log('Payments router not mounted:', err.message);
 }
 
-app.get("/", (req, res) => {
-  res.sendFile(path.join(process.cwd(), ".vscode", "index.html"));
+app.get('/', (req, res) => {
+  res.sendFile(path.join(process.cwd(), '.vscode', 'index.html'));
 });
 
 if (require.main === module) {

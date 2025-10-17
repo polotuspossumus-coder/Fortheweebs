@@ -1,9 +1,9 @@
 /**
  * @param {{ creatorId: string, initialLore?: string, onSave: (lore: string) => void }} props
  */
-import React, { useState } from "react";
+import React, { useState } from 'react';
 
-export const CreatorLoreEditor = ({ creatorId, initialLore = "", onSave }) => {
+export const CreatorLoreEditor = ({ creatorId, initialLore = '', onSave }) => {
   const [lore, setLore] = useState(initialLore);
 
   return (
@@ -16,7 +16,9 @@ export const CreatorLoreEditor = ({ creatorId, initialLore = "", onSave }) => {
         className="lore-textarea"
         placeholder="Forge your remix legacy here..."
       />
-      <button onClick={() => onSave(lore)} className="primary-btn lore-save-btn">Save Lore</button>
+      <button onClick={() => onSave(lore)} className="primary-btn lore-save-btn">
+        Save Lore
+      </button>
     </div>
   );
 };

@@ -15,8 +15,9 @@ const scripts = pkg.scripts || {};
 const wanted = {
   dev: 'vite',
   'dev:demo': 'vite',
-  'demo:open': "powershell -NoProfile -Command \"Start-Process 'http://localhost:5173'; npm run dev:demo\"",
-  'smoke:dev': 'node .vscode/probe_local.js'
+  'demo:open':
+    'powershell -NoProfile -Command "Start-Process \'http://localhost:5173\'; npm run dev:demo"',
+  'smoke:dev': 'node .vscode/probe_local.js',
 };
 
 let changed = false;
@@ -37,4 +38,6 @@ if (changed) {
   console.log('No changes needed to package.json scripts.');
 }
 
-console.log('\nDone. You can run: npm run smoke:dev from the repo root to probe the dev server (after you start it).');
+console.log(
+  '\nDone. You can run: npm run smoke:dev from the repo root to probe the dev server (after you start it).'
+);

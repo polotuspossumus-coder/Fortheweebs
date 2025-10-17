@@ -11,7 +11,9 @@ export default function HelpOverlay() {
           <div className="bg-white p-6 rounded shadow-lg max-w-lg">
             <h2 className="text-xl font-bold mb-2">How to Use Vanguard</h2>
             <p>Upload media, remix with tools, publish with tiered access.</p>
-            <button onClick={() => setOpen(false)} className="mt-4">Close</button>
+            <button onClick={() => setOpen(false)} className="mt-4">
+              Close
+            </button>
           </div>
         </div>
       )}

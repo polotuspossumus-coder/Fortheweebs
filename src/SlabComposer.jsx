@@ -17,9 +17,9 @@ function SlabComposer({ onSubmit }) {
   return (
     <div className="p-4 bg-white rounded shadow">
       <h2 className="font-bold text-lg mb-2">Create New Slab</h2>
-      <input placeholder="Name" onChange={e => setName(e.target.value)} />
-      <input placeholder="Description" onChange={e => setDescription(e.target.value)} />
-      <input placeholder="Endpoint" onChange={e => setEndpoint(e.target.value)} />
+      <input placeholder="Name" onChange={(e) => setName(e.target.value)} />
+      <input placeholder="Description" onChange={(e) => setDescription(e.target.value)} />
+      <input placeholder="Endpoint" onChange={(e) => setEndpoint(e.target.value)} />
       <button onClick={submit}>Save Slab</button>
     </div>
   );

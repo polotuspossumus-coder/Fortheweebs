@@ -27,7 +27,11 @@ export default function StandaloneAccess({ isSubscriber, onAccess }) {
   return (
     <div className="standalone-access">
       <h3>Standalone Access</h3>
-      <p>Vanguard is free for paid Fortheweebs users.<br />Non-subscribers: $10 per use.</p>
+      <p>
+        Vanguard is free for paid Fortheweebs users.
+        <br />
+        Non-subscribers: $10 per use.
+      </p>
       <button onClick={handlePay} disabled={loading}>
         {loading ? 'Redirecting to Payment...' : 'Pay $10 with Stripe'}
       </button>

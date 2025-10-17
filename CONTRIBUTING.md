@@ -31,22 +31,26 @@ Welcome to Fortheweebs—an immortal remix protocol and creator-first platform. 
 ## 🔧 Setup
 
 1. Clone the repo:
+
 ```bash
 git clone https://github.com/fortheweebs/protocol.git
 ```
 
 2. Install dependencies:
+
 ```bash
 npm install
 ```
 
 3. Copy and configure environment variables:
+
 ```bash
 cp .env.example .env
 # Edit .env to set your keys and config
 ```
 
 4. Start the development server:
+
 ```bash
 npm run dev
 ```
@@ -56,10 +60,13 @@ npm run dev
 ## 🧪 Testing
 
 - Run all unit and integration tests:
+
 ```bash
 npm test
 ```
+
 - For end-to-end tests (Cypress):
+
 ```bash
 npx cypress open
 ```

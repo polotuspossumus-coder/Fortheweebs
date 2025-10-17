@@ -20,7 +20,9 @@ function FrameSequencer({ frames, setFrames }) {
   return (
     <ul id="frame-list">
       {frames.map((frame, i) => (
-        <li key={i}><img src={frame} alt={`Frame ${i}`} /></li>
+        <li key={i}>
+          <img src={frame} alt={`Frame ${i}`} />
+        </li>
       ))}
     </ul>
   );

@@ -7,7 +7,7 @@ export default function MusicMixer() {
 
   const startLoop = () => {
     Tone.Transport.cancel();
-    Tone.Transport.scheduleRepeat(time => {
+    Tone.Transport.scheduleRepeat((time) => {
       kick.start(time);
       snare.start(time + 0.5);
     }, '1m');

@@ -20,7 +20,7 @@ app.post('/api/meme', express.json({ limit: '2mb' }), async (req, res) => {
       generate: async ({ topText, bottomText, imageUrl }) => {
         // Return a dummy meme URL for now
         return `/memes/generated?top=${encodeURIComponent(topText)}&bottom=${encodeURIComponent(bottomText)}&img=${encodeURIComponent(imageUrl)}`;
-      }
+      },
     };
     const meme = await memeEngine.generate({ topText, bottomText, imageUrl });
     res.json({ meme });
@@ -33,8 +33,9 @@ const autoFlag = require('./utils/autoFlag');
 // POST /api/ingest - accept multiple files, generate preview, auto-flag, and save
 app.post('/api/ingest', express.json({ limit: '50mb' }), async (req, res) => {
   try {
-    if (!Array.isArray(req.body.files)) return res.status(400).json({ error: 'Missing files array' });
-    const files = req.body.files.map(file => {
+    if (!Array.isArray(req.body.files))
+      return res.status(400).json({ error: 'Missing files array' });
+    const files = req.body.files.map((file) => {
       const preview = generatePreview(file);
       const flagged = autoFlag(file);
       return { ...file, preview, flagged };
@@ -69,7 +70,9 @@ app.get('/api/moderation-queue', async (req, res) => {
     const adapter = new JSONFile(dbFile);
     const db = new Low(adapter);
     await db.read();
-    const queue = (db.data.files || []).filter(f => f.status === 'pending' || f.status === 'flagged' || !f.status);
+    const queue = (db.data.files || []).filter(
+      (f) => f.status === 'pending' || f.status === 'flagged' || !f.status
+    );
     res.json(queue);
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -105,7 +108,8 @@ app.patch('/api/moderate/:id', async (req, res) => {
 app.patch('/api/moderate', async (req, res) => {
   try {
     const { ids, action } = req.body;
-    if (!Array.isArray(ids) || !action) return res.status(400).json({ error: 'Missing ids or action' });
+    if (!Array.isArray(ids) || !action)
+      return res.status(400).json({ error: 'Missing ids or action' });
     // Use lowdb for updateMany
     const { Low, JSONFile } = require('lowdb');
     const path = require('path');
@@ -130,7 +134,17 @@ app.patch('/api/moderate', async (req, res) => {
 app.get('/api/files', async (req, res) => {
   try {
     const db = require('../../db');
-    const files = await db.getAllFiles ? await db.getAllFiles() : (await (async () => { const { Low, JSONFile } = require('lowdb'); const path = require('path'); const dbFile = path.join(__dirname, '../../../media/vanguard-meta.json'); const adapter = new JSONFile(dbFile); const dbInst = new Low(adapter); await dbInst.read(); return dbInst.data.files || []; })());
+    const files = (await db.getAllFiles)
+      ? await db.getAllFiles()
+      : await (async () => {
+          const { Low, JSONFile } = require('lowdb');
+          const path = require('path');
+          const dbFile = path.join(__dirname, '../../../media/vanguard-meta.json');
+          const adapter = new JSONFile(dbFile);
+          const dbInst = new Low(adapter);
+          await dbInst.read();
+          return dbInst.data.files || [];
+        })();
     res.json(files);
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -138,7 +152,6 @@ app.get('/api/files', async (req, res) => {
 });
 // Vanguard backend entry point
 // Handles media ingestion, moderation queue, and API endpoints
-
 
 // Vanguard backend entry point
 // Handles media ingestion, moderation queue, and API endpoints
@@ -175,7 +188,6 @@ app.post('/api/vanguard/ingest', upload.single('file'), async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
-
 
 // Moderation endpoint
 app.use('/api/vanguard/moderate', moderateRouter);

@@ -14,7 +14,11 @@ router.post('/', async (req, res) => {
     const translated = await ai.translateSlab(slab, targetLang);
     res.json(translated);
   } catch (err) {
-    res.status(500).json({ error: 'Failed to translate slab', details: typeof err === 'object' && err !== null && 'message' in err ? err.message : String(err) });
+    res.status(500).json({
+      error: 'Failed to translate slab',
+      details:
+        typeof err === 'object' && err !== null && 'message' in err ? err.message : String(err),
+    });
   }
 });
 

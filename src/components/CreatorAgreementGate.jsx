@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 
 const CREATOR_AGREEMENT_TEXT = `# Fortheweebs Creator Agreement
 
@@ -76,7 +76,7 @@ export const CreatorAgreementGate = ({ userId, ipAddress, version, onAccepted })
         <pre className="terms-pre">{CREATOR_AGREEMENT_TEXT}</pre>
       </div>
       <label className="terms-label">
-        <input type="checkbox" checked={accepted} onChange={e => setAccepted(e.target.checked)} />
+        <input type="checkbox" checked={accepted} onChange={(e) => setAccepted(e.target.checked)} />
         I accept the Creator Agreement
       </label>
       <button

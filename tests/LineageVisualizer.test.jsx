@@ -9,7 +9,9 @@ test('LineageVisualizer renders provided nodes and edges', () => {
     { id: 'c2', label: 'Child 2', parentId: 'root' },
   ];
 
-  const { container, getByText } = render(<LineageVisualizer nodes={nodes} width={300} height={120} />);
+  const { container, getByText } = render(
+    <LineageVisualizer nodes={nodes} width={300} height={120} />
+  );
 
   expect(getByText(/Root/)).toBeTruthy();
   expect(getByText(/Child 1/)).toBeTruthy();

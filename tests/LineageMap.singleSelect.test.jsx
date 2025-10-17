@@ -11,7 +11,12 @@ test('single-select mode clears other selections', async () => {
 
   const onSelectionChange = jest.fn();
   const { container } = render(
-    <LineageMap userId="u" nodes={nodes} multiSelect={false} onSelectionChange={onSelectionChange} />
+    <LineageMap
+      userId="u"
+      nodes={nodes}
+      multiSelect={false}
+      onSelectionChange={onSelectionChange}
+    />
   );
 
   const circleA = container.querySelector('circle[id="a1"]');

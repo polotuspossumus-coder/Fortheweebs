@@ -1,22 +1,33 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Fortheweebs</title>
-    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="/style.css" />
   </head>
   <body class="site-root">
     <div class="animated-bg"></div>
     <main>
-  <section class="hero animated-hero glass-card enhanced-glass">
+      <section class="hero animated-hero glass-card enhanced-glass">
         <img src="/assets/logo.png" alt="Fortheweebs Logo" class="hero-logo enhanced-logo" />
         <h1 class="hero-title rainbow-text">Welcome to Fortheweebs</h1>
-        <p class="hero-sub">A next-gen, friendly social media platform for creators and fans.<br>Onboard, sign documents, and enjoy the community.<br>Donations are always welcome!</p>
+        <p class="hero-sub">
+          A next-gen, friendly social media platform for creators and fans.<br />Onboard, sign
+          documents, and enjoy the community.<br />Donations are always welcome!
+        </p>
         <div class="stats-row">
-          <div class="stat-card"><span class="stat-value" id="stat-users">0</span><span class="stat-label">Users</span></div>
-          <div class="stat-card"><span class="stat-value" id="stat-creators">0</span><span class="stat-label">Creators</span></div>
-          <div class="stat-card"><span class="stat-value" id="stat-badges">0</span><span class="stat-label">Badges Minted</span></div>
+          <div class="stat-card">
+            <span class="stat-value" id="stat-users">0</span><span class="stat-label">Users</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-value" id="stat-creators">0</span
+            ><span class="stat-label">Creators</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-value" id="stat-badges">0</span
+            ><span class="stat-label">Badges Minted</span>
+          </div>
         </div>
         <div class="carousel enhanced-carousel">
           <h3 class="carousel-title">Featured Creators</h3>
@@ -33,56 +44,127 @@
         <div class="scroll-down-arrow"></div>
       </section>
       <style>
-        body { margin: 0; }
+        body {
+          margin: 0;
+        }
         .animated-bg {
           position: fixed;
-          top: 0; left: 0; width: 100vw; height: 100vh;
+          top: 0;
+          left: 0;
+          width: 100vw;
+          height: 100vh;
           z-index: 0;
           background: linear-gradient(120deg, #0f2027, #2c5364, #38bdf8, #7f5af0, #2cb67d);
           background-size: 400% 400%;
           animation: gradientMove 16s ease-in-out infinite;
         }
         @keyframes gradientMove {
-          0% { background-position: 0% 50%; }
-          50% { background-position: 100% 50%; }
-          100% { background-position: 0% 50%; }
+          0% {
+            background-position: 0% 50%;
+          }
+          50% {
+            background-position: 100% 50%;
+          }
+          100% {
+            background-position: 0% 50%;
+          }
         }
         .enhanced-glass {
-          background: rgba(34,34,44,0.85);
+          background: rgba(34, 34, 44, 0.85);
           border-radius: 2.5rem;
-          box-shadow: 0 12px 48px 0 rgba(56,189,248,0.25), 0 1.5px 8px 0 rgba(127,90,240,0.15);
+          box-shadow:
+            0 12px 48px 0 rgba(56, 189, 248, 0.25),
+            0 1.5px 8px 0 rgba(127, 90, 240, 0.15);
           -webkit-backdrop-filter: blur(16px) saturate(1.2);
           backdrop-filter: blur(16px) saturate(1.2);
-          border: 2px solid rgba(56,189,248,0.18);
+          border: 2px solid rgba(56, 189, 248, 0.18);
           margin: 2.5rem auto;
           max-width: 650px;
         }
         .enhanced-logo {
-          width: 120px; height: 120px; margin-bottom: 1.5rem;
+          width: 120px;
+          height: 120px;
+          margin-bottom: 1.5rem;
           filter: drop-shadow(0 0 32px #38bdf8) drop-shadow(0 0 8px #7f5af0);
         }
         .rainbow-text {
           font-size: 2.8rem;
           font-weight: bold;
-          background: linear-gradient(90deg,#38bdf8,#7f5af0,#2cb67d,#f87171,#fbbf24,#38bdf8);
+          background: linear-gradient(90deg, #38bdf8, #7f5af0, #2cb67d, #f87171, #fbbf24, #38bdf8);
           background-size: 200% 200%;
-          -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; color: transparent;
+          -webkit-background-clip: text;
+          background-clip: text;
+          -webkit-text-fill-color: transparent;
+          color: transparent;
           animation: rainbowMove 6s linear infinite;
         }
         @keyframes rainbowMove {
-          0% { background-position: 0% 50%; }
-          100% { background-position: 100% 50%; }
+          0% {
+            background-position: 0% 50%;
+          }
+          100% {
+            background-position: 100% 50%;
+          }
         }
-        .stats-row { display: flex; justify-content: center; gap: 2.5rem; margin: 2.5rem 0; }
-        .stat-card { background: #23233a; border-radius: 1.2rem; padding: 1.2rem 2.2rem; color: #fff; box-shadow: 0 2px 12px rgba(56,189,248,0.12); }
-        .stat-value { font-size: 2.2rem; font-weight: bold; display: block; transition: color 0.3s; }
-        .stat-label { font-size: 1.1rem; color: #aaf; }
-        .enhanced-carousel { margin: 2.5rem 0; }
-        .carousel-title { color: #fff; font-size: 1.3rem; margin-bottom: 0.7rem; }
-        .carousel-track { display: flex; gap: 2rem; justify-content: center; animation: enhancedScroll 12s linear infinite; }
-        .carousel-item { background: #23233a; color: #fff; border-radius: 1.2rem; padding: 0.7rem 2rem; font-size: 1.15rem; box-shadow: 0 2px 12px rgba(56,189,248,0.12); transition: transform 0.2s; }
-        .carousel-item:hover { transform: scale(1.08) rotate(-2deg); background: #38bdf8; color: #23233a; }
-        @keyframes enhancedScroll { 0% { transform: translateX(0); } 100% { transform: translateX(-60%); } }
+        .stats-row {
+          display: flex;
+          justify-content: center;
+          gap: 2.5rem;
+          margin: 2.5rem 0;
+        }
+        .stat-card {
+          background: #23233a;
+          border-radius: 1.2rem;
+          padding: 1.2rem 2.2rem;
+          color: #fff;
+          box-shadow: 0 2px 12px rgba(56, 189, 248, 0.12);
+        }
+        .stat-value {
+          font-size: 2.2rem;
+          font-weight: bold;
+          display: block;
+          transition: color 0.3s;
+        }
+        .stat-label {
+          font-size: 1.1rem;
+          color: #aaf;
+        }
+        .enhanced-carousel {
+          margin: 2.5rem 0;
+        }
+        .carousel-title {
+          color: #fff;
+          font-size: 1.3rem;
+          margin-bottom: 0.7rem;
+        }
+        .carousel-track {
+          display: flex;
+          gap: 2rem;
+          justify-content: center;
+          animation: enhancedScroll 12s linear infinite;
+        }
+        .carousel-item {
+          background: #23233a;
+          color: #fff;
+          border-radius: 1.2rem;
+          padding: 0.7rem 2rem;
+          font-size: 1.15rem;
+          box-shadow: 0 2px 12px rgba(56, 189, 248, 0.12);
+          transition: transform 0.2s;
+        }
+        .carousel-item:hover {
+          transform: scale(1.08) rotate(-2deg);
+          background: #38bdf8;
+          color: #23233a;
+        }
+        @keyframes enhancedScroll {
+          0% {
+            transform: translateX(0);
+          }
+          100% {
+            transform: translateX(-60%);
+          }
+        }
         .enhanced-cta {
           display: inline-block;
           margin-top: 2.5rem;
@@ -90,31 +172,47 @@
           font-size: 1.3rem;
           font-weight: bold;
           color: #fff;
-          background: linear-gradient(90deg,#38bdf8,#7f5af0,#2cb67d);
+          background: linear-gradient(90deg, #38bdf8, #7f5af0, #2cb67d);
           border: none;
           border-radius: 2rem;
-          box-shadow: 0 0 24px #38bdf8, 0 0 8px #7f5af0;
+          box-shadow:
+            0 0 24px #38bdf8,
+            0 0 8px #7f5af0;
           cursor: pointer;
-          transition: background 0.3s, box-shadow 0.3s, transform 0.2s;
+          transition:
+            background 0.3s,
+            box-shadow 0.3s,
+            transform 0.2s;
           animation: enhancedPulse 1.5s infinite;
         }
         .enhanced-cta:hover {
-          background: linear-gradient(90deg,#2cb67d,#7f5af0,#38bdf8);
-          box-shadow: 0 0 32px #2cb67d, 0 0 12px #7f5af0;
+          background: linear-gradient(90deg, #2cb67d, #7f5af0, #38bdf8);
+          box-shadow:
+            0 0 32px #2cb67d,
+            0 0 12px #7f5af0;
           transform: scale(1.05);
         }
         @keyframes enhancedPulse {
-          0% { box-shadow: 0 0 0 0 #38bdf8; }
-          70% { box-shadow: 0 0 0 18px rgba(56,189,248,0); }
-          100% { box-shadow: 0 0 0 0 rgba(56,189,248,0); }
+          0% {
+            box-shadow: 0 0 0 0 #38bdf8;
+          }
+          70% {
+            box-shadow: 0 0 0 18px rgba(56, 189, 248, 0);
+          }
+          100% {
+            box-shadow: 0 0 0 0 rgba(56, 189, 248, 0);
+          }
         }
         .scroll-down-arrow {
           margin: 2.5rem auto 0 auto;
-          width: 36px; height: 36px;
+          width: 36px;
+          height: 36px;
           border-radius: 50%;
           border: 2px solid #38bdf8;
-          display: flex; align-items: center; justify-content: center;
-          background: rgba(56,189,248,0.08);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          background: rgba(56, 189, 248, 0.08);
           box-shadow: 0 0 12px #38bdf8;
           position: relative;
         }
@@ -125,8 +223,13 @@
           animation: arrowBounce 1.2s infinite;
         }
         @keyframes arrowBounce {
-          0%, 100% { transform: translateY(0); }
-          50% { transform: translateY(10px); }
+          0%,
+          100% {
+            transform: translateY(0);
+          }
+          50% {
+            transform: translateY(10px);
+          }
         }
       </style>
       <script>
@@ -138,7 +241,10 @@
           const step = Math.ceil(end / (duration / 16));
           function update() {
             start += step;
-            if (start >= end) { el.textContent = end.toLocaleString(); return; }
+            if (start >= end) {
+              el.textContent = end.toLocaleString();
+              return;
+            }
             el.textContent = start.toLocaleString();
             requestAnimationFrame(update);
           }
@@ -151,9 +257,7 @@
         });
       </script>
       <div id="root" class="container-card"></div>
-      <footer class="site-footer">
-        &copy; 2025 Fortheweebs. All rights reserved.
-      </footer>
+      <footer class="site-footer">&copy; 2025 Fortheweebs. All rights reserved.</footer>
     </main>
     <script src="/index.js" type="module"></script>
   </body>

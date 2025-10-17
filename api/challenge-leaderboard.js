@@ -4,12 +4,15 @@ const db = require('./lib/database');
 
 router.get('/:challengeId', async (req, res) => {
   try {
-    const entries = await db.challengeEntries.find({ challengeId: req.params.challengeId }).sort({ votes: -1 }).toArray();
+    const entries = await db.challengeEntries
+      .find({ challengeId: req.params.challengeId })
+      .sort({ votes: -1 })
+      .toArray();
     const slabs = await db.slabs.find({}).toArray();
-    const leaderboard = entries.map(entry => ({
+    const leaderboard = entries.map((entry) => ({
       creator: entry.creator,
       votes: entry.votes,
-      slabName: slabs.find(s => s._id === entry.slabId)?.name || 'Unknown',
+      slabName: slabs.find((s) => s._id === entry.slabId)?.name || 'Unknown',
     }));
     res.json(leaderboard);
   } catch (err) {

@@ -2,4 +2,3 @@
 export default function CreatorSignupPlaceholder() {
   return 'CreatorSignup (editor copy placeholder)';
 }
-

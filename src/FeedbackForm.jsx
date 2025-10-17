@@ -11,7 +11,7 @@ function FeedbackForm() {
   };
   return (
     <div>
-      <textarea onChange={e => setText(e.target.value)} value={text} />
+      <textarea onChange={(e) => setText(e.target.value)} value={text} />
       <button onClick={submit}>Submit Feedback</button>
     </div>
   );

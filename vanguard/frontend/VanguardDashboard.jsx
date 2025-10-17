@@ -1,4 +1,3 @@
-
 import StandaloneAccess from './StandaloneAccess';
 import ModerationQueue from './ModerationQueue';
 import { useEffect, useState } from 'react';
@@ -15,7 +14,7 @@ export default function VanguardDashboard() {
   // Fetch files from backend
   useEffect(() => {
     fetch('/api/vanguard/list')
-      .then(res => res.json())
+      .then((res) => res.json())
       .then(setFiles)
       .catch(() => setFiles([]));
   }, [uploading]);
@@ -27,7 +26,16 @@ export default function VanguardDashboard() {
       const formData = new FormData();
       formData.append('file', file);
       formData.append('userId', 'demo'); // TODO: Replace with real userId
-      formData.append('mediaType', file.type.startsWith('image') ? 'image' : file.type.startsWith('video') ? 'video' : file.type.startsWith('audio') ? 'audio' : 'other');
+      formData.append(
+        'mediaType',
+        file.type.startsWith('image')
+          ? 'image'
+          : file.type.startsWith('video')
+            ? 'video'
+            : file.type.startsWith('audio')
+              ? 'audio'
+              : 'other'
+      );
       await fetch('/api/vanguard/ingest', {
         method: 'POST',
         body: formData,
@@ -52,7 +60,7 @@ export default function VanguardDashboard() {
   }
 
   function handleSelect(file) {
-    setSelected(sel => sel.includes(file) ? sel.filter(f => f !== file) : [...sel, file]);
+    setSelected((sel) => (sel.includes(file) ? sel.filter((f) => f !== file) : [...sel, file]));
   }
 
   async function handleModerate(file, status) {
@@ -61,27 +69,18 @@ export default function VanguardDashboard() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ status }),
     });
-    setUploading(u => !u); // trigger refresh
+    setUploading((u) => !u); // trigger refresh
   }
 
   // Access gating logic
   if (!isPaidUser && !standaloneAccess) {
-    return (
-      <StandaloneAccess
-        isSubscriber={false}
-        onAccess={() => setStandaloneAccess(true)}
-      />
-    );
+    return <StandaloneAccess isSubscriber={false} onAccess={() => setStandaloneAccess(true)} />;
   }
 
   return (
     <div className="vanguard-dashboard">
       <h2>Vanguard Media Manager</h2>
-      <div
-        className="drop-zone"
-        onDrop={handleDrop}
-        onDragOver={handleDragOver}
-      >
+      <div className="drop-zone" onDrop={handleDrop} onDragOver={handleDragOver}>
         <p>Drag and drop files here, or click to select.</p>
         <input
           type="file"
@@ -90,7 +89,9 @@ export default function VanguardDashboard() {
           id="file-input"
           onChange={handleFileInput}
         />
-        <label htmlFor="file-input" className="file-input-label">Browse Files</label>
+        <label htmlFor="file-input" className="file-input-label">
+          Browse Files
+        </label>
       </div>
       {uploading && <div>Uploading...</div>}
       {files.length > 0 && (
@@ -102,7 +103,7 @@ export default function VanguardDashboard() {
             <button onClick={() => alert('Batch flag coming soon!')}>Flag</button>
           </div>
           <ul className="file-list">
-            {files.map(file => (
+            {files.map((file) => (
               <li key={file.fileName} className={selected.includes(file) ? 'selected' : ''}>
                 <input
                   type="checkbox"

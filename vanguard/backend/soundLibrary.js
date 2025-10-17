@@ -12,7 +12,7 @@ module.exports = {
   getAll: () => soundList,
   play: (id) => {
     // In a real app, trigger playback via Web Audio API or broadcast to clients
-    const sound = soundList.find(s => s.id === id);
+    const sound = soundList.find((s) => s.id === id);
     if (sound) {
       console.log(`Playing sound: ${sound.name}`);
     }

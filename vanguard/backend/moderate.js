@@ -14,7 +14,7 @@ router.patch('/:id/status', async (req, res) => {
   const { id } = req.params;
   const { status } = req.body;
   await db.read();
-  const file = db.data.files.find(f => f.remixId === id || f.fileName === id);
+  const file = db.data.files.find((f) => f.remixId === id || f.fileName === id);
   if (!file) return res.status(404).send({ error: 'File not found' });
   file.status = status;
   await db.write();

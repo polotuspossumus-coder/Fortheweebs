@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 /**
  * @param {{ challenge: {id: string, title: string, description: string} }} props
  */
@@ -20,7 +20,13 @@ export default function MobileRemixChallenge({ challenge }) {
     <div className="p-4 max-w-sm mx-auto" aria-label="Remix challenge">
       <h2 className="text-lg font-bold mb-2">{challenge.title}</h2>
       <p className="text-sm text-gray-700 mb-4">{challenge.description}</p>
-      <button className="w-full bg-indigo-600 text-white py-2 rounded" onClick={submit} aria-label="Submit remix">Submit Remix</button>
+      <button
+        className="w-full bg-indigo-600 text-white py-2 rounded"
+        onClick={submit}
+        aria-label="Submit remix"
+      >
+        Submit Remix
+      </button>
     </div>
   );
 }

@@ -5,7 +5,7 @@ export default function Soundboard() {
   const [sounds, setSounds] = useState([]);
 
   useEffect(() => {
-    axios.get('/api/soundboard/sounds').then(res => setSounds(res.data));
+    axios.get('/api/soundboard/sounds').then((res) => setSounds(res.data));
   }, []);
 
   const playSound = (url) => {
@@ -15,7 +15,7 @@ export default function Soundboard() {
 
   return (
     <div className="grid grid-cols-4 gap-4">
-      {sounds.map(sound => (
+      {sounds.map((sound) => (
         <button
           key={sound.id}
           className="bg-purple-700 text-white p-4 rounded shadow"

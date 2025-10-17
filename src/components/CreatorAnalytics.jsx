@@ -16,10 +16,7 @@ export const CreatorAnalytics = ({ userId }) => {
         .select('*')
         .eq('user_id', userId);
 
-      const { data: badges } = await supabase
-        .from('badges')
-        .select('*')
-        .eq('user_id', userId);
+      const { data: badges } = await supabase.from('badges').select('*').eq('user_id', userId);
 
       const { data: sessions } = await supabase
         .from('remix_sessions')

@@ -7,7 +7,7 @@ function PublishFlow({ onPublish }) {
   return (
     <div>
       <h2>{steps[step]}</h2>
-      <button onClick={() => step < steps.length - 1 ? setStep(step + 1) : onPublish()}>
+      <button onClick={() => (step < steps.length - 1 ? setStep(step + 1) : onPublish())}>
         {step < steps.length - 1 ? 'Next' : 'Publish'}
       </button>
     </div>

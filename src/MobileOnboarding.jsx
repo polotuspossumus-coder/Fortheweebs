@@ -1,5 +1,5 @@
-import { useState } from "react";
-import AccessibleButton from "./AccessibleButton";
+import { useState } from 'react';
+import AccessibleButton from './AccessibleButton';
 
 /**
  * @param {Object} props
@@ -7,21 +7,27 @@ import AccessibleButton from "./AccessibleButton";
  */
 export default function MobileOnboarding(props) {
   const onBegin = props.onBegin;
-  const [tier, setTier] = useState("100");
+  const [tier, setTier] = useState('100');
 
   /**
    * @param {React.ChangeEvent<HTMLSelectElement>} e
    */
   const handleChange = (e) => setTier(e.target.value);
   const handleBegin = () => {
-    if (typeof onBegin === "function") onBegin(tier);
+    if (typeof onBegin === 'function') onBegin(tier);
   };
 
   return (
-    <div className="p-4 max-w-sm mx-auto bg-white rounded-lg shadow-lg" role="form" aria-label="Mobile onboarding">
+    <div
+      className="p-4 max-w-sm mx-auto bg-white rounded-lg shadow-lg"
+      role="form"
+      aria-label="Mobile onboarding"
+    >
       <h2 className="text-2xl font-bold mb-2 text-indigo-700">Welcome to Fortheweebs</h2>
       <p className="text-base mb-4 text-gray-700">Start your remix journey. Choose your tier:</p>
-      <label htmlFor="tier-select" className="sr-only">Choose your profit tier</label>
+      <label htmlFor="tier-select" className="sr-only">
+        Choose your profit tier
+      </label>
       <select
         id="tier-select"
         className="w-full p-2 border border-indigo-300 rounded focus:ring-2 focus:ring-indigo-500"

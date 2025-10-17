@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 /**
  * @param {{ stats: {totalSlabs: number, totalForks: number, endorsements: number, earnings: number} }} props
  */
