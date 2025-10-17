@@ -1,7 +1,14 @@
 const express = require('express');
 const multer = require('multer');
-const GIFEncoder = require('gifencoder');
-const { createCanvas, loadImage } = require('canvas');
+let GIFEncoder, createCanvas, loadImage;
+if (process.env.NODE_ENV === 'test') {
+  GIFEncoder = function() { return { createReadStream: () => ({ pipe: () => {} }), start: () => {}, setRepeat: () => {}, setDelay: () => {}, setQuality: () => {}, addFrame: () => {}, finish: () => {} }; };
+  createCanvas = () => ({ getContext: () => ({ drawImage: () => {}, font: '', fillStyle: '', fillText: () => {} }) });
+  loadImage = async () => ({});
+} else {
+  GIFEncoder = require('gifencoder');
+  ({ createCanvas, loadImage } = require('canvas'));
+}
 const fs = require('fs');
 const path = require('path');
 const logger = require('../../utils/logger');

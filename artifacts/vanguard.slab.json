@@ -1,0 +1,6 @@
+{
+  "chain": "vanguard",
+  "timestamp": "2025-10-17T05:47:55.074Z",
+  "validatorMemory": "validators/vanguard.json",
+  "ritualHooks": "rituals/vanguard.ts"
+}

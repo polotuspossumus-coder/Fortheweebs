@@ -4,11 +4,29 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "build": "ts-node build.ts"
+    "build": "ts-node build.ts",
+    "test": "jest"
   },
   "devDependencies": {
+    "@babel/preset-env": "^7.28.3",
+    "@babel/preset-react": "^7.27.1",
+    "@babel/preset-typescript": "^7.27.1",
+    "@testing-library/react": "^16.3.0",
+    "@testing-library/user-event": "^14.6.1",
+    "@types/jest": "^30.0.0",
+    "@types/react": "^19.2.2",
+    "@types/react-dom": "^19.2.2",
+    "babel-jest": "^30.2.0",
     "inquirer": "^12.10.0",
+    "jest": "^30.2.0",
+    "jest-environment-jsdom": "^30.2.0",
+    "supertest": "^7.1.4",
     "ts-node": "^10.0.0",
-    "typescript": "^4.0.0"
+    "typescript": "^4.0.0",
+    "vitest": "^3.2.4"
+  },
+  "dependencies": {
+    "swagger-ui-express": "^5.0.1",
+    "uuid": "^13.0.0"
   }
 }

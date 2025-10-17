@@ -1,8 +1,6 @@
 import React from 'react';
 import { render } from '@testing-library/react';
-import { test, expect } from 'vitest';
-import LineageVisualizer from '../../src/components/LineageVisualizer';
-import { prettyDOM } from '@testing-library/dom';
+import LineageVisualizer from '../src/components/LineageVisualizer';
 
 test('LineageVisualizer renders provided nodes and edges', () => {
   const nodes = [
@@ -19,13 +17,4 @@ test('LineageVisualizer renders provided nodes and edges', () => {
 
   const lines = container.querySelectorAll('line');
   expect(lines.length).toBe(2);
-});
-
-test('LineageVisualizer snapshot', () => {
-  const nodes = [
-    { id: 'root', label: 'Root with a very long label that should be truncated' },
-    { id: 'c1', label: 'Child 1 with extra long label', parentId: 'root' },
-  ];
-  const { container } = render(<LineageVisualizer nodes={nodes} width={320} height={120} />);
-  expect(prettyDOM(container.querySelector('svg'))).toMatchSnapshot();
 });

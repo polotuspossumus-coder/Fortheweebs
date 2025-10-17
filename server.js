@@ -1,4 +1,3 @@
-
 const express = require("express");
 const path = require("path");
 const signupRouter = require("./src/routes/signup.js").default;
@@ -39,7 +38,10 @@ app.get("/", (req, res) => {
   res.sendFile(path.join(process.cwd(), ".vscode", "index.html"));
 });
 
+if (require.main === module) {
+  app.listen(PORT, () => {
+    console.log(`ForTheWeebs social platform running on port ${PORT}`);
+  });
+}
 
-app.listen(PORT, () => {
-  console.log(`ForTheWeebs social platform running on port ${PORT}`);
-});
+module.exports = app;
