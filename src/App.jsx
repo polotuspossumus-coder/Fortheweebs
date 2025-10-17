@@ -7,21 +7,24 @@ import VideoEditor from './VideoEditor';
 import ResponsiveContainer from './ResponsiveContainer';
 import HelpOverlay from './HelpOverlay';
 import FeedbackToast from './FeedbackToast';
+import ErrorBoundary from './ErrorBoundary';
 
 function App() {
   return (
-    <Router>
-      <ResponsiveContainer>
-        <HelpOverlay />
-        <FeedbackToast message="Welcome to Fortheweebs!" />
-        <Routes>
-          <Route path="/" element={<Dashboard />} />
-          <Route path="/moderation" element={<ModerationQueue />} />
-          <Route path="/soundboard" element={<Soundboard />} />
-          <Route path="/image-editor" element={<ImageEditor />} />
-          <Route path="/video-editor" element={<VideoEditor />} />
-        </Routes>
-      </ResponsiveContainer>
-    </Router>
+    <ErrorBoundary>
+      <Router>
+        <ResponsiveContainer>
+          <HelpOverlay />
+          <FeedbackToast message="Welcome to Fortheweebs!" />
+          <Routes>
+            <Route path="/" element={<Dashboard />} />
+            <Route path="/moderation" element={<ModerationQueue />} />
+            <Route path="/soundboard" element={<Soundboard />} />
+            <Route path="/image-editor" element={<ImageEditor />} />
+            <Route path="/video-editor" element={<VideoEditor />} />
+          </Routes>
+        </ResponsiveContainer>
+      </Router>
+    </ErrorBoundary>
   );
 }
