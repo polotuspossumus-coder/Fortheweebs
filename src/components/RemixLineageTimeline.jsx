@@ -13,23 +13,27 @@
  * @param {{ badges: RemixBadge[] }} props
  */
 
-import React from "react";
-import "./RemixLineageTimeline.css";
+import React from 'react';
+import './RemixLineageTimeline.css';
 
 export const RemixLineageTimeline = ({ badges }) => {
   return (
-  <div className="lineage-container">
+    <div className="lineage-container">
       {badges
         .sort((a, b) => b.timestamp - a.timestamp)
         .map((badge) => (
           <div
             key={badge.lineageHash}
             className="lineage-item"
-            style={{ backgroundColor: badge.badge.color }}
+            style={badge.badge.color ? { ['--badge-color']: badge.badge.color } : undefined}
           >
-            <div className="lineage-icon">{badge.badge.icon} {badge.badge.label}</div>
+            <div className="lineage-icon">
+              {badge.badge.icon} {badge.badge.label}
+            </div>
             <div className="lineage-desc">{new Date(badge.timestamp).toLocaleString()}</div>
-            <div className="lineage-id"><strong>Hash:</strong> {badge.lineageHash}</div>
+            <div className="lineage-id">
+              <strong>Hash:</strong> {badge.lineageHash}
+            </div>
           </div>
         ))}
     </div>

@@ -5,16 +5,16 @@ export function saveLoreToCodex(creatorId, lore) {
   } else {
     codex.push({
       creatorId,
-      tier: "Unknown",
+      tier: 'Unknown',
       timestamp: Date.now(),
-      lineageHash: "",
-      badgeLabel: "",
+      lineageHash: '',
+      badgeLabel: '',
       lore,
     });
   }
 }
-import { CreatorTier, getBadgeForTier } from "./utils/creatorBadges";
-import { generateLineageHash } from "./utils/mintBadge";
+import { CreatorTier, getBadgeForTier } from './utils/creatorBadges';
+import { generateLineageHash } from './utils/mintBadge';
 
 /**
  * @typedef {Object} MythologyCodexEntry

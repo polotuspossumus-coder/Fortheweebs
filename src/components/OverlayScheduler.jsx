@@ -18,8 +18,7 @@ export const OverlayScheduler = ({ userId }) => {
 
   const now = new Date();
   const activeOverlay = schedule.find(
-    (slot) =>
-      new Date(slot.start_time) <= now && new Date(slot.end_time) >= now
+    (slot) => new Date(slot.start_time) <= now && new Date(slot.end_time) >= now
   );
 
   return (

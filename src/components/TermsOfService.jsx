@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import "./TermsOfService.css";
+import React, { useState } from 'react';
+import './TermsOfService.css';
 
 const TERMS_TEXT = `# Fortheweebs Terms of Service
 
@@ -8,9 +8,27 @@ _Last updated: October 2025_
 ## 1. Introduction
 Welcome to Fortheweebs (“the Platform”). By accessing or using Fortheweebs, you agree to be bound by these Terms of Service (“Terms”). These Terms govern your relationship with Fortheweebs, including your use of the Platform as a creator, subscriber, or visitor.
 ---
+## Thank You Letter
+
+Dear Reader,
+
+Thank you for joining Fortheweebs. We are deeply grateful for your trust and participation in our community. Our platform stands for freedom of speech, creativity, and the right to express yourself without fear or censorship. We believe that every voice matters and that creative expression is essential for personal and societal growth.
+
+**Key Points We Stand For:**
+- Freedom of speech for all legal content
+- Unrestricted creativity and innovation
+- Respect for individual rights and diversity
+- Community-driven moderation and responsibility
+- No subscriptions—one-time fees unlock true ownership
+
+We are committed to protecting your rights and fostering a safe, open environment for creators and fans alike. Thank you for being part of this journey and helping us set a new standard for online freedom and creativity.
+
+With gratitude,
+The Fortheweebs Team
+
+---
 ## 2. Platform Scope
 Fortheweebs provides infrastructure for creators to publish content, manage subscriptions, and engage with their audience. Fortheweebs does not produce, endorse, or monitor creator content. The Platform is a neutral automation and orchestration service.
----
 ## 3. Creator Independence
 Creators operate as independent entities. Fortheweebs does not employ, contract, or represent creators in any legal or editorial capacity. Creators are solely responsible for:
 - The content they publish
@@ -44,18 +62,18 @@ export const TermsOfService = ({ onAccept }) => {
   const [accepted, setAccepted] = useState(false);
 
   return (
-  <div className="terms-container">
+    <div className="terms-container">
       <h2>Terms of Service</h2>
       <div className="terms-content">
         <pre className="terms-pre">{TERMS_TEXT}</pre>
       </div>
-  <label className="terms-label">
-        <input type="checkbox" checked={accepted} onChange={e => setAccepted(e.target.checked)} />
+      <label className="terms-label">
+        <input type="checkbox" checked={accepted} onChange={(e) => setAccepted(e.target.checked)} />
         I accept the Terms of Service
       </label>
       <button
         disabled={!accepted}
-        className={`terms-button${!accepted ? " disabled" : ""}`}
+        className={`terms-button${!accepted ? ' disabled' : ''}`}
         onClick={() => accepted && onAccept()}
       >
         Continue

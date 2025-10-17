@@ -19,11 +19,8 @@ import winston from 'winston';
 
 const logger = winston.createLogger({
   level: 'info',
-  format: winston.format.combine(
-    winston.format.timestamp(),
-    winston.format.simple()
-  ),
-  transports: [new winston.transports.Console()]
+  format: winston.format.combine(winston.format.timestamp(), winston.format.simple()),
+  transports: [new winston.transports.Console()],
 });
 
 export const packageEXE = () => {
@@ -32,7 +29,10 @@ export const packageEXE = () => {
     logger.warn('NODE_ENV is not set. Defaulting to development.');
     process.env.NODE_ENV = 'development';
   }
-  if (typeof process.env.PACKAGE_OUTPUT !== 'undefined' && typeof process.env.PACKAGE_OUTPUT !== 'string') {
+  if (
+    typeof process.env.PACKAGE_OUTPUT !== 'undefined' &&
+    typeof process.env.PACKAGE_OUTPUT !== 'string'
+  ) {
     logger.error('PACKAGE_OUTPUT must be a string if set.');
     return;
   }

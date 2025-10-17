@@ -5,16 +5,16 @@ import OverlayToggle from './OverlayToggle';
 
 export default function DashboardLayout({ children }) {
   return (
-    <div style={{ padding: 32, background: '#18181b', minHeight: '100vh' }}>
+    <div className="dashboard-shell">
       <Tabs.Root defaultValue="dashboard">
-        <Tabs.List>
+        <Tabs.List className="tabs-list">
           <Tabs.Trigger value="dashboard">Dashboard</Tabs.Trigger>
           <Tabs.Trigger value="payments">Payments</Tabs.Trigger>
           <Tabs.Trigger value="remix">Remix</Tabs.Trigger>
           <Tabs.Trigger value="codex">Codex</Tabs.Trigger>
         </Tabs.List>
         <OverlayToggle />
-        <div style={{ marginTop: 24 }}>{children}</div>
+        <div className="page-content">{children}</div>
       </Tabs.Root>
     </div>
   );

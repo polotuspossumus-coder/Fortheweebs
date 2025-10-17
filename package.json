@@ -1,18 +1,57 @@
 {
   "name": "fortheweebs-runtime",
   "version": "1.0.0",
+  "main": "server.js",
   "type": "module",
-  "main": "index.js",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "start": "node server.js"
+    "start": "node server.js",
+    "test": "jest",
+    "package:exe": "ts-node scripts/packageEXE.ts"
   },
   "dependencies": {
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "@radix-ui/react-switch": "^1.2.6",
+    "@radix-ui/react-tabs": "^1.1.13",
+    "@supabase/supabase-js": "^2.75.0",
+    "chart.js": "^4.5.0",
+    "express": "^5.1.0",
+    "react-chartjs-2": "^5.3.0",
+    "stripe": "^19.1.0",
+    "winston": "^3.18.3"
   },
   "devDependencies": {
-    "vite": "^4.0.0"
+    "@babel/preset-env": "^7.28.3",
+    "@babel/preset-typescript": "^7.27.1",
+    "@types/cytoscape": "^3.21.9",
+    "@types/express": "^5.0.3",
+    "@types/jest": "^30.0.0",
+    "babel-jest": "^30.2.0",
+    "concurrently": "^9.2.1",
+    "cytoscape": "^3.33.1",
+    "electron": "^28.1.0",
+    "electron-packager": "^17.1.2",
+    "eslint": "^9.37.0",
+    "jest": "^30.2.0",
+    "rimraf": "^5.0.5",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.3",
+    "vite": "^5.0.0",
+    "wait-on": "^7.2.0"
+  },
+  "creatorId": "jacob",
+  "dashboard": {
+    "theme": "dark",
+    "modules": [
+      "overview",
+      "overlays",
+      "payments",
+      "codex",
+      "map"
+    ],
+    "defaultOverlay": "anime-stream-v2"
+  },
+  "sovereign": {
+    "remixLineage": true,
+    "badgePropagation": true,
+    "genesisProtocol": true
   }
 }

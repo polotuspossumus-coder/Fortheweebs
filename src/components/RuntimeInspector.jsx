@@ -13,10 +13,7 @@ export const RuntimeInspector = ({ userId }) => {
 
   useEffect(() => {
     const fetchDiagnostics = async () => {
-      const { data: badges } = await supabase
-        .from('badges')
-        .select('*')
-        .eq('user_id', userId);
+      const { data: badges } = await supabase.from('badges').select('*').eq('user_id', userId);
 
       const { data: pings } = await supabase
         .from('protocol_pings')
@@ -32,8 +29,7 @@ export const RuntimeInspector = ({ userId }) => {
 
       const now = new Date();
       const active = overlays?.find(
-        (slot) =>
-          new Date(slot.start_time) <= now && new Date(slot.end_time) >= now
+        (slot) => new Date(slot.start_time) <= now && new Date(slot.end_time) >= now
       );
 
       setDiagnostics((prev) => ({

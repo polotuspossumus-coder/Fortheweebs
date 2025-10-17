@@ -8,10 +8,7 @@ export const RewardEngine = ({ userId }) => {
 
   useEffect(() => {
     const fetchBadges = async () => {
-      const { data } = await supabase
-        .from('badges')
-        .select('*')
-        .eq('user_id', userId);
+      const { data } = await supabase.from('badges').select('*').eq('user_id', userId);
 
       const count = data?.length || 0;
       setBadgeCount(count);

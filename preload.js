@@ -30,7 +30,8 @@ contextBridge.exposeInMainWorld('electronAPI', {
   searchAPIAnime: (query, limit = 10) => ipcRenderer.invoke('search-api-anime', query, limit),
   getAnimeDetails: (animeId) => ipcRenderer.invoke('get-anime-details', animeId),
   getTopAnime: (type = 'all', limit = 25) => ipcRenderer.invoke('get-top-anime', type, limit),
-  getSeasonalAnime: (year, season, limit = 25) => ipcRenderer.invoke('get-seasonal-anime', year, season, limit),
+  getSeasonalAnime: (year, season, limit = 25) =>
+    ipcRenderer.invoke('get-seasonal-anime', year, season, limit),
   getRandomAnime: () => ipcRenderer.invoke('get-random-anime'),
   addAPIAnimeToLibrary: (apiAnime) => ipcRenderer.invoke('add-api-anime-to-library', apiAnime),
 
@@ -43,5 +44,5 @@ contextBridge.exposeInMainWorld('electronAPI', {
 
   // Version info
   getVersion: () => '1.0.0',
-  getPlatform: () => process.platform
+  getPlatform: () => process.platform,
 });

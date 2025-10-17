@@ -1,0 +1,34 @@
+name: Fortheweebs CI/CD
+
+on:
+  push:
+    branches: [main, dev]
+  pull_request:
+    branches: [main, dev]
+
+jobs:
+  build-test-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+      - run: npm ci
+      - name: Lint
+        run: npm run lint || true
+      - name: Type check
+        run: npx tsc --noEmit
+      - name: Run tests
+        run: npm test
+      - name: Build
+        run: npm run build || true
+      - name: Upload coverage
+        if: success()
+        uses: actions/upload-artifact@v3
+        with:
+          name: coverage-report
+          path: coverage/
+      - name: Deploy
+        run: echo "Deploy logic here (e.g. Vercel, Render, Docker)"

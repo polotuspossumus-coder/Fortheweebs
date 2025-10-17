@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { remixConfig } from '../config/remix.config';
 import { supabase } from '../lib/supabase';
-import "./OverlayComposer.css";
+import './OverlayComposer.css';
 
 export const OverlayComposer = ({ userId }) => {
   const [presets, setPresets] = useState([]);
@@ -9,10 +9,7 @@ export const OverlayComposer = ({ userId }) => {
 
   useEffect(() => {
     const fetchPresets = async () => {
-      const { data } = await supabase
-        .from('overlay_presets')
-        .select('*')
-        .eq('user_id', userId);
+      const { data } = await supabase.from('overlay_presets').select('*').eq('user_id', userId);
       setPresets(data || []);
     };
     fetchPresets();
@@ -23,7 +20,7 @@ export const OverlayComposer = ({ userId }) => {
   };
 
   return (
-  <div className="overlay-composer">
+    <div className="overlay-composer">
       <h2>🎼 Sovereign Overlay Composer</h2>
       <div className="preset-selector">
         {presets.map((preset) => (
@@ -37,9 +34,11 @@ export const OverlayComposer = ({ userId }) => {
         <div
           className="overlay-preview"
           style={{
-            backgroundImage: `url(${activePreset.background_url})`,
-            color: activePreset.text_color,
-            fontFamily: activePreset.font_family,
+            ['--overlay-bg']: activePreset.background_url
+              ? `url(${activePreset.background_url})`
+              : undefined,
+            ['--overlay-text-color']: activePreset.text_color || undefined,
+            ['--overlay-font-family']: activePreset.font_family || undefined,
           }}
         >
           <h3>{activePreset.title}</h3>

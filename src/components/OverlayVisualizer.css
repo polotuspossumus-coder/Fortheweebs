@@ -7,7 +7,7 @@
   background: #222;
   color: #fff;
   border-radius: 12px;
-  box-shadow: 0 2px 12px rgba(0,0,0,0.2);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.2);
 }
 .visualizer-section {
   background: #181818;
@@ -23,7 +23,7 @@
 .visualizer-button {
   margin-top: 24px;
   padding: 10px 24px;
-  background: #FFD700;
+  background: #ffd700;
   color: #222;
   border: none;
   border-radius: 6px;

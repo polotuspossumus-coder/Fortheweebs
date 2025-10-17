@@ -12,10 +12,7 @@ export const RuntimeMonitor = ({ userId }) => {
 
   useEffect(() => {
     const fetchStatus = async () => {
-      const { data: badges } = await supabase
-        .from('badges')
-        .select('*')
-        .eq('user_id', userId);
+      const { data: badges } = await supabase.from('badges').select('*').eq('user_id', userId);
 
       const { data: protocol } = await supabase
         .from('protocol_pings')
@@ -32,7 +29,6 @@ export const RuntimeMonitor = ({ userId }) => {
     };
 
     fetchStatus();
-     
   }, [userId]);
 
   return (

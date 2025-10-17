@@ -5,12 +5,12 @@ const path = require('path');
 function runCommand(command, args = []) {
   return new Promise((resolve, reject) => {
     console.log(`Running: ${command} ${args.join(' ')}`);
-    const process = spawn(command, args, { 
+    const process = spawn(command, args, {
       stdio: 'inherit',
       shell: true,
-      cwd: __dirname
+      cwd: __dirname,
     });
-    
+
     process.on('close', (code) => {
       if (code === 0) {
         resolve();
@@ -26,7 +26,7 @@ async function dev() {
   try {
     console.log('📦 Building app...');
     await runCommand('npm', ['run', 'build']);
-    
+
     console.log('⚡ Starting Electron...');
     await runCommand('npx', ['electron', '.']);
   } catch (error) {
