@@ -1,3 +1,4 @@
+export const revalidate = 0;
 import React, { useState } from "react";
 import ReactDOM from "react-dom";
 import { LegalDocumentsList } from "../src/components/LegalDocumentsList.jsx";
