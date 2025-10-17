@@ -1,5 +1,6 @@
 const express = require("express");
 const helmet = require("helmet");
+const rateLimit = require("express-rate-limit");
 const path = require("path");
 const signupRouter = require("./src/routes/signup.js").default;
 const tosRouter = require("./src/routes/tos.js").default;
@@ -11,6 +12,14 @@ const PORT = process.env.PORT || 3000;
 
 // Set HTTP security headers
 app.use(helmet());
+// Rate limiting: 100 requests per 15 minutes per IP
+app.use(rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 100,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: 'Too many requests from this IP, please try again later.'
+}));
 // Set global headers for caching and CORS
 app.use((req, res, next) => {
   res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
