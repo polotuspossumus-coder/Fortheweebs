@@ -1,4 +1,5 @@
 import { useState } from "react";
+import AccessibleButton from "./AccessibleButton";
 
 /**
  * @param {Object} props
@@ -17,13 +18,13 @@ export default function MobileOnboarding(props) {
   };
 
   return (
-    <div className="p-4 max-w-sm mx-auto" role="form" aria-label="Mobile onboarding">
-      <h2 className="text-xl font-bold mb-2">Welcome to Fortheweebs</h2>
-      <p className="text-sm mb-4">Start your remix journey. Choose your tier:</p>
+    <div className="p-4 max-w-sm mx-auto bg-white rounded-lg shadow-lg" role="form" aria-label="Mobile onboarding">
+      <h2 className="text-2xl font-bold mb-2 text-indigo-700">Welcome to Fortheweebs</h2>
+      <p className="text-base mb-4 text-gray-700">Start your remix journey. Choose your tier:</p>
       <label htmlFor="tier-select" className="sr-only">Choose your profit tier</label>
       <select
         id="tier-select"
-        className="w-full p-2 border rounded"
+        className="w-full p-2 border border-indigo-300 rounded focus:ring-2 focus:ring-indigo-500"
         value={tier}
         onChange={handleChange}
         aria-label="Profit tier"
@@ -33,13 +34,9 @@ export default function MobileOnboarding(props) {
         <option value="85">Tier 85 – 85% Profit</option>
         <option value="80">Tier 80 – 80% Profit</option>
       </select>
-      <button
-        className="mt-4 w-full bg-indigo-600 text-white py-2 rounded"
-        onClick={handleBegin}
-        aria-label="Begin onboarding"
-      >
-        Begin
-      </button>
+      <div className="mt-4">
+        <AccessibleButton label="Begin onboarding" onClick={handleBegin} />
+      </div>
     </div>
   );
 }
