@@ -15,7 +15,13 @@ export default function Home() {
         <p className="mb-4">Before you continue, please review and accept our legal documents to use the platform.</p>
         <div className="bg-gray-800 p-4 rounded mb-4">
           <h2 className="text-2xl font-semibold mb-2">Terms of Service</h2>
-          <p className="text-sm">By using this site, you agree to our Terms of Service and Privacy Policy. Please read them carefully before proceeding.</p>
+          <p className="text-sm mb-2">
+            By using this site, you agree to our
+            <a href="/legal/terms-of-service.md" target="_blank" rel="noopener noreferrer" className="underline text-blue-400 mx-1">Terms of Service</a>
+            and
+            <a href="/legal/privacy-policy.md" target="_blank" rel="noopener noreferrer" className="underline text-blue-400 mx-1">Privacy Policy</a>.
+            Please read them carefully before proceeding.
+          </p>
         </div>
         <button onClick={handleAgree} className="bg-blue-600 px-6 py-3 rounded text-white font-bold">I Agree & Continue</button>
       </div>
