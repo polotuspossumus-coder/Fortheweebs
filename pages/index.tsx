@@ -1,8 +1,10 @@
 import React from 'react';
 import { useRouter } from 'next/router';
+import Link from 'next/link';
+import useTranslation from 'next-translate/useTranslation';
 
-export default function Home() {
   const router = useRouter();
+  const { t } = useTranslation('common');
 
   const handleAgree = () => {
     router.push('/signup');
@@ -10,20 +12,20 @@ export default function Home() {
 
   return (
     <main className="min-h-screen flex flex-col items-center justify-center p-8 bg-gray-900 text-white">
-      <h1 className="text-4xl font-bold mb-4">Welcome to ForTheWeebs</h1>
+      <h1 className="text-4xl font-bold mb-4">{t('welcome')}</h1>
       <div className="max-w-xl text-center mb-6">
-        <p className="mb-4">Before you continue, please review and accept our legal documents to use the platform.</p>
+        <p className="mb-4">{t('reviewLegalDocs')}</p>
         <div className="bg-gray-800 p-4 rounded mb-4">
-          <h2 className="text-2xl font-semibold mb-2">Terms of Service</h2>
+          <h2 className="text-2xl font-semibold mb-2">{t('tosTitle')}</h2>
           <p className="text-sm mb-2">
-            By using this site, you agree to our
-            <a href="/legal/terms-of-service.md" target="_blank" rel="noopener noreferrer" className="underline text-blue-400 mx-1">Terms of Service</a>
-            and
-            <a href="/legal/privacy-policy.md" target="_blank" rel="noopener noreferrer" className="underline text-blue-400 mx-1">Privacy Policy</a>.
-            Please read them carefully before proceeding.
+            {t('tosAgreement')}
+            <Link href="/legal/terms-of-service" className="underline text-blue-400 mx-1" target="_blank" rel="noopener noreferrer">{t('termsOfService')}</Link>
+            {t('and')}
+            <Link href="/legal/privacy-policy" className="underline text-blue-400 mx-1" target="_blank" rel="noopener noreferrer">{t('privacyPolicy')}</Link>.
+            {t('readCarefully')}
           </p>
         </div>
-        <button onClick={handleAgree} className="bg-blue-600 px-6 py-3 rounded text-white font-bold">I Agree & Continue</button>
+        <button onClick={handleAgree} className="bg-blue-600 px-6 py-3 rounded text-white font-bold">{t('agreeAndContinue')}</button>
       </div>
     </main>
   );

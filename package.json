@@ -4,17 +4,30 @@
   "type": "module",
   "main": "index.js",
   "scripts": {
+    "cleanup": "node scripts/cleanup.js",
+    "validate-env": "node scripts/check-env.js",
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "lint": "next lint",
+    "deploy": "vercel --prod",
+    "analyze": "next build && ANALYZE=true next export",
+    "smoke-test": "ts-node scripts/smoke-test.ts"
   },
   "dependencies": {
+    "@stripe/stripe-js": "^8.1.0",
+    "@supabase/supabase-js": "^2.75.1",
+    "@types/axios": "^0.9.36",
     "autoprefixer": "^10.4.21",
+    "axios": "^1.12.2",
     "next": "^15.5.6",
+    "next-auth": "^4.24.11",
+    "next-pwa": "^5.6.0",
     "postcss": "^8.5.6",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-hook-form": "^7.65.0",
+    "react-markdown": "^10.1.0",
     "tailwindcss": "^4.1.14",
     "winston": "^3.18.3"
   },

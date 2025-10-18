@@ -2,9 +2,6 @@
 const signupLog = [];
 
 // Health check endpoint for diagnostics
-function healthCheck(res) {
-  res.status(200).json({ status: "ok", message: "signup.js loaded and running" });
-}
 
 function handler(req, res) {
   try {
@@ -39,4 +36,4 @@ function handler(req, res) {
   }
 }
 
-module.exports = handler;
+export default handler;
