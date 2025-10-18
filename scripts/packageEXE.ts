@@ -1,3 +1,5 @@
+// Safe NODE_ENV fallback
+const nodeEnv = process.env.NODE_ENV || 'development';
 /**
  * Packages the Fortheweebs Windows EXE using Capacitor and frontend build tools.
  *
@@ -30,7 +32,6 @@ export const packageEXE = () => {
   // Input validation: check required environment variables
   if (!process.env.NODE_ENV) {
     logger.warn('NODE_ENV is not set. Defaulting to development.');
-    process.env.NODE_ENV = 'development';
   }
   if (typeof process.env.PACKAGE_OUTPUT !== 'undefined' && typeof process.env.PACKAGE_OUTPUT !== 'string') {
     logger.error('PACKAGE_OUTPUT must be a string if set.');
