@@ -35,7 +35,7 @@
     "next-translate": "^2.6.2",
     "postcss": "^8.5.6",
     "posthog-js": "^1.276.0",
-    "react": "^18.3.1",
+    "react": "^19.2.0",
     "react-dom": "^18.3.1",
     "react-hook-form": "^7.65.0",
     "react-i18next": "^16.1.0",
