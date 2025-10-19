@@ -2,14 +2,14 @@ import React from 'react';
 import { useDevice } from '../hooks/useDevice';
 
 const MobileUI = () => (
-  <div style={{ padding: 24 }}>
+  <div className="text-red-500">
     <h2>Payments (Mobile)</h2>
     <p>Payment history and actions will appear here.</p>
   </div>
 );
 
 const DesktopUI = () => (
-  <div style={{ padding: 24 }}>
+  <div className="text-red-500">
     <h2>Payments (Desktop)</h2>
     <p>Payment history and actions will appear here.</p>
   </div>

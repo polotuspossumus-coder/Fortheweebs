@@ -1,0 +1,20 @@
+{
+  "welcome": "Fortheweebsへようこそ",
+  "onboard": "クリエイターとしての旅を始めましょう",
+  "dashboard_title": "クリエイターダッシュボード",
+  "dashboard_subtitle": "あなたの儀式、収益、レガシーを管理する",
+  "start_ritual": "新しい儀式を開始",
+  "view_ledger": "収益台帳を見る",
+  "graveyard_title": "グレイブヤード",
+  "graveyard_description": "封印されたコンテンツはここで保存され、プラットフォームのレガシーとして収益化されます",
+  "banned_notice": "このクリエイターは儀式違反により封印されました",
+  "monetization_status": "収益化ステータス",
+  "sovereign_access": "ソブリンアクセス",
+  "access_granted": "アクセスが許可されました — あなたの存在は励ましとなります",
+  "access_revoked": "アクセスが取り消されました — 儀式の境界が尊重されました",
+  "fan_signal": "ファンシグナルを送信",
+  "signal_received": "シグナルを受信しました — レガシーが強化されました",
+  "settings": "設定",
+  "language": "言語",
+  "logout": "ログアウト"
+}

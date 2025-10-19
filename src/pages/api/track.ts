@@ -12,6 +12,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     console.log('Page view tracked:', { path, timestamp });
     res.status(200).json({ success: true });
   } catch (err) {
-    res.status(400).json({ error: 'Invalid request', details: err.message });
+    if (err instanceof Error) {
+      res.status(400).json({ error: 'Invalid request', details: err.message });
+    } else {
+      res.status(400).json({ error: 'Invalid request', details: String(err) });
+    }
   }
 }

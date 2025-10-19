@@ -13,7 +13,7 @@ export default function First25Payment() {
         body: JSON.stringify({ tier: 'first-25', amount: 10000 }), // $100
       });
       const session = await res.json();
-      await stripe?.redirectToCheckout({ sessionId: session.id });
+  await (stripe as any)?.redirectToCheckout({ sessionId: session.id });
     };
 
     initiateCheckout();

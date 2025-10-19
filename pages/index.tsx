@@ -1,8 +1,10 @@
+export const revalidate = 60;
 import React from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import useTranslation from 'next-translate/useTranslation';
 
+export default function Home() {
   const router = useRouter();
   const { t } = useTranslation('common');
 

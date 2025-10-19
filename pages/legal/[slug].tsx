@@ -1,7 +1,15 @@
+export const revalidate = 60;
 import React from 'react';
 import LegalDocPage from '../../src/components/LegalDocPage';
 
-export default function Page({ title, lastUpdated, version, content }) {
+interface PageProps {
+  title: string;
+  lastUpdated: string;
+  version: string;
+  content: string;
+}
+
+export default function Page({ title, lastUpdated, version, content }: PageProps) {
   return <LegalDocPage title={title} lastUpdated={lastUpdated} version={version} content={content} />;
 }
 
@@ -15,7 +23,7 @@ export async function getStaticPaths() {
   };
 }
 
-export async function getStaticProps({ params }) {
+export async function getStaticProps({ params }: { params: { slug: string } }) {
   const fs = require('fs');
   const path = require('path');
   const matter = require('gray-matter');

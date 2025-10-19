@@ -1,0 +1,25 @@
+openapi: 3.0.0
+info:
+  title: Fortheweebs API
+  version: 1.0.0
+paths:
+  /api/onboard:
+    post:
+      summary: Onboard a new creator
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OnboardRequest'
+      responses:
+        '200':
+          description: Success
+components:
+  schemas:
+    OnboardRequest:
+      type: object
+      properties:
+        username:
+          type: string
+        role:
+          type: string

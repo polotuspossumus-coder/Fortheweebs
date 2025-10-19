@@ -13,7 +13,11 @@ const endpoints = [
       const res = await axios.get(`https://fortheweebs.vercel.app${url}`);
       console.log(`✅ ${url} responded with ${res.status}`);
     } catch (err) {
-      console.error(`❌ ${url} failed:`, err.message);
+      if (err instanceof Error) {
+        console.error(`❌ ${url} failed:`, err.message);
+      } else {
+        console.error(`❌ ${url} failed:`, String(err));
+      }
       process.exit(1);
     }
   }

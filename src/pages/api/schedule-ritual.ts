@@ -22,6 +22,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     res.status(200).json({ message: `Ritual "${title}" scheduled for ${datetime}` });
   } catch (err) {
-    res.status(400).json({ error: 'Invalid request', details: err.message });
+    res.status(400).json({ error: 'Invalid request', details: (err as Error).message });
   }
 }
