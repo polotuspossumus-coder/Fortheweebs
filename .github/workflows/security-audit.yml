@@ -1,0 +1,20 @@
+name: Security Audit
+
+on:
+  schedule:
+    - cron: '0 0 * * 0' # weekly
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install dependencies
+        run: npm install
+      - name: Run npm audit
+        run: npm audit --json > audit-report.json
+      - name: Run Snyk test
+        run: |
+          npm install -g snyk
+          snyk auth ${{ secrets.SNYK_TOKEN }}
+          snyk test > snyk-report.txt
