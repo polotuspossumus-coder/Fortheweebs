@@ -26,7 +26,9 @@ export default async function handler(req, res) {
     const { artifactId } = req.query;
     if (!artifactId) return res.status(400).json({ error: 'Missing artifactId' });
     const artifact = await vault.findOne({ _id: new ObjectId(artifactId) });
-    if (!artifact) return res.status(404).json({ error: 'Artifact not found' });
+    if (!artifact || artifact.sealed) {
+      return res.status(403).json({ error: 'Artifact is sealed or missing' });
+    }
     res.status(200).json(artifact);
   } catch (err) {
     res.status(500).json({ error: err.message || 'Internal server error' });
