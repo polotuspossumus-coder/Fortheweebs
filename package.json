@@ -5,13 +5,11 @@
   "main": "index.js",
   "scripts": {
     "dev": "vite",
-  "build": "tsc",
-  "start": "node server.js",
+    "build": "tsc",
+    "start": "node server.js",
     "test": "jest --coverage",
-    "coverage": "open coverage/lcov-report/index.html"
-    ,
-    "electron:package": "electron-builder --config electron-builder.config.js"
-    ,
+    "coverage": "open coverage/lcov-report/index.html",
+    "electron:package": "electron-builder --config electron-builder.config.js",
     "mobile:sync": "npx cap sync",
     "mobile:android": "npx cap build android",
     "mobile:ios": "npx cap build ios"
@@ -19,8 +17,10 @@
   "dependencies": {
     "@react-three/drei": "^9.56.14",
     "@react-three/fiber": "^8.13.7",
+    "@types/axios": "^0.9.36",
     "@types/cors": "^2.8.19",
     "@types/helmet": "^0.0.48",
+    "axios": "^1.12.2",
     "cors": "^2.8.5",
     "express": "^5.1.0",
     "helmet": "^8.1.0",
