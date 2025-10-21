@@ -13,7 +13,11 @@
   "dependencies": {
     "@react-three/drei": "^9.56.14",
     "@react-three/fiber": "^8.13.7",
+    "@types/cors": "^2.8.19",
+    "@types/helmet": "^0.0.48",
+    "cors": "^2.8.5",
     "express": "^5.1.0",
+    "helmet": "^8.1.0",
     "pdfkit": "^0.17.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
