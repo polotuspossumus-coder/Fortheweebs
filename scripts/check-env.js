@@ -8,11 +8,11 @@ const requiredVars = [
   'DISCORD_WEBHOOK_URL',
 ];
 
-const missing = requiredVars.filter((v) => !process.env[v]);
+const missing = typeof process !== 'undefined' ? requiredVars.filter((v) => !process.env[v]) : [];
 
 if (missing.length > 0) {
   console.error('❌ Missing environment variables:', missing.join(', '));
-  process.exit(1);
+  if (typeof process !== 'undefined') process.exit(1);
 } else {
   console.log('✅ All required environment variables are set.');
 }

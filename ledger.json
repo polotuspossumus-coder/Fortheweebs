@@ -1,0 +1,11 @@
+[
+  {
+    "timestamp": "2025-10-21T04:26:27.332Z",
+    "action": "ban",
+    "creatorId": "creator_042",
+    "reason": "violation of sealed boundaries",
+    "monetized": true,
+    "transferredTo": "Fortheweebs",
+    "initiatedBy": "Jacob"
+  }
+]

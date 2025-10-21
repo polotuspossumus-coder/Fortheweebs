@@ -1,3 +1,5 @@
+// Stub for process if not defined
+const process = typeof process !== 'undefined' ? process : { env: {} };
 import nodemailer from 'nodemailer';
 import axios from 'axios';
 
@@ -6,8 +8,8 @@ export async function notifyOnboardingComplete(user) {
   const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
-      user: process.env.NOTIFY_EMAIL,
-      pass: process.env.NOTIFY_PASS,
+  user: typeof process !== 'undefined' ? process.env.NOTIFY_EMAIL : '',
+  pass: typeof process !== 'undefined' ? process.env.NOTIFY_PASS : '',
     },
   });
 
@@ -19,7 +21,7 @@ export async function notifyOnboardingComplete(user) {
   });
 
   // Discord
-  await axios.post(process.env.DISCORD_WEBHOOK_URL, {
+  await axios.post(typeof process !== 'undefined' ? process.env.DISCORD_WEBHOOK_URL : '', {
     content: `🎉 Creator onboarded: ${user.email}`,
   });
 }

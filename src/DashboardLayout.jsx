@@ -1,5 +1,11 @@
 // Dashboard layout using Radix UI
 import React from 'react';
+import StatusPanel from './components/StatusPanel.jsx';
+import BanReview from './components/BanReview.jsx';
+import GovernancePanel from './components/GovernancePanel.tsx';
+import { CampaignStatus } from './components/CampaignStatus.jsx';
+import CampaignMetricsPanel from './components/CampaignMetricsPanel.jsx';
+import CouncilFeed from './CouncilFeed.jsx';
 import * as Tabs from '@radix-ui/react-tabs';
 import OverlayToggle from './OverlayToggle';
 
@@ -14,7 +20,13 @@ export default function DashboardLayout({ children }) {
           <Tabs.Trigger value="codex">Codex</Tabs.Trigger>
         </Tabs.List>
         <OverlayToggle />
-        <div style={{ marginTop: 24 }}>{children}</div>
+  <div style={{ marginTop: 24 }}>{children}</div>
+  <StatusPanel creator={{ tier: 'mythic', unlocked: true, banned: false }} />
+  <BanReview />
+  <GovernancePanel />
+  <CampaignStatus userId={"creator_042"} />
+  <CampaignMetricsPanel campaign={{ views: 1200, conversions: 87, profit: 420 }} />
+  <CouncilFeed />
       </Tabs.Root>
     </div>
   );

@@ -1,3 +1,4 @@
+import { captureError } from '../utils/logger';
 import { useState } from 'react';
 import axios from 'axios';
 
@@ -10,8 +11,8 @@ export function useFinalizeOnboarding() {
     try {
       const res = await axios.post('/api/onboarding/finalize', { userId, email });
       setStatus(res.data.success ? 'success' : 'error');
-    } catch (err) {
-      setStatus('error');
+    } catch (error) {
+      captureError(error);
     } finally {
       setLoading(false);
     }

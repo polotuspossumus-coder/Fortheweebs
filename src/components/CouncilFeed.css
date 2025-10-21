@@ -1,0 +1,30 @@
+.council-feed {
+  background: #f3f8ff;
+  border-radius: 12px;
+  padding: 2rem;
+  max-width: 600px;
+  margin: 2rem auto;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+}
+.council-feed h2 {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  color: #2a4d7c;
+  text-align: center;
+}
+.council-feed ul {
+  list-style: none;
+  padding: 0;
+}
+.council-feed li {
+  background: #eaf2fb;
+  margin: 0.5rem 0;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  font-size: 1rem;
+  color: #2a4d7c;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+}
+.council-feed strong {
+  color: #1a2c4d;
+}

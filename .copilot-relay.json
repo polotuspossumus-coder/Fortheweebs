@@ -1,0 +1,30 @@
+{
+  "inject": [
+    {
+      "file": "src/vanguardStatus.ts",
+      "trigger": "statusFlag logic",
+      "description": "Injects offline/online propagation logic across Vanguard slabs",
+      "runtime": "typescript",
+      "dependencies": [
+        "ledger",
+        "updateArtifactStatus",
+        "sealOrActivateGraveyard",
+        "syncFanSignals",
+        "enforceAccessChains",
+        "togglePRCampaigns"
+      ]
+    },
+    {
+      "file": "src/slabAccess.ts",
+      "trigger": "post-launch feature access",
+      "description": "Enforces $200-tier gating for all future features",
+      "runtime": "typescript",
+      "dependencies": [
+        "featureRegistry",
+        "hasPostLaunchAccess",
+        "getAvailableFeatures",
+        "canUseFeature"
+      ]
+    }
+  ]
+}

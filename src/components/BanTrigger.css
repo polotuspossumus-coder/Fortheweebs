@@ -1,0 +1,43 @@
+.ban-trigger {
+  background: #fff3f0;
+  border-radius: 12px;
+  padding: 2rem;
+  max-width: 400px;
+  margin: 2rem auto;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+  text-align: center;
+}
+.ban-trigger h2 {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  color: #a12c2c;
+}
+.ban-trigger input,
+.ban-trigger textarea {
+  width: 90%;
+  margin: 0.5rem 0;
+  padding: 0.5rem;
+  border-radius: 6px;
+  border: 1px solid #d8b4a0;
+  font-size: 1rem;
+}
+.ban-trigger button {
+  background: #a12c2c;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 0.7rem 2rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-top: 1rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.ban-trigger button:hover {
+  background: #d84c4c;
+}
+.ban-trigger p {
+  margin-top: 1rem;
+  color: #a12c2c;
+  font-weight: 500;
+}

@@ -1,0 +1,41 @@
+name: Fortheweebs Sovereign Build
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  validate-and-build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 🧭 Checkout Code
+        uses: actions/checkout@v3
+
+      - name: 🧪 Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: 📦 Install Dependencies
+        run: npm ci
+
+      - name: 🔍 Run Pre-Launch Validator
+        run: node build-check.js
+
+      - name: 🚀 Build for Production
+        run: npm run build
+
+      - name: 📤 Upload Build Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: fortheweebs-build
+          path: ./dist # or your build output folder
+
+      - name: 🛎️ Notify Discord Council
+        run: node notify-discord.js
+
+      - name: 🧾 Notify Council
+        run: echo "Build complete. Sovereign artifact uploaded."

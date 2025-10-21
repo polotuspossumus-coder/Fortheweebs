@@ -1,29 +1,52 @@
-import Link from 'next/link';
+import React, { useEffect, useContext } from 'react';
+import eventBus from './utils/eventBus'; // You may need to create this or adjust import
+import { handlePayment, handleBan, handleFeedback, handleRitualDrop } from './utils/eventHandlers';
+import { AppContext } from './context/AppContext';
+import { BrowserRouter as Router } from 'react-router-dom';
+import { AppContextProvider } from './context/AppContext';
+import Header from './components/Header';
+import Footer from './components/Footer';
+import Routes from './Routes';
+import { launchFortheweebs } from "../slabs/launchFortheweebs";
 
-export default function AppShell() {
+const AppShell = () => {
+  useEffect(() => {
+    launchFortheweebs();
+    eventBus.on('paymentSuccess', handlePayment);
+    eventBus.on('userBanned', handleBan);
+    eventBus.on('feedbackSubmitted', handleFeedback);
+    eventBus.on('ritualBroadcast', handleRitualDrop);
+    // Optionally, cleanup listeners on unmount
+    return () => {
+      eventBus.off('paymentSuccess', handlePayment);
+      eventBus.off('userBanned', handleBan);
+      eventBus.off('feedbackSubmitted', handleFeedback);
+      eventBus.off('ritualBroadcast', handleRitualDrop);
+    };
+  }, []);
+  const { userRole, hasSignedNDA, backendFlags } = useContext(AppContext);
+
+  const isAuthorized = () => {
+    if (userRole === 'creator' && hasSignedNDA) return true;
+    if (userRole === 'influencer' && backendFlags.includes('promoAccess')) return true;
+    if (userRole === 'tech' && backendFlags.includes('debugMode')) return true;
+    return false;
+  };
+
   return (
-    <section className="min-h-screen bg-black text-white px-4 py-6">
-      <nav className="flex justify-between items-center mb-6">
-        <Link href="/" className="text-xl font-bold">FTW</Link>
-        <div className="space-x-4 text-sm">
-          <Link href="/create">Create</Link>
-          <Link href="/govern">Govern</Link>
-          <Link href="/dashboard">Dashboard</Link>
+    <Router>
+      <AppContextProvider>
+        <div className="app-shell">
+          <Header />
+          <main className="main-content">
+            {!hasSignedNDA && <NDAOverlay />}
+            {isAuthorized() ? <Routes /> : <AccessDenied />}
+          </main>
+          <Footer />
         </div>
-      </nav>
-
-      <main>
-        <h1 className="text-2xl font-bold mb-4">📱 Fortheweebs Mobile</h1>
-        <p className="text-sm text-gray-300 mb-6">
-          Access rituals, lore, validator memory, and remix lineage from any device, anywhere.
-        </p>
-        <ul className="space-y-2 text-purple-400 text-sm">
-          <li><Link href="/lore/submit">Submit Lore</Link></li>
-          <li><Link href="/rituals">Join Ritual</Link></li>
-          <li><Link href="/remix">View Remix Graph</Link></li>
-          <li><Link href="/legal">Legal Slabs</Link></li>
-        </ul>
-      </main>
-    </section>
+      </AppContextProvider>
+    </Router>
   );
-}
+};
+
+export default AppShell;

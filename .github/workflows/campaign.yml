@@ -1,0 +1,22 @@
+name: Ritual Campaign Flow
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  campaign:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout slab
+        uses: actions/checkout@v3
+
+      - name: Run build-check validator
+        run: node build-check.cjs
+
+      - name: Trigger PR automation
+        run: node scripts/triggerOcoya.js
+
+      - name: Sync ledger
+        run: node scripts/ledgerSync.js

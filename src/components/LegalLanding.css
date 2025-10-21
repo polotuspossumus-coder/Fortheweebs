@@ -1,0 +1,38 @@
+.legal-landing {
+  background: #f9f6f2;
+  border-radius: 12px;
+  padding: 2rem;
+  max-width: 600px;
+  margin: 2rem auto;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+  text-align: center;
+}
+.legal-image {
+  width: 120px;
+  margin-bottom: 1rem;
+}
+.legal-landing h1 {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  color: #3a2c1a;
+}
+.legal-landing p {
+  font-size: 1.1rem;
+  margin-bottom: 1.5rem;
+  color: #5a4633;
+}
+.legal-landing ul {
+  list-style: none;
+  padding: 0;
+}
+.legal-landing li {
+  margin: 0.5rem 0;
+}
+.legal-landing a {
+  color: #7c4d1e;
+  text-decoration: underline;
+  font-weight: 500;
+}
+.legal-landing a:hover {
+  color: #c47f2a;
+}

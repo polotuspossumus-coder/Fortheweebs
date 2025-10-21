@@ -14,7 +14,7 @@ export async function launchCampaign({ title, content, platforms }) {
     hashtags: 'auto',
     visuals: 'auto'
   }, {
-    headers: { Authorization: `Bearer ${process.env.OCOYA_TOKEN}` }
+  headers: { Authorization: typeof process !== 'undefined' ? `Bearer ${process.env.OCOYA_TOKEN}` : '' }
   });
 
   return response.data;

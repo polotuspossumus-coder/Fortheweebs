@@ -13,6 +13,8 @@ jobs:
         with:
           node-version: '18'
       - run: npm ci
+      - name: Run validator
+        run: node build-check.cjs
       - run: npm run build
       - run: npm run deploy
         env:

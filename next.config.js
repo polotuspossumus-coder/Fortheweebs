@@ -1,5 +1,5 @@
 import createBundleAnalyzer from '@next/bundle-analyzer';
 const withBundleAnalyzer = createBundleAnalyzer({
-  enabled: process.env.ANALYZE === 'true',
+  enabled: typeof process !== 'undefined' ? process.env.ANALYZE === 'true' : false,
 });
 export default withBundleAnalyzer({});

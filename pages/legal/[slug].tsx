@@ -31,10 +31,16 @@ export async function getStaticProps({ params }: { params: { slug: string } }) {
   const fileContent = fs.readFileSync(filePath, 'utf8');
   const { data, content } = matter(fileContent);
 
+  let lastUpdated = data.lastUpdated || null;
+  if (lastUpdated instanceof Date) {
+    lastUpdated = lastUpdated.toISOString();
+  } else if (typeof lastUpdated === 'object' && lastUpdated !== null && lastUpdated.toISOString) {
+    lastUpdated = lastUpdated.toISOString();
+  }
   return {
     props: {
       title: data.title || params.slug,
-      lastUpdated: data.lastUpdated || null,
+      lastUpdated,
       version: data.version || null,
       requiredAcceptance: data.requiredAcceptance || false,
       content,

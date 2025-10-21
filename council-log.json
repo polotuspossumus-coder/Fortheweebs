@@ -1,0 +1,17 @@
+[
+  {
+    "timestamp": "2025-10-20T22:14:00Z",
+    "type": "Flag",
+    "details": "Creator ShadowWeeb triggered sealed content violation"
+  },
+  {
+    "timestamp": "2025-10-20T22:15:30Z",
+    "type": "Mute",
+    "details": "Campaign BladeRitual auto-muted for excessive length"
+  },
+  {
+    "timestamp": "2025-10-20T22:17:10Z",
+    "type": "Pass",
+    "details": "Tribute SamuraiStorm passed all filters"
+  }
+]
