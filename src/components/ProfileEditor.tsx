@@ -49,6 +49,7 @@ export default function ProfileEditor({ profile }: ProfileEditorProps) {
         type="file"
         accept="image/*"
         className="mb-2"
+        title="Upload avatar image"
         onChange={(e) => setAvatar(e.target.files?.[0] || null)}
       />
       <button
