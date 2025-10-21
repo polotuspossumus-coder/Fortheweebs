@@ -90,7 +90,7 @@ export function calculateRevenueSplit(tier: Tier, totalRevenue: number): { creat
   const creatorShare = splits[tier] ?? 0.80;
   const platformShare = 1 - creatorShare;
 
-  import type { GraveyardEntry } from './graveyard-ledger.js';
+
   return {
     creator: totalRevenue * creatorShare,
     platform: totalRevenue * platformShare,

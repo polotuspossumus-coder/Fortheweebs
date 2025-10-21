@@ -1,0 +1,44 @@
+.parental-bubble {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 1000;
+  background: #1a1a1a;
+  border: 1px solid #ffd700;
+  border-radius: 8px;
+  padding: 12px;
+  color: #fff;
+  font-size: 14px;
+}
+
+.bubble-toggle {
+  background: transparent;
+  border: none;
+  color: #ffd700;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.bubble-toggle.active {
+  color: #00ff99;
+}
+
+.bubble-panel {
+  margin-top: 8px;
+  background: #2a2a2a;
+  padding: 8px;
+  border-radius: 6px;
+}
+
+.bubble-text {
+  margin-bottom: 6px;
+}
+
+.bubble-disable {
+  background: #ff4444;
+  border: none;
+  color: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+}
