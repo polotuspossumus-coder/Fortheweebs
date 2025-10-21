@@ -24,48 +24,6 @@ export const legalIndex: LegalDocument[] = [
     lastUpdated: "2025-10-11",
     requiredAcceptance: true,
   },
-  {
-  {
-    id: 'terms-of-service',
-    title: 'Terms of Service',
-    version: '1.0.0',
-    lastUpdated: '2025-10-11',
-    changes: [
-      'Initial release',
-      'Added liability disclaimer for creator content',
-      'Added data breach waiver',
-      'Added no complaints/snitching clause',
-      'Clarified user blocking responsibility',
-      'Declared zero obligations for Fortheweebs'
-    ]
-  },
-  {
-    id: 'privacy-policy',
-    title: 'Privacy Policy',
-    version: '1.0.0',
-    lastUpdated: '2025-10-11',
-    changes: [
-      'Initial release',
-      'Outlined data collection and usage boundaries',
-      'Declared no liability for data breaches',
-      'Reinforced no moderation or complaint handling',
-      'Added open suggestion policy'
-    ]
-  },
-  {
-    id: 'creator-agreement',
-    title: 'Creator Agreement',
-    version: '1.0.0',
-    lastUpdated: '2025-10-11',
-    changes: [
-      'Initial release',
-      'Declared creator independence',
-      'Waived all liability for creator actions',
-      'Added indemnification clause',
-      'Enforced no complaints/snitching policy',
-      'Declared zero obligations and moderation duties',
-      'Added user blocking responsibility',
-      'Enabled open suggestions'
-    ]
-  }
+  // Additional valid LegalDocument objects can be added here
 ];
+

@@ -1,4 +1,5 @@
-import { getBadgeForTier, RemixBadge, CreatorTier } from "./creatorBadges";
+import { getBadgeForTier } from "./creatorBadges.js";
+import type { RemixBadge, CreatorTier } from "./creatorBadges.js";
 
 export function mintRemixBadge(creatorId: string, tier: CreatorTier, timestamp: number): RemixBadge {
   return {

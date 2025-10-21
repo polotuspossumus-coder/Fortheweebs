@@ -6,13 +6,25 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "start": "node server.js"
+    "start": "node server.js",
+  "test": "jest --coverage",
+  "coverage": "open coverage/lcov-report/index.html"
   },
   "dependencies": {
+    "@react-three/drei": "^10.7.6",
+    "@react-three/fiber": "^9.4.0",
+    "express": "^5.1.0",
+    "pdfkit": "^0.17.2",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "three": "^0.180.0"
   },
   "devDependencies": {
+    "@types/express": "^5.0.3",
+    "@types/node": "^24.9.1",
+    "@types/pdfkit": "^0.17.3",
+    "@types/winston": "^2.4.4",
+    "typescript": "^5.9.3",
     "vite": "^4.0.0"
   }
 }

@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vanguard Remix Dashboard</title>
+  <style>
+    body { font-family: sans-serif; padding: 20px; background: #111; color: #eee; }
+    h2 { color: #9c27b0; }
+    section { margin-bottom: 40px; }
+    button { padding: 8px 12px; background: #9c27b0; color: white; border: none; cursor: pointer; }
+    input, select { padding: 6px; margin-right: 10px; }
+    ul { list-style: none; padding: 0; }
+    li { margin: 4px 0; }
+  </style>
+</head>
+<body>
+  <h1>🧬 Vanguard Remix Dashboard</h1>
+
+  <section id="governance">
+    <h2>Governance Overview</h2>
+    <div id="governance-data">Loading...</div>
+  </section>
+
+  <section id="search">
+    <h2>Artifact Search</h2>
+    <input id="search-query" placeholder="Name..." />
+    <input id="search-actor" placeholder="Actor..." />
+  <select id="search-type" title="Artifact Type">
+      <option value="">Type</option>
+      <option value="audio">Audio</option>
+      <option value="video">Video</option>
+      <option value="image">Image</option>
+      <option value="text">Text</option>
+    </select>
+  <select id="search-tier" title="Artifact Tier">
+      <option value="">Tier</option>
+      <option value="general">General</option>
+      <option value="supporter">Supporter</option>
+      <option value="legacy">Legacy</option>
+      <option value="founder">Founder</option>
+      <option value="mythic">Mythic</option>
+    </select>
+    <button onclick="runSearch()">Search</button>
+    <ul id="search-results"></ul>
+  </section>
+
+  <section id="appeals">
+    <h2>Remix Appeals</h2>
+    <div id="appeal-list">Loading...</div>
+  </section>
+
+  <script>
+    async function loadGovernance() {
+      const res = await fetch("/governance-overview");
+      const html = await res.text();
+      document.getElementById("governance-data").innerHTML = html;
+    }
+
+    async function runSearch() {
+      const query = document.getElementById("search-query").value;
+      const actor = document.getElementById("search-actor").value;
+      const type = document.getElementById("search-type").value;
+      const tier = document.getElementById("search-tier").value;
+
+      const res = await fetch("/search", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ query, actor, type, tier })
+      });
+      const results = await res.json();
+      const list = document.getElementById("search-results");
+      list.innerHTML = results.map(r => `<li>${r.name} (${r.actor})</li>`).join("");
+    }
+
+    async function loadAppeals() {
+      const res = await fetch("/appeals");
+      const appeals = await res.json();
+      document.getElementById("appeal-list").innerHTML = `
+        <ul>
+          ${appeals.map((a, i) => `
+            <li>
+              ${a.actor} appealed ${a.artifactId}: ${a.reason} [${a.status}]
+              ${a.status === "pending" ? `<button onclick="resolveAppeal(${i}, 'approved')">✅</button>
+              <button onclick="resolveAppeal(${i}, 'rejected')">❌</button>` : ""}
+            </li>
+          `).join("")}
+        </ul>
+      `;
+    }
+
+    async function resolveAppeal(index, outcome) {
+      await fetch(`/appeals/${index}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ outcome })
+      });
+      loadAppeals();
+    }
+
+    loadGovernance();
+    loadAppeals();
+  </script>
+</body>
+</html>
