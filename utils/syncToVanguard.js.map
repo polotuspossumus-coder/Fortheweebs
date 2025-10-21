@@ -1,0 +1,1 @@
+{"version":3,"file":"syncToVanguard.js","sourceRoot":"","sources":["syncToVanguard.ts"],"names":[],"mappings":"AAAA,OAAO,KAAK,MAAM,OAAO,CAAC;AAE1B,MAAM,CAAC,KAAK,UAAU,cAAc,CAAC,QAAa;IAChD,MAAM,KAAK,CAAC,IAAI,CAAC,wCAAwC,EAAE;QACzD,MAAM,EAAE,aAAa;QACrB,QAAQ;KACT,CAAC,CAAC;AACL,CAAC"}

@@ -1,11 +1,16 @@
-import { supabase } from '../lib/supabase';
-
-export const mintBadge = async (userId, remixAnchor) => {
-  const badge = `badge-${remixAnchor}-${Date.now()}`;
-  const { data, error } = await supabase
-    .from('badges')
-    .insert([{ user_id: userId, badge, minted_at: new Date().toISOString() }]);
-
-  if (error) throw new Error('Badge minting failed');
-  return data;
-};
+import { getBadgeForTier } from "./creatorBadges.js";
+export function mintRemixBadge(creatorId, tier, timestamp) {
+    return {
+        creatorId,
+        tier,
+        timestamp,
+        lineageHash: generateLineageHash(creatorId, tier, timestamp),
+        badge: getBadgeForTier(tier),
+    };
+}
+import crypto from "crypto";
+export function generateLineageHash(creatorId, tier, timestamp) {
+    const input = `${creatorId}:${tier}:${timestamp}`;
+    return crypto.createHash("sha256").update(input).digest("hex");
+}
+//# sourceMappingURL=mintBadge.js.map
