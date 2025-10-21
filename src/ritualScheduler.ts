@@ -1,18 +1,19 @@
 // ritualScheduler.ts
-export async function scheduleRitual(userId: string, ritualType: 'tribute' | 'campaign' | 'drop', date: string) {
-  const payload = {
-    userId,
-    ritualType,
-    date,
-    legacyId: `RIT-${userId}-${ritualType}-${Date.now()}`,
-  };
+export interface ScheduledRitual {
+  ritualId: string;
+  creatorId: string;
+  artifactId: string;
+  scheduledTime: number;
+  type: 'tribute' | 'campaign' | 'remix';
+}
 
-  const response = await fetch('/api/ritual/schedule', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(payload),
-  });
+const ritualQueue: ScheduledRitual[] = [];
 
-  if (!response.ok) throw new Error('Ritual scheduling failed');
-  return await response.json(); // returns ritual ID, countdown, legacy sync
+export function scheduleRitual(ritual: ScheduledRitual) {
+  ritualQueue.push(ritual);
+}
+
+export function getUpcomingRituals(): ScheduledRitual[] {
+  const now = Date.now();
+  return ritualQueue.filter(r => r.scheduledTime > now);
 }

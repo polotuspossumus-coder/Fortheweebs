@@ -19,3 +19,20 @@ export async function interpretPrompt(
   if (!response.ok) throw new Error(`Prompt engine failed: ${response.statusText}`);
   return await response.json(); // returns domain-specific blueprint
 }
+export interface PromptRequest {
+  promptId: string;
+  creatorId: string;
+  promptText: string;
+  type: 'canvas' | 'sound' | 'video' | 'cgi';
+  timestamp: number;
+}
+
+const promptLog: PromptRequest[] = [];
+
+export function logPrompt(request: PromptRequest) {
+  promptLog.push(request);
+}
+
+export function getPromptsByCreator(creatorId: string): PromptRequest[] {
+  return promptLog.filter(p => p.creatorId === creatorId);
+}

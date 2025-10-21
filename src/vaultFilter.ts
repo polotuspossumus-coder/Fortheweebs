@@ -1,3 +1,15 @@
+import { VaultEntry } from './vaultUpload.js';
+// Filter VaultEntry[] by format and tier
+export function filterVault(
+  entries: VaultEntry[],
+  options: { format?: VaultEntry['format']; tier?: VaultEntry['tier'] }
+): VaultEntry[] {
+  return entries.filter(entry => {
+    const formatMatch = options.format ? entry.format === options.format : true;
+    const tierMatch = options.tier ? entry.tier === options.tier : true;
+    return formatMatch && tierMatch;
+  });
+}
 import { CreatorTier } from './tierAccess.js';
 
 type Asset = {

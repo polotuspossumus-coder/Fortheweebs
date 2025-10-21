@@ -1,3 +1,20 @@
+export interface CampaignTrigger {
+  triggerId: string;
+  artifactId: string;
+  creatorId: string;
+  triggerType: 'seasonal' | 'tribute-chain' | 'vault-activity';
+  timestamp: number;
+}
+
+const triggerLog: CampaignTrigger[] = [];
+
+export function logTrigger(trigger: CampaignTrigger) {
+  triggerLog.push(trigger);
+}
+
+export function getTriggersByCreator(creatorId: string): CampaignTrigger[] {
+  return triggerLog.filter(t => t.creatorId === creatorId);
+}
 // campaignTrigger.ts
 // @ts-ignore
 import type { CampaignConfig } from './types/campaign.js';

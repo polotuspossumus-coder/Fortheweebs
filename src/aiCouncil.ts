@@ -1,17 +1,32 @@
 // aiCouncil.ts
-// @ts-ignore
-import { tierConfig } from './tierAccess.js';
-// @ts-ignore
-import type { Media, ModerationFlag } from './types/moderation.js';
-
-export function enforceTierAccess(userTier: string, tool: string): boolean {
-  const allowed = tierConfig[userTier]?.tools || [];
-  return allowed.includes('all-tools') || allowed.includes(tool);
+export interface BanProposal {
+  proposalId: string;
+  targetUserId: string;
+  reason: string;
+  evidenceArtifactIds: string[];
+  proposedBy: string;
+  timestamp: number;
+  votes: {
+    approve: string[];
+    reject: string[];
+  };
 }
 
-export function flagContent(content: Media): ModerationFlag[] {
-  const flags: ModerationFlag[] = [];
-  if (detectNudity(content)) flags.push({ type: 'adult', action: 'access-separation' });
-  if (detectIllegal(content)) flags.push({ type: 'illegal', action: 'seal-and-review' });
-  return flags;
+const banQueue: BanProposal[] = [];
+
+export function proposeBan(proposal: BanProposal) {
+  banQueue.push(proposal);
+}
+
+export function voteOnBan(proposalId: string, voterId: string, approve: boolean) {
+  const proposal = banQueue.find(p => p.proposalId === proposalId);
+  if (!proposal) return;
+  // Remove voter from both arrays first
+  proposal.votes.approve = proposal.votes.approve.filter(id => id !== voterId);
+  proposal.votes.reject = proposal.votes.reject.filter(id => id !== voterId);
+  if (approve) {
+    proposal.votes.approve.push(voterId);
+  } else {
+    proposal.votes.reject.push(voterId);
+  }
 }

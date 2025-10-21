@@ -1,3 +1,25 @@
+// --- Type-safe Tier access for new modules ---
+export type Tier = 'Mythic' | 'Standard' | 'Supporter' | 'General';
+
+export interface TierAccess {
+  tier: Tier;
+  canExport: boolean;
+  canLaunchCampaign: boolean;
+  vaultLimit: number;
+}
+
+export function getTierAccess(tier: Tier): TierAccess {
+  switch (tier) {
+    case 'Mythic':
+      return { tier, canExport: true, canLaunchCampaign: true, vaultLimit: Infinity };
+    case 'Standard':
+      return { tier, canExport: true, canLaunchCampaign: true, vaultLimit: 500 };
+    case 'Supporter':
+      return { tier, canExport: true, canLaunchCampaign: false, vaultLimit: 200 };
+    default:
+      return { tier, canExport: false, canLaunchCampaign: false, vaultLimit: 50 };
+  }
+}
 export enum CreatorTier {
   GENERAL = 'general',
   SUPPORTER = 'supporter',

@@ -1,17 +1,18 @@
 // legacySync.ts
-// @ts-ignore
-import { generateFingerprint } from './artifactLogger.js';
-// @ts-ignore
-import { saveToLedger } from './ArtifactLedger.js';
+export interface LegacyRecord {
+  legacyId: string;
+  artifactId: string;
+  creatorId: string;
+  timestamp: number;
+  synced: boolean;
+}
 
-export function logArtifactDrop(userId: string, tool: string, timestamp: Date) {
-  const legacyId = `ART-${userId}-${tool}-${timestamp.getTime()}`;
-  const artifact = {
-    userId,
-    tool,
-    timestamp,
-    legacyId,
-    fingerprint: generateFingerprint(tool, userId, timestamp),
-  };
-  saveToLedger(artifact);
+const legacyLedger: LegacyRecord[] = [];
+
+export function syncLegacy(record: LegacyRecord) {
+  legacyLedger.push({ ...record, synced: true });
+}
+
+export function getLegacyRecords(creatorId: string): LegacyRecord[] {
+  return legacyLedger.filter(r => r.creatorId === creatorId);
 }

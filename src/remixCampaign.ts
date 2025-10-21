@@ -1,18 +1,21 @@
 // remixCampaign.ts
-export async function launchRemixCampaign(originalArtifactId: string, remixPrompt: string, userId: string) {
-  const payload = {
-    originalArtifactId,
-    remixPrompt,
-    userId,
-    legacyId: `RMX-${userId}-${Date.now()}`,
-  };
+export interface RemixCampaign {
+  campaignId: string;
+  originArtifactId: string;
+  creatorId: string;
+  startDate: number;
+  endDate: number;
+  theme: string;
+  tierAccess: 'Mythic' | 'Standard' | 'Supporter' | 'General';
+}
 
-  const response = await fetch('/api/campaign/remix', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(payload),
-  });
+const campaignLedger: RemixCampaign[] = [];
 
-  if (!response.ok) throw new Error('Remix campaign failed');
-  return await response.json(); // returns campaign ID, remixed artifact, legacy sync
+export function launchCampaign(campaign: RemixCampaign) {
+  campaignLedger.push(campaign);
+}
+
+export function getActiveCampaigns(): RemixCampaign[] {
+  const now = Date.now();
+  return campaignLedger.filter(c => c.startDate <= now && c.endDate >= now);
 }
