@@ -9,7 +9,7 @@ export type UploadStats = {
 };
 
 export const MatureContentAnalytics = ({ data }: { data: UploadStats[] }) => (
-  <div className="bg-blue-50 border-l-4 border-blue-500 text-blue-800 p-6 rounded mb-6">
+  <div className="legal-docs-debug-border">
     <h3 className="text-xl font-bold mb-4">📊 PG-13 & M Upload Analytics</h3>
     <table className="w-full text-left border-collapse">
       <thead>

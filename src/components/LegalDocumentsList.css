@@ -6,3 +6,12 @@
   color: #FFD700;
   margin-bottom: 16px;
 }
+/* Add a red border for debug/visual emphasis */
+.legal-docs-debug-border {
+  border: 1px solid red;
+}
+/* Ensure legal docs are always visible */
+.legal-docs {
+  display: block;
+  opacity: 1;
+}

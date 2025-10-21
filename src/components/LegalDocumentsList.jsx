@@ -12,7 +12,7 @@ async function fetchMarkdown(path) {
 }
 
 
-export const LegalDocumentsList = () => {
+export default function LegalDocumentsList() {
   const [accepted, setAccepted] = useState(() => {
     const stored = localStorage.getItem("legalAccepted");
     return stored ? JSON.parse(stored) : {};
