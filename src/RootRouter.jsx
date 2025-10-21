@@ -1,7 +1,7 @@
 import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import AppFlow from "./AppFlow.jsx";
-import LegalDocuments from "./components/LegalDocuments.jsx";
+import { LegalDocuments } from "./components/LegalDocuments.jsx";
 
 export default function RootRouter() {
   return (
