@@ -18,7 +18,7 @@ function AppFlow() {
 
   return (
     <React.StrictMode>
-      <div style={{background:'#222', color:'#FFD700', padding:'8px 0', textAlign:'center', fontWeight:700, fontSize:'1.1rem'}}>DEBUG: Onboarding Flow v1.0.0 - {new Date().toLocaleString()}</div>
+  <div style={{background:'#222', color:'#FFD700', padding:'8px 0', textAlign:'center', fontWeight:700, fontSize:'1.1rem'}}>DEBUG: Onboarding Flow v2.0.0 - {new Date().toLocaleString()}</div>
       {step === 0 && (
         <div>
           <LegalDocumentsList userId={userId} />

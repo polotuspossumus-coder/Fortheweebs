@@ -1,6 +1,6 @@
 [
   {
-    "version": "1.0.0",
+  "version": "2.0.0",
     "codename": "Genesis",
     "date": "2025-10-21",
     "summary": "Initial sovereign release: governance engine, media ingestion, moderation council."
