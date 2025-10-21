@@ -9,11 +9,16 @@ import { Switch } from '@radix-ui/react-switch';
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL || 'https://demo.supabase.co';
 const SUPABASE_KEY = import.meta.env.VITE_SUPABASE_KEY || 'demo-anon-key';
 // const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+
 import { LegalDocumentsList } from "./components/LegalDocumentsList";
+import TierInfo from "./components/TierInfo";
+import UpgradePrompt from "./components/UpgradePrompt";
+import VaultEntryList from "./components/VaultEntryList";
 
 export const CreatorDashboard = ({ userId = "demo_user", ipAddress = "127.0.0.1" }) => {
   const [tosAccepted, setTosAccepted] = useState(false);
   const [creatorAgreementAccepted, setCreatorAgreementAccepted] = useState(false);
+  const [currentTier] = useState('General Access'); // TODO: Replace with real user tier
   const version = "2025.10";
 
   if (!tosAccepted) {
@@ -29,39 +34,48 @@ export const CreatorDashboard = ({ userId = "demo_user", ipAddress = "127.0.0.1"
       />
     );
   }
-    return (
-      <Tabs defaultValue="overview" className="dashboard-tabs">
-        <TabsList>
-          <TabsTrigger value="overview">Overview</TabsTrigger>
-          <TabsTrigger value="overlays">Overlays</TabsTrigger>
-          <TabsTrigger value="payments">Payments</TabsTrigger>
-          <TabsTrigger value="legal">Legal</TabsTrigger>
-          {userId === "owner" && (
-            <TabsTrigger value="earnings">Earnings</TabsTrigger>
-          )}
-        </TabsList>
-        <TabsContent value="overview">
-          <OverviewPanel />
-        </TabsContent>
-        <TabsContent value="overlays">
-          <OverlayPanel />
-        </TabsContent>
-        <TabsContent value="payments">
-          <PaymentPanel />
-        </TabsContent>
-        <TabsContent value="legal">
-          <LegalDocumentsList userId={userId} />
-        </TabsContent>
+  return (
+    <Tabs defaultValue="overview" className="dashboard-tabs">
+      <TabsList>
+        <TabsTrigger value="overview">Overview</TabsTrigger>
+        <TabsTrigger value="overlays">Overlays</TabsTrigger>
+        <TabsTrigger value="payments">Payments</TabsTrigger>
+        <TabsTrigger value="legal">Legal</TabsTrigger>
         {userId === "owner" && (
-          <TabsContent value="earnings">
-            <OwnerEarningsPanel />
-          </TabsContent>
+          <TabsTrigger value="earnings">Earnings</TabsTrigger>
         )}
-      </Tabs>
-    );
+      </TabsList>
+      <TabsContent value="overview">
+        <div style={{ marginBottom: 32 }}>
+          <TierInfo currentTier={currentTier} />
+          <UpgradePrompt userId={userId} currentTier={currentTier} />
+        </div>
+        <OverviewPanel />
+      </TabsContent>
+      <TabsContent value="overlays">
+        <OverlayPanel />
+        <div style={{ marginTop: 32 }}>
+          <h3>Your Vault Entries</h3>
+          <VaultEntryList userId={userId} />
+        </div>
+      </TabsContent>
+      <TabsContent value="payments">
+        <PaymentPanel />
+      </TabsContent>
+      <TabsContent value="legal">
+        <LegalDocumentsList userId={userId} />
+      </TabsContent>
+      {userId === "owner" && (
+        <TabsContent value="earnings">
+          <OwnerEarningsPanel />
+        </TabsContent>
+      )}
+    </Tabs>
+  );
+};
 export const OwnerEarningsPanel = () => {
   // TODO: Replace with real backend data
-  const [topEarners, setTopEarners] = useState([
+  const [topEarners] = useState([
     { username: "creator1", profit: 1200 },
     { username: "creator2", profit: 950 },
     { username: "creator3", profit: 800 },
@@ -82,29 +96,7 @@ export const OwnerEarningsPanel = () => {
     </div>
   );
 };
-    <Tabs defaultValue="overview" className="dashboard-tabs">
-      <TabsList>
-        <TabsTrigger value="overview">Overview</TabsTrigger>
-        <TabsTrigger value="overlays">Overlays</TabsTrigger>
-        <TabsTrigger value="payments">Payments</TabsTrigger>
-        <TabsTrigger value="legal">Legal</TabsTrigger>
-      </TabsList>
-
-      <TabsContent value="overview">
-        <OverviewPanel />
-      </TabsContent>
-      <TabsContent value="overlays">
-        <OverlayPanel />
-      </TabsContent>
-      <TabsContent value="payments">
-        <PaymentPanel />
-      </TabsContent>
-      <TabsContent value="legal">
-        <LegalDocumentsList userId={userId} />
-      </TabsContent>
-    </Tabs>
-  );
-};
+// ...existing code...
 
 export const OverlayPanel = () => {
   const [enabled, setEnabled] = useState(true);
