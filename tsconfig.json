@@ -34,10 +34,12 @@
 
     // Recommended Options
     "strict": true,
-    "jsx": "react-jsx",
-    "verbatimModuleSyntax": true,
-    "isolatedModules": true,
-    "noUncheckedSideEffectImports": true,
+  "jsx": "react-jsx",
+  "verbatimModuleSyntax": true,
+  "isolatedModules": true,
+  "noUncheckedSideEffectImports": true,
+  "resolveJsonModule": true,
+  "esModuleInterop": true,
     "moduleDetection": "force",
     "skipLibCheck": true,
   }
