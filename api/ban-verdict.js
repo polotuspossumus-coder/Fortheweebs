@@ -6,9 +6,9 @@ let db;
 let proposals;
 let ledger;
 
-async function connect(req) {
+async function connect() {
   if (!client) {
-    const uri = (req.env && req.env.MONGO_URI) || undefined;
+    const uri = (await import('process')).env.MONGO_URI;
     if (!uri) throw new Error('MONGO_URI not set');
     client = new MongoClient(uri);
     await client.connect();
@@ -24,20 +24,21 @@ export default async function handler(req, res) {
     return;
   }
   try {
-    await connect(req);
-    const { proposalId, verdict } = req.body;
-    if (!proposalId || !verdict) return res.status(400).json({ error: 'Missing proposalId or verdict' });
-    const id = typeof proposalId === 'string' ? new ObjectId(proposalId) : proposalId;
+    await connect();
+    const { banId, verdict } = req.body;
+    if (!banId || !verdict) return res.status(400).json({ error: 'Missing banId or verdict' });
+    const id = typeof banId === 'string' ? new ObjectId(banId) : banId;
     const result = await proposals.updateOne(
       { _id: id },
       { $set: { verdict, reviewed: true, reviewedAt: new Date() } }
     );
     if (result.modifiedCount === 0) return res.status(404).json({ error: 'Proposal not found' });
     await ledger.insertOne({
-      proposalId: id,
+      banId: id,
       verdict,
       timestamp: new Date(),
       synced: true,
+      reviewedBy: req.user?.username || 'Jacob',
     });
     res.status(200).json({ status: 'verdictLogged' });
   } catch (err) {
