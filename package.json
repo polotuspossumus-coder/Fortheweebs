@@ -7,11 +7,11 @@
     "dev": "vite",
     "build": "vite build",
     "start": "node server.js",
-  "test": "jest --coverage",
-  "coverage": "open coverage/lcov-report/index.html"
+    "test": "jest --coverage",
+    "coverage": "open coverage/lcov-report/index.html"
   },
   "dependencies": {
-    "@react-three/drei": "^10.7.6",
+    "@react-three/drei": "^9.56.14",
     "@react-three/fiber": "^9.4.0",
     "express": "^5.1.0",
     "pdfkit": "^0.17.2",
