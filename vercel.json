@@ -1,4 +1,5 @@
 {
-  "buildCommand": "vite build",
-  "outputDirectory": "dist"
+  "framework": "express",
+  "buildCommand": "npm run build",
+  "outputDirectory": "."
 }

@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "dev": "vite",
-  "build": "vite build",
-    "start": "node server.js",
+  "build": "tsc",
+  "start": "node server.js",
     "test": "jest --coverage",
     "coverage": "open coverage/lcov-report/index.html"
     ,
