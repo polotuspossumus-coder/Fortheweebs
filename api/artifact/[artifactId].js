@@ -1,10 +1,9 @@
-// Vercel serverless API to list council log/banLedger entries
-import { MongoClient } from 'mongodb';
+// Vercel serverless API to fetch a single artifact by ID
+import { MongoClient, ObjectId } from 'mongodb';
 
 let client;
 let db;
-let ledger;
-let reviewLog;
+let vault;
 
 async function connect(req) {
   if (!client) {
@@ -13,8 +12,7 @@ async function connect(req) {
     client = new MongoClient(uri);
     await client.connect();
     db = client.db('fortheweebs');
-    ledger = db.collection('banLedger');
-    reviewLog = db.collection('reviewLog');
+    vault = db.collection('vault');
   }
 }
 
@@ -25,10 +23,11 @@ export default async function handler(req, res) {
   }
   try {
     await connect(req);
-    const banLogs = await ledger.find({}).toArray();
-    const reviewLogs = await reviewLog.find({}).toArray();
-    const logs = [...banLogs, ...reviewLogs].sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
-    res.status(200).json(logs);
+    const { artifactId } = req.query;
+    if (!artifactId) return res.status(400).json({ error: 'Missing artifactId' });
+    const artifact = await vault.findOne({ _id: new ObjectId(artifactId) });
+    if (!artifact) return res.status(404).json({ error: 'Artifact not found' });
+    res.status(200).json(artifact);
   } catch (err) {
     res.status(500).json({ error: err.message || 'Internal server error' });
   }
