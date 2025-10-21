@@ -6,7 +6,8 @@ import CreatorSignup from "./CreatorSignup.jsx";
 import PaymentModule from "./PaymentModule.jsx";
 import GovernanceRitual from "./GovernanceRitual.jsx";
 import { ParentalLock } from "./components/ParentalLock";
-import { hashPassword, ParentalControls } from "./utils/parentalControls";
+import { hashPassword } from "./utils/parentalControls";
+
 import "./GovernanceRitual.css";
 
 const userId = "demo-user";
@@ -26,7 +27,7 @@ function ParentalDisclaimer({ onContinue }) {
 
 function AppFlow() {
   const [step, setStep] = useState(0);
-  const [parentalControls, setParentalControls] = useState<ParentalControls | null>(null);
+  const [parentalControls, setParentalControls] = useState(null);
   const [showParentalLock, setShowParentalLock] = useState(false);
 
   // Simulate legal acceptance callback
