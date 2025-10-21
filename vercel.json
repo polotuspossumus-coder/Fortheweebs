@@ -1,7 +1,7 @@
 {
+  "framework": "express",
   "buildCommand": "npm run build",
   "outputDirectory": "dist",
-  "framework": "Other",
   "routes": [
     {
       "src": "/(.*)",
