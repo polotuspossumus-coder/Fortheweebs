@@ -104,33 +104,42 @@ export interface GraveyardEntry {
   sealedAt: number;
   [key: string]: any;
 }
-  export function exportTributeArtifact(artifactId: string): { fileName: string; content: string } {
 export const graveyardLedger: GraveyardEntry[] = [];
-    const artifact = ledger.find((entry: GraveyardEntry) => entry.artifactId === artifactId);
+export function exportTributeArtifact(artifactId: string): { fileName: string; content: string } | undefined {
+  const artifact = graveyardLedger.find((entry: GraveyardEntry) => entry.artifactId === artifactId);
+  if (!artifact) return undefined;
+  return {
+    fileName: `${artifactId}.json`,
+    content: JSON.stringify(artifact, null, 2),
+  };
+}
 export function logToGraveyard(tribute: { tributeId: string; creatorId: string; reason: string; [key: string]: any }) {
   graveyardLedger.push({
     ...tribute,
     sealedAt: Date.now(),
   });
 }
-
 export function getGraveyardLedger(): GraveyardEntry[] {
   return graveyardLedger;
 }
 import type { BanProposal } from './ban-queue.js';
-import { generateFingerprint } from './fingerprint.js';
+import { generateFingerprint } from './behavioralFingerprint.js';
 /**
  * Enrich a ban proposal with a timestamp and cryptographic fingerprint.
  * @param proposal - The ban proposal to enrich
  * @returns The enriched proposal
  */
 export function enrichProposal(proposal: BanProposal): BanProposal & { fingerprint: string } {
+  // For demo, use targetId as userId, and empty objects for device/content data
+  const fp = generateFingerprint(
+    proposal.targetId ?? '',
+    {},
+    proposal.reason ?? ''
+  );
   return {
     ...proposal,
     timestamp: Date.now(),
-    fingerprint: generateFingerprint(
-      (proposal.targetId ?? '') + (proposal.reason ?? '') + Date.now()
-    ),
+    fingerprint: JSON.stringify(fp),
   };
 }
 
