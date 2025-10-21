@@ -1,0 +1,33 @@
+.legal-container {
+  background-color: #111;
+  color: #fff;
+  padding: 32px;
+  border-radius: 12px;
+  max-width: 720px;
+  margin: auto;
+  box-shadow: 0 0 12px rgba(255, 215, 0, 0.2);
+}
+
+.legal-title {
+  font-size: 28px;
+  margin-bottom: 24px;
+  color: #ffd700;
+}
+
+.legal-section {
+  margin-bottom: 24px;
+  padding: 16px;
+  background-color: #1a1a1a;
+  border-left: 4px solid #ffd700;
+  border-radius: 8px;
+}
+
+.legal-accept {
+  background-color: #ffd700;
+  color: #000;
+  font-weight: bold;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
