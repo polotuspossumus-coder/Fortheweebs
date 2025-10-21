@@ -2,17 +2,16 @@ import React, { useEffect, useState } from "react";
 import { legalIndex } from "../legal/legalIndex";
 import { getInteractionLogs, getRemixConsents, getCommentAcks } from '../legal/interaction-log';
 
-// Simulated API call to get acceptance status
-async function fetchAcceptanceStatus(userId) {
+
+// Mock acceptance status for static hosting
+function fetchAcceptanceStatus(userId) {
   const status = {};
   for (const doc of legalIndex) {
     if (doc.requiredAcceptance) {
-      const res = await fetch(`/api/tos/accepted/${userId}`);
-      const data = await res.json();
-      status[doc.id] = data.accepted;
+      status[doc.id] = false; // or true if you want to show as accepted
     }
   }
-  return status;
+  return Promise.resolve(status);
 }
 
 export const LegalDocumentsList = ({ userId }) => {
@@ -28,14 +27,11 @@ export const LegalDocumentsList = ({ userId }) => {
         setError(null);
         const status = await fetchAcceptanceStatus(userId);
         setAcceptance(status);
-        // Fetch acceptance history for each doc
+        // Mock acceptance history for static hosting
         const histories = {};
         for (const doc of legalIndex) {
           if (doc.requiredAcceptance) {
-            const res = await fetch(`/api/tos/accepted/${userId}`);
-            if (!res.ok) throw new Error(`Failed to fetch history for ${doc.id}`);
-            const data = await res.json();
-            histories[doc.id] = data.history || [];
+            histories[doc.id] = [];
           }
         }
         setHistory(histories);
