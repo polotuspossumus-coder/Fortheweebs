@@ -9,6 +9,12 @@
     "start": "node server.js",
     "test": "jest --coverage",
     "coverage": "open coverage/lcov-report/index.html"
+    ,
+    "electron:package": "electron-builder --config electron-builder.config.js"
+    ,
+    "mobile:sync": "npx cap sync",
+    "mobile:android": "npx cap build android",
+    "mobile:ios": "npx cap build ios"
   },
   "dependencies": {
     "@react-three/drei": "^9.56.14",

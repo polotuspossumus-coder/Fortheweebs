@@ -1,0 +1,13 @@
+{
+  "title": "Vanguard",
+  "shortDescription": "Automated governance and media engine for creators.",
+  "fullDescription": "Vanguard empowers creators with sovereign tools for moderation, campaign triggers, and media management. Every action is immortalized as a legacy artifact.",
+  "keywords": "creator, AI, governance, automation, media",
+  "contactEmail": "support@vanguard.app",
+  "privacyPolicy": "https://vanguard.app/privacy",
+  "screenshots": [
+    "screenshot1.png",
+    "screenshot2.png",
+    "screenshot3.png"
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "productName": "Vanguard",
+  "description": "Desktop version of the Vanguard creator engine. Includes governance dashboard, media ingestion, and ritualized protocol drops.",
+  "platforms": ["Windows", "macOS", "Linux"],
+  "installerFiles": [
+    "Vanguard Setup.exe",
+    "Vanguard.dmg",
+    "Vanguard.AppImage"
+  ],
+  "support": "https://vanguard.support",
+  "license": "MIT"
+}

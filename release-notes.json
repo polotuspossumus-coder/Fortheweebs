@@ -1,0 +1,7 @@
+{
+  "version": "1.0.0",
+  "codename": "Genesis",
+  "releaseDate": "2025-10-21",
+  "platforms": ["web", "desktop", "mobile", "api"],
+  "notes": "Initial sovereign release of Vanguard. Includes governance engine, media ingestion, moderation council, and ritualized protocol drops."
+}
