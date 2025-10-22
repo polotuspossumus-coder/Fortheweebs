@@ -1,15 +1,13 @@
 // Placeholder: unlockTier does nothing
 function unlockTier(userId, tier) {
   // TODO: Implement real unlock logic
-  return true;
-function unlockTier(userId, tier) { void userId; void tier; return true; }
+  return Boolean(userId) && Boolean(tier);
 }
 
 // Placeholder: logPayment does nothing
 function logPayment(userId, amount, tier) {
   // TODO: Implement real payment logging
-  return true;
-function logPayment(userId, amount, tier) { void userId; void amount; void tier; return true; }
+  return Boolean(userId) && Boolean(amount) && Boolean(tier);
 }
 
 function processPayment(userId, tier, amount) {

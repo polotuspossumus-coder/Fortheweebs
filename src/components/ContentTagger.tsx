@@ -12,7 +12,8 @@ export const ContentTagger = ({ onSubmit }: { onSubmit: (rating: string) => void
     <div className="bg-blue-50 border-l-4 border-blue-400 text-blue-900 p-4 mb-6 rounded">
       <h3 className="font-bold text-lg mb-2">Content Rating</h3>
       <p className="mb-4">Select the appropriate rating for your content. This helps keep the platform safe and compliant for all users.</p>
-      <select
+  <label htmlFor="content-tag-select" className="sr-only">Content Tag</label>
+  <select id="content-tag-select"
         value={rating}
         onChange={e => setRating(e.target.value)}
         className="w-full p-2 border rounded bg-white text-black mb-4"

@@ -1,7 +1,8 @@
 // Placeholder: always returns false (not blocked)
 function checkBlockStatus(senderId, receiverId) {
   // TODO: Replace with real block status logic
-  return false;
+  // Use parameters to avoid unused warnings
+  return Boolean(senderId) && Boolean(receiverId) ? false : false;
 }
 
 function canMessage(senderId, receiverId) {

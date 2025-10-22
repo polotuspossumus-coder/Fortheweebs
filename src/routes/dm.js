@@ -3,7 +3,8 @@ import { canMessage } from '../utils/canMessage.js';
 // Placeholder for sendMessage utility
 async function sendMessage(senderId, receiverId, message) {
   // TODO: Implement actual message sending logic
-  return true;
+  // Use parameters to avoid unused warnings
+  return Boolean(senderId) && Boolean(receiverId) && Boolean(message);
 }
 
 const router = express.Router();

@@ -1,3 +1,44 @@
+// Alternate naming for compatibility with other modules
+export type Rating = 'G' | 'PG' | 'PG-13' | 'M' | 'MA' | 'XXX';
+
+export interface ParentalSettings {
+  passkey: string;
+  allowed: Rating[];
+  childMode: boolean;
+}
+
+/**
+ * Determines if content is allowed based on parental settings and user status (alternate signature).
+ */
+export function isAllowed(rating: Rating, settings: ParentalSettings, isPaid: boolean): boolean {
+  if (rating === 'XXX' && !isPaid) return false;
+  if (settings.childMode && !settings.allowed.includes(rating)) return false;
+  return true;
+}
+export type ContentRating = 'G' | 'PG' | 'PG-13' | 'M' | 'MA' | 'XXX';
+
+export interface ParentalSettings {
+  passkey: string;
+  allowedRatings: ContentRating[];
+  childMode: boolean;
+}
+
+/**
+ * Determines if content is allowed based on parental settings and user status.
+ * @param rating - The content rating to check
+ * @param settings - The parental settings object
+ * @param isPayingUser - Whether the user is a paying customer
+ * @returns true if allowed, false otherwise
+ */
+export function isContentAllowed(
+  rating: ContentRating,
+  settings: ParentalSettings,
+  isPayingUser: boolean
+): boolean {
+  if (settings.childMode && !settings.allowedRatings.includes(rating)) return false;
+  if (rating === 'XXX' && !isPayingUser) return false;
+  return true;
+}
 // parentalControls.ts
 
 /**

@@ -1,3 +1,16 @@
+// --- Ban queue notification logic ---
+
+import { getBanQueue } from './moderationCouncil';
+import { writeToLedger } from './ledgerEngine';
+
+interface BanProposal { userId: string; reason: string; timestamp: number; }
+
+export async function notifyBanQueue(): Promise<void> {
+  const queue: BanProposal[] = await getBanQueue();
+  for (const ban of queue) {
+    await writeToLedger({ type: 'ban', ...ban });
+  }
+}
 import { getConfirmedSlabs } from './slab-registry.js';
 /**
  * Initiate a recovery ritual, returning emotional validation and confirmed slabs.
