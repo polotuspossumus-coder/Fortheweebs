@@ -45,13 +45,13 @@ export default function LegalDocumentsList() {
   if (allAccepted) return null;
 
   return (
-    <div className="legal-docs-container" style={{ maxWidth: 700, margin: "40px auto", background: "#181818", borderRadius: 12, boxShadow: "0 2px 16px #0008", padding: 32 }}>
-      <h2 style={{ fontSize: "2rem", fontWeight: 700, marginBottom: 32, color: "#FFD700", textAlign: "center" }}>Legal Documents</h2>
+    <div className="legal-docs-container" style={{ maxWidth: 700, margin: "40px auto", background: "#fff", color: "#111", borderRadius: 12, boxShadow: "0 2px 16px #0008", padding: 32 }}>
+      <h2 style={{ fontSize: "2rem", fontWeight: 700, marginBottom: 32, color: "#222", textAlign: "center" }}>Legal Documents</h2>
       {legalIndex.map(doc => (
-        <div key={doc.id} style={{ marginBottom: 32, background: "#222", borderRadius: 8, padding: 24, boxShadow: "0 1px 8px #0006" }}>
-          <div style={{ fontWeight: "bold", fontSize: "1.3rem", marginBottom: 8 }}>{doc.title}</div>
-          <div style={{ fontSize: "0.95rem", color: "#FFD700", marginBottom: 12 }}>Version: {doc.version} | Last Updated: {doc.lastUpdated}</div>
-          <div style={{ background: "#181818", borderRadius: 6, padding: 16, marginBottom: 16, maxHeight: 300, overflowY: "auto", border: "1px solid #333" }}>
+        <div key={doc.id} style={{ marginBottom: 32, background: "#f7f7f7", color: "#111", borderRadius: 8, padding: 24, boxShadow: "0 1px 8px #0002" }}>
+          <div style={{ fontWeight: "bold", fontSize: "1.3rem", marginBottom: 8, color: "#111" }}>{doc.title}</div>
+          <div style={{ fontSize: "0.95rem", color: "#444", marginBottom: 12 }}>Version: {doc.version} | Last Updated: {doc.lastUpdated}</div>
+          <div style={{ background: "#fff", color: "#111", borderRadius: 6, padding: 16, marginBottom: 16, maxHeight: 300, overflowY: "auto", border: "1px solid #ddd" }}>
             <ReactMarkdown>{docs[doc.id] || ""}</ReactMarkdown>
           </div>
           {doc.requiredAcceptance && !accepted[doc.id] && (
@@ -60,7 +60,7 @@ export default function LegalDocumentsList() {
             </button>
           )}
           {doc.requiredAcceptance && accepted[doc.id] && (
-            <div style={{ color: "#0f0", fontWeight: 600, marginTop: 8 }}>Accepted</div>
+            <div style={{ color: "#0a0", fontWeight: 600, marginTop: 8 }}>Accepted</div>
           )}
         </div>
       ))}

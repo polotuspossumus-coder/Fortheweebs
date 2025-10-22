@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+
 import WelcomeScreen from './WelcomeScreen.jsx';
 import ChooseArchetype from './ChooseArchetype.jsx';
 import SelectTier from './SelectTier.jsx';
@@ -8,14 +9,26 @@ import ProfileBuilder from './ProfileBuilder.jsx';
 
 export default function OnboardingFlow() {
   const [step, setStep] = useState(0);
+  const [parentalSet, setParentalSet] = useState(() => {
+    try {
+      return !!localStorage.getItem('parentalControls');
+    } catch {
+      return false;
+    }
+  });
+
   const steps = [
     <WelcomeScreen />,
     <ChooseArchetype />,
     <SelectTier />,
     <ToolPreview />,
     <AcceptLegalSlabs />,
+    !parentalSet && <OptionalParentalControls onConfirm={controls => {
+      if (controls) localStorage.setItem('parentalControls', JSON.stringify(controls));
+      setParentalSet(true);
+    }} />,
     <ProfileBuilder />
-  ];
+  ].filter(Boolean);
 
   return (
     <div className="p-4">

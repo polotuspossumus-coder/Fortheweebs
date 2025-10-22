@@ -1,16 +1,15 @@
 // --- Ban queue notification logic ---
 
-import { getBanQueue } from './moderationCouncil';
-import { writeToLedger } from './ledgerEngine';
-
-interface BanProposal { userId: string; reason: string; timestamp: number; }
+import { getBanQueue } from './moderationCouncil.js';
+import { writeToLedger } from './utils/ledger.js';
 
 export async function notifyBanQueue(): Promise<void> {
-  const queue: BanProposal[] = await getBanQueue();
+  const queue = await getBanQueue();
   for (const ban of queue) {
-    await writeToLedger({ type: 'ban', ...ban });
+    writeToLedger('ban', ban);
   }
 }
+
 import { getConfirmedSlabs } from './slab-registry.js';
 /**
  * Initiate a recovery ritual, returning emotional validation and confirmed slabs.
@@ -138,12 +137,11 @@ export function getGraveyardLedger(): GraveyardEntry[] {
 import type { BanProposal } from './ban-queue.js';
 import { generateFingerprint } from './behavioralFingerprint.js';
 /**
- * Enrich a ban proposal with a timestamp and cryptographic fingerprint.
+ * Enrich a ban proposal with a cryptographic fingerprint.
  * @param proposal - The ban proposal to enrich
  * @returns The enriched proposal
  */
 export function enrichProposal(proposal: BanProposal): BanProposal & { fingerprint: string } {
-  // For demo, use targetId as userId, and empty objects for device/content data
   const fp = generateFingerprint(
     proposal.targetId ?? '',
     {},
@@ -151,7 +149,6 @@ export function enrichProposal(proposal: BanProposal): BanProposal & { fingerpri
   );
   return {
     ...proposal,
-    timestamp: Date.now(),
     fingerprint: JSON.stringify(fp),
   };
 }
@@ -172,13 +169,11 @@ export function finalizeBanDecision(proposal: BanProposal, approved: boolean): v
   }
 }
 import { banQueue } from './ban-queue.js';
-import { writeToLedger } from './utils/ledger.js'; // fallback for JS bundlers
-// For TypeScript, prefer .ts extension for correct resolution
-// @ts-ignore
-import { writeToLedger as writeToLedgerTS } from './utils/ledger.ts';
-// Sync all ban proposals in the queue to the ledger
+/**
+ * Sync all ban proposals in the queue to the ledger
+ */
 export function syncBanQueueToLedger(): void {
-  banQueue.forEach((proposal: BanProposal) => {
+  banQueue.forEach((proposal) => {
     writeToLedger('ban-proposal', proposal);
   });
 }
