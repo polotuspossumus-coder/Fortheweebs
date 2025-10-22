@@ -1,5 +1,5 @@
 // Generates a sample output for a creator tool
-export const generateCreatorOutput = (creatorId, tool) => ({
+export const generateCreatorOutput = (creatorId: string, tool: string) => ({
   creatorId,
   tool,
   outputType: 'content',
