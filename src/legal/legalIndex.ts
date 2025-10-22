@@ -24,6 +24,14 @@ export const legalIndex: LegalDocument[] = [
     lastUpdated: "2025-10-11",
     requiredAcceptance: true,
   },
+  {
+    id: "creator-agreement",
+    title: "Creator Agreement",
+    path: "/legal/creator-agreement.md",
+    version: "1.0.0",
+    lastUpdated: "2025-10-22",
+    requiredAcceptance: true,
+  },
   // Additional valid LegalDocument objects can be added here
 ];
 

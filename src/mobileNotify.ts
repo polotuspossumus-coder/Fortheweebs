@@ -159,7 +159,10 @@ export function finalizeBanDecision(proposal: BanProposal, approved: boolean): v
   }
 }
 import { banQueue } from './ban-queue.js';
-import { writeToLedger } from './utils/ledger.js';
+import { writeToLedger } from './utils/ledger.js'; // fallback for JS bundlers
+// For TypeScript, prefer .ts extension for correct resolution
+// @ts-ignore
+import { writeToLedger as writeToLedgerTS } from './utils/ledger.ts';
 // Sync all ban proposals in the queue to the ledger
 export function syncBanQueueToLedger(): void {
   banQueue.forEach((proposal: BanProposal) => {
