@@ -1,3 +1,9 @@
+8. Donations, Refunds, and Disputes
+•  All payments made through Fortheweebs are considered voluntary donations to support the platform and its creators.
+•  Donations are non-refundable and not eligible for chargeback, reversal, or dispute under any circumstances.
+•  By making a donation, you acknowledge and agree that you are not entitled to any refund, return, or compensation, regardless of your experience or outcome on the platform.
+•  Disputing or attempting to reverse a donation may result in permanent loss of access to the platform and its features.
+
 
 # Terms of Service
 

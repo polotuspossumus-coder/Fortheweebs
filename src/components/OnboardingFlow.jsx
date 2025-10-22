@@ -64,6 +64,11 @@ export default function OnboardingFlow() {
   return (
     <div className="p-4">
       {steps[step]}
+      {step === steps.length - 1 && (
+        <div className="my-4 p-3 bg-yellow-100 text-yellow-900 rounded border border-yellow-400 text-sm">
+          <strong>Donation Notice:</strong> All payments are considered voluntary donations to support Fortheweebs and its creators. Donations are <b>non-refundable</b> and not eligible for chargeback, reversal, or dispute under any circumstances. By proceeding, you acknowledge and agree to these terms.
+        </div>
+      )}
       <button
         onClick={handleNext}
         className="mt-4 bg-purple-600 px-4 py-2 rounded"
