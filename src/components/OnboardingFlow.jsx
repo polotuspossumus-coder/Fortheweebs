@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+// import { useNavigate } from 'react-router-dom';
 
 import WelcomeScreen from './WelcomeScreen.jsx';
 import ChooseArchetype from './ChooseArchetype.jsx';
@@ -17,7 +17,7 @@ export default function OnboardingFlow() {
       return false;
     }
   });
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   const [tier, setTier] = useState('supporter');
   const [userId] = useState('demo-user');
