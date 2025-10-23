@@ -1,3 +1,15 @@
+// --- Ban queue notification logic ---
+
+import { getBanQueue } from './moderationCouncil.js';
+import { writeToLedger } from './utils/ledger.js';
+
+export async function notifyBanQueue(): Promise<void> {
+  const queue = await getBanQueue();
+  for (const ban of queue) {
+    writeToLedger('ban', ban);
+  }
+}
+
 import { getConfirmedSlabs } from './slab-registry.js';
 /**
  * Initiate a recovery ritual, returning emotional validation and confirmed slabs.
@@ -90,7 +102,7 @@ export function calculateRevenueSplit(tier: Tier, totalRevenue: number): { creat
   const creatorShare = splits[tier] ?? 0.80;
   const platformShare = 1 - creatorShare;
 
-  import type { GraveyardEntry } from './graveyard-ledger.js';
+
   return {
     creator: totalRevenue * creatorShare,
     platform: totalRevenue * platformShare,
@@ -104,33 +116,40 @@ export interface GraveyardEntry {
   sealedAt: number;
   [key: string]: any;
 }
-  export function exportTributeArtifact(artifactId: string): { fileName: string; content: string } {
 export const graveyardLedger: GraveyardEntry[] = [];
-    const artifact = ledger.find((entry: GraveyardEntry) => entry.artifactId === artifactId);
+export function exportTributeArtifact(artifactId: string): { fileName: string; content: string } | undefined {
+  const artifact = graveyardLedger.find((entry: GraveyardEntry) => entry.artifactId === artifactId);
+  if (!artifact) return undefined;
+  return {
+    fileName: `${artifactId}.json`,
+    content: JSON.stringify(artifact, null, 2),
+  };
+}
 export function logToGraveyard(tribute: { tributeId: string; creatorId: string; reason: string; [key: string]: any }) {
   graveyardLedger.push({
     ...tribute,
     sealedAt: Date.now(),
   });
 }
-
 export function getGraveyardLedger(): GraveyardEntry[] {
   return graveyardLedger;
 }
 import type { BanProposal } from './ban-queue.js';
-import { generateFingerprint } from './fingerprint.js';
+import { generateFingerprint } from './behavioralFingerprint.js';
 /**
- * Enrich a ban proposal with a timestamp and cryptographic fingerprint.
+ * Enrich a ban proposal with a cryptographic fingerprint.
  * @param proposal - The ban proposal to enrich
  * @returns The enriched proposal
  */
 export function enrichProposal(proposal: BanProposal): BanProposal & { fingerprint: string } {
+  const fp = generateFingerprint(
+    proposal.targetId ?? '',
+    {},
+    proposal.reason ?? ''
+  );
   return {
     ...proposal,
-    timestamp: Date.now(),
-    fingerprint: generateFingerprint(
-      (proposal.targetId ?? '') + (proposal.reason ?? '') + Date.now()
-    ),
+    fingerprint: JSON.stringify(fp),
   };
 }
 
@@ -150,10 +169,11 @@ export function finalizeBanDecision(proposal: BanProposal, approved: boolean): v
   }
 }
 import { banQueue } from './ban-queue.js';
-import { writeToLedger } from './utils/ledger.js';
-// Sync all ban proposals in the queue to the ledger
+/**
+ * Sync all ban proposals in the queue to the ledger
+ */
 export function syncBanQueueToLedger(): void {
-  banQueue.forEach((proposal: BanProposal) => {
+  banQueue.forEach((proposal) => {
     writeToLedger('ban-proposal', proposal);
   });
 }
