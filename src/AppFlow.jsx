@@ -1,5 +1,7 @@
 
-import React, { useState } from "react";
+
+import '../src/axiosSetup.js';
+import React from "react";
 import LegalDocumentsList from "./components/LegalDocumentsList.jsx";
 import CreatorSignup from "./CreatorSignup.jsx";
 import PaymentModule from "./PaymentModule.jsx";
