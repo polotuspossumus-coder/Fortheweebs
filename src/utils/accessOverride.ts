@@ -9,16 +9,20 @@ export interface User {
   role?: string;
 }
 
-export const isPolotus = (user: User) =>
-  user.id === 'jacob.morris' || user.email === 'polotus@vanguard.tools';
+
+// Secure: check for override email from environment variable
+export const isPolotus = (user: User) => {
+  const overrideEmail = typeof process !== 'undefined' ? process.env.OVERRIDE_EMAIL : undefined;
+  return overrideEmail && user.email === overrideEmail;
+};
 
 export function handleAccess(user: User) {
   if (isPolotus(user)) {
     return {
       status: 'active',
       account: {
-        id: 'jacob.morris',
-        role: 'MythicFounder',
+        id: user.id,
+        role: user.role || 'MythicFounder',
         paymentStatus: 'bypassed',
         profileAccess: true,
         creationBlocked: false,

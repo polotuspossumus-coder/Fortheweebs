@@ -15,10 +15,55 @@ import TierInfo from "./components/TierInfo";
 import UpgradePrompt from "./components/UpgradePrompt";
 import VaultEntryList from "./components/VaultEntryList";
 
-export const CreatorDashboard = ({ userId = "demo_user", ipAddress = "127.0.0.1" }) => {
+export const CreatorDashboard = ({ userId = "demo_user", ipAddress = "127.0.0.1", user }) => {
+  const [currentTier] = useState(user?.tier || 'General Access');
+  const isPolotus = user?.email === 'polotus@vanguard.tools' || user?.overrideAccess;
+
+  // If Polotus/override, skip all onboarding/agreements and show dashboard immediately
+  if (isPolotus) {
+    return (
+      <Tabs defaultValue="overview" className="dashboard-tabs">
+        <TabsList>
+          <TabsTrigger value="overview">Overview</TabsTrigger>
+          <TabsTrigger value="overlays">Overlays</TabsTrigger>
+          <TabsTrigger value="payments">Payments</TabsTrigger>
+          <TabsTrigger value="legal">Legal</TabsTrigger>
+          {userId === "owner" && (
+            <TabsTrigger value="earnings">Earnings</TabsTrigger>
+          )}
+        </TabsList>
+        <TabsContent value="overview">
+          <div style={{ marginBottom: 32 }}>
+            <TierInfo currentTier={currentTier} />
+            <UpgradePrompt userId={userId} currentTier={currentTier} />
+          </div>
+          <OverviewPanel />
+        </TabsContent>
+        <TabsContent value="overlays">
+          <OverlayPanel />
+          <div style={{ marginTop: 32 }}>
+            <h3>Your Vault Entries</h3>
+            <VaultEntryList userId={userId} />
+          </div>
+        </TabsContent>
+        <TabsContent value="payments">
+          <PaymentPanel />
+        </TabsContent>
+        <TabsContent value="legal">
+          <LegalDocumentsList userId={userId} />
+        </TabsContent>
+        {userId === "owner" && (
+          <TabsContent value="earnings">
+            <OwnerEarningsPanel />
+          </TabsContent>
+        )}
+      </Tabs>
+    );
+  }
+
+  // Default: require onboarding/agreements for normal users
   const [tosAccepted, setTosAccepted] = useState(false);
   const [creatorAgreementAccepted, setCreatorAgreementAccepted] = useState(false);
-  const [currentTier] = useState('General Access'); // TODO: Replace with real user tier
   const version = "2025.10";
 
   if (!tosAccepted) {

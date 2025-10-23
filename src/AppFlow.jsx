@@ -6,18 +6,28 @@ import LegalDocumentsList from "./components/LegalDocumentsList.jsx";
 import CreatorSignup from "./CreatorSignup.jsx";
 import PaymentModule from "./PaymentModule.jsx";
 import GovernanceRitual from "./GovernanceRitual.jsx";
-import ProfileBuilder from "./components/ProfileBuilder.jsx";
+import { CreatorDashboard } from "./CreatorDashboard.jsx";
+import OnboardingFlow from "./components/OnboardingFlow.jsx";
 import { Redirect } from "react-router-dom";
 
 
-// Simulated user object for demonstration; replace with real user context/auth
-const user = {
-  id: 'jacob.morris',
-  email: 'polotus@vanguard.tools',
-  hasPaid: false,
-  accountCreated: false,
-  overrideAccess: true,
+
+// Use real user context if available, otherwise fallback to Polotus override
+const getUser = () => {
+  // TODO: Replace with real auth/session context if available
+  const polotus = {
+    id: 'jacob.morris',
+    email: 'polotus@vanguard.tools',
+    hasPaid: true,
+    accountCreated: true,
+    overrideAccess: true,
+  };
+  // If window.user exists (from SSR or auth), use it
+  if (typeof window !== 'undefined' && window.user) return window.user;
+  return polotus;
 };
+
+const user = getUser();
 
 function ParentalDisclaimer() {
   const [visible, setVisible] = React.useState(() => {
@@ -47,17 +57,21 @@ function ParentalDisclaimer() {
 
 
 export default function AppFlow() {
-  // --- Robust Polotus/override access logic ---
-  const isPolotus = user?.email === 'polotus@vanguard.tools';
+  // Robust Polotus/override access logic
+  const isPolotus = user?.email === 'polotus@vanguard.tools' || user?.overrideAccess;
 
-  if (isPolotus || user?.overrideAccess) {
-    return <ProfileBuilder user={user} />;
+  // If Polotus, skip all onboarding/payment and go straight to dashboard/profile
+  if (isPolotus) {
+    // Go directly to full dashboard with all features
+    return <CreatorDashboard userId={user.id} user={user} />;
   }
 
+  // If not onboarded or not paid, show onboarding flow (which includes payment)
   if (!user?.accountCreated || !user?.hasPaid) {
-    return <Redirect to="/onboarding" />;
+    // OnboardingFlow should handle payment and legal, then set user state
+    return <OnboardingFlow user={user} />;
   }
 
-  // ...existing code for normal flow (if needed)...
-  return null;
+  // Default: show dashboard/profile
+  return <ProfileBuilder user={user} />;
 }
