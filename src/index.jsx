@@ -1,12 +1,14 @@
+
 import React, { useState } from "react";
 import ReactDOM from "react-dom";
-import { LegalDocumentsList } from "./components/LegalDocumentsList.jsx";
+import LegalDocumentsList from "./components/LegalDocumentsList.jsx";
 import CreatorSignup from "./CreatorSignup.jsx";
 import PaymentModule from "./PaymentModule.jsx";
-import GovernanceRitual from "./GovernanceRitual.jsx";
+import GovernanceRitual from "./GovernanceRitual";
 import "./GovernanceRitual.css";
 
 const userId = "demo-user";
+
 
 function AppFlow() {
   const [step, setStep] = useState(0);
