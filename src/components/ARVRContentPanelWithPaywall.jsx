@@ -4,6 +4,8 @@ import { VRGallery, VRGalleryCard } from "./VRGallery";
 import { CloudUploader } from "./CloudUploader";
 import { PaymentGate, useUserTier } from "./PaymentGate";
 import { AIContentGenerator } from "./AIContentGenerator";
+import { VRContentManager } from "./VRContentManager";
+import { CGIConverter } from "./CGIConverter";
 
 export function ARVRContentPanel({ userId }) {
   const { tier, loading } = useUserTier(userId);
