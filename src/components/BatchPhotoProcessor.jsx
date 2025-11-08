@@ -226,7 +226,7 @@ export function BatchPhotoProcessor({ userId }) {
         <p style={{ fontSize: '18px', opacity: 0.9 }}>
           Process hundreds of photos at once • Works offline
         </p>
-        <p style={{ fontSize: '14px', opacity: 0.7', marginTop: '10px' }}>
+        <p style={{ fontSize: '14px', opacity: 0.7, marginTop: '10px' }}>
           No monthly fees • No censorship • Professional quality
         </p>
       </div>

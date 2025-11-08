@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { ARViewer, AR3DCard } from "./ARViewer";
-import { VRGallery, VRGalleryCard } from "./VRGallery";
-import { CloudUploader } from "./CloudUploader";
+// import { ARViewer, AR3DCard } from "./ARViewer";
+// import { VRGallery, VRGalleryCard } from "./VRGallery";
+// import { CloudUploader } from "./CloudUploader";
 import { PaymentGate, useUserTier } from "./PaymentGate";
 import { AIContentGenerator } from "./AIContentGenerator";
 import { VRContentManager } from "./VRContentManager";
@@ -264,3 +264,6 @@ export function ARVRContentPanel({ userId }) {
     </PaymentGate>
   );
 }
+
+// Export alias for backwards compatibility
+export { ARVRContentPanel as ARVRContentPanelWithPaywall };
