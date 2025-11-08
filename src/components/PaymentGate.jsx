@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 export const TIERS = {
   FREE: { price: 0, name: 'Free', features: ['View content', 'Basic features'] },
   CREATOR: {
-    price: 250,
+    price: 500,
     name: 'Creator Pro',
     features: [
       '100% profit on all sales',
