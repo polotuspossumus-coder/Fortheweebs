@@ -8,6 +8,9 @@ import TierInfo from "./components/TierInfo";
 import UpgradePrompt from "./components/UpgradePrompt";
 import VaultEntryList from "./components/VaultEntryList";
 import { ARVRContentPanelWithPaywall } from "./components/ARVRContentPanelWithPaywall";
+import { PhotoToolsHub } from "./components/PhotoToolsHub";
+import { ContentPlanner } from "./components/ContentPlanner";
+import { InfluencerVerification } from "./components/InfluencerVerification";
 
 export const CreatorDashboard = ({ userId = "demo_user", ipAddress = "127.0.0.1", tier = "free" }) => {
   const [tosAccepted, setTosAccepted] = useState(false);
@@ -32,7 +35,10 @@ export const CreatorDashboard = ({ userId = "demo_user", ipAddress = "127.0.0.1"
     <Tabs defaultValue="overview" className="dashboard-tabs">
       <TabsList>
         <TabsTrigger value="overview">Overview</TabsTrigger>
+        <TabsTrigger value="photos">📸 Photo Tools</TabsTrigger>
+        <TabsTrigger value="planner">📅 Content Planner</TabsTrigger>
         <TabsTrigger value="arvr">🎭 AR/VR Studio</TabsTrigger>
+        <TabsTrigger value="influencer">👑 Influencer</TabsTrigger>
         <TabsTrigger value="overlays">Overlays</TabsTrigger>
         <TabsTrigger value="payments">Payments</TabsTrigger>
         <TabsTrigger value="legal">Legal</TabsTrigger>
@@ -47,8 +53,19 @@ export const CreatorDashboard = ({ userId = "demo_user", ipAddress = "127.0.0.1"
         </div>
         <OverviewPanel />
       </TabsContent>
+      <TabsContent value="photos">
+        <PhotoToolsHub userId={userId} />
+      </TabsContent>
+      <TabsContent value="planner">
+        <ContentPlanner userId={userId} />
+      </TabsContent>
       <TabsContent value="arvr">
         <ARVRContentPanelWithPaywall userId={userId} />
+      </TabsContent>
+      <TabsContent value="influencer">
+        <InfluencerVerification userId={userId} onVerified={(data) => {
+          console.log('Verified as influencer:', data);
+        }} />
       </TabsContent>
       <TabsContent value="overlays">
         <OverlayPanel />
