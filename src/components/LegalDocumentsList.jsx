@@ -47,6 +47,38 @@ export const LegalDocumentsList = () => {
   return (
     <div className="legal-docs-container" style={{ maxWidth: 700, margin: "40px auto", background: "#181818", borderRadius: 12, boxShadow: "0 2px 16px #0008", padding: 32 }}>
       <h2 style={{ fontSize: "2rem", fontWeight: 700, marginBottom: 32, color: "#FFD700", textAlign: "center" }}>Legal Documents</h2>
+
+      {/* PARENTAL ADVISORY DISCLAIMER */}
+      <div style={{
+        background: "linear-gradient(135deg, #ff6b6b, #ee5a6f)",
+        border: "4px solid #ff0000",
+        borderRadius: 12,
+        padding: "30px",
+        marginBottom: 40,
+        textAlign: "center",
+        boxShadow: "0 8px 24px rgba(255,0,0,0.4)"
+      }}>
+        <div style={{ fontSize: "2.5rem", fontWeight: 900, marginBottom: 15, color: "white", textShadow: "0 2px 8px rgba(0,0,0,0.5)" }}>
+          ⚠️ PARENTAL ADVISORY ⚠️
+        </div>
+        <div style={{ fontSize: "1.1rem", fontWeight: 700, color: "white", lineHeight: 1.6, marginBottom: 15 }}>
+          STRONGLY CAUTIONED
+        </div>
+        <div style={{ fontSize: "1rem", color: "white", lineHeight: 1.8, textAlign: "left" }}>
+          <strong>PAID ACCESS IS ADULT ACCESS:</strong><br/>
+          • By making a payment, you confirm you are 18+ years of age<br/>
+          • Content may include mature themes (G, PG, PG-13, R, XXX ratings)<br/>
+          • Once payment is received, YOU are solely responsible for:<br/>
+          &nbsp;&nbsp;- Setting up parental controls (🔒 button bottom-right)<br/>
+          &nbsp;&nbsp;- Monitoring your child's experience with our platform<br/>
+          &nbsp;&nbsp;- Restricting access to age-inappropriate content<br/>
+          • We provide tools - YOU control what your child accesses<br/>
+          • ForTheWeebs is NOT liable for unsupervised minor access
+        </div>
+        <div style={{ fontSize: "0.9rem", marginTop: 15, color: "#ffeb3b", fontWeight: 600 }}>
+          USE THE 🔒 PARENTAL CONTROLS BUTTON AT ALL TIMES
+        </div>
+      </div>
       {legalIndex.map(doc => (
         <div key={doc.id} style={{ marginBottom: 32, background: "#222", borderRadius: 8, padding: 24, boxShadow: "0 1px 8px #0006" }}>
           <div style={{ fontWeight: "bold", fontSize: "1.3rem", marginBottom: 8 }}>{doc.title}</div>

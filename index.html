@@ -3,10 +3,227 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vanguard</title>
+    <title>ForTheWeebs - Creator Platform for Anime Culture</title>
+    <meta name="description" content="The ultimate creator platform for anime culture. Professional tools, media management, and monetization for content creators." />
+    <meta name="keywords" content="anime, creator platform, content creation, media tools, anime community" />
+    <meta property="og:title" content="ForTheWeebs - Creator Platform" />
+    <meta property="og:description" content="Professional creator tools for anime content creators" />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: #fff;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .hero {
+        text-align: center;
+        padding: 100px 20px;
+        background: rgba(0,0,0,0.3);
+        backdrop-filter: blur(10px);
+      }
+
+      .hero h1 {
+        font-size: 4rem;
+        font-weight: 900;
+        margin-bottom: 20px;
+        text-shadow: 0 4px 20px rgba(0,0,0,0.5);
+        animation: fadeInUp 0.8s ease;
+      }
+
+      .hero .tagline {
+        font-size: 1.5rem;
+        margin-bottom: 40px;
+        opacity: 0.9;
+        animation: fadeInUp 1s ease;
+      }
+
+      .cta-buttons {
+        display: flex;
+        gap: 20px;
+        justify-content: center;
+        flex-wrap: wrap;
+        animation: fadeInUp 1.2s ease;
+      }
+
+      .btn {
+        padding: 18px 40px;
+        font-size: 1.1rem;
+        font-weight: 700;
+        border: none;
+        border-radius: 50px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        display: inline-block;
+      }
+
+      .btn-primary {
+        background: linear-gradient(135deg, #ff6b6b, #ee5a6f);
+        color: #fff;
+        box-shadow: 0 10px 30px rgba(255, 107, 107, 0.4);
+      }
+
+      .btn-primary:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 15px 40px rgba(255, 107, 107, 0.6);
+      }
+
+      .btn-secondary {
+        background: rgba(255, 255, 255, 0.2);
+        color: #fff;
+        border: 2px solid rgba(255,255,255,0.3);
+      }
+
+      .btn-secondary:hover {
+        background: rgba(255, 255, 255, 0.3);
+        transform: translateY(-3px);
+      }
+
+      .features {
+        padding: 80px 20px;
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+
+      .features h2 {
+        text-align: center;
+        font-size: 2.5rem;
+        margin-bottom: 60px;
+      }
+
+      .feature-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 30px;
+      }
+
+      .feature-card {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        padding: 40px 30px;
+        border-radius: 20px;
+        transition: all 0.3s ease;
+        border: 1px solid rgba(255,255,255,0.1);
+      }
+
+      .feature-card:hover {
+        transform: translateY(-10px);
+        background: rgba(255, 255, 255, 0.15);
+        box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+      }
+
+      .feature-icon {
+        font-size: 3rem;
+        margin-bottom: 20px;
+      }
+
+      .feature-card h3 {
+        font-size: 1.5rem;
+        margin-bottom: 15px;
+      }
+
+      .feature-card p {
+        opacity: 0.85;
+        line-height: 1.6;
+      }
+
+      footer {
+        text-align: center;
+        padding: 40px 20px;
+        background: rgba(0,0,0,0.3);
+        margin-top: auto;
+      }
+
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @media (max-width: 768px) {
+        .hero h1 {
+          font-size: 2.5rem;
+        }
+        .hero .tagline {
+          font-size: 1.2rem;
+        }
+      }
+    </style>
   </head>
   <body>
-    <div id="root"></div>
-  <script type="module" src="/src/index.jsx"></script>
+    <div class="hero">
+      <h1>🎌 ForTheWeebs</h1>
+      <p class="tagline">The Ultimate Creator Platform for Anime Culture</p>
+      <div class="cta-buttons">
+        <a href="/app" class="btn btn-primary">Launch Dashboard</a>
+        <a href="#features" class="btn btn-secondary">Learn More</a>
+      </div>
+    </div>
+
+    <section class="features" id="features">
+      <h2>✨ Features</h2>
+      <div class="feature-grid">
+        <div class="feature-card">
+          <div class="feature-icon">🎨</div>
+          <h3>Creator Tools</h3>
+          <p>Professional media editing, auto-crop, image splitting, and CGI tools built for creators.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">📚</div>
+          <h3>Media Library</h3>
+          <p>Smart organization with duplicate detection, tagging, and advanced search capabilities.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">📊</div>
+          <h3>Analytics Dashboard</h3>
+          <p>Track performance, engagement, and growth with real-time insights and metrics.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">💎</div>
+          <h3>Premium Tiers</h3>
+          <p>Flexible subscription options with exclusive features and priority support.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">🔒</div>
+          <h3>Secure & Private</h3>
+          <p>Enterprise-grade security with encrypted data and SOC 2 compliance.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">🚀</div>
+          <h3>Fast & Reliable</h3>
+          <p>Built on modern infrastructure for lightning-fast performance worldwide.</p>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <p>© 2025 ForTheWeebs — Empowering Creators Worldwide</p>
+      <p style="margin-top: 10px; opacity: 0.7;">Made with 💜 for the community</p>
+    </footer>
+
+    <!-- React App Mount Point -->
+    <div id="root" style="display: none;"></div>
+    <script type="module" src="/src/index.jsx"></script>
   </body>
 </html>

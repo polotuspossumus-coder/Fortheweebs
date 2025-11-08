@@ -1,0 +1,58 @@
+name: Auto-Fix Bugs
+
+on:
+  issues:
+    types: [opened, labeled]
+
+jobs:
+  auto-fix:
+    if: contains(github.event.issue.labels.*.name, 'bug')
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Analyze bug and attempt fix
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          node .github/scripts/auto-fix-bug.js ${{ github.event.issue.number }}
+
+      - name: Create Pull Request with fix
+        if: success()
+        uses: peter-evans/create-pull-request@v5
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: "🤖 Auto-fix: ${{ github.event.issue.title }}"
+          branch: auto-fix-${{ github.event.issue.number }}
+          title: "🤖 Auto-fix: ${{ github.event.issue.title }}"
+          body: |
+            Automated fix for issue #${{ github.event.issue.number }}
+
+            This fix was generated automatically by AI.
+            Please review before merging.
+
+            Closes #${{ github.event.issue.number }}
+          labels: auto-fix, needs-review
+
+      - name: Comment on issue
+        if: success()
+        uses: actions/github-script@v6
+        with:
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: '🤖 I\'ve analyzed this bug and created a potential fix in a pull request. Please review!'
+            })
