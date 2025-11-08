@@ -1,18 +1,24 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { TermsOfService } from "./components/TermsOfService";
 import { CreatorAgreementGate } from "./components/CreatorAgreementGate";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@radix-ui/react-tabs';
 import { Switch } from '@radix-ui/react-switch';
+// import { createClient } from '@supabase/supabase-js';
+// import { queue } from '@/utils/asyncQueue';
+
+const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL || 'https://demo.supabase.co';
+const SUPABASE_KEY = import.meta.env.VITE_SUPABASE_KEY || 'demo-anon-key';
+// const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+
 import { LegalDocumentsList } from "./components/LegalDocumentsList";
 import TierInfo from "./components/TierInfo";
 import UpgradePrompt from "./components/UpgradePrompt";
 import VaultEntryList from "./components/VaultEntryList";
-import { ARVRContentPanelWithPaywall } from "./components/ARVRContentPanelWithPaywall";
 
-export const CreatorDashboard = ({ userId = "demo_user", ipAddress = "127.0.0.1", tier = "free" }) => {
+export const CreatorDashboard = ({ userId = "demo_user", ipAddress = "127.0.0.1" }) => {
   const [tosAccepted, setTosAccepted] = useState(false);
   const [creatorAgreementAccepted, setCreatorAgreementAccepted] = useState(false);
-  const [currentTier] = useState(tier || 'General Access');
+  const [currentTier] = useState('General Access'); // TODO: Replace with real user tier
   const version = "2025.10";
 
   if (!tosAccepted) {
@@ -32,7 +38,6 @@ export const CreatorDashboard = ({ userId = "demo_user", ipAddress = "127.0.0.1"
     <Tabs defaultValue="overview" className="dashboard-tabs">
       <TabsList>
         <TabsTrigger value="overview">Overview</TabsTrigger>
-        <TabsTrigger value="arvr">🎭 AR/VR Studio</TabsTrigger>
         <TabsTrigger value="overlays">Overlays</TabsTrigger>
         <TabsTrigger value="payments">Payments</TabsTrigger>
         <TabsTrigger value="legal">Legal</TabsTrigger>
@@ -46,9 +51,6 @@ export const CreatorDashboard = ({ userId = "demo_user", ipAddress = "127.0.0.1"
           <UpgradePrompt userId={userId} currentTier={currentTier} />
         </div>
         <OverviewPanel />
-      </TabsContent>
-      <TabsContent value="arvr">
-        <ARVRContentPanelWithPaywall userId={userId} />
       </TabsContent>
       <TabsContent value="overlays">
         <OverlayPanel />
@@ -71,8 +73,8 @@ export const CreatorDashboard = ({ userId = "demo_user", ipAddress = "127.0.0.1"
     </Tabs>
   );
 };
-
 export const OwnerEarningsPanel = () => {
+  // TODO: Replace with real backend data
   const [topEarners] = useState([
     { username: "creator1", profit: 1200 },
     { username: "creator2", profit: 950 },
@@ -94,6 +96,7 @@ export const OwnerEarningsPanel = () => {
     </div>
   );
 };
+// ...existing code...
 
 export const OverlayPanel = () => {
   const [enabled, setEnabled] = useState(true);
@@ -108,6 +111,11 @@ export const OverlayPanel = () => {
   );
 };
 
+// Functions moved to utils/dashboardActions.js for Fast Refresh compliance
+
+// Stub panels for demonstration
+import { useEffect } from 'react';
+
 export const OverviewPanel = () => {
   const [stats, setStats] = useState(null);
 
@@ -115,6 +123,7 @@ export const OverviewPanel = () => {
     let isMounted = true;
     const fetchStats = async () => {
       try {
+        // Replace with your backend endpoint if available
         const res = await fetch('/api/stats');
         if (!res.ok) throw new Error('Failed to fetch stats');
         const data = await res.json();
@@ -124,7 +133,7 @@ export const OverviewPanel = () => {
       }
     };
     fetchStats();
-    const interval = setInterval(fetchStats, 5000);
+    const interval = setInterval(fetchStats, 5000); // Poll every 5 seconds
     return () => {
       isMounted = false;
       clearInterval(interval);
