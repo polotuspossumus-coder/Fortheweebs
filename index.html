@@ -223,7 +223,18 @@
     </footer>
 
     <!-- React App Mount Point -->
-    <div id="root" style="display: none;"></div>
+    <div id="root"></div>
     <script type="module" src="/src/index.jsx"></script>
+    <script>
+      // Hide landing page and show React app if URL has params
+      if (window.location.search) {
+        document.querySelector('.hero').style.display = 'none';
+        document.querySelector('.features').style.display = 'none';
+        document.querySelector('footer').style.display = 'none';
+        document.getElementById('root').style.display = 'block';
+      } else {
+        document.getElementById('root').style.display = 'none';
+      }
+    </script>
   </body>
 </html>
