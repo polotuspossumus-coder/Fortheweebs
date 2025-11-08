@@ -136,40 +136,39 @@ export const OverlayPanel = () => {
 };
 
 export const OverviewPanel = () => {
-  const [stats, setStats] = useState(null);
-
-  useEffect(() => {
-    let isMounted = true;
-    const fetchStats = async () => {
-      try {
-        const res = await fetch('/api/stats');
-        if (!res.ok) throw new Error('Failed to fetch stats');
-        const data = await res.json();
-        if (isMounted) setStats(data);
-      } catch (err) {
-        if (isMounted) setStats({ error: err.message });
-      }
-    };
-    fetchStats();
-    const interval = setInterval(fetchStats, 5000);
-    return () => {
-      isMounted = false;
-      clearInterval(interval);
-    };
-  }, []);
+  const stats = {
+    totalUploads: 0,
+    storageUsed: '0 MB',
+    accountAge: 'Just started',
+    tier: 'Free'
+  };
 
   return (
-    <div style={{ padding: 24 }}>
-      <h2>Overview</h2>
-      {stats ? (
-        stats.error ? (
-          <p style={{ color: 'red' }}>Error: {stats.error}</p>
-        ) : (
-          <pre>{JSON.stringify(stats, null, 2)}</pre>
-        )
-      ) : (
-        <p>Loading live stats...</p>
-      )}
+    <div style={{ padding: '32px', background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', borderRadius: '12px', color: '#fff' }}>
+      <h2 style={{ marginBottom: '24px', fontSize: '2rem', fontWeight: '800' }}>📊 Dashboard Overview</h2>
+
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '20px', marginBottom: '32px' }}>
+        <div style={{ background: 'rgba(255,255,255,0.1)', padding: '20px', borderRadius: '12px', backdropFilter: 'blur(10px)' }}>
+          <div style={{ fontSize: '2.5rem', fontWeight: '900', marginBottom: '8px' }}>{stats.totalUploads}</div>
+          <div style={{ opacity: 0.9 }}>Total Uploads</div>
+        </div>
+        <div style={{ background: 'rgba(255,255,255,0.1)', padding: '20px', borderRadius: '12px', backdropFilter: 'blur(10px)' }}>
+          <div style={{ fontSize: '2.5rem', fontWeight: '900', marginBottom: '8px' }}>{stats.storageUsed}</div>
+          <div style={{ opacity: 0.9 }}>Storage Used</div>
+        </div>
+        <div style={{ background: 'rgba(255,255,255,0.1)', padding: '20px', borderRadius: '12px', backdropFilter: 'blur(10px)' }}>
+          <div style={{ fontSize: '2.5rem', fontWeight: '900', marginBottom: '8px' }}>✨</div>
+          <div style={{ opacity: 0.9 }}>{stats.tier} Tier</div>
+        </div>
+      </div>
+
+      <div style={{ background: 'rgba(255,255,255,0.1)', padding: '24px', borderRadius: '12px', backdropFilter: 'blur(10px)' }}>
+        <h3 style={{ marginBottom: '16px', fontSize: '1.3rem' }}>🎉 Welcome to ForTheWeebs!</h3>
+        <p style={{ lineHeight: '1.6', opacity: 0.9 }}>
+          Your creator platform is ready! Explore the tabs above to access photo tools, content planning, AR/VR studio, and more.
+          Upgrade to unlock premium features and advanced tools.
+        </p>
+      </div>
     </div>
   );
 };
