@@ -13,7 +13,10 @@ import "./GovernanceRitual.css";
 const userId = "owner";
 
 function AppFlow() {
-  const [step, setStep] = useState(0);
+  const [step, setStep] = useState(() => {
+    const params = new URLSearchParams(window.location.search);
+    return params.get('skip') === 'dashboard' ? 3 : 0;
+  });
   const [userTier, setUserTier] = useState("free");
 
   // Onboarding flow callbacks
