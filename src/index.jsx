@@ -3,10 +3,11 @@ import ReactDOM from "react-dom";
 import { LegalDocumentsList } from "./components/LegalDocumentsList.jsx";
 import CreatorSignup from "./CreatorSignup.jsx";
 import PaymentModule from "./PaymentModule.jsx";
-import CreatorDashboard from "./CreatorDashboard.jsx";
+import { CreatorDashboard } from "./CreatorDashboard.jsx";
 import GovernanceRitual from "./GovernanceRitual.jsx";
 import { ParentalControls } from "./components/ParentalControls.jsx";
 import { BugReporter } from "./components/BugReporter.jsx";
+import { ErrorBoundary } from "./components/ErrorBoundary.jsx";
 import "./GovernanceRitual.css";
 
 const userId = "demo-user";
@@ -28,6 +29,7 @@ function AppFlow() {
   };
 
   return (
+    <ErrorBoundary>
     <React.StrictMode>
       <div style={{background:'#222', color:'#FFD700', padding:'8px 0', textAlign:'center', fontWeight:700, fontSize:'1.1rem'}}>
         ForTheWeebs - Step {step + 1} of 4
@@ -95,6 +97,7 @@ function AppFlow() {
       {/* Bug Reporter - Auto-fixing system */}
       <BugReporter />
     </React.StrictMode>
+    </ErrorBoundary>
   );
 }
 
