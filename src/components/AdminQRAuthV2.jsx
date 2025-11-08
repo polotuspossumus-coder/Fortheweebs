@@ -83,6 +83,7 @@ export function AdminQRAuth({ onAuthSuccess }) {
   const [error, setError] = useState("");
   const [authToken, setAuthToken] = useState("");
   const [sentCode, setSentCode] = useState("");
+  const [showCode, setShowCode] = useState(false);
 
   const handlePhoneSubmit = (e) => {
     e.preventDefault();
@@ -97,10 +98,10 @@ export function AdminQRAuth({ onAuthSuccess }) {
       // For now, generate a 6-digit code
       const code = Math.floor(100000 + Math.random() * 900000).toString();
       setSentCode(code);
+      setShowCode(true);
 
       // Show code in console for testing (remove in production)
       console.log(`🔐 Verification Code: ${code}`);
-      alert(`🔐 Verification Code (for testing): ${code}\n\nIn production, this will be sent via SMS.`);
 
       setStep(2);
       setError("");
@@ -282,9 +283,31 @@ export function AdminQRAuth({ onAuthSuccess }) {
         {/* Step 2: Verification Code */}
         {step === 2 && (
           <form onSubmit={handleCodeVerify}>
+            {showCode && sentCode && (
+              <div style={{
+                background: 'linear-gradient(135deg, #4CAF50, #2E7D32)',
+                color: '#fff',
+                padding: '20px',
+                borderRadius: '12px',
+                marginBottom: '24px',
+                textAlign: 'center',
+                border: '3px solid #FFD700'
+              }}>
+                <div style={{ fontSize: '0.9rem', marginBottom: '8px', opacity: 0.9 }}>
+                  Your Verification Code:
+                </div>
+                <div style={{ fontSize: '3rem', fontWeight: 900, letterSpacing: '12px', fontFamily: 'monospace' }}>
+                  {sentCode}
+                </div>
+                <div style={{ fontSize: '0.85rem', marginTop: '8px', opacity: 0.8 }}>
+                  (In production, this will be sent via SMS)
+                </div>
+              </div>
+            )}
+
             <div style={{ marginBottom: '24px' }}>
               <label style={{ display: 'block', marginBottom: '8px', color: '#FFD700', fontWeight: 600 }}>
-                6-Digit Code
+                Enter 6-Digit Code
               </label>
               <input
                 type="text"
