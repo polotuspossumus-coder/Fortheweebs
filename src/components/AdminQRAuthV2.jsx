@@ -87,8 +87,12 @@ export function AdminQRAuth({ onAuthSuccess }) {
   const handlePhoneSubmit = (e) => {
     e.preventDefault();
 
+    // Normalize phone number - remove all non-digits then check
+    const normalizedInput = phoneNumber.replace(/\D/g, '');
+    const normalizedOwner = OWNER_PHONE_NUMBER.replace(/\D/g, '');
+
     // Check if phone number matches owner
-    if (phoneNumber === OWNER_PHONE_NUMBER) {
+    if (normalizedInput === normalizedOwner || normalizedInput === normalizedOwner.slice(1)) {
       // In production, send SMS via Twilio/AWS SNS
       // For now, generate a 6-digit code
       const code = Math.floor(100000 + Math.random() * 900000).toString();
