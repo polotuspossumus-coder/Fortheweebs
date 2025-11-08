@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 /**
  * ParentalControls - Always-accessible parental control feature
  * Appears as a floating button in the corner of every page
- * Allows parents to set PIN-protected content restrictions
+ * Allows parents to set PIN-protected content restrictions with G, PG, PG-13, R, XXX ratings
  */
 export const ParentalControls = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -11,7 +11,7 @@ export const ParentalControls = () => {
   const [pin, setPin] = useState('');
   const [savedPin, setSavedPin] = useState(localStorage.getItem('parentalPin') || null);
   const [settings, setSettings] = useState({
-    ageRestriction: localStorage.getItem('ageRestriction') || 'none',
+    maxRating: localStorage.getItem('maxRating') || 'XXX',
     contentFilter: localStorage.getItem('contentFilter') === 'true',
     timeLimit: localStorage.getItem('timeLimit') || 'unlimited',
   });
@@ -40,7 +40,7 @@ export const ParentalControls = () => {
   };
 
   const handleSaveSettings = () => {
-    localStorage.setItem('ageRestriction', settings.ageRestriction);
+    localStorage.setItem('maxRating', settings.maxRating);
     localStorage.setItem('contentFilter', settings.contentFilter);
     localStorage.setItem('timeLimit', settings.timeLimit);
     alert('Parental control settings saved!');
@@ -51,7 +51,7 @@ export const ParentalControls = () => {
   const handleResetPin = () => {
     if (confirm('Are you sure you want to reset the parental control PIN? This will remove all restrictions.')) {
       localStorage.removeItem('parentalPin');
-      localStorage.removeItem('ageRestriction');
+      localStorage.removeItem('maxRating');
       localStorage.removeItem('contentFilter');
       localStorage.removeItem('timeLimit');
       setSavedPin(null);
@@ -99,7 +99,7 @@ export const ParentalControls = () => {
             bottom: 0,
             background: 'rgba(0, 0, 0, 0.8)',
             display: 'flex',
-            alignItems: 'center',
+            alignments: 'center',
             justifyContent: 'center',
             zIndex: 10000,
           }}
@@ -186,11 +186,11 @@ export const ParentalControls = () => {
               <div>
                 <div style={{ marginBottom: '25px' }}>
                   <label style={{ display: 'block', fontWeight: '600', marginBottom: '10px', color: '#333' }}>
-                    Age Restriction
+                    Maximum Content Rating
                   </label>
                   <select
-                    value={settings.ageRestriction}
-                    onChange={(e) => setSettings({ ...settings, ageRestriction: e.target.value })}
+                    value={settings.maxRating}
+                    onChange={(e) => setSettings({ ...settings, maxRating: e.target.value })}
                     style={{
                       width: '100%',
                       padding: '12px',
@@ -199,11 +199,15 @@ export const ParentalControls = () => {
                       fontSize: '1rem',
                     }}
                   >
-                    <option value="none">No Restriction</option>
-                    <option value="13+">13+ (Teen)</option>
-                    <option value="16+">16+ (Mature Teen)</option>
-                    <option value="18+">18+ (Adult)</option>
+                    <option value="G">G - General Audiences (All Ages)</option>
+                    <option value="PG">PG - Parental Guidance Suggested</option>
+                    <option value="PG-13">PG-13 - Parents Strongly Cautioned (13+)</option>
+                    <option value="R">R - Restricted (17+ with adult, 18+ alone)</option>
+                    <option value="XXX">XXX - Adults Only (18+, Explicit)</option>
                   </select>
+                  <div style={{ fontSize: '0.85rem', color: '#666', marginTop: '8px' }}>
+                    Content rated higher than selected will be blocked
+                  </div>
                 </div>
 
                 <div style={{ marginBottom: '25px' }}>
@@ -214,7 +218,7 @@ export const ParentalControls = () => {
                       onChange={(e) => setSettings({ ...settings, contentFilter: e.target.checked })}
                       style={{ marginRight: '10px', width: '20px', height: '20px' }}
                     />
-                    Enable Content Filter (Block NSFW content)
+                    Enable Content Filter (Block R & XXX content)
                   </label>
                 </div>
 
@@ -299,29 +303,27 @@ export const ParentalControls = () => {
   );
 };
 
-// Export helper function to check if content is allowed
+// Export helper function to check if content is allowed based on rating
 export const isContentAllowed = (contentRating) => {
-  const ageRestriction = localStorage.getItem('ageRestriction') || 'none';
+  const maxRating = localStorage.getItem('maxRating') || 'XXX';
   const contentFilter = localStorage.getItem('contentFilter') === 'true';
 
-  if (contentFilter && contentRating === 'NSFW') {
+  // Content filter blocks all explicit content
+  if (contentFilter && (contentRating === 'XXX' || contentRating === 'R')) {
     return false;
   }
 
-  const restrictionMap = {
-    'none': 999,
-    '13+': 13,
-    '16+': 16,
-    '18+': 18,
+  // Rating hierarchy: G < PG < PG-13 < R < XXX
+  const ratingLevels = {
+    'G': 0,
+    'PG': 1,
+    'PG-13': 2,
+    'R': 3,
+    'XXX': 4,
   };
 
-  const contentMap = {
-    'General': 0,
-    '13+': 13,
-    '16+': 16,
-    '18+': 18,
-    'NSFW': 18,
-  };
+  const maxLevel = ratingLevels[maxRating] || 4;
+  const contentLevel = ratingLevels[contentRating] || 0;
 
-  return contentMap[contentRating] <= restrictionMap[ageRestriction];
+  return contentLevel <= maxLevel;
 };
