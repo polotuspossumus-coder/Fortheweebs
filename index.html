@@ -226,12 +226,18 @@
     <div id="root"></div>
     <script type="module" src="/src/index.jsx"></script>
     <script>
-      // Hide landing page and show React app if URL has params
-      if (window.location.search) {
+      // Hide landing page and show React app if URL has params OR admin.html OR /app
+      const showApp = window.location.search ||
+                      window.location.pathname.includes('admin') ||
+                      window.location.pathname === '/app' ||
+                      window.location.hash;
+
+      if (showApp) {
         document.querySelector('.hero').style.display = 'none';
         document.querySelector('.features').style.display = 'none';
         document.querySelector('footer').style.display = 'none';
         document.getElementById('root').style.display = 'block';
+        document.body.style.background = '#1a1a2e';
       } else {
         document.getElementById('root').style.display = 'none';
       }

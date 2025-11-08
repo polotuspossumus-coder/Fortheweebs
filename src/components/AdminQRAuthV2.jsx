@@ -132,7 +132,11 @@ export function AdminQRAuth({ onAuthSuccess }) {
     const token = `ftw_admin_${Date.now()}_${Math.random().toString(36).substring(7)}`;
     setAuthToken(token);
 
-    const authUrl = `${window.location.origin}/admin-verify?token=${token}&key=${ADMIN_SECRET_KEY}&phone=${encodeURIComponent(OWNER_PHONE_NUMBER)}`;
+    // Store token for verification
+    localStorage.setItem('pending_qr_token', token);
+    localStorage.setItem('pending_qr_timestamp', Date.now().toString());
+
+    const authUrl = `${window.location.origin}/?token=${token}&key=${ADMIN_SECRET_KEY}`;
 
     try {
       const qrDataUrl = await QRCode.toDataURL(authUrl, {
@@ -140,12 +144,13 @@ export function AdminQRAuth({ onAuthSuccess }) {
         margin: 2,
         color: {
           dark: '#000000',
-          light: '#FFD700'
+          light: '#FFFFFF'
         }
       });
       setQrCodeUrl(qrDataUrl);
     } catch (err) {
       console.error('QR code generation failed:', err);
+      setError('Failed to generate QR code');
     }
   };
 
