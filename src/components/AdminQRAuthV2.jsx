@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import QRCode from "qrcode";
 
-// SECURE: Only Jacob Morris - tied to phone number
-const OWNER_PHONE_NUMBER = "+12813819498"; // Replace with YOUR actual phone number
-const ADMIN_SECRET_KEY = "polotuspossumus_ftw_2025_owner";
+// SECURE: Load from environment variables
+const OWNER_PHONE_NUMBER = import.meta.env.VITE_OWNER_PHONE_NUMBER || "";
+const ADMIN_SECRET_KEY = import.meta.env.VITE_ADMIN_SECRET_KEY || "";
 const MAX_AUTHORIZED_DEVICES = 5; // Computer + Phone + 3 backups
 
 // Generate device fingerprint

@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import QRCode from "qrcode";
 
-// SECURE: Only Jacob's phone can authenticate
+// SECURE: Load from environment variables
 const AUTHORIZED_DEVICE_ID = "jacob_phone_2025"; // Will be set when you first scan
-const ADMIN_SECRET_KEY = "polotuspossumus_ftw_2025_owner";
+const ADMIN_SECRET_KEY = import.meta.env.VITE_ADMIN_SECRET_KEY || "";
 
 // Generate device fingerprint from phone
 function generateDeviceFingerprint() {

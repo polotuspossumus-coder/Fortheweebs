@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 
-// SECURE ADMIN CREDENTIALS - Only Jacob Morris (Polotus Possumus) has access
-const ADMIN_USERNAME = "jacobmorris";
-const ADMIN_PASSWORD = "polotuspossumus2025"; // Change this to your secure password
+// SECURE ADMIN CREDENTIALS - Load from environment variables
+const ADMIN_USERNAME = import.meta.env.VITE_ADMIN_USERNAME || "admin";
+const ADMIN_PASSWORD = import.meta.env.VITE_ADMIN_PASSWORD || "";
 
 export function AdminLogin({ onLoginSuccess }) {
   const [username, setUsername] = useState("");

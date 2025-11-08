@@ -1,13 +1,13 @@
 import React, { useState } from "react";
 
-// MASTER RECOVERY CREDENTIALS - Use if phone is lost/broken
-const MASTER_RECOVERY_PASSWORD = "jacobmorris_fortheweebs_owner_recovery_2025";
-const BACKUP_EMAIL = "your-backup-email@example.com"; // Change this to your real backup email
+// MASTER RECOVERY CREDENTIALS - Load from environment variables
+const MASTER_RECOVERY_PASSWORD = import.meta.env.VITE_ADMIN_RECOVERY_PASSWORD || "";
+const BACKUP_EMAIL = import.meta.env.VITE_BACKUP_EMAIL || "";
 
 const SECURITY_QUESTIONS = [
-  { question: "What is your full legal name?", answer: "jacob morris" },
-  { question: "What is the name of your platform?", answer: "fortheweebs" },
-  { question: "What is your creator alias?", answer: "polotus possumus" }
+  { question: "What is your full legal name?", answer: import.meta.env.VITE_SECURITY_ANSWER_1 || "" },
+  { question: "What is the name of your platform?", answer: import.meta.env.VITE_SECURITY_ANSWER_2 || "" },
+  { question: "What is your creator alias?", answer: import.meta.env.VITE_SECURITY_ANSWER_3 || "" }
 ];
 
 export function AdminRecovery({ onRecoverySuccess }) {
