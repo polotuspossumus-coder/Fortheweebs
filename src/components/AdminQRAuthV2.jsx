@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import QRCode from "qrcode";
 
 // SECURE: Only Jacob Morris - tied to phone number
-const OWNER_PHONE_NUMBER = "+1234567890"; // Replace with YOUR actual phone number
+const OWNER_PHONE_NUMBER = "+12813819498"; // Replace with YOUR actual phone number
 const ADMIN_SECRET_KEY = "polotuspossumus_ftw_2025_owner";
 const MAX_AUTHORIZED_DEVICES = 5; // Computer + Phone + 3 backups
 
@@ -236,7 +236,7 @@ export function AdminQRAuth({ onAuthSuccess }) {
                   fontSize: '1.1rem',
                   outline: 'none'
                 }}
-                placeholder="+1234567890"
+                placeholder="+12813819498"
                 autoFocus
                 required
               />
