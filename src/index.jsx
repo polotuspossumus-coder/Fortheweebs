@@ -5,6 +5,7 @@ import CreatorSignup from "./CreatorSignup.jsx";
 import PaymentModule from "./PaymentModule.jsx";
 import CreatorDashboard from "./CreatorDashboard.jsx";
 import GovernanceRitual from "./GovernanceRitual.jsx";
+import { ParentalControls } from "./components/ParentalControls.jsx";
 import "./GovernanceRitual.css";
 
 const userId = "demo-user";
@@ -86,6 +87,9 @@ function AppFlow() {
       )}
 
       <GovernanceRitual />
+
+      {/* Parental Controls - Always Accessible Floating Button */}
+      <ParentalControls />
     </React.StrictMode>
   );
 }
