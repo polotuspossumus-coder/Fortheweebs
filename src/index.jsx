@@ -14,8 +14,17 @@ const userId = "owner";
 
 function AppFlow() {
   const [step, setStep] = useState(() => {
-    const params = new URLSearchParams(window.location.search);
-    return params.get('skip') === 'dashboard' ? 3 : 0;
+    // Check if user has completed onboarding
+    const hasAcceptedLegal = localStorage.getItem("legalAccepted");
+    const hasOnboarded = localStorage.getItem("hasOnboarded");
+
+    // If they've onboarded before, go straight to dashboard
+    if (hasOnboarded === "true" || hasAcceptedLegal) {
+      return 3;
+    }
+
+    // Otherwise start from step 0 (legal documents)
+    return 0;
   });
   const [userTier, setUserTier] = useState("free");
 
@@ -24,10 +33,12 @@ function AppFlow() {
   const handleSignupComplete = () => setStep(2);
   const handlePaymentComplete = (tier) => {
     setUserTier(tier || "free");
+    localStorage.setItem("hasOnboarded", "true");
     setStep(3);
   };
   const handleSkipPayment = () => {
     setUserTier("free");
+    localStorage.setItem("hasOnboarded", "true");
     setStep(3);
   };
 
