@@ -11,12 +11,14 @@ import { ARVRContentPanelWithPaywall } from "./components/ARVRContentPanelWithPa
 import { PhotoToolsHub } from "./components/PhotoToolsHub";
 import { ContentPlanner } from "./components/ContentPlanner";
 import { InfluencerVerification } from "./components/InfluencerVerification";
+import { FamilyAccessSystem } from "./components/FamilyAccessSystem";
 
 export const CreatorDashboard = ({ userId = "demo_user", ipAddress = "127.0.0.1", tier = "free" }) => {
   const [tosAccepted, setTosAccepted] = useState(false);
   const [creatorAgreementAccepted, setCreatorAgreementAccepted] = useState(false);
   const [currentTier] = useState(tier || 'General Access');
   const version = "2025.10";
+  const isAdmin = userId === "owner" || userId === "admin";
 
   if (!tosAccepted) {
     return <TermsOfService onAccept={() => setTosAccepted(true)} />;
@@ -42,6 +44,9 @@ export const CreatorDashboard = ({ userId = "demo_user", ipAddress = "127.0.0.1"
         <TabsTrigger value="overlays">Overlays</TabsTrigger>
         <TabsTrigger value="payments">Payments</TabsTrigger>
         <TabsTrigger value="legal">Legal</TabsTrigger>
+        {isAdmin && (
+          <TabsTrigger value="family-access">🎁 Family Access</TabsTrigger>
+        )}
         {userId === "owner" && (
           <TabsTrigger value="earnings">Earnings</TabsTrigger>
         )}
@@ -80,6 +85,11 @@ export const CreatorDashboard = ({ userId = "demo_user", ipAddress = "127.0.0.1"
       <TabsContent value="legal">
         <LegalDocumentsList userId={userId} />
       </TabsContent>
+      {isAdmin && (
+        <TabsContent value="family-access">
+          <FamilyAccessSystem userId={userId} isAdmin={isAdmin} />
+        </TabsContent>
+      )}
       {userId === "owner" && (
         <TabsContent value="earnings">
           <OwnerEarningsPanel />
