@@ -94,14 +94,10 @@ export function AdminQRAuth({ onAuthSuccess }) {
 
     // Check if phone number matches owner
     if (normalizedInput === normalizedOwner || normalizedInput === normalizedOwner.slice(1)) {
-      // In production, send SMS via Twilio/AWS SNS
-      // For now, generate a 6-digit code
+      // Generate a 6-digit code
       const code = Math.floor(100000 + Math.random() * 900000).toString();
       setSentCode(code);
       setShowCode(true);
-
-      // Show code in console for testing (remove in production)
-      console.log(`🔐 Verification Code: ${code}`);
 
       setStep(2);
       setError("");
@@ -216,7 +212,7 @@ export function AdminQRAuth({ onAuthSuccess }) {
             {step === 1 ? 'Phone Verification' : step === 2 ? 'Enter Code' : 'Scan QR Code'}
           </h2>
           <p style={{ color: '#aaa', marginTop: '12px', fontSize: '1rem' }}>
-            {step === 1 ? 'Enter your registered phone number' : step === 2 ? 'Check your SMS for verification code' : 'Scan with the phone you just verified'}
+            {step === 1 ? 'Enter your registered phone number' : step === 2 ? 'Enter the verification code shown above' : 'Scan with your phone to authorize device'}
           </p>
         </div>
 
@@ -300,7 +296,7 @@ export function AdminQRAuth({ onAuthSuccess }) {
                   {sentCode}
                 </div>
                 <div style={{ fontSize: '0.85rem', marginTop: '8px', opacity: 0.8 }}>
-                  (In production, this will be sent via SMS)
+                  Enter this code below to continue
                 </div>
               </div>
             )}
