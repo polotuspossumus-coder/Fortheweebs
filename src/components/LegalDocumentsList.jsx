@@ -81,9 +81,9 @@ export const LegalDocumentsList = () => {
       </div>
       {legalIndex.map(doc => (
         <div key={doc.id} style={{ marginBottom: 32, background: "#222", borderRadius: 8, padding: 24, boxShadow: "0 1px 8px #0006" }}>
-          <div style={{ fontWeight: "bold", fontSize: "1.3rem", marginBottom: 8 }}>{doc.title}</div>
+          <div style={{ fontWeight: "bold", fontSize: "1.3rem", marginBottom: 8, color: "#fff" }}>{doc.title}</div>
           <div style={{ fontSize: "0.95rem", color: "#FFD700", marginBottom: 12 }}>Version: {doc.version} | Last Updated: {doc.lastUpdated}</div>
-          <div style={{ background: "#181818", borderRadius: 6, padding: 16, marginBottom: 16, maxHeight: 300, overflowY: "auto", border: "1px solid #333" }}>
+          <div style={{ background: "#f5f5f5", borderRadius: 6, padding: 16, marginBottom: 16, maxHeight: 300, overflowY: "auto", border: "1px solid #333", color: "#000" }}>
             <ReactMarkdown>{docs[doc.id] || ""}</ReactMarkdown>
           </div>
           {doc.requiredAcceptance && !accepted[doc.id] && (

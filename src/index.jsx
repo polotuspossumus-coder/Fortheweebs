@@ -10,7 +10,7 @@ import { BugReporter } from "./components/BugReporter.jsx";
 import { ErrorBoundary } from "./components/ErrorBoundary.jsx";
 import "./GovernanceRitual.css";
 
-const userId = "demo-user";
+const userId = "owner";
 
 function AppFlow() {
   const [step, setStep] = useState(0);
