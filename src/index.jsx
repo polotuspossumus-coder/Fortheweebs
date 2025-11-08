@@ -6,6 +6,7 @@ import PaymentModule from "./PaymentModule.jsx";
 import CreatorDashboard from "./CreatorDashboard.jsx";
 import GovernanceRitual from "./GovernanceRitual.jsx";
 import { ParentalControls } from "./components/ParentalControls.jsx";
+import { BugReporter } from "./components/BugReporter.jsx";
 import "./GovernanceRitual.css";
 
 const userId = "demo-user";
@@ -90,6 +91,9 @@ function AppFlow() {
 
       {/* Parental Controls - Always Accessible Floating Button */}
       <ParentalControls />
+
+      {/* Bug Reporter - Auto-fixing system */}
+      <BugReporter />
     </React.StrictMode>
   );
 }
