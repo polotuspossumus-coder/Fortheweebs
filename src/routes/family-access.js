@@ -6,9 +6,15 @@
  */
 
 import Stripe from 'stripe';
+import { createClient } from '@supabase/supabase-js';
+
+const supabase = createClient(
+  process.env.VITE_SUPABASE_URL || process.env.SUPABASE_URL,
+  process.env.VITE_SUPABASE_KEY || process.env.SUPABASE_KEY
+);
 
 // Initialize Stripe (requires STRIPE_SECRET_KEY environment variable)
-// const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+const stripe = process.env.STRIPE_SECRET_KEY ? new Stripe(process.env.STRIPE_SECRET_KEY) : null;
 
 export default async function handler(req, res) {
   const { action } = req.query;
@@ -34,30 +40,33 @@ export default async function handler(req, res) {
  */
 async function listAccessCodes(req, res) {
   try {
-    // In production: Check if user is admin
-    // const { userId } = req.query;
-    // const user = await db.users.findOne({ userId });
-    // if (user.role !== 'admin') return res.status(403).json({ error: 'Unauthorized' });
+    // Get codes from database
+    const { data: codes, error } = await supabase
+      .from('family_access_codes')
+      .select('*')
+      .eq('active', true)
+      .order('created_at', { ascending: false });
 
-    // In production: Get from database
-    // const codes = await db.familyAccessCodes.find({ active: true });
+    if (error) {
+      console.error('Database error:', error);
+      // Return mock data as fallback
+      const mockCodes = [
+        {
+          id: 'fac_001',
+          code: 'FAMILY-MOM-2024',
+          name: 'Mom',
+          type: 'free',
+          notes: 'Full free access for testing',
+          link: `${process.env.VERCEL_URL || 'http://localhost:3000'}/redeem?code=FAMILY-MOM-2024`,
+          created_at: new Date().toISOString(),
+          used_count: 0,
+          active: true
+        }
+      ];
+      return res.status(200).json({ codes: mockCodes, usingMockData: true });
+    }
 
-    // Mock data for demo
-    const mockCodes = [
-      {
-        id: 'fac_001',
-        code: 'FAMILY-MOM-2024',
-        name: 'Mom',
-        type: 'free',
-        notes: 'Full free access for testing',
-        link: `${process.env.VERCEL_URL || 'http://localhost:3000'}/redeem?code=FAMILY-MOM-2024`,
-        createdAt: new Date().toISOString(),
-        usedCount: 0,
-        active: true
-      }
-    ];
-
-    return res.status(200).json({ codes: mockCodes });
+    return res.status(200).json({ codes });
   } catch (error) {
     console.error('Error listing access codes:', error);
     return res.status(500).json({ error: 'Internal server error' });
@@ -79,10 +88,6 @@ async function generateAccessCode(req, res) {
       return res.status(400).json({ error: 'Missing required fields' });
     }
 
-    // In production: Verify admin
-    // const admin = await db.users.findOne({ userId: adminId, role: 'admin' });
-    // if (!admin) return res.status(403).json({ error: 'Unauthorized' });
-
     // Generate unique code
     const code = `FAMILY-${name.toUpperCase().replace(/\s+/g, '-')}-${Date.now().toString(36).toUpperCase()}`;
 
@@ -92,21 +97,27 @@ async function generateAccessCode(req, res) {
 
     const link = `${baseUrl}/redeem?code=${code}`;
 
-    const accessCode = {
-      id: `fac_${Date.now()}`,
-      code,
-      name,
-      type, // 'free' or 'supporter'
-      notes,
-      link,
-      createdBy: adminId,
-      createdAt: new Date().toISOString(),
-      usedCount: 0,
-      active: true
-    };
+    // Save to database
+    const { data: accessCode, error } = await supabase
+      .from('family_access_codes')
+      .insert({
+        code,
+        name,
+        type, // 'free' or 'supporter'
+        notes,
+        link,
+        created_by: adminId,
+        created_at: new Date().toISOString(),
+        used_count: 0,
+        active: true
+      })
+      .select()
+      .single();
 
-    // In production: Save to database
-    // await db.familyAccessCodes.create(accessCode);
+    if (error) {
+      console.error('Database insert error:', error);
+      return res.status(500).json({ error: 'Failed to create access code', details: error.message });
+    }
 
     return res.status(200).json({
       success: true,
@@ -132,22 +143,25 @@ async function verifyAccessCode(req, res) {
       return res.status(400).json({ error: 'Code required' });
     }
 
-    // In production: Check database
-    // const accessCode = await db.familyAccessCodes.findOne({ code, active: true });
+    // Check database for code
+    const { data: accessCode, error } = await supabase
+      .from('family_access_codes')
+      .select('*')
+      .eq('code', code)
+      .eq('active', true)
+      .single();
 
-    // Mock verification
-    const isValid = code.startsWith('FAMILY-');
-
-    if (!isValid) {
-      return res.status(200).json({ valid: false });
+    if (error || !accessCode) {
+      return res.status(200).json({ valid: false, message: 'Invalid or expired code' });
     }
 
     // Return code info
     return res.status(200).json({
       valid: true,
-      name: 'Family Member',
-      type: code.includes('FREE') ? 'free' : 'supporter',
-      code
+      name: accessCode.name,
+      type: accessCode.type,
+      code: accessCode.code,
+      notes: accessCode.notes
     });
 
   } catch (error) {
@@ -171,21 +185,50 @@ async function redeemAccessCode(req, res) {
       return res.status(400).json({ error: 'Code required' });
     }
 
-    // In production: Verify code exists and is active
-    // const accessCode = await db.familyAccessCodes.findOne({ code, active: true });
-    // if (!accessCode) return res.status(400).json({ success: false, message: 'Invalid code' });
+    // Verify code exists and is active
+    const { data: accessCode, error: codeError } = await supabase
+      .from('family_access_codes')
+      .select('*')
+      .eq('code', code)
+      .eq('active', true)
+      .single();
 
-    // Determine access type
-    const isFree = code.includes('FREE') || !code.includes('SUPPORTER');
-    const type = isFree ? 'free' : 'supporter';
+    if (codeError || !accessCode) {
+      return res.status(400).json({ success: false, message: 'Invalid or expired code' });
+    }
 
-    // In production: Update user account
-    // await db.users.update({ userId }, {
-    //   tier: 'CREATOR', // Full access
-    //   familyAccessType: type,
-    //   familyAccessCode: code,
-    //   familyAccessActivatedAt: new Date()
-    // });
+    // Determine tier based on access type
+    const tierMap = {
+      'free': 'SUPER_ADMIN', // Full free access
+      'supporter': 'CREATOR'  // Supporter tier
+    };
+    const tier = tierMap[accessCode.type] || 'CREATOR';
+
+    // Update user account with access
+    if (userId) {
+      const { error: updateError } = await supabase
+        .from('users')
+        .update({ 
+          payment_tier: tier,
+          family_access_type: accessCode.type,
+          family_access_code: code,
+          family_access_activated_at: new Date().toISOString()
+        })
+        .eq('id', userId);
+
+      if (updateError) {
+        console.error('User update error:', updateError);
+      }
+    }
+
+    // Increment used count
+    await supabase
+      .from('family_access_codes')
+      .update({ 
+        used_count: (accessCode.used_count || 0) + 1,
+        last_used_at: new Date().toISOString()
+      })
+      .eq('code', code);
 
     // If supporter plan, set up Stripe subscription
     if (type === 'supporter') {

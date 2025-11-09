@@ -1,4 +1,10 @@
 import { verify } from 'jsonwebtoken';
+import { createClient } from '@supabase/supabase-js';
+
+const supabase = createClient(
+  process.env.VITE_SUPABASE_URL || process.env.SUPABASE_URL,
+  process.env.VITE_SUPABASE_KEY || process.env.SUPABASE_KEY
+);
 
 export async function GET(request) {
   try {
@@ -31,22 +37,56 @@ export async function GET(request) {
       });
     }
 
-    // TODO: Query database for user's payment tier
-    // For now, return FREE as default
-    // Replace this with actual database query:
-    //   const user = await db.users.findOne({ userId });
-    //   const tier = user.paymentTier || 'FREE';
+    // Query database for user's payment tier
+    try {
+      const { data: user, error } = await supabase
+        .from('users')
+        .select('payment_tier, email, username')
+        .eq('id', userId)
+        .single();
 
-    const tier = 'FREE'; // Default tier
+      if (error) {
+        console.error('Database error:', error);
+        // Return FREE tier if user not found
+        const tier = 'FREE';
+        return new Response(JSON.stringify({
+          tier,
+          userId,
+          features: getTierFeatures(tier),
+          message: 'User not found in database, defaulting to FREE tier'
+        }), {
+          status: 200,
+          headers: { 'Content-Type': 'application/json' }
+        });
+      }
 
-    return new Response(JSON.stringify({
-      tier,
-      userId,
-      features: getTierFeatures(tier)
-    }), {
-      status: 200,
-      headers: { 'Content-Type': 'application/json' }
-    });
+      const tier = user?.payment_tier || 'FREE';
+
+      return new Response(JSON.stringify({
+        tier,
+        userId,
+        username: user?.username,
+        email: user?.email,
+        features: getTierFeatures(tier)
+      }), {
+        status: 200,
+        headers: { 'Content-Type': 'application/json' }
+      });
+
+    } catch (dbError) {
+      console.error('Database query error:', dbError);
+      // Fallback to FREE tier
+      const tier = 'FREE';
+      return new Response(JSON.stringify({
+        tier,
+        userId,
+        features: getTierFeatures(tier),
+        message: 'Database unavailable, defaulting to FREE tier'
+      }), {
+        status: 200,
+        headers: { 'Content-Type': 'application/json' }
+      });
+    }
 
   } catch (error) {
     console.error('User tier check error:', error);

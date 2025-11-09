@@ -1,5 +1,11 @@
 import { verify } from 'jsonwebtoken';
 import { put } from '@vercel/blob';
+import { createClient } from '@supabase/supabase-js';
+
+const supabase = createClient(
+  process.env.VITE_SUPABASE_URL || process.env.SUPABASE_URL,
+  process.env.VITE_SUPABASE_KEY || process.env.SUPABASE_KEY
+);
 
 export async function POST(request) {
   try {
@@ -33,14 +39,41 @@ export async function POST(request) {
     }
 
     // Check if user has SUPER_ADMIN tier
-    // TODO: Query database for user tier
-    //   const userTier = await db.users.findOne({ userId: user.userId });
-    //   if (userTier.paymentTier !== 'SUPER_ADMIN') {
-    //     return new Response(JSON.stringify({ error: 'Requires Super Admin tier' }), {
-    //       status: 403,
-    //       headers: { 'Content-Type': 'application/json' }
-    //     });
-    //   }
+    try {
+      const { data: userData, error } = await supabase
+        .from('users')
+        .select('payment_tier')
+        .eq('id', userId)
+        .single();
+
+      if (error || !userData) {
+        return new Response(JSON.stringify({ 
+          error: 'User not found or database error',
+          details: error?.message 
+        }), {
+          status: 403,
+          headers: { 'Content-Type': 'application/json' }
+        });
+      }
+
+      if (userData.payment_tier !== 'SUPER_ADMIN') {
+        return new Response(JSON.stringify({ 
+          error: 'Requires Super Admin tier ($1000)',
+          currentTier: userData.payment_tier
+        }), {
+          status: 403,
+          headers: { 'Content-Type': 'application/json' }
+        });
+      }
+    } catch (dbError) {
+      console.error('Database tier check error:', dbError);
+      return new Response(JSON.stringify({ 
+        error: 'Failed to verify user tier'
+      }), {
+        status: 500,
+        headers: { 'Content-Type': 'application/json' }
+      });
+    }
 
     // Generate content based on type
     let result;
@@ -82,38 +115,81 @@ export async function POST(request) {
 }
 
 async function generateImage(prompt) {
-  // TODO: Implement with OpenAI DALL-E 3, Stability AI, or Midjourney
-  // Example with OpenAI:
-  //   const response = await fetch('https://api.openai.com/v1/images/generations', {
-  //     method: 'POST',
-  //     headers: {
-  //       'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`,
-  //       'Content-Type': 'application/json'
-  //     },
-  //     body: JSON.stringify({
-  //       model: 'dall-e-3',
-  //       prompt,
-  //       n: 1,
-  //       size: '1024x1024'
-  //     })
-  //   });
-  //   const data = await response.json();
-  //   const imageUrl = data.data[0].url;
-  //
-  //   // Download and upload to Vercel Blob
-  //   const imageResponse = await fetch(imageUrl);
-  //   const imageBlob = await imageResponse.blob();
-  //   const blob = await put(`generated/${Date.now()}.png`, imageBlob, {
-  //     access: 'public',
-  //     token: process.env.BLOB_READ_WRITE_TOKEN
-  //   });
-  //   return { url: blob.url };
+  // Check if OpenAI API key is configured
+  if (!process.env.OPENAI_API_KEY) {
+    console.warn('OPENAI_API_KEY not configured');
+    return {
+      url: 'https://placeholder.com/generated-image.png',
+      message: 'Image generation not yet configured. Add OPENAI_API_KEY environment variable.'
+    };
+  }
 
-  // Placeholder response
-  return {
-    url: 'https://placeholder.com/generated-image.png',
-    message: 'Image generation not yet implemented. Add OPENAI_API_KEY to enable.'
-  };
+  try {
+    // Call OpenAI DALL-E 3 API
+    const response = await fetch('https://api.openai.com/v1/images/generations', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        model: 'dall-e-3',
+        prompt,
+        n: 1,
+        size: '1024x1024',
+        quality: 'hd',
+        response_format: 'url'
+      })
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(`OpenAI API error: ${error.error?.message || 'Unknown error'}`);
+    }
+
+    const data = await response.json();
+    const imageUrl = data.data[0].url;
+
+    // Download and upload to Vercel Blob for permanent storage
+    if (process.env.BLOB_READ_WRITE_TOKEN) {
+      try {
+        const imageResponse = await fetch(imageUrl);
+        const imageBlob = await imageResponse.arrayBuffer();
+        const blob = await put(`generated/image_${Date.now()}.png`, imageBlob, {
+          access: 'public',
+          token: process.env.BLOB_READ_WRITE_TOKEN
+        });
+        return { 
+          url: blob.url,
+          originalUrl: imageUrl,
+          message: 'Image generated successfully',
+          revisedPrompt: data.data[0].revised_prompt
+        };
+      } catch (blobError) {
+        console.error('Blob upload error:', blobError);
+        // Return OpenAI URL if blob upload fails
+        return {
+          url: imageUrl,
+          message: 'Image generated (temporary URL - expires in 1 hour)',
+          revisedPrompt: data.data[0].revised_prompt
+        };
+      }
+    }
+
+    return {
+      url: imageUrl,
+      message: 'Image generated successfully (temporary URL - expires in 1 hour)',
+      revisedPrompt: data.data[0].revised_prompt
+    };
+
+  } catch (error) {
+    console.error('Image generation error:', error);
+    return {
+      error: 'Failed to generate image',
+      details: error.message,
+      url: null
+    };
+  }
 }
 
 async function generate3DModel(prompt) {
@@ -135,25 +211,46 @@ async function generateVideo(prompt) {
 }
 
 async function generateText(prompt) {
-  // TODO: Implement with OpenAI GPT-4 or Anthropic Claude
-  // Example with OpenAI:
-  //   const response = await fetch('https://api.openai.com/v1/chat/completions', {
-  //     method: 'POST',
-  //     headers: {
-  //       'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`,
-  //       'Content-Type': 'application/json'
-  //     },
-  //     body: JSON.stringify({
-  //       model: 'gpt-4',
-  //       messages: [{ role: 'user', content: prompt }],
-  //       max_tokens: 1000
-  //     })
-  //   });
-  //   const data = await response.json();
-  //   return { text: data.choices[0].message.content };
+  if (!process.env.OPENAI_API_KEY) {
+    console.warn('OPENAI_API_KEY not configured');
+    return {
+      text: `Generated text for: "${prompt}"\n\nText generation not yet configured. Add OPENAI_API_KEY environment variable.`
+    };
+  }
 
-  // Placeholder response
-  return {
-    text: `Generated text for: "${prompt}"\n\nText generation not yet implemented. Add OPENAI_API_KEY or ANTHROPIC_API_KEY to enable.`
-  };
+  try {
+    const response = await fetch('https://api.openai.com/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        model: 'gpt-4',
+        messages: [{ role: 'user', content: prompt }],
+        max_tokens: 2000,
+        temperature: 0.7
+      })
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(`OpenAI API error: ${error.error?.message || 'Unknown error'}`);
+    }
+
+    const data = await response.json();
+    return { 
+      text: data.choices[0].message.content,
+      message: 'Text generated successfully',
+      tokensUsed: data.usage?.total_tokens
+    };
+
+  } catch (error) {
+    console.error('Text generation error:', error);
+    return {
+      error: 'Failed to generate text',
+      details: error.message,
+      text: null
+    };
+  }
 }

@@ -5,7 +5,6 @@ import CreatorSignup from "./CreatorSignup.jsx";
 import PaymentModule from "./PaymentModule.jsx";
 import { CreatorDashboard } from "./CreatorDashboard.jsx";
 import GovernanceRitual from "./GovernanceRitual.jsx";
-import { ParentalControls } from "./components/ParentalControls.jsx";
 import { BugReporter } from "./components/BugReporter.jsx";
 import { ErrorBoundary } from "./components/ErrorBoundary.jsx";
 import { AdminQRAuth, AdminQRVerify, checkAdminAuth, logoutAdmin } from "./components/AdminQRAuthV2.jsx";
@@ -96,7 +95,6 @@ function AppFlow() {
       {step === 2 && (<div style={{padding:'40px', maxWidth:'1000px', margin:'0 auto'}}><h1 style={{marginBottom:'10px'}}>💎 Choose Your Tier</h1><p style={{marginBottom:'30px', opacity:0.8}}>Start free or unlock premium creator tools</p><PaymentModule onPaymentComplete={handlePaymentComplete} /><button onClick={handleSkipPayment} style={{marginTop:24, padding:'16px 32px', fontSize:'1.1rem', fontWeight:600, cursor:'pointer', background:'transparent', color:'#667eea', border:'2px solid #667eea', borderRadius:'8px'}}>Skip - Start with Free Tools</button></div>)}
       {step === 3 && (<div><div style={{padding:'20px', background:'#667eea', color:'white', textAlign:'center'}}><h2>🎉 Welcome to Your Creator Dashboard!</h2><p>Tier: <strong>{userTier.toUpperCase()}</strong>{isAdmin && <span style={{marginLeft: '16px', background: '#FFD700', color: '#000', padding: '4px 12px', borderRadius: '6px', fontSize: '0.9rem', fontWeight: 800}}>👑 OWNER MODE</span>}</p></div><CreatorDashboard userId={userId} tier={userTier} /></div>)}
       <GovernanceRitual />
-      <ParentalControls />
       <BugReporter />
       {!isAdmin && !showAdminLogin && (<div style={{position: 'fixed', bottom: '80px', right: '20px', zIndex: 9998}}><button onClick={() => setShowAdminLogin(true)} style={{background: '#222', color: '#FFD700', border: '2px solid #FFD700', padding: '8px 16px', borderRadius: '6px', fontSize: '0.85rem', fontWeight: 600, cursor: 'pointer', opacity: 0.7, transition: 'opacity 0.3s'}} onMouseEnter={(e) => e.target.style.opacity = 1} onMouseLeave={(e) => e.target.style.opacity = 0.7}>🔐 Admin</button></div>)}
     </React.StrictMode>

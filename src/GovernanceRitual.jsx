@@ -9,6 +9,51 @@ const actions = {
 
 export default function GovernanceRitual() {
   const [selected, setSelected] = useState(null);
+  const [targetId, setTargetId] = useState("");
+  const [reason, setReason] = useState("");
+  const [submitting, setSubmitting] = useState(false);
+  const [result, setResult] = useState(null);
+
+  const handleSubmit = async () => {
+    if (!targetId || !reason) {
+      alert("Please fill in all fields");
+      return;
+    }
+
+    setSubmitting(true);
+    setResult(null);
+
+    try {
+      const response = await fetch('/api/governance-ritual', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          action: selected,
+          targetId,
+          reason,
+          timestamp: new Date().toISOString()
+        })
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        setResult({ success: true, message: data.message || 'Ritual submitted successfully' });
+        setTargetId("");
+        setReason("");
+        setSelected(null);
+      } else {
+        setResult({ success: false, message: data.error || 'Submission failed' });
+      }
+    } catch (error) {
+      console.error('Ritual submission error:', error);
+      setResult({ success: false, message: 'Network error: ' + error.message });
+    } finally {
+      setSubmitting(false);
+    }
+  };
 
   return (
     <div className="ritual">
@@ -24,9 +69,34 @@ export default function GovernanceRitual() {
       {selected && (
         <div className="form">
           <h2>{actions[selected]}</h2>
-          <input type="text" placeholder="Enter user ID or artifact ID" />
-          <textarea placeholder="Reason, context, or legacy note" />
-          <button>Submit Ritual</button>
+          <input 
+            type="text" 
+            placeholder="Enter user ID or artifact ID" 
+            value={targetId}
+            onChange={(e) => setTargetId(e.target.value)}
+            disabled={submitting}
+          />
+          <textarea 
+            placeholder="Reason, context, or legacy note" 
+            value={reason}
+            onChange={(e) => setReason(e.target.value)}
+            disabled={submitting}
+          />
+          <button onClick={handleSubmit} disabled={submitting}>
+            {submitting ? 'Submitting...' : 'Submit Ritual'}
+          </button>
+          
+          {result && (
+            <div style={{ 
+              marginTop: '20px', 
+              padding: '15px', 
+              borderRadius: '8px',
+              background: result.success ? '#4CAF50' : '#f44336',
+              color: 'white'
+            }}>
+              {result.message}
+            </div>
+          )}
         </div>
       )}
 

@@ -14,7 +14,7 @@
     "files.autoSaveDelay": 1000,
     "editor.formatOnSave": true,
     "editor.codeActionsOnSave": {
-      "source.fixAll": true
+      "source.fixAll": "explicit"
     },
     "git.autofetch": true,
     "git.confirmSync": false,
@@ -48,8 +48,13 @@
         "request": "launch",
         "cwd": "${workspaceFolder}/Fortheweebs",
         "runtimeExecutable": "npm",
-        "runtimeArgs": ["run", "dev"],
-        "skipFiles": ["<node_internals>/**"]
+        "runtimeArgs": [
+          "run",
+          "dev"
+        ],
+        "skipFiles": [
+          "<node_internals>/**"
+        ]
       }
     ]
   },

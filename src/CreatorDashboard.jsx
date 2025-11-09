@@ -12,6 +12,9 @@ import { PhotoToolsHub } from "./components/PhotoToolsHub";
 import { ContentPlanner } from "./components/ContentPlanner";
 import { InfluencerVerification } from "./components/InfluencerVerification";
 import { FamilyAccessSystem } from "./components/FamilyAccessSystem";
+import { AudioProductionStudio } from "./components/AudioProductionStudio";
+import { ComicBookCreator } from "./components/ComicBookCreator";
+import { GraphicDesignStudio } from "./components/GraphicDesignStudio";
 
 export const CreatorDashboard = ({ userId = "demo_user", ipAddress = "127.0.0.1", tier = "free" }) => {
   const [tosAccepted, setTosAccepted] = useState(false);
@@ -38,6 +41,9 @@ export const CreatorDashboard = ({ userId = "demo_user", ipAddress = "127.0.0.1"
       <TabsList>
         <TabsTrigger value="overview">Overview</TabsTrigger>
         <TabsTrigger value="photos">📸 Photo Tools</TabsTrigger>
+        <TabsTrigger value="music">🎵 Music Studio</TabsTrigger>
+        <TabsTrigger value="comics">📚 Comic Creator</TabsTrigger>
+        <TabsTrigger value="design">🎨 Graphic Design</TabsTrigger>
         <TabsTrigger value="planner">📅 Content Planner</TabsTrigger>
         <TabsTrigger value="arvr">🎭 AR/VR Studio</TabsTrigger>
         <TabsTrigger value="influencer">👑 Influencer</TabsTrigger>
@@ -60,6 +66,15 @@ export const CreatorDashboard = ({ userId = "demo_user", ipAddress = "127.0.0.1"
       </TabsContent>
       <TabsContent value="photos">
         <PhotoToolsHub userId={userId} />
+      </TabsContent>
+      <TabsContent value="music">
+        <AudioProductionStudio userId={userId} />
+      </TabsContent>
+      <TabsContent value="comics">
+        <ComicBookCreator userId={userId} />
+      </TabsContent>
+      <TabsContent value="design">
+        <GraphicDesignStudio userId={userId} />
       </TabsContent>
       <TabsContent value="planner">
         <ContentPlanner userId={userId} />
