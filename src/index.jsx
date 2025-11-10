@@ -14,6 +14,9 @@ import { ThemeProvider } from "./components/ThemeToggle.jsx";
 import CookieConsent from "./components/CookieConsent.jsx";
 import A11ySkipLink from "./components/A11ySkipLink.jsx";
 import InstallPWA from "./components/InstallPWA.jsx";
+import CommandPalette from "./components/CommandPalette.jsx";
+import QuickActions from "./components/QuickActions.jsx";
+import AchievementSystem from "./components/AchievementSystem.jsx";
 import { registerServiceWorker } from "./utils/registerServiceWorker.js";
 import "./GovernanceRitual.css";
 
@@ -94,6 +97,9 @@ function AppFlow() {
       <A11ySkipLink />
       <ToastContainer />
       <InstallPWA />
+      <CommandPalette />
+      <QuickActions />
+      <AchievementSystem userId={userId} />
       <div id="main-content" style={{background:'#222', color:'#FFD700', padding:'8px 0', textAlign:'center', fontWeight:700, fontSize:'1.1rem', position:'relative'}}>
         ForTheWeebs - Step {step + 1} of 4
         {isAdmin && (
