@@ -5,7 +5,7 @@ import React, { useState } from 'react';
  * Users can report bugs which auto-create GitHub Issues
  * AI will attempt to fix them automatically
  */
-export const BugReporter = () => {
+const BugReporter = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
@@ -263,3 +263,5 @@ ${JSON.stringify(errorContext.localStorage, null, 2)}
     </>
   );
 };
+
+export default BugReporter;

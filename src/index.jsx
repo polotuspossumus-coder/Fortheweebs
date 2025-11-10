@@ -5,7 +5,7 @@ import CreatorSignup from "./CreatorSignup.jsx";
 import PaymentModule from "./PaymentModule.jsx";
 import { CreatorDashboard } from "./CreatorDashboard.jsx";
 import GovernanceRitual from "./GovernanceRitual.jsx";
-import { BugReporter } from "./components/BugReporter.jsx";
+import BugReporter from "./components/BugReporter.jsx";
 import { ErrorBoundary } from "./components/ErrorBoundary.jsx";
 import { AdminQRAuth, AdminQRVerify, checkAdminAuth, logoutAdmin } from "./components/AdminQRAuthV2.jsx";
 import { AdminRecovery } from "./components/AdminRecovery.jsx";

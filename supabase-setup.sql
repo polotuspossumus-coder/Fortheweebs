@@ -12,8 +12,36 @@ CREATE TABLE IF NOT EXISTS users (
   subscription_tier TEXT DEFAULT 'free',
   subscription_status TEXT DEFAULT 'inactive',
   stripe_customer_id TEXT,
+  access_type TEXT DEFAULT 'standard', -- 'standard', 'friends_family', 'vip_family'
+  invite_code TEXT, -- Code used during signup
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
   updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- Invite codes table
+CREATE TABLE IF NOT EXISTS invite_codes (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  code TEXT UNIQUE NOT NULL,
+  code_type TEXT NOT NULL, -- 'friends_family', 'vip_family'
+  max_uses INTEGER NOT NULL,
+  current_uses INTEGER DEFAULT 0,
+  is_active BOOLEAN DEFAULT true,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- Bug reports table (auto-creates GitHub issues)
+CREATE TABLE IF NOT EXISTS bug_reports (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id UUID REFERENCES users(id) ON DELETE SET NULL,
+  title TEXT NOT NULL,
+  description TEXT NOT NULL,
+  error_message TEXT,
+  browser_info JSONB,
+  console_logs TEXT,
+  screenshot_url TEXT,
+  github_issue_url TEXT,
+  status TEXT DEFAULT 'pending', -- 'pending', 'created', 'failed'
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
 -- Projects table
@@ -74,6 +102,8 @@ ALTER TABLE projects ENABLE ROW LEVEL SECURITY;
 ALTER TABLE assets ENABLE ROW LEVEL SECURITY;
 ALTER TABLE subscriptions ENABLE ROW LEVEL SECURITY;
 ALTER TABLE payments ENABLE ROW LEVEL SECURITY;
+ALTER TABLE invite_codes ENABLE ROW LEVEL SECURITY;
+ALTER TABLE bug_reports ENABLE ROW LEVEL SECURITY;
 
 -- Policies for users table
 CREATE POLICY "Users can view their own profile" ON users
@@ -116,12 +146,26 @@ CREATE POLICY "Users can view their own subscriptions" ON subscriptions
 CREATE POLICY "Users can view their own payments" ON payments
   FOR SELECT USING (auth.uid() = user_id);
 
+-- Policies for invite_codes table
+CREATE POLICY "Anyone can view active invite codes" ON invite_codes
+  FOR SELECT USING (is_active = true);
+
+-- Policies for bug_reports table
+CREATE POLICY "Users can view their own bug reports" ON bug_reports
+  FOR SELECT USING (auth.uid() = user_id);
+
+CREATE POLICY "Users can create bug reports" ON bug_reports
+  FOR INSERT WITH CHECK (true);
+
 -- Create indexes for better performance
 CREATE INDEX IF NOT EXISTS idx_projects_user_id ON projects(user_id);
 CREATE INDEX IF NOT EXISTS idx_assets_user_id ON assets(user_id);
 CREATE INDEX IF NOT EXISTS idx_assets_project_id ON assets(project_id);
 CREATE INDEX IF NOT EXISTS idx_subscriptions_user_id ON subscriptions(user_id);
 CREATE INDEX IF NOT EXISTS idx_payments_user_id ON payments(user_id);
+CREATE INDEX IF NOT EXISTS idx_invite_codes_code ON invite_codes(code);
+CREATE INDEX IF NOT EXISTS idx_users_invite_code ON users(invite_code);
+CREATE INDEX IF NOT EXISTS idx_bug_reports_status ON bug_reports(status);
 
 -- Function to update updated_at timestamp
 CREATE OR REPLACE FUNCTION update_updated_at_column()
@@ -141,3 +185,9 @@ CREATE TRIGGER update_projects_updated_at BEFORE UPDATE ON projects
 
 CREATE TRIGGER update_subscriptions_updated_at BEFORE UPDATE ON subscriptions
   FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+-- Insert the special invite codes
+INSERT INTO invite_codes (code, code_type, max_uses, is_active) VALUES
+  ('FRIENDS_FAMILY_2024', 'friends_family', 50, true),
+  ('VIP_FAMILY_MOM_BILL', 'vip_family', 2, true)
+ON CONFLICT (code) DO NOTHING;

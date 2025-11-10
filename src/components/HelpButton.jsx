@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import BugReporter from './BugReporter';
 import './HelpButton.css';
 
 /**
@@ -7,6 +8,7 @@ import './HelpButton.css';
 
 const HelpButton = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isBugReporterOpen, setIsBugReporterOpen] = useState(false);
 
   const handleMenuAction = (action) => {
     setIsMenuOpen(false);
@@ -26,7 +28,7 @@ const HelpButton = () => {
         }
         break;
       case 'feedback':
-        alert('Feedback form coming soon! For now, reach us at support@fortheweebs.com');
+        setIsBugReporterOpen(true);
         break;
       default:
         break;
@@ -60,11 +62,16 @@ const HelpButton = () => {
               ⌨️ Keyboard Shortcuts
             </button>
             <button onClick={() => handleMenuAction('feedback')}>
-              💬 Send Feedback
+              � Report Bug
             </button>
           </div>
         </>
       )}
+
+      <BugReporter 
+        isOpen={isBugReporterOpen} 
+        onClose={() => setIsBugReporterOpen(false)} 
+      />
     </>
   );
 };
