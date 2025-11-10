@@ -11,6 +11,7 @@ import { AdminQRAuth, AdminQRVerify, checkAdminAuth, logoutAdmin } from "./compo
 import { AdminRecovery } from "./components/AdminRecovery.jsx";
 import { ToastContainer } from "./components/Toast.jsx";
 import { ThemeProvider } from "./components/ThemeToggle.jsx";
+import CookieConsent from "./components/CookieConsent.jsx";
 import "./GovernanceRitual.css";
 
 function AppFlow() {
@@ -100,6 +101,7 @@ function AppFlow() {
       {step === 3 && (<div><div style={{padding:'20px', background:'#667eea', color:'white', textAlign:'center'}}><h2>🎉 Welcome to Your Creator Dashboard!</h2><p>Tier: <strong>{userTier.toUpperCase()}</strong>{isAdmin && <span style={{marginLeft: '16px', background: '#FFD700', color: '#000', padding: '4px 12px', borderRadius: '6px', fontSize: '0.9rem', fontWeight: 800}}>👑 OWNER MODE</span>}</p></div><CreatorDashboard userId={userId} tier={userTier} /></div>)}
       <GovernanceRitual />
       <BugReporter />
+      <CookieConsent />
       {!isAdmin && !showAdminLogin && (<div style={{position: 'fixed', bottom: '80px', right: '20px', zIndex: 9998}}><button onClick={() => setShowAdminLogin(true)} style={{background: '#222', color: '#FFD700', border: '2px solid #FFD700', padding: '8px 16px', borderRadius: '6px', fontSize: '0.85rem', fontWeight: 600, cursor: 'pointer', opacity: 0.7, transition: 'opacity 0.3s'}} onMouseEnter={(e) => e.target.style.opacity = 1} onMouseLeave={(e) => e.target.style.opacity = 0.7}>🔐 Admin</button></div>)}
     </React.StrictMode>
     </ThemeProvider>
