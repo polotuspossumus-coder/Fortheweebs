@@ -512,12 +512,91 @@
         opacity: 0.7;
       }
 
+      /* FAQ Section */
+      .faq-section {
+        padding: 100px 20px;
+        max-width: 900px;
+        margin: 0 auto;
+      }
+
+      .faq-section h2 {
+        text-align: center;
+        font-size: 3rem;
+        margin-bottom: 64px;
+        font-weight: 800;
+        letter-spacing: -0.02em;
+      }
+
+      .faq-container {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+      }
+
+      .faq-item details {
+        background: rgba(255, 255, 255, 0.08);
+        backdrop-filter: blur(20px);
+        border: 1px solid rgba(255,255,255,0.15);
+        border-radius: 16px;
+        padding: 24px;
+        transition: all 0.3s ease;
+        cursor: pointer;
+      }
+
+      .faq-item details:hover {
+        background: rgba(255, 255, 255, 0.12);
+        transform: translateX(8px);
+      }
+
+      .faq-item details[open] {
+        background: rgba(255, 255, 255, 0.12);
+      }
+
+      .faq-item summary {
+        font-size: 1.2rem;
+        font-weight: 700;
+        margin-bottom: 0;
+        list-style: none;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .faq-item summary::-webkit-details-marker {
+        display: none;
+      }
+
+      .faq-item summary::after {
+        content: '+';
+        font-size: 1.5rem;
+        font-weight: 300;
+        transition: transform 0.3s ease;
+      }
+
+      .faq-item details[open] summary::after {
+        transform: rotate(45deg);
+      }
+
+      .faq-item p {
+        margin-top: 16px;
+        line-height: 1.7;
+        opacity: 0.9;
+        font-size: 1rem;
+        animation: fadeIn 0.3s ease-in-out;
+      }
+
       @media (max-width: 768px) {
         .hero h1 {
           font-size: 2.5rem;
         }
         .hero .tagline {
           font-size: 1.2rem;
+        }
+        .faq-section h2 {
+          font-size: 2rem;
+        }
+        .faq-item summary {
+          font-size: 1rem;
         }
         .pricing-section h2,
         .testimonials-section h2 {
@@ -654,6 +733,53 @@
               <div class="author-role">Content Creator</div>
             </div>
           </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="faq-section">
+      <h2>❓ Frequently Asked Questions</h2>
+      <div class="faq-container">
+        <div class="faq-item">
+          <details>
+            <summary>What is ForTheWeebs?</summary>
+            <p>ForTheWeebs is a comprehensive creator platform designed specifically for the anime community. We provide professional tools for audio editing, comic creation, graphic design, photo manipulation, and VR/AR content.</p>
+          </details>
+        </div>
+
+        <div class="faq-item">
+          <details>
+            <summary>Is there a free plan?</summary>
+            <p>Yes! Our free plan includes basic creator tools, 5 projects, and 100MB storage. Upgrade to VIP for unlimited projects, 10GB storage, and AI-powered tools.</p>
+          </details>
+        </div>
+
+        <div class="faq-item">
+          <details>
+            <summary>Can I cancel my subscription anytime?</summary>
+            <p>Absolutely! You can cancel your VIP subscription at any time. You'll continue to have access until the end of your billing period.</p>
+          </details>
+        </div>
+
+        <div class="faq-item">
+          <details>
+            <summary>Do you offer a free trial?</summary>
+            <p>Yes! New VIP members get a 7-day free trial with full access to all premium features. Cancel anytime during the trial at no charge.</p>
+          </details>
+        </div>
+
+        <div class="faq-item">
+          <details>
+            <summary>What payment methods do you accept?</summary>
+            <p>We accept all major credit cards (Visa, Mastercard, American Express), debit cards, and digital wallets through our secure Stripe payment system.</p>
+          </details>
+        </div>
+
+        <div class="faq-item">
+          <details>
+            <summary>Is my data secure?</summary>
+            <p>Yes! We use enterprise-grade encryption, SOC 2 compliance, and secure cloud storage. Your projects and personal data are always protected.</p>
+          </details>
         </div>
       </div>
     </section>
