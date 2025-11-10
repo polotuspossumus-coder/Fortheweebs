@@ -6,8 +6,10 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
+    "preview": "vite preview",
     "lint": "eslint . --ext .js,.ts,.jsx,.tsx",
-    "test": "vitest"
+    "test": "vitest",
+    "analyze": "node scripts/analyze-bundle.js"
   },
   "keywords": [
     "creator",

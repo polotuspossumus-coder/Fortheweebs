@@ -12,7 +12,13 @@ import { AdminRecovery } from "./components/AdminRecovery.jsx";
 import { ToastContainer } from "./components/Toast.jsx";
 import { ThemeProvider } from "./components/ThemeToggle.jsx";
 import CookieConsent from "./components/CookieConsent.jsx";
+import A11ySkipLink from "./components/A11ySkipLink.jsx";
+import InstallPWA from "./components/InstallPWA.jsx";
+import { registerServiceWorker } from "./utils/registerServiceWorker.js";
 import "./GovernanceRitual.css";
+
+// Register service worker for PWA support
+registerServiceWorker();
 
 function AppFlow() {
   const [step, setStep] = useState(() => {
@@ -85,8 +91,10 @@ function AppFlow() {
     <ErrorBoundary>
     <ThemeProvider>
     <React.StrictMode>
+      <A11ySkipLink />
       <ToastContainer />
-      <div style={{background:'#222', color:'#FFD700', padding:'8px 0', textAlign:'center', fontWeight:700, fontSize:'1.1rem', position:'relative'}}>
+      <InstallPWA />
+      <div id="main-content" style={{background:'#222', color:'#FFD700', padding:'8px 0', textAlign:'center', fontWeight:700, fontSize:'1.1rem', position:'relative'}}>
         ForTheWeebs - Step {step + 1} of 4
         {isAdmin && (
           <div style={{position: 'absolute', right: '20px', top: '50%', transform: 'translateY(-50%)', display: 'flex', alignItems: 'center', gap: '12px'}}>
