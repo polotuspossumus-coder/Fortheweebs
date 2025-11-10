@@ -9,6 +9,8 @@ import { BugReporter } from "./components/BugReporter.jsx";
 import { ErrorBoundary } from "./components/ErrorBoundary.jsx";
 import { AdminQRAuth, AdminQRVerify, checkAdminAuth, logoutAdmin } from "./components/AdminQRAuthV2.jsx";
 import { AdminRecovery } from "./components/AdminRecovery.jsx";
+import { ToastContainer } from "./components/Toast.jsx";
+import { ThemeProvider } from "./components/ThemeToggle.jsx";
 import "./GovernanceRitual.css";
 
 function AppFlow() {
@@ -80,7 +82,9 @@ function AppFlow() {
 
   return (
     <ErrorBoundary>
+    <ThemeProvider>
     <React.StrictMode>
+      <ToastContainer />
       <div style={{background:'#222', color:'#FFD700', padding:'8px 0', textAlign:'center', fontWeight:700, fontSize:'1.1rem', position:'relative'}}>
         ForTheWeebs - Step {step + 1} of 4
         {isAdmin && (
@@ -98,6 +102,7 @@ function AppFlow() {
       <BugReporter />
       {!isAdmin && !showAdminLogin && (<div style={{position: 'fixed', bottom: '80px', right: '20px', zIndex: 9998}}><button onClick={() => setShowAdminLogin(true)} style={{background: '#222', color: '#FFD700', border: '2px solid #FFD700', padding: '8px 16px', borderRadius: '6px', fontSize: '0.85rem', fontWeight: 600, cursor: 'pointer', opacity: 0.7, transition: 'opacity 0.3s'}} onMouseEnter={(e) => e.target.style.opacity = 1} onMouseLeave={(e) => e.target.style.opacity = 0.7}>🔐 Admin</button></div>)}
     </React.StrictMode>
+    </ThemeProvider>
     </ErrorBoundary>
   );
 }
