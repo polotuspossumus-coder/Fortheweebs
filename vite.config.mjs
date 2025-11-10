@@ -1,14 +1,19 @@
 import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
 
 export default defineConfig({
+  plugins: [react()],
   base: './',
   publicDir: 'public',
   build: {
     outDir: 'dist',
     emptyOutDir: true,
     minify: 'esbuild',
-    sourcemap: false, // Disable sourcemaps in production
+    sourcemap: false,
     rollupOptions: {
+      input: {
+        main: './index.html'
+      },
       output: {
         manualChunks: {
           'react-vendor': ['react', 'react-dom'],
