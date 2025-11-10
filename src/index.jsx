@@ -30,6 +30,19 @@ function AppFlow() {
   const [step, setStep] = useState(() => {
     const hasAcceptedLegal = localStorage.getItem("legalAccepted");
     const hasOnboarded = localStorage.getItem("hasOnboarded");
+    
+    // Check if this is a referral link
+    const params = new URLSearchParams(window.location.search);
+    const refCode = params.get('ref') || params.get('referral') || params.get('invite');
+    
+    if (refCode) {
+      // Store the referral code
+      localStorage.setItem('referral_code', refCode);
+      console.log('🎉 Referral code detected:', refCode);
+      // Start at signup step (1) if they have a referral
+      return hasOnboarded === "true" ? 3 : 1;
+    }
+    
     if (hasOnboarded === "true" || hasAcceptedLegal) {
       return 3;
     }
@@ -39,6 +52,7 @@ function AppFlow() {
   const [isAdmin, setIsAdmin] = useState(false);
   const [showAdminLogin, setShowAdminLogin] = useState(false);
   const [showRecovery, setShowRecovery] = useState(false);
+  const [referralCode] = useState(() => localStorage.getItem('referral_code'));
 
   useEffect(() => {
     const adminAuthenticated = checkAdminAuth();
@@ -120,7 +134,7 @@ function AppFlow() {
         )}
       </div>
       {step === 0 && (<div style={{padding:'40px', maxWidth:'800px', margin:'0 auto'}}><h1 style={{marginBottom:'30px'}}>📜 Terms & Privacy</h1><LegalDocumentsList userId={userId} /><button onClick={handleLegalAccepted} style={{marginTop:24, padding:'16px 32px', fontSize:'1.1rem', fontWeight:600, cursor:'pointer', background:'#667eea', color:'white', border:'none', borderRadius:'8px'}}>Accept & Continue →</button></div>)}
-      {step === 1 && (<div style={{padding:'40px', maxWidth:'800px', margin:'0 auto'}}><h1 style={{marginBottom:'30px'}}>✨ Create Your Account</h1><CreatorSignup /><button onClick={handleSignupComplete} style={{marginTop:24, padding:'16px 32px', fontSize:'1.1rem', fontWeight:600, cursor:'pointer', background:'#667eea', color:'white', border:'none', borderRadius:'8px'}}>Continue to Pricing →</button></div>)}
+      {step === 1 && (<div style={{padding:'40px', maxWidth:'800px', margin:'0 auto'}}><h1 style={{marginBottom:'30px'}}>✨ Create Your Account</h1>{referralCode && (<div style={{background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)', padding: '16px', borderRadius: '12px', marginBottom: '24px', textAlign: 'center'}}><div style={{fontSize: '2rem', marginBottom: '8px'}}>🎉</div><div style={{color: 'white', fontWeight: 700, fontSize: '1.2rem'}}>You've been referred!</div><div style={{color: 'rgba(255,255,255,0.9)', marginTop: '8px'}}>Code: <strong>{referralCode}</strong></div><div style={{color: 'rgba(255,255,255,0.85)', marginTop: '4px', fontSize: '0.9rem'}}>You'll get special bonuses when you sign up!</div></div>)}<CreatorSignup /><button onClick={handleSignupComplete} style={{marginTop:24, padding:'16px 32px', fontSize:'1.1rem', fontWeight:600, cursor:'pointer', background:'#667eea', color:'white', border:'none', borderRadius:'8px'}}>Continue to Pricing →</button></div>)}
       {step === 2 && (<div style={{padding:'40px', maxWidth:'1000px', margin:'0 auto'}}><h1 style={{marginBottom:'10px'}}>💎 Choose Your Tier</h1><p style={{marginBottom:'30px', opacity:0.8}}>Start free or unlock premium creator tools</p><PaymentModule onPaymentComplete={handlePaymentComplete} /><button onClick={handleSkipPayment} style={{marginTop:24, padding:'16px 32px', fontSize:'1.1rem', fontWeight:600, cursor:'pointer', background:'transparent', color:'#667eea', border:'2px solid #667eea', borderRadius:'8px'}}>Skip - Start with Free Tools</button></div>)}
       {step === 3 && (<div><div style={{padding:'20px', background:'#667eea', color:'white', textAlign:'center'}}><h2>🎉 Welcome to Your Creator Dashboard!</h2><p>Tier: <strong>{userTier.toUpperCase()}</strong>{isAdmin && <span style={{marginLeft: '16px', background: '#FFD700', color: '#000', padding: '4px 12px', borderRadius: '6px', fontSize: '0.9rem', fontWeight: 800}}>👑 OWNER MODE</span>}</p></div><CreatorDashboard userId={userId} tier={userTier} /></div>)}
       <GovernanceRitual />
