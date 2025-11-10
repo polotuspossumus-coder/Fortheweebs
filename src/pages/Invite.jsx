@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { validateInvite } from '../utils/api';
 import './Invite.css';
 
 /**
@@ -28,8 +29,7 @@ const Invite = () => {
     setError('');
 
     try {
-      const response = await fetch(`/api/validate-invite?code=${code}`);
-      const data = await response.json();
+      const data = await validateInvite(code);
 
       if (data.valid) {
         setCodeInfo(data);
