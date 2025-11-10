@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import './CreatorDashboard.css';
 import { TermsOfService } from "./components/TermsOfService";
 import { CreatorAgreementGate } from "./components/CreatorAgreementGate";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@radix-ui/react-tabs';
