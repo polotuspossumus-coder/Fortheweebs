@@ -2,7 +2,7 @@
 
 ## Friends & Family Link (50 People Max)
 ```
-https://fortheweebs.netlify.app/invite?code=FRIENDS_FAMILY_2024
+https://fortheweebs.netlify.app/invite?code=FRIENDS_FAMILY_2025
 ```
 
 **Benefits:**
@@ -63,7 +63,7 @@ https://fortheweebs.netlify.app/invite?code=VIP_FAMILY_MOM_BILL
 ## Database Setup
 
 Both codes are automatically inserted into your Supabase database:
-- `FRIENDS_FAMILY_2024` - 50 uses, requires $5/month minimum
+- `FRIENDS_FAMILY_2025` - 50 uses, requires $5/month minimum
 - `VIP_FAMILY_MOM_BILL` - 2 uses, 100% free forever
 
 The system automatically tracks:

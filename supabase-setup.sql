@@ -188,6 +188,6 @@ CREATE TRIGGER update_subscriptions_updated_at BEFORE UPDATE ON subscriptions
 
 -- Insert the special invite codes
 INSERT INTO invite_codes (code, code_type, max_uses, is_active) VALUES
-  ('FRIENDS_FAMILY_2024', 'friends_family', 50, true),
+  ('FRIENDS_FAMILY_2025', 'friends_family', 50, true),
   ('VIP_FAMILY_MOM_BILL', 'vip_family', 2, true)
 ON CONFLICT (code) DO NOTHING;
