@@ -19,6 +19,7 @@ import QuickActions from "./components/QuickActions.jsx";
 import AchievementSystem from "./components/AchievementSystem.jsx";
 import InteractiveTutorial from "./components/InteractiveTutorial.jsx";
 import HelpButton from "./components/HelpButton.jsx";
+import Invite from "./pages/Invite.jsx";
 import { registerServiceWorker } from "./utils/registerServiceWorker.js";
 import "./GovernanceRitual.css";
 
@@ -53,6 +54,11 @@ function AppFlow() {
       setShowRecovery(true);
     }
   }, []);
+
+  // Check if this is the invite page
+  if (window.location.pathname === '/invite' || window.location.pathname.startsWith('/invite/')) {
+    return <Invite />;
+  }
 
   const handleAdminLogin = () => {
     setIsAdmin(true);
