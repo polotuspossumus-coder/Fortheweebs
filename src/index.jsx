@@ -22,6 +22,7 @@ import HelpButton from "./components/HelpButton.jsx";
 import Invite from "./pages/Invite.jsx";
 import { registerServiceWorker } from "./utils/registerServiceWorker.js";
 import "./GovernanceRitual.css";
+import "./mobile.css";
 
 // Register service worker for PWA support
 registerServiceWorker();
