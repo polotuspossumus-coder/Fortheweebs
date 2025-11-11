@@ -1,10 +1,17 @@
 // TOOL UNLOCK SYSTEM - Earn-to-unlock model + $500 full platform access
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './PremiumSubscription.css';
+import { unlockTool, getUserBalance, deductBalance, TOOL_PRICES } from '../utils/toolUnlockSystem';
 
-export function PremiumSubscription({ userId, currentTier, userBalance = 0 }) {
+export function PremiumSubscription({ userId, currentTier }) {
   const [selectedUnlock, setSelectedUnlock] = useState(null);
+  const [userBalance, setUserBalance] = useState(0);
+
+  useEffect(() => {
+    const balance = getUserBalance(userId);
+    setUserBalance(balance);
+  }, [userId]);
 
   const toolUnlocks = [
     { id: 'photo', name: '📸 Photo Tools Hub', price: 25, description: 'Advanced photo editing, filters, AI enhancement' },
@@ -63,41 +70,52 @@ export function PremiumSubscription({ userId, currentTier, userBalance = 0 }) {
   };
 
   const handleUnlock = async (unlockType, price, paymentMethod = 'balance') => {
-    if (paymentMethod === 'balance' && userBalance < price) {
-      alert(`❌ Insufficient balance. You need $${price} but only have $${userBalance}.\n\nOptions:\n1. Earn more from tips/commissions/print sales\n2. Pay with credit card instead`);
-      return;
-    }
-
-    // In production: Process payment
-    /*
     if (paymentMethod === 'balance') {
-      const response = await fetch('/api/unlocks/purchase', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          userId,
-          unlockType,
-          price,
-          payFromBalance: true
-        })
-      });
-      const result = await response.json();
+      if (userBalance < price) {
+        alert(`❌ Insufficient balance. You need $${price} but only have $${userBalance}.\n\nOptions:\n1. Earn more from tips/commissions/print sales\n2. Pay with credit card instead`);
+        return;
+      }
+
+      // Deduct from balance
+      const success = deductBalance(userId, price);
+      if (!success) {
+        alert('❌ Payment failed. Please try again.');
+        return;
+      }
+
+      // Unlock the tool
+      const result = unlockTool(userId, unlockType, 'balance', price);
       if (result.success) {
-        // Update user's unlocked tools
+        alert(`🎉 ${result.message}\n\nPaid from balance: $${price}\nRemaining balance: $${(userBalance - price).toFixed(2)}`);
+        
+        // Update balance display
+        setUserBalance(userBalance - price);
+        
+        // Reload page to show unlocked tool
+        setTimeout(() => window.location.reload(), 1500);
+      } else {
+        alert(`❌ ${result.message}`);
       }
     } else if (paymentMethod === 'card') {
-      // Stripe Payment Intent
+      // In production: Stripe Payment Intent
+      /*
       const { clientSecret } = await fetch('/api/unlocks/payment-intent', {
         method: 'POST',
         body: JSON.stringify({ userId, unlockType, price })
       }).then(r => r.json());
       
       const stripe = await loadStripe(process.env.STRIPE_PUBLIC_KEY);
-      await stripe.confirmCardPayment(clientSecret);
-    }
-    */
+      const result = await stripe.confirmCardPayment(clientSecret);
+      
+      if (result.paymentIntent.status === 'succeeded') {
+        const unlockResult = unlockTool(userId, unlockType, 'card', price);
+        alert(`🎉 ${unlockResult.message}`);
+        window.location.reload();
+      }
+      */
 
-    alert(`🎉 Unlocked! (Payment integration needed)\n\nPayment method: ${paymentMethod === 'balance' ? 'ForTheWeebs balance' : 'Credit card'}\nAmount: $${price}`);
+      alert(`💳 Credit card payment integration pending.\n\nFor now, use "Pay from Balance" option.\nYou can add test balance in the console:\nlocalStorage.setItem('balance_${userId}', '1000')`);
+    }
   };
 
   return (

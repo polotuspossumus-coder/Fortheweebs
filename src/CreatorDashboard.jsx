@@ -24,13 +24,22 @@ import { TradingCardDesigner } from "./components/TradingCardDesigner";
 import { TipsAndDonations } from "./components/TipsAndDonations";
 import { CommissionMarketplace } from "./components/CommissionMarketplace";
 import { PremiumSubscription } from "./components/PremiumSubscription";
+import { ToolLockGate } from "./components/ToolLockGate";
+import { getUserBalance } from "./utils/toolUnlockSystem";
 
 export const CreatorDashboard = ({ userId = "demo_user", ipAddress = "127.0.0.1", tier = "free" }) => {
   const [tosAccepted, setTosAccepted] = useState(false);
   const [creatorAgreementAccepted, setCreatorAgreementAccepted] = useState(false);
   const [currentTier] = useState(tier || 'General Access');
+  const [userBalance, setUserBalance] = useState(0);
   const version = "2025.10";
   const isAdmin = userId === "owner" || userId === "admin";
+
+  // Load user balance on mount
+  useEffect(() => {
+    const balance = getUserBalance(userId);
+    setUserBalance(balance);
+  }, [userId]);
 
   if (!tosAccepted) {
     return <TermsOfService onAccept={() => setTosAccepted(true)} />;
@@ -78,19 +87,26 @@ export const CreatorDashboard = ({ userId = "demo_user", ipAddress = "127.0.0.1"
         <OverviewPanel />
       </TabsContent>
       <TabsContent value="photos">
-        <PhotoToolsHub userId={userId} />
+        <ToolLockGate userId={userId} toolId="photo">
+          <PhotoToolsHub userId={userId} />
+        </ToolLockGate>
       </TabsContent>
       <TabsContent value="music">
-        <AudioProductionStudio userId={userId} />
+        <ToolLockGate userId={userId} toolId="audio">
+          <AudioProductionStudio userId={userId} />
+        </ToolLockGate>
       </TabsContent>
       <TabsContent value="comics">
-        <ComicBookCreator userId={userId} />
+        <ToolLockGate userId={userId} toolId="comics">
+          <ComicBookCreator userId={userId} />
+        </ToolLockGate>
       </TabsContent>
       <TabsContent value="design">
-        <div style={{ marginBottom: '2rem' }}>
-          <h2 style={{ marginBottom: '1rem' }}>🎨 Design Tools</h2>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '1rem', marginBottom: '2rem' }}>
-            <button 
+        <ToolLockGate userId={userId} toolId="design">
+          <div style={{ marginBottom: '2rem' }}>
+            <h2 style={{ marginBottom: '1rem' }}>🎨 Design Tools</h2>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '1rem', marginBottom: '2rem' }}>
+              <button 
               style={{
                 padding: '1.5rem',
                 background: 'rgba(139, 92, 246, 0.1)',
@@ -134,12 +150,15 @@ export const CreatorDashboard = ({ userId = "demo_user", ipAddress = "127.0.0.1"
             <TradingCardDesigner userId={userId} />
           </TabsContent>
         </Tabs>
+        </ToolLockGate>
       </TabsContent>
       <TabsContent value="planner">
         <ContentPlanner userId={userId} />
       </TabsContent>
       <TabsContent value="arvr">
-        <ARVRContentPanelWithPaywall userId={userId} />
+        <ToolLockGate userId={userId} toolId="arvr">
+          <ARVRContentPanelWithPaywall userId={userId} />
+        </ToolLockGate>
       </TabsContent>
       <TabsContent value="influencer">
         <InfluencerVerification userId={userId} onVerified={(data) => {
