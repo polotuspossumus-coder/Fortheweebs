@@ -141,7 +141,7 @@ function AppFlow() {
           <GovernanceRitual />
           <BugReporter />
           <CookieConsent />
-          {!isAdmin && !showAdminLogin && (<div style={{ position: 'fixed', bottom: '80px', right: '20px', zIndex: 9998 }}><button onClick={() => setShowAdminLogin(true)} style={{ background: '#222', color: '#FFD700', border: '2px solid #FFD700', padding: '8px 16px', borderRadius: '6px', fontSize: '0.85rem', fontWeight: 600, cursor: 'pointer', opacity: 0.7, transition: 'opacity 0.3s' }} onMouseEnter={(e) => e.target.style.opacity = 1} onMouseLeave={(e) => e.target.style.opacity = 0.7}>🔐 Admin</button></div>)}
+          {/* Admin button hidden - access via /?admin=true URL parameter only */}
         </React.StrictMode>
       </ThemeProvider>
     </ErrorBoundary>
