@@ -33,6 +33,17 @@ export function ComicBookCreator({ userId }) {
     'custom': { name: 'Custom Layout', icon: '✏️' }
   };
 
+  const TEMPLATES = {
+    'manga': { name: 'Manga Style', description: 'Right-to-left reading, dramatic panels', icon: '📖' },
+    'western': { name: 'Western Comic', description: 'Traditional superhero style', icon: '💥' },
+    'webtoon': { name: 'Webtoon Vertical', description: 'Infinite scroll format', icon: '📱' },
+    'novel': { name: 'Light Novel', description: 'Text-heavy with illustrations', icon: '📚' },
+    'poetry': { name: 'Poetry Book', description: 'Verse layout with art', icon: '✍️' },
+    'artbook': { name: 'Art Book', description: 'Gallery-style layouts', icon: '🎨' },
+    'zine': { name: 'DIY Zine', description: 'Indie comic style', icon: '📰' },
+    'childrens': { name: "Children's Book", description: 'Large text, simple panels', icon: '🧸' }
+  };
+
   const addPage = () => {
     setPages([...pages, createNewPage()]);
     setCurrentPage(pages.length);
@@ -248,17 +259,43 @@ export function ComicBookCreator({ userId }) {
           flexWrap: 'wrap',
           alignItems: 'center'
         }}>
-          <button onClick={saveProject} style={toolButtonStyle('#3498db')}>
-            💾 Save Project
-          </button>
-          <button onClick={exportToPDF} style={toolButtonStyle('#e74c3c')}>
-            📄 Export PDF
-          </button>
-          <button onClick={addPage} style={toolButtonStyle('#2ecc71')}>
-            ➕ Add Page
-          </button>
+          <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap', flex: 1 }}>
+            <button onClick={saveProject} style={toolButtonStyle('#3498db')}>
+              💾 Save
+            </button>
+            <button onClick={exportToPDF} style={toolButtonStyle('#e74c3c')}>
+              📄 Export PDF
+            </button>
+            <button onClick={addPage} style={toolButtonStyle('#2ecc71')}>
+              ➕ Page
+            </button>
+            <select 
+              onChange={(e) => {
+                const template = e.target.value;
+                if (template && confirm(`Apply ${TEMPLATES[template].name} template to current page?`)) {
+                  // Apply template styling here
+                  console.log('Applying template:', template);
+                }
+              }}
+              style={{
+                background: 'rgba(139, 92, 246, 0.2)',
+                border: '1px solid #8b5cf6',
+                borderRadius: '8px',
+                color: '#fff',
+                padding: '8px 12px',
+                cursor: 'pointer'
+              }}
+            >
+              <option value="">📋 Templates</option>
+              {Object.entries(TEMPLATES).map(([key, template]) => (
+                <option key={key} value={key}>
+                  {template.icon} {template.name}
+                </option>
+              ))}
+            </select>
+          </div>
 
-          <div style={{ marginLeft: 'auto', display: 'flex', gap: '10px', alignItems: 'center' }}>
+          <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
             <span>Layout:</span>
             {Object.entries(LAYOUTS).map(([key, layout]) => (
               <button

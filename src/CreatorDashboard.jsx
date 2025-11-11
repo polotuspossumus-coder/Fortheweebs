@@ -17,6 +17,7 @@ import { AudioProductionStudio } from "./components/AudioProductionStudio";
 import { ComicBookCreator } from "./components/ComicBookCreator";
 import { GraphicDesignStudio } from "./components/GraphicDesignStudio";
 import { PrintOnDemand } from "./components/PrintOnDemand";
+import { TradingCardDesigner } from "./components/TradingCardDesigner";
 
 export const CreatorDashboard = ({ userId = "demo_user", ipAddress = "127.0.0.1", tier = "free" }) => {
   const [tosAccepted, setTosAccepted] = useState(false);
@@ -77,7 +78,53 @@ export const CreatorDashboard = ({ userId = "demo_user", ipAddress = "127.0.0.1"
         <ComicBookCreator userId={userId} />
       </TabsContent>
       <TabsContent value="design">
-        <GraphicDesignStudio userId={userId} />
+        <div style={{ marginBottom: '2rem' }}>
+          <h2 style={{ marginBottom: '1rem' }}>🎨 Design Tools</h2>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '1rem', marginBottom: '2rem' }}>
+            <button 
+              style={{
+                padding: '1.5rem',
+                background: 'rgba(139, 92, 246, 0.1)',
+                border: '2px solid #8b5cf6',
+                borderRadius: '12px',
+                color: '#fff',
+                fontWeight: 600,
+                cursor: 'pointer',
+                transition: 'all 0.3s ease'
+              }}
+              onClick={() => document.querySelector('[value="design-studio"]')?.click()}
+            >
+              🎨 Graphic Design Studio
+            </button>
+            <button 
+              style={{
+                padding: '1.5rem',
+                background: 'rgba(139, 92, 246, 0.1)',
+                border: '2px solid #8b5cf6',
+                borderRadius: '12px',
+                color: '#fff',
+                fontWeight: 600,
+                cursor: 'pointer',
+                transition: 'all 0.3s ease'
+              }}
+              onClick={() => document.querySelector('[value="cards"]')?.click()}
+            >
+              🎴 Trading Card Designer
+            </button>
+          </div>
+        </div>
+        <Tabs defaultValue="design-studio">
+          <TabsList style={{ marginBottom: '2rem' }}>
+            <TabsTrigger value="design-studio">Graphic Design</TabsTrigger>
+            <TabsTrigger value="cards">Trading Cards</TabsTrigger>
+          </TabsList>
+          <TabsContent value="design-studio">
+            <GraphicDesignStudio userId={userId} />
+          </TabsContent>
+          <TabsContent value="cards">
+            <TradingCardDesigner userId={userId} />
+          </TabsContent>
+        </Tabs>
       </TabsContent>
       <TabsContent value="planner">
         <ContentPlanner userId={userId} />
