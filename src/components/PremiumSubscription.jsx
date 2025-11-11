@@ -78,20 +78,18 @@ export function PremiumSubscription({ userId, currentTier }) {
       name: '🤫 Shhh... It\'s a Secret',
       price: 1000,
       color: '#8b5cf6',
-      tagline: 'Admin-Level Superpowers (You won\'t be disappointed)',
+      tagline: 'You won\'t be disappointed... Trust me.',
       features: [
         '✅ Everything in Full Platform',
-        '🔥 NEVER PAY CREATOR SUBSCRIPTION FEES',
-        '🧠 AI Content Generation Powers',
-        '👤 Facial Recognition AI - Feed anime girls, AI identifies show/character names',
-        '🎨 Set AI to auto-generate content for you',
-        '🤖 Train AI on your own datasets',
-        '⚡ Admin-level tool access',
-        '🎯 Custom AI models for your content',
-        '🔓 Unlock future superpowers as they\'re added',
+        '🔥 Exclusive superpowers not listed here',
+        '🧠 Advanced AI capabilities',
+        '⚡ Admin-level features',
+        '🎯 Custom tools & workflows',
+        '🔓 Future features as they\'re added',
         '👑 VIP "Secret Member" badge',
         '💎 Lifetime priority support',
-        '🚀 Beta access to experimental features'
+        '🚀 Beta access to experimental features',
+        '❓ And more surprises...'
       ]
     }
   };
@@ -334,9 +332,8 @@ export function PremiumSubscription({ userId, currentTier }) {
           )}
         </div>
 
-        {/* Super Admin Powers - HIDDEN from public, only shows for userId === 'owner' */}
-        {userId === 'owner' && (
-          <div className="tier-card super-admin-card">
+        {/* Super Admin Powers - Everyone sees it, features are vague/mysterious */}
+        <div className="tier-card super-admin-card">
             <div className="secret-badge">🤫 SECRET TIER</div>
             <div className="tier-header" style={{borderColor: tiers.super_admin.color}}>
               <h2 style={{color: tiers.super_admin.color}}>{tiers.super_admin.name}</h2>
@@ -354,6 +351,30 @@ export function PremiumSubscription({ userId, currentTier }) {
                   {feature}
                 </div>
               ))}
+              
+              {/* Only YOU see the real features */}
+              {userId === 'owner' && (
+                <div style={{
+                  marginTop: '20px',
+                  padding: '15px',
+                  background: 'rgba(139, 92, 246, 0.1)',
+                  borderRadius: '10px',
+                  border: '2px solid #8b5cf6'
+                }}>
+                  <div style={{ fontWeight: '700', marginBottom: '10px', color: '#8b5cf6' }}>
+                    👑 OWNER VIEW - Real Features:
+                  </div>
+                  <div style={{ fontSize: '0.9rem', opacity: 0.9 }}>
+                    ✅ Never pay creator subscription fees<br/>
+                    ✅ AI Content Generation Powers<br/>
+                    ✅ Facial Recognition AI (anime character identification)<br/>
+                    ✅ Set AI to auto-generate content<br/>
+                    ✅ Train AI on your own datasets<br/>
+                    ✅ Admin-level tool access<br/>
+                    ✅ Custom AI models for your content
+                  </div>
+                </div>
+              )}
             </div>
             <button
               className="tier-btn super-admin-btn"
@@ -377,8 +398,7 @@ export function PremiumSubscription({ userId, currentTier }) {
                 💎 For serious creators who want admin-level superpowers
               </p>
             )}
-          </div>
-        )}
+        </div>
       </div>
 
       <div className="premium-benefits">
