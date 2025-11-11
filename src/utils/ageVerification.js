@@ -29,15 +29,9 @@ export const AGE_VERIFICATION_CONFIG = {
       providers: ['Stripe Identity', 'Onfido', 'Jumio', 'Yoti'],
       proof_level: 'HIGH',
       required_for: ['Adult content creation', 'High-volume sales (>$10k/year)']
-    },
-    
-    // Tier 4: SSN verification (21+, for gambling/alcohol content)
-    ssn_verification: {
-      required_for_age: 21,
-      method: 'Last 4 digits of SSN + DOB matching',
-      proof_level: 'VERY_HIGH',
-      required_for: ['Gambling content', 'Alcohol/tobacco promotion']
     }
+    
+    // NO SSN VERIFICATION - Too invasive, not international-friendly
   },
   
   // Parental consent for users under 13
@@ -65,18 +59,17 @@ export const AGE_RESTRICTIONS = {
       'View PG-13 content',
       'Create non-commercial content',
       'Participate in contests',
-      'Comment on content'
+      'Comment on content',
+      'Full platform access EXCEPT adult content'
     ],
     blocked: [
-      'Adult content (18+)',
-      'Direct payment processing (requires parent)',
-      'Print-on-demand sales (requires parent)',
-      'Revenue >$500/month (requires parental consent)'
+      'Adult content (18+) - NSFW, explicit sexual content',
+      'Extreme graphic violence (18+)'
     ],
     restrictions: {
-      max_monthly_revenue: 500,
-      parental_consent_for_payments: true,
-      content_filter: 'strict'
+      max_monthly_revenue: 'UNLIMITED', // No revenue restrictions for teens
+      parental_consent_for_payments: false, // Teens can earn freely
+      content_filter: 'strict' // Filters out 18+ content only
     }
   },
   

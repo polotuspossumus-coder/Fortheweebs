@@ -39,18 +39,26 @@ export const LEGAL_PROTECTIONS = {
     'harry potter', 'lord of the rings', 'game of thrones'
   ],
   
-  // Content that requires age verification
+  // Content that requires age verification (18+)
   ADULT_CONTENT_FLAGS: [
     'nude', 'nudity', 'nsfw', 'explicit', '18+', 'adult only',
-    'pornographic', 'hentai', 'ecchi'
+    'pornographic', 'hentai', 'ecchi', 'sex', 'pussy', 'cock',
+    'gore', 'graphic violence', 'dismemberment', 'blood'
   ],
   
-  // Prohibited content
+  // PROHIBITED CONTENT - Only truly illegal/harmful content
   PROHIBITED_CONTENT: [
-    'hate', 'racist', 'nazi', 'white supremacy',
-    'child', 'minor', 'underage', 'loli', 'shota',
-    'violence', 'gore', 'terrorism',
-    'drugs', 'illegal', 'counterfeit'
+    'child sexual', 'child porn', 'cp', 'pedo', 'loli', 'shota', 'minor sexual', // CSAM - ZERO TOLERANCE
+    'terrorist', 'isis', 'al qaeda', 'bomb instructions', 'mass shooting plan', // Terrorism
+    'counterfeit', 'fake id', 'stolen credit card', 'fraud', // Fraud
+    'nigger', 'kike', 'faggot targeting' // Extreme racial/homophobic slurs (targeted harassment)
+  ],
+  
+  // EXPLICITLY ALLOWED (with 18+ age gate)
+  ALLOWED_ADULT_CONTENT: [
+    'gore', 'violence', 'blood', 'dismemberment', 'graphic horror', // Horror/violence ALLOWED
+    'fuck', 'shit', 'ass', 'bitch', 'damn', // Profanity ALLOWED
+    'bdsm', 'fetish', 'kink', 'furry nsfw', 'monster girls' // Kink content ALLOWED
   ]
 };
 
@@ -70,28 +78,35 @@ export function checkContentLegality(text, cardData = null) {
     }
   }
   
-  // Check for prohibited content
+  // Check for prohibited content (ONLY illegal/harmful content)
   for (const term of LEGAL_PROTECTIONS.PROHIBITED_CONTENT) {
     if (textLower.includes(term)) {
       issues.push({
         type: 'prohibited',
         severity: 'CRITICAL',
-        message: `Contains prohibited content: "${term}". This violates our Terms of Service.`,
+        message: `Contains prohibited content: "${term}". This is illegal and violates our Terms of Service.`,
         blocked: true
       });
     }
   }
   
-  // Check for adult content (requires age gate)
+  // Check for adult content (requires age gate, but NOT blocked)
+  let hasAdultContent = false;
   for (const term of LEGAL_PROTECTIONS.ADULT_CONTENT_FLAGS) {
     if (textLower.includes(term)) {
-      issues.push({
-        type: 'adult',
-        severity: 'MEDIUM',
-        message: `May contain adult content. Age verification required.`,
-        requiresAgeVerification: true
-      });
+      hasAdultContent = true;
+      break;
     }
+  }
+  
+  if (hasAdultContent) {
+    issues.push({
+      type: 'adult',
+      severity: 'INFO',
+      message: `Contains adult content. This is ALLOWED but requires 18+ age verification.`,
+      requiresAgeVerification: true,
+      blocked: false // NOT blocked, just needs age gate
+    });
   }
   
   // Check for suspicious quantities (anti-counterfeit)

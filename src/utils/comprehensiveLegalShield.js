@@ -153,22 +153,33 @@ export const PLATFORM_LEGAL_SHIELD = {
   // SECTION 6: CONTENT MODERATION SHIELD
   content_moderation: {
     prohibited_content_categories: [
-      'Child sexual abuse material (CSAM) - ZERO TOLERANCE',
+      'Child sexual abuse material (CSAM) - ZERO TOLERANCE - FEDERAL CRIME',
+      'Child exploitation / sexualization of minors',
       'Human trafficking / exploitation',
-      'Terrorism / violent extremism',
-      'Credible threats of violence',
-      'Self-harm / suicide promotion',
+      'Terrorism / terrorist recruitment / ISIS propaganda',
+      'Credible threats of violence (specific person + intent + means)',
       'Non-consensual intimate imagery (revenge porn)',
-      'Doxxing / harassment',
-      'Hate speech (racial slurs, Nazi symbols, etc.)',
-      'Animal cruelty',
-      'Copyright infringement',
-      'Trademark violation',
-      'Counterfeit goods',
-      'Stolen goods / fraud',
-      'Illegal drugs / weapons',
-      'Medical misinformation (during public health crises)',
-      'Election interference / voter suppression'
+      'Doxxing / posting private information to cause harm',
+      'Hate speech targeting protected classes (race, religion, ethnicity, national origin, sexual orientation, gender identity, disability)',
+      'Real animal cruelty (actual abuse, not fictional/cartoon)',
+      'Copyright infringement (traced/stolen copyrighted characters)',
+      'Trademark violation (fake Pokemon/Yu-Gi-Oh!/Magic cards)',
+      'Counterfeit goods (fake branded products)',
+      'Illegal drugs sales / weapons trafficking',
+      'Fraud / scams / phishing'
+    ],
+    
+    // ALLOWED CONTENT (18+ with age gate):
+    allowed_adult_content: [
+      'NSFW artwork (nudity, sexual content)',
+      'Adult comics / hentai / doujinshi',
+      'Erotic fiction / smut',
+      'Fetish art (as long as legal)',
+      'Graphic violence / gore / horror (fictional)',
+      'Blood / dismemberment / body horror (fictional)',
+      'Monster girls / furry NSFW',
+      'Consensual BDSM / kink content',
+      'All adult content MUST have 18+ age gate'
     ],
 
     // CSAM detection (CRITICAL - Federal law requires reporting)
@@ -182,25 +193,26 @@ export const PLATFORM_LEGAL_SHIELD = {
       zero_appeals_for_csam: true
     },
 
-    // Automated content moderation
+    // Automated content moderation (AI ONLY - no human team)
     automated_moderation: {
-      ai_text_scanning: true, // Scan all text for prohibited content
-      ai_image_scanning: true,
+      ai_text_scanning: true, // Scan all text for prohibited content (CSAM, terrorism, hate speech)
+      ai_image_scanning: true, // PhotoDNA for CSAM, Google Vision for copyright
       ai_video_scanning: true,
       ai_audio_scanning: true,
-      profanity_filter: true,
+      profanity_filter: false, // Allow swearing/profanity
       spam_detection: true,
-      bot_detection: true
+      bot_detection: true,
+      csam_only_strict_enforcement: true, // ONLY strict enforcement for CSAM/child exploitation
+      gore_violence_allowed: true, // Graphic violence/gore is ALLOWED (18+ age gate)
+      adult_content_allowed: true, // NSFW/sexual content is ALLOWED (18+ age gate)
+      hate_speech_detection: true, // Flag racial slurs, Nazi symbols, targeted harassment
+      terrorism_detection: true // Flag ISIS propaganda, terrorist recruitment
     },
 
-    // Human moderation team
+    // NO human moderation team - AI handles everything
     human_moderation: {
-      24_7_coverage: true,
-      escalation_for_ambiguous_cases: true,
-      moderator_training: 'Trust & Safety certification',
-      moderator_mental_health_support: true, // Moderators see disturbing content
-      average_response_time: '4 hours',
-      appeals_process: true
+      enabled: false, // AI-only moderation
+      note: 'Platform uses automated AI moderation only. Appeals reviewed by AI + admin dashboard.'
     }
   },
 
