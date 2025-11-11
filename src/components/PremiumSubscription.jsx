@@ -66,12 +66,32 @@ export function PremiumSubscription({ userId, currentTier }) {
         '✅ Everything in Free + Adult',
         '🔓 ALL tools unlocked forever',
         '🔞 Adult content included',
-        '� Commission marketplace',
+        '💪 Commission marketplace',
         '💰 Better revenue split (80/20)',
         '⭐ Premium profile badge',
         '📊 Advanced analytics',
         '🚀 Priority support',
         '🎁 Never pay monthly again'
+      ]
+    },
+    super_admin: {
+      name: '🤫 Shhh... It\'s a Secret',
+      price: 1000,
+      color: '#8b5cf6',
+      tagline: 'Admin-Level Superpowers (You won\'t be disappointed)',
+      features: [
+        '✅ Everything in Full Platform',
+        '🔥 NEVER PAY CREATOR SUBSCRIPTION FEES',
+        '🧠 AI Content Generation Powers',
+        '👤 Facial Recognition AI - Feed anime girls, AI identifies show/character names',
+        '🎨 Set AI to auto-generate content for you',
+        '🤖 Train AI on your own datasets',
+        '⚡ Admin-level tool access',
+        '🎯 Custom AI models for your content',
+        '🔓 Unlock future superpowers as they\'re added',
+        '👑 VIP "Secret Member" badge',
+        '💎 Lifetime priority support',
+        '🚀 Beta access to experimental features'
       ]
     }
   };
@@ -313,6 +333,52 @@ export function PremiumSubscription({ userId, currentTier }) {
             </p>
           )}
         </div>
+
+        {/* Super Admin Powers - HIDDEN from public, only shows for userId === 'owner' */}
+        {userId === 'owner' && (
+          <div className="tier-card super-admin-card">
+            <div className="secret-badge">🤫 SECRET TIER</div>
+            <div className="tier-header" style={{borderColor: tiers.super_admin.color}}>
+              <h2 style={{color: tiers.super_admin.color}}>{tiers.super_admin.name}</h2>
+              <div className="tier-price">
+                <span className="price">${tiers.super_admin.price}</span>
+                <span className="period">one-time</span>
+              </div>
+              <p className="tier-tagline" style={{color: tiers.super_admin.color}}>
+                {tiers.super_admin.tagline}
+              </p>
+            </div>
+            <div className="tier-features">
+              {tiers.super_admin.features.map((feature, idx) => (
+                <div key={idx} className="feature-item super-feature">
+                  {feature}
+                </div>
+              ))}
+            </div>
+            <button
+              className="tier-btn super-admin-btn"
+              style={{background: `linear-gradient(135deg, ${tiers.super_admin.color}, #7c3aed)`}}
+              onClick={() => handleUnlock('super_admin_powers', tiers.super_admin.price, 'balance')}
+              disabled={userBalance < tiers.super_admin.price}
+            >
+              {userBalance >= tiers.super_admin.price 
+                ? `🔥 Pay from Balance ($${tiers.super_admin.price})` 
+                : `Need $${(tiers.super_admin.price - userBalance).toFixed(2)} more`}
+            </button>
+            <button
+              className="tier-btn super-admin-btn"
+              style={{background: `linear-gradient(135deg, #ec4899, #db2777)`, marginTop: '0.5rem'}}
+              onClick={() => handleUnlock('super_admin_powers', tiers.super_admin.price, 'card')}
+            >
+              💳 Pay with Card ($${tiers.super_admin.price})
+            </button>
+            {userBalance < tiers.super_admin.price && (
+              <p className="unlock-tip">
+                💎 For serious creators who want admin-level superpowers
+              </p>
+            )}
+          </div>
+        )}
       </div>
 
       <div className="premium-benefits">

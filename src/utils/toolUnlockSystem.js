@@ -6,7 +6,8 @@ export const TOOL_PRICES = {
   comics: 75,
   audio: 100,
   arvr: 200,
-  full_platform: 500 // Unlocks everything
+  full_platform: 500, // Unlocks everything
+  super_admin_powers: 1000 // 🤫 Shhh... It's a Secret - Admin-level superpowers
 };
 
 export const TOOL_NAMES = {
@@ -14,7 +15,8 @@ export const TOOL_NAMES = {
   design: '🎨 Graphic Design Studio',
   comics: '📚 Comic Book Creator',
   audio: '🎵 Audio Production Studio',
-  arvr: '🎭 AR/VR Studio'
+  arvr: '🎭 AR/VR Studio',
+  super_admin_powers: '🤫 Super Admin Powers (Shhh... It\'s a Secret)'
 };
 
 /**

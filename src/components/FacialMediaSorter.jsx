@@ -1,13 +1,16 @@
 import React, { useState } from 'react';
 
 /**
- * Facial Media Sorter - Premium Feature for $1000+ Tier
+ * Facial Media Sorter - FREE for everyone!
  *
- * Analyzes images, groups by detected faces, and organizes them
- * Automatically names based on character recognition + numerical sequence
+ * FREE: Analyzes images, groups by detected faces, organizes them with generic names
+ * ENHANCED (Secret): AI character identification (anime show + character names)
+ *
+ * Basic facial sorting: FREE
+ * AI Character Recognition: Requires super_admin_powers unlock (secret feature)
  */
 
-export const FacialMediaSorter = ({ userId, tier }) => {
+export const FacialMediaSorter = ({ userId, tier, hasSuperAdminPowers = false }) => {
   const [uploadedImages, setUploadedImages] = useState([]);
   const [analyzing, setAnalyzing] = useState(false);
   const [groupedFaces, setGroupedFaces] = useState([]);
@@ -55,7 +58,8 @@ export const FacialMediaSorter = ({ userId, tier }) => {
             url: img.url,
             name: img.name
           })),
-          userId: userId
+          userId: userId,
+          enableAIRecognition: hasSuperAdminPowers // Only $1000 tier gets AI character identification
         })
       });
 
@@ -172,15 +176,19 @@ export const FacialMediaSorter = ({ userId, tier }) => {
       }}>
         <div style={{
           display: 'inline-block',
-          background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+          background: hasSuperAdminPowers 
+            ? 'linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)' 
+            : 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
           padding: '8px 24px',
           borderRadius: '30px',
           fontSize: '0.9rem',
           fontWeight: '700',
           marginBottom: '20px',
-          boxShadow: '0 4px 15px rgba(102, 126, 234, 0.4)'
+          boxShadow: hasSuperAdminPowers 
+            ? '0 4px 15px rgba(139, 92, 246, 0.5)' 
+            : '0 4px 15px rgba(102, 126, 234, 0.4)'
         }}>
-          👤 FACIAL RECOGNITION SORTER - $1000+ TIER
+          👤 FACIAL RECOGNITION SORTER {hasSuperAdminPowers ? '🔥 ENHANCED' : '(FREE)'}
         </div>
         <h1 style={{
           fontSize: '2.8rem',
