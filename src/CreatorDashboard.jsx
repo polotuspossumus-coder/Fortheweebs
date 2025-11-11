@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import './CreatorDashboard.css';
+import './components/TipsAndDonations.css';
+import './components/CommissionMarketplace.css';
+import './components/PremiumSubscription.css';
 import { TermsOfService } from "./components/TermsOfService";
 import { CreatorAgreementGate } from "./components/CreatorAgreementGate";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@radix-ui/react-tabs';
@@ -18,6 +21,9 @@ import { ComicBookCreator } from "./components/ComicBookCreator";
 import { GraphicDesignStudio } from "./components/GraphicDesignStudio";
 import { PrintOnDemand } from "./components/PrintOnDemand";
 import { TradingCardDesigner } from "./components/TradingCardDesigner";
+import { TipsAndDonations } from "./components/TipsAndDonations";
+import { CommissionMarketplace } from "./components/CommissionMarketplace";
+import { PremiumSubscription } from "./components/PremiumSubscription";
 
 export const CreatorDashboard = ({ userId = "demo_user", ipAddress = "127.0.0.1", tier = "free" }) => {
   const [tosAccepted, setTosAccepted] = useState(false);
@@ -52,6 +58,9 @@ export const CreatorDashboard = ({ userId = "demo_user", ipAddress = "127.0.0.1"
         <TabsTrigger value="influencer">👑 Influencer</TabsTrigger>
         <TabsTrigger value="overlays">Overlays</TabsTrigger>
         <TabsTrigger value="shop">📦 Print Shop</TabsTrigger>
+        <TabsTrigger value="tips">☕ Tips</TabsTrigger>
+        <TabsTrigger value="commissions">💼 Commissions</TabsTrigger>
+        <TabsTrigger value="premium">💎 Premium</TabsTrigger>
         <TabsTrigger value="payments">Payments</TabsTrigger>
         <TabsTrigger value="legal">Legal</TabsTrigger>
         {isAdmin && (
@@ -146,6 +155,15 @@ export const CreatorDashboard = ({ userId = "demo_user", ipAddress = "127.0.0.1"
       </TabsContent>
       <TabsContent value="shop">
         <PrintOnDemand />
+      </TabsContent>
+      <TabsContent value="tips">
+        <TipsAndDonations creatorId={userId} creatorName={userId} />
+      </TabsContent>
+      <TabsContent value="commissions">
+        <CommissionMarketplace userId={userId} isCreator={true} />
+      </TabsContent>
+      <TabsContent value="premium">
+        <PremiumSubscription userId={userId} currentTier={currentTier} />
       </TabsContent>
       <TabsContent value="payments">
         <PaymentPanel />
