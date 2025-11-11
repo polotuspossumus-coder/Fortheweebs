@@ -16,6 +16,7 @@ import { FamilyAccessSystem } from "./components/FamilyAccessSystem";
 import { AudioProductionStudio } from "./components/AudioProductionStudio";
 import { ComicBookCreator } from "./components/ComicBookCreator";
 import { GraphicDesignStudio } from "./components/GraphicDesignStudio";
+import { PrintOnDemand } from "./components/PrintOnDemand";
 
 export const CreatorDashboard = ({ userId = "demo_user", ipAddress = "127.0.0.1", tier = "free" }) => {
   const [tosAccepted, setTosAccepted] = useState(false);
@@ -49,6 +50,7 @@ export const CreatorDashboard = ({ userId = "demo_user", ipAddress = "127.0.0.1"
         <TabsTrigger value="arvr">🎭 AR/VR Studio</TabsTrigger>
         <TabsTrigger value="influencer">👑 Influencer</TabsTrigger>
         <TabsTrigger value="overlays">Overlays</TabsTrigger>
+        <TabsTrigger value="shop">📦 Print Shop</TabsTrigger>
         <TabsTrigger value="payments">Payments</TabsTrigger>
         <TabsTrigger value="legal">Legal</TabsTrigger>
         {isAdmin && (
@@ -94,6 +96,9 @@ export const CreatorDashboard = ({ userId = "demo_user", ipAddress = "127.0.0.1"
           <h3>Your Vault Entries</h3>
           <VaultEntryList userId={userId} />
         </div>
+      </TabsContent>
+      <TabsContent value="shop">
+        <PrintOnDemand />
       </TabsContent>
       <TabsContent value="payments">
         <PaymentPanel />
