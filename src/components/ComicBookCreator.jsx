@@ -506,20 +506,20 @@ export function ComicBookCreator({ userId }) {
                         return (
                           <div
                             key={bubble.id}
-                            style={bubbleStyle}
+                            style={{
+                              ...bubbleStyle,
+                              padding: '10px',
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              fontSize: '12px',
+                              textAlign: 'center',
+                              color: '#000',
+                              cursor: 'move',
+                              boxShadow: bubble.type === 'shout' ? '0 0 0 3px #000' : 'none',
+                              fontWeight: bubble.type === 'shout' ? 'bold' : 'normal'
+                            }}
                           >
-                            padding: '10px',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            fontSize: '12px',
-                            textAlign: 'center',
-                            color: '#000',
-                            cursor: 'move',
-                            boxShadow: bubble.type === 'shout' ? '0 0 0 3px #000' : 'none',
-                            fontWeight: bubble.type === 'shout' ? 'bold' : 'normal'
-                          }}
-                        >
                           <textarea
                             value={bubble.text}
                             onChange={(e) => updateBubbleText(panel.id, bubble.id, e.target.value)}
@@ -535,7 +535,8 @@ export function ComicBookCreator({ userId }) {
                             }}
                           />
                         </div>
-                      ))}
+                      );
+                      })}
 
                       {selectedPanel === panel.id && panel.image && (
                         <div style={{
