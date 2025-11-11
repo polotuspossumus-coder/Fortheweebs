@@ -47,7 +47,7 @@ export async function POST(request) {
       try {
         const { data, error } = await supabase
           .from('users')
-          .update({ 
+          .update({
             payment_tier: tier,
             tier_updated_at: new Date().toISOString(),
             payment_status: 'paid',
@@ -69,7 +69,7 @@ export async function POST(request) {
             });
         } else {
           console.log(`Successfully updated tier for user ${userId} to ${tier}`);
-          
+
           // Send confirmation email (optional)
           // await sendTierUpgradeEmail(userId, tier);
         }
@@ -82,7 +82,7 @@ export async function POST(request) {
     if (event.type === 'checkout.session.expired' || event.type === 'payment_intent.payment_failed') {
       const session = event.data.object;
       console.log(`Payment failed/expired for session ${session.id}`);
-      
+
       // Log failed payment attempt
       await supabase
         .from('failed_payments')

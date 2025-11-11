@@ -6,21 +6,21 @@ import { useState, useEffect } from 'react';
  * Returns boolean - true if reduced motion preferred
  */
 export function useReducedMotion() {
-  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
+    const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
 
-  useEffect(() => {
-    const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
-    setPrefersReducedMotion(mediaQuery.matches);
+    useEffect(() => {
+        const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+        setPrefersReducedMotion(mediaQuery.matches);
 
-    const handleChange = (e) => {
-      setPrefersReducedMotion(e.matches);
-    };
+        const handleChange = (e) => {
+            setPrefersReducedMotion(e.matches);
+        };
 
-    mediaQuery.addEventListener('change', handleChange);
-    return () => mediaQuery.removeEventListener('change', handleChange);
-  }, []);
+        mediaQuery.addEventListener('change', handleChange);
+        return () => mediaQuery.removeEventListener('change', handleChange);
+    }, []);
 
-  return prefersReducedMotion;
+    return prefersReducedMotion;
 }
 
 /**
@@ -29,6 +29,6 @@ export function useReducedMotion() {
  * @returns {number} Duration (0 if reduced motion, normal otherwise)
  */
 export function getAnimationDuration(normalDuration = 300) {
-  const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
-  return mediaQuery.matches ? 0 : normalDuration;
+    const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+    return mediaQuery.matches ? 0 : normalDuration;
 }

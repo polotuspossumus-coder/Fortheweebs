@@ -8,8 +8,8 @@ export async function POST(request) {
     const { images, userId } = await request.json();
 
     if (!images || !Array.isArray(images) || images.length === 0) {
-      return new Response(JSON.stringify({ 
-        error: 'No images provided' 
+      return new Response(JSON.stringify({
+        error: 'No images provided'
       }), {
         status: 400,
         headers: { 'Content-Type': 'application/json' }

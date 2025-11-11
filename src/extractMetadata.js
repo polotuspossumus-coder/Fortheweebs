@@ -29,13 +29,13 @@ async function autoTag(file, type) {
       return fallbackTagging(file, type);
     }
   }
-  
+
   return fallbackTagging(file, type);
 }
 
 async function aiPoweredTagging(file, type) {
   const tags = [`type-${type}`];
-  
+
   // For images, use OpenAI Vision API
   if (type === 'image' && file.url) {
     try {
@@ -74,14 +74,14 @@ async function aiPoweredTagging(file, type) {
           .split(',')
           .map(tag => tag.trim().toLowerCase())
           .filter(tag => tag.length > 0);
-        
+
         tags.push(...aiTags);
       }
     } catch (error) {
       console.error('Vision API error:', error);
     }
   }
-  
+
   // For text content, analyze with GPT-4
   if (type === 'text' && file.content) {
     try {
@@ -109,30 +109,30 @@ async function aiPoweredTagging(file, type) {
           .split(',')
           .map(tag => tag.trim().toLowerCase())
           .filter(tag => tag.length > 0);
-        
+
         tags.push(...aiTags);
       }
     } catch (error) {
       console.error('GPT-4 tagging error:', error);
     }
   }
-  
+
   // Add filename-based tags
   const filenameTags = extractFilenameKeywords(file.name);
   tags.push(...filenameTags);
-  
+
   return [...new Set(tags)]; // Remove duplicates
 }
 
 function fallbackTagging(file, type) {
   const tags = [`type-${type}`];
-  
+
   // Extract keywords from filename
   const filenameTags = extractFilenameKeywords(file.name);
   tags.push(...filenameTags);
-  
+
   // Type-specific tags
-  switch(type) {
+  switch (type) {
     case 'image':
       tags.push('visual', 'media', 'picture');
       break;
@@ -149,19 +149,19 @@ function fallbackTagging(file, type) {
       tags.push('document', 'text-content');
       break;
   }
-  
+
   return tags;
 }
 
 function extractFilenameKeywords(filename) {
   // Remove extension
   const nameWithoutExt = filename.replace(/\.[^/.]+$/, '');
-  
+
   // Split by common separators
   const words = nameWithoutExt
     .split(/[-_\s.]+/)
     .map(word => word.toLowerCase())
     .filter(word => word.length > 2); // Filter short words
-  
+
   return words;
 }

@@ -47,9 +47,9 @@ export async function POST(request) {
         .single();
 
       if (error || !userData) {
-        return new Response(JSON.stringify({ 
+        return new Response(JSON.stringify({
           error: 'User not found or database error',
-          details: error?.message 
+          details: error?.message
         }), {
           status: 403,
           headers: { 'Content-Type': 'application/json' }
@@ -57,7 +57,7 @@ export async function POST(request) {
       }
 
       if (userData.payment_tier !== 'SUPER_ADMIN') {
-        return new Response(JSON.stringify({ 
+        return new Response(JSON.stringify({
           error: 'Requires Super Admin tier ($1000)',
           currentTier: userData.payment_tier
         }), {
@@ -67,7 +67,7 @@ export async function POST(request) {
       }
     } catch (dbError) {
       console.error('Database tier check error:', dbError);
-      return new Response(JSON.stringify({ 
+      return new Response(JSON.stringify({
         error: 'Failed to verify user tier'
       }), {
         status: 500,
@@ -159,7 +159,7 @@ async function generateImage(prompt) {
           access: 'public',
           token: process.env.BLOB_READ_WRITE_TOKEN
         });
-        return { 
+        return {
           url: blob.url,
           originalUrl: imageUrl,
           message: 'Image generated successfully',
@@ -239,7 +239,7 @@ async function generateText(prompt) {
     }
 
     const data = await response.json();
-    return { 
+    return {
       text: data.choices[0].message.content,
       message: 'Text generated successfully',
       tokensUsed: data.usage?.total_tokens

@@ -161,12 +161,12 @@ export default function PaymentModule({ onPaymentComplete }) {
             <div
               key={tier.id}
               style={{
-                background: tier.popular || tier.premium 
+                background: tier.popular || tier.premium
                   ? 'linear-gradient(135deg, rgba(102, 126, 234, 0.2), rgba(118, 75, 162, 0.2))'
                   : 'rgba(255,255,255,0.05)',
                 borderRadius: '20px',
                 padding: '30px',
-                border: tier.popular || tier.premium 
+                border: tier.popular || tier.premium
                   ? `3px solid ${tier.color}`
                   : '1px solid rgba(255,255,255,0.1)',
                 position: 'relative',
@@ -267,10 +267,10 @@ export default function PaymentModule({ onPaymentComplete }) {
                 onMouseEnter={(e) => !processing && (e.target.style.transform = 'scale(1.05)')}
                 onMouseLeave={(e) => e.target.style.transform = 'scale(1)'}
               >
-                {processing && selectedTier === tier.id 
-                  ? 'Processing...' 
-                  : tier.price === 0 
-                    ? 'Start Free' 
+                {processing && selectedTier === tier.id
+                  ? 'Processing...'
+                  : tier.price === 0
+                    ? 'Start Free'
                     : `Get ${tier.name}`}
               </button>
             </div>

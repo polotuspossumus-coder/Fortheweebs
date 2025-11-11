@@ -16,9 +16,9 @@ export function ToastContainer() {
     toastCallback = (message, type) => {
       const id = Date.now();
       const newToast = { id, message, type };
-      
+
       setToasts(prev => [...prev, newToast]);
-      
+
       setTimeout(() => {
         setToasts(prev => prev.filter(t => t.id !== id));
       }, 4000);

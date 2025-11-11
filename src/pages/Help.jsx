@@ -6,7 +6,7 @@ import HelpCenter from '../components/HelpCenter';
  */
 
 const Help = () => {
-  return <HelpCenter />;
+    return <HelpCenter />;
 };
 
 export default Help;

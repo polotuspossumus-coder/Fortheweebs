@@ -1,9 +1,13 @@
 # Mobile Apps Setup Guide
+
 # ForTheWeebs - iOS & Android Apps
+
 # The feature that makes us accessible everywhere (Adobe mobile apps are LIMITED and EXPENSIVE)
 
 ## Overview
+
 All 6 professional tools available on phone/tablet:
+
 - Pro Audio Studio (mobile recording, mixing)
 - Ultimate Media Library (cloud sync)
 - Photo Editor Pro (touch-optimized editing)
@@ -12,12 +16,14 @@ All 6 professional tools available on phone/tablet:
 - VR/AR Studio (AR preview with phone camera)
 
 ## Technology Stack
+
 - React Native (iOS + Android from single codebase)
 - Expo for rapid development
 - Capacitor for native features (camera, storage, sensors)
 - WebView for existing web tools (optimization layer)
 
 ## Revenue Impact
+
 - Adobe Mobile: $10-30/month PER APP
 - Canva Mobile: Limited features unless Pro ($13/mo)
 - Unity Mobile: Not designed for content creators
@@ -26,19 +32,23 @@ All 6 professional tools available on phone/tablet:
 ## Architecture
 
 ### Hybrid Approach (Best Performance + Fastest Development)
+
 1. **Native Shell** - React Native wrapper
 2. **WebView Optimization** - Embedded web tools with native bridges
 3. **Native Components** - Camera, file picker, AR preview
 4. **Offline Support** - IndexedDB + service workers
 
 ### Platform-Specific Features
+
 **iOS:**
+
 - ARKit integration (VR/AR Studio)
 - ProMotion display support (120Hz)
 - Apple Pencil optimization (Photo Editor, Design Suite)
 - Metal rendering (graphics acceleration)
 
 **Android:**
+
 - ARCore integration (VR/AR Studio)
 - S Pen support (Samsung devices)
 - Adaptive icons & Material Design
@@ -47,6 +57,7 @@ All 6 professional tools available on phone/tablet:
 ## Implementation Plan
 
 ### Phase 1: Foundation (Week 1)
+
 ```bash
 # Initialize React Native project
 npx react-native init FortheweeebsMobile
@@ -61,6 +72,7 @@ npm install @react-native-camera-roll/camera-roll
 ```
 
 ### Phase 2: WebView Integration (Week 2)
+
 ```javascript
 // MobileWrapper.jsx
 import { WebView } from 'react-native-webview';
@@ -81,6 +93,7 @@ const MobileWrapper = ({ tool }) => {
 ```
 
 ### Phase 3: Native Features (Week 3)
+
 ```javascript
 // Camera integration for AR Studio
 import { Camera } from 'react-native-camera';
@@ -93,6 +106,7 @@ import { ViroARSceneNavigator } from '@viro-community/react-viro';
 ```
 
 ### Phase 4: Offline Support (Week 4)
+
 ```javascript
 // Service worker for offline editing
 // IndexedDB for local project storage
@@ -100,6 +114,7 @@ import { ViroARSceneNavigator } from '@viro-community/react-viro';
 ```
 
 ## File Structure
+
 ```
 FortheweeebsMobile/
 ├── android/                 # Android native code
@@ -127,6 +142,7 @@ FortheweeebsMobile/
 ## Native Bridge Communication
 
 ### Web → Native
+
 ```javascript
 // From web tool (running in WebView)
 window.ReactNativeWebView.postMessage(JSON.stringify({
@@ -146,6 +162,7 @@ window.ReactNativeWebView.postMessage(JSON.stringify({
 ```
 
 ### Native → Web
+
 ```javascript
 // In React Native
 const handleMessage = (event) => {
@@ -184,6 +201,7 @@ const handleMessage = (event) => {
 ## Performance Optimizations
 
 ### 1. Progressive Web App (PWA) Fallback
+
 ```json
 // manifest.json
 {
@@ -207,6 +225,7 @@ const handleMessage = (event) => {
 ```
 
 ### 2. Code Splitting
+
 ```javascript
 // Lazy load tools
 const ProAudioStudio = React.lazy(() => import('./tools/ProAudioStudio'));
@@ -214,6 +233,7 @@ const VideoEditorPro = React.lazy(() => import('./tools/VideoEditorPro'));
 ```
 
 ### 3. Image Optimization
+
 ```javascript
 // Use WebP on Android, HEIC on iOS
 // Compress images before upload
@@ -223,6 +243,7 @@ const VideoEditorPro = React.lazy(() => import('./tools/VideoEditorPro'));
 ## App Store Submission
 
 ### iOS (App Store)
+
 1. **Apple Developer Account** ($99/year)
 2. **Bundle ID:** com.fortheweebs.mobile
 3. **App Name:** ForTheWeebs - Creative Studio
@@ -230,6 +251,7 @@ const VideoEditorPro = React.lazy(() => import('./tools/VideoEditorPro'));
 5. **Rating:** 12+ (user-generated content)
 
 ### Android (Google Play)
+
 1. **Google Play Console** ($25 one-time)
 2. **Package Name:** com.fortheweebs.mobile
 3. **App Name:** ForTheWeebs - Creative Studio
@@ -239,11 +261,13 @@ const VideoEditorPro = React.lazy(() => import('./tools/VideoEditorPro'));
 ## Monetization
 
 ### Subscription Tiers (Mobile)
+
 - **Free:** Basic tools, 720p export, watermark
 - **Pro:** $9.99/month - All tools, 4K export, no watermark
 - **Ultimate:** $14.99/month - Pro + cloud storage (100GB) + priority rendering
 
 ### In-App Purchases
+
 - Cloud storage upgrades (50GB: $2.99/mo, 1TB: $9.99/mo)
 - Asset packs from marketplace
 - Premium filters/effects
@@ -251,18 +275,21 @@ const VideoEditorPro = React.lazy(() => import('./tools/VideoEditorPro'));
 ## Competitive Analysis
 
 ### Adobe Mobile Apps
+
 - **Cost:** $10-30/month PER APP
 - **Features:** Limited compared to desktop
 - **Offline:** Limited
 - **Our Advantage:** ALL tools in ONE app, SAME subscription
 
 ### Canva Mobile
+
 - **Cost:** $13/month for Pro
 - **Features:** Design only (no audio/video/VR)
 - **Offline:** Very limited
 - **Our Advantage:** 6 tools vs 1, better offline support
 
 ### Unity Mobile
+
 - **Cost:** Free (but complex, not for content creators)
 - **Features:** Game development only
 - **Target:** Developers, not creators
@@ -271,6 +298,7 @@ const VideoEditorPro = React.lazy(() => import('./tools/VideoEditorPro'));
 ## Next Steps
 
 ### Immediate Actions
+
 1. Create React Native project structure
 2. Build tool selector home screen
 3. Implement WebView wrapper for first tool (Photo Editor)
@@ -280,6 +308,7 @@ const VideoEditorPro = React.lazy(() => import('./tools/VideoEditorPro'));
 7. Submit Google Play Internal Testing (Android)
 
 ### Marketing
+
 - "All Your Creative Tools, Now in Your Pocket"
 - "Adobe's $360/year Mobile Suite? We're $120/year"
 - "Create Anywhere: Beach, Bus, or Bed"
@@ -289,16 +318,19 @@ const VideoEditorPro = React.lazy(() => import('./tools/VideoEditorPro'));
 ## Technical Requirements
 
 ### Minimum OS Versions
+
 - iOS 13.0+ (95% of iPhone users)
 - Android 8.0+ (90% of Android users)
 
 ### Device Requirements
+
 - 3GB RAM minimum (4GB recommended)
 - 2GB free storage
 - Camera (for AR features)
 - GPU (for video editing)
 
 ### Network
+
 - Offline mode for basic editing
 - Online required for:
   - Cloud sync
@@ -310,16 +342,19 @@ const VideoEditorPro = React.lazy(() => import('./tools/VideoEditorPro'));
 ## Future Enhancements
 
 ### Year 1
+
 - Apple Watch companion app (quick edits, project notifications)
 - iPad Pro optimization (split-screen, trackpad support)
 - Android tablet optimization (DeX mode for Samsung)
 
 ### Year 2
+
 - Wear OS companion
 - ChromeOS support
 - Linux mobile (Pinephone)
 
 ## Estimated Development Time
+
 - **MVP (1 tool working):** 2 weeks
 - **All 6 tools:** 6 weeks
 - **Polish + testing:** 2 weeks
@@ -327,6 +362,7 @@ const VideoEditorPro = React.lazy(() => import('./tools/VideoEditorPro'));
 - **Total:** 11-12 weeks to public launch
 
 ## Cost Breakdown
+
 - Apple Developer: $99/year
 - Google Play: $25 one-time
 - Code signing cert: Included in dev accounts
@@ -334,6 +370,7 @@ const VideoEditorPro = React.lazy(() => import('./tools/VideoEditorPro'));
 - **Total Year 1:** ~$2000 + dev time
 
 ## ROI Projection
+
 - Average mobile user pays $10/month
 - 1000 mobile users = $10,000/month = $120,000/year
 - **Break-even:** 200 mobile users (achievable in Month 3)

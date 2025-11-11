@@ -9,7 +9,7 @@ class Analytics {
   // Track page views
   pageView(pageName) {
     if (!this.enabled) return;
-    
+
     this.track('page_view', {
       page: pageName,
       timestamp: new Date().toISOString(),
@@ -98,7 +98,7 @@ class Analytics {
     if (this.queue.length >= 10) {
       const eventsToSend = [...this.queue];
       this.queue = [];
-      
+
       // Example: Send to backend
       // fetch('/api/analytics', {
       //   method: 'POST',

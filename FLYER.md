@@ -1,4 +1,5 @@
 # ForTheWeebs
+
 ## The Creative Platform That Actually Competes With Industry Giants
 
 **We're not "good enough." We're BETTER. Here's proof:**
@@ -64,6 +65,7 @@ Every payment you make adds up toward $500 lifetime ownership. Pick what works f
 *Stop paying anytime. Come back anytime. Your progress toward the $500 never expires.*
 
 **The Math:**  
+
 - **Adobe Creative Cloud:** $55/month = $660/year = $6,600 over 10 years  
 - **Logic Pro:** $200 + **Final Cut:** $300 = $500 (but limited features)  
 - **Canva Pro:** $120/year forever  

@@ -53,7 +53,7 @@ export function ComicBookCreator({ userId }) {
   const changeLayout = (layout) => {
     const newPages = [...pages];
     const page = { ...newPages[currentPage] };
-    
+
     if (layout === 'grid-4') {
       page.panels = [
         { id: 'p1', x: 0, y: 0, width: 50, height: 50, image: null, bubbles: [] },
@@ -82,7 +82,7 @@ export function ComicBookCreator({ userId }) {
         { id: 'p4', x: 0, y: 75, width: 100, height: 25, image: null, bubbles: [] }
       ];
     }
-    
+
     page.layout = layout;
     newPages[currentPage] = page;
     setPages(newPages);
@@ -217,7 +217,7 @@ export function ComicBookCreator({ userId }) {
           }}>
             📚 Comic Book Creator
           </h1>
-          
+
           <input
             type="text"
             value={comicTitle}
@@ -257,7 +257,7 @@ export function ComicBookCreator({ userId }) {
           <button onClick={addPage} style={toolButtonStyle('#2ecc71')}>
             ➕ Add Page
           </button>
-          
+
           <div style={{ marginLeft: 'auto', display: 'flex', gap: '10px', alignItems: 'center' }}>
             <span>Layout:</span>
             {Object.entries(LAYOUTS).map(([key, layout]) => (
@@ -448,7 +448,7 @@ export function ComicBookCreator({ userId }) {
               <h3 style={{ marginBottom: '20px', fontSize: '20px' }}>
                 📖 Pages ({pages.length})
               </h3>
-              
+
               <div style={{
                 display: 'flex',
                 flexDirection: 'column',
@@ -461,11 +461,11 @@ export function ComicBookCreator({ userId }) {
                     key={page.id}
                     onClick={() => setCurrentPage(index)}
                     style={{
-                      background: currentPage === index 
-                        ? 'rgba(231, 76, 60, 0.3)' 
+                      background: currentPage === index
+                        ? 'rgba(231, 76, 60, 0.3)'
                         : 'rgba(255,255,255,0.1)',
-                      border: currentPage === index 
-                        ? '2px solid #e74c3c' 
+                      border: currentPage === index
+                        ? '2px solid #e74c3c'
                         : '1px solid rgba(255,255,255,0.2)',
                       borderRadius: '10px',
                       padding: '15px',

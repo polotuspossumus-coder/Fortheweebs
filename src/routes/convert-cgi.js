@@ -114,11 +114,11 @@ async function convertToVR(file, userId) {
 
   const fileBuffer = await file.arrayBuffer();
   const fileData = Buffer.from(fileBuffer);
-  
+
   // Basic optimization: reduce file size if too large
   let optimizedData = fileData;
   const maxSize = 50 * 1024 * 1024; // 50MB max for VR
-  
+
   if (fileData.length > maxSize) {
     // For production: integrate with 3D optimization library like gltf-pipeline
     // For now: just warn and upload
@@ -152,7 +152,7 @@ async function convertToAR(file, userId) {
 
   const fileBuffer = await file.arrayBuffer();
   const fileData = Buffer.from(fileBuffer);
-  
+
   // For iOS: USDZ format
   const usdzFilename = `${userId}/ar/${Date.now()}-ar.usdz`;
   const usdzBlob = await put(usdzFilename, fileData, {

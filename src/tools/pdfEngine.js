@@ -10,7 +10,7 @@ export async function createPDF({ template, content }) {
       // Server-side implementation
       const PDFDocument = require('pdfkit');
       const doc = new PDFDocument();
-      
+
       // Apply template styling
       if (template === 'legal') {
         doc.fontSize(12).font('Times-Roman');
@@ -19,15 +19,15 @@ export async function createPDF({ template, content }) {
       } else {
         doc.fontSize(11).font('Courier');
       }
-      
+
       // Add content
       doc.text(content, 100, 100);
-      
+
       return { doc, template, content };
     } else {
       // Client-side fallback
       console.log(`Creating PDF with template: ${template}, content: ${content}`);
-      return { 
+      return {
         doc: `${template}-${content}`,
         template,
         content,
@@ -36,7 +36,7 @@ export async function createPDF({ template, content }) {
     }
   } catch (error) {
     console.error('PDF creation error:', error);
-    return { 
+    return {
       doc: `${template}-${content}`,
       error: error.message,
       template,
@@ -56,7 +56,7 @@ export async function attachMetadata(doc, metadata) {
       doc.doc.info.Creator = 'ForTheWeebs Platform';
       doc.doc.info.CreationDate = new Date();
     }
-    
+
     doc.metadata = metadata;
     console.log(`Attached metadata to PDF:`, metadata);
     return doc;
@@ -73,7 +73,7 @@ export async function exportPDF(doc, { format = 'pdf', sealed = false }) {
       // Real PDFKit document - finalize and export
       return new Promise((resolve, reject) => {
         const chunks = [];
-        
+
         doc.doc.on('data', (chunk) => chunks.push(chunk));
         doc.doc.on('end', () => {
           const pdfBuffer = Buffer.concat(chunks);
@@ -86,7 +86,7 @@ export async function exportPDF(doc, { format = 'pdf', sealed = false }) {
           });
         });
         doc.doc.on('error', reject);
-        
+
         // Finalize PDF
         doc.doc.end();
       });

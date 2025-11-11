@@ -53,20 +53,20 @@ export async function POST(request) {
 
     // Add cover page
     doc.fontSize(32)
-       .font('Helvetica-Bold')
-       .text(title || 'Comic Book', 50, 300, { align: 'center' });
+      .font('Helvetica-Bold')
+      .text(title || 'Comic Book', 50, 300, { align: 'center' });
 
     doc.fontSize(14)
-       .font('Helvetica')
-       .text(`Created by ${userId}`, 50, 350, { align: 'center' });
+      .font('Helvetica')
+      .text(`Created by ${userId}`, 50, 350, { align: 'center' });
 
     doc.fontSize(10)
-       .text(new Date().toLocaleDateString(), 50, 380, { align: 'center' });
+      .text(new Date().toLocaleDateString(), 50, 380, { align: 'center' });
 
     // Add each page
     for (let i = 0; i < pages.length; i++) {
       const page = pages[i];
-      
+
       doc.addPage({
         size: [612, 792],
         margin: 20
@@ -74,8 +74,8 @@ export async function POST(request) {
 
       // Add page number
       doc.fontSize(10)
-         .font('Helvetica')
-         .text(`Page ${i + 1}`, 20, 760, { align: 'left' });
+        .font('Helvetica')
+        .text(`Page ${i + 1}`, 20, 760, { align: 'left' });
 
       // Draw panels (simplified version - in production would render actual images)
       page.panels.forEach(panel => {
@@ -90,7 +90,7 @@ export async function POST(request) {
         // If panel has image, add note (actual implementation would embed image)
         if (panel.image) {
           doc.fontSize(8)
-             .text('[Image]', x + 5, y + 5);
+            .text('[Image]', x + 5, y + 5);
         }
 
         // Add speech bubbles
@@ -102,20 +102,20 @@ export async function POST(request) {
 
           // Draw bubble
           if (bubble.type === 'thought') {
-            doc.circle(bx + bw/2, by + bh/2, bw/2).stroke();
+            doc.circle(bx + bw / 2, by + bh / 2, bw / 2).stroke();
           } else {
             doc.roundedRect(bx, by, bw, bh, 5).stroke();
           }
 
           // Add text
           doc.fontSize(8)
-             .font('Helvetica')
-             .text(bubble.text, bx + 2, by + 2, {
-               width: bw - 4,
-               height: bh - 4,
-               align: 'center',
-               valign: 'center'
-             });
+            .font('Helvetica')
+            .text(bubble.text, bx + 2, by + 2, {
+              width: bw - 4,
+              height: bh - 4,
+              align: 'center',
+              valign: 'center'
+            });
         });
       });
     }

@@ -5,7 +5,7 @@
 
 export async function renderTribute({ type, style, options = {} }) {
   console.log(`Rendering tribute of type: ${type}, style: ${style}`);
-  
+
   // Character generation with detailed attributes
   const character = {
     id: `char_${Date.now()}`,
@@ -34,7 +34,7 @@ export async function renderTribute({ type, style, options = {} }) {
 
 export async function buildScene({ character, lighting = 'default', environment = 'studio', options = {} }) {
   console.log(`Building scene for character: ${character.id}, lighting: ${lighting}, environment: ${environment}`);
-  
+
   const scene = {
     id: `scene_${Date.now()}`,
     character: character,
@@ -72,7 +72,7 @@ export async function buildScene({ character, lighting = 'default', environment 
 
 export async function deployRender({ scene, moderation = true, monetization = false, options = {} }) {
   console.log(`Deploying render for scene: ${scene.id}, moderation: ${moderation}, monetization: ${monetization}`);
-  
+
   const renderJob = {
     id: `render_${Date.now()}`,
     sceneId: scene.id,
@@ -118,7 +118,7 @@ export async function deployRender({ scene, moderation = true, monetization = fa
     renderJob.output.fullRender = `https://cdn.fortheweebs.com/renders/${renderJob.id}.mp4`;
   }, 5000);
 
-  return { 
+  return {
     renderJob,
     success: true,
     message: 'Render job created and processing'
@@ -226,7 +226,7 @@ function calculateRenderTime(scene) {
   const baseTime = 30; // seconds
   const qualityMultiplier = scene.renderSettings.samples / 64;
   const resolutionMultiplier = scene.renderSettings.resolution === '4k' ? 2 : 1;
-  
+
   const totalTime = baseTime * qualityMultiplier * resolutionMultiplier;
   return `${Math.round(totalTime)}s`;
 }

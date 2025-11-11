@@ -54,13 +54,13 @@ export function AudioProductionStudio({ userId }) {
       mediaRecorder.onstop = () => {
         const audioBlob = new Blob(audioChunksRef.current, { type: 'audio/wav' });
         const audioUrl = URL.createObjectURL(audioBlob);
-        
-        setTracks(tracks.map(track => 
-          track.id === trackId 
+
+        setTracks(tracks.map(track =>
+          track.id === trackId
             ? { ...track, audioUrl, duration: audioBlob.size / 44100 }
             : track
         ));
-        
+
         stream.getTracks().forEach(track => track.stop());
       };
 
@@ -80,7 +80,7 @@ export function AudioProductionStudio({ userId }) {
   };
 
   const updateTrack = (trackId, updates) => {
-    setTracks(tracks.map(track => 
+    setTracks(tracks.map(track =>
       track.id === trackId ? { ...track, ...updates } : track
     ));
   };
@@ -272,11 +272,11 @@ export function AudioProductionStudio({ userId }) {
             <div
               key={track.id}
               style={{
-                background: activeTrack === track.id 
-                  ? 'rgba(102, 126, 234, 0.2)' 
+                background: activeTrack === track.id
+                  ? 'rgba(102, 126, 234, 0.2)'
                   : 'rgba(255,255,255,0.05)',
-                border: activeTrack === track.id 
-                  ? '2px solid #667eea' 
+                border: activeTrack === track.id
+                  ? '2px solid #667eea'
                   : '1px solid rgba(255,255,255,0.1)',
                 borderRadius: '15px',
                 padding: '20px',
@@ -467,7 +467,7 @@ export function AudioProductionStudio({ userId }) {
           <p style={{ opacity: 0.7, marginBottom: '20px' }}>
             Click pads to create beats • Adjust BPM • Add loops
           </p>
-          
+
           <div style={{
             display: 'grid',
             gridTemplateColumns: 'repeat(auto-fit, minmax(100px, 1fr))',

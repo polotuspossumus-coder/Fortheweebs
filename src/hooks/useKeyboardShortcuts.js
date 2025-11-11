@@ -9,7 +9,7 @@ export function useKeyboardShortcuts(shortcuts) {
     const alt = event.altKey;
 
     for (const shortcut of shortcuts) {
-      const match = 
+      const match =
         shortcut.key.toLowerCase() === key &&
         !!shortcut.ctrl === ctrl &&
         !!shortcut.shift === shift &&

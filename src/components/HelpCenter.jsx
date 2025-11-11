@@ -7,13 +7,13 @@ import './HelpCenter.css';
  */
 
 const HELP_SECTIONS = {
-  getting_started: {
-    title: '🚀 Getting Started',
-    articles: [
-      {
-        id: 'welcome',
-        title: 'Welcome to ForTheWeebs',
-        content: `Welcome to your new creative home! ForTheWeebs is a professional creator platform designed for anime culture enthusiasts.
+    getting_started: {
+        title: '🚀 Getting Started',
+        articles: [
+            {
+                id: 'welcome',
+                title: 'Welcome to ForTheWeebs',
+                content: `Welcome to your new creative home! ForTheWeebs is a professional creator platform designed for anime culture enthusiasts.
 
 **What You Can Do:**
 • Create stunning audio content with our Audio Editor
@@ -24,11 +24,11 @@ const HELP_SECTIONS = {
 
 **Getting Around:**
 Press Ctrl+K anytime to open the Command Palette - your instant gateway to every feature!`
-      },
-      {
-        id: 'first_project',
-        title: 'Creating Your First Project',
-        content: `Let's create something amazing!
+            },
+            {
+                id: 'first_project',
+                title: 'Creating Your First Project',
+                content: `Let's create something amazing!
 
 **Step 1: Choose Your Tool**
 Press Ctrl+K and type "new" to see all project types, or click the ⚡ Quick Actions button (bottom right) and select "New Project".
@@ -40,17 +40,17 @@ Each tool opens with a blank canvas ready for your creativity. Your work auto-sa
 Press Ctrl+S to manually save, or Ctrl+E to export in PNG, JPG, or JSON format.
 
 **Pro Tip:** Use the theme toggle (top corner) to switch between dark and light mode for comfortable creating at any time of day!`
-      }
-    ]
-  },
-  
-  tools: {
-    title: '🎨 Creator Tools',
-    articles: [
-      {
-        id: 'audio_editor',
-        title: 'Audio Editor Guide',
-        content: `🎵 **Audio Editor** - Professional audio creation and editing
+            }
+        ]
+    },
+
+    tools: {
+        title: '🎨 Creator Tools',
+        articles: [
+            {
+                id: 'audio_editor',
+                title: 'Audio Editor Guide',
+                content: `🎵 **Audio Editor** - Professional audio creation and editing
 
 **Features:**
 • Multi-track editing
@@ -74,11 +74,11 @@ Press Ctrl+S to manually save, or Ctrl+E to export in PNG, JPG, or JSON format.
 • Use headphones for accurate mixing
 • Save multiple versions as you work
 • Export in WAV for highest quality`
-      },
-      {
-        id: 'comic_maker',
-        title: 'Comic Maker Guide',
-        content: `📚 **Comic Maker** - Create manga and comics like a pro
+            },
+            {
+                id: 'comic_maker',
+                title: 'Comic Maker Guide',
+                content: `📚 **Comic Maker** - Create manga and comics like a pro
 
 **Features:**
 • Panel layouts and templates
@@ -105,11 +105,11 @@ Press Ctrl+S to manually save, or Ctrl+E to export in PNG, JPG, or JSON format.
 • Keep text concise and readable
 • Use varied panel sizes for dramatic effect
 • Reference professional manga for inspiration`
-      },
-      {
-        id: 'graphic_designer',
-        title: 'Graphic Designer Guide',
-        content: `🎨 **Graphic Designer** - Professional design tools
+            },
+            {
+                id: 'graphic_designer',
+                title: 'Graphic Designer Guide',
+                content: `🎨 **Graphic Designer** - Professional design tools
 
 **Features:**
 • Vector and raster editing
@@ -137,11 +137,11 @@ Press Ctrl+S to manually save, or Ctrl+E to export in PNG, JPG, or JSON format.
 • Save color palettes for consistency
 • Export in PNG for transparency
 • Keep backups of your source files`
-      },
-      {
-        id: 'photo_editor',
-        title: 'Photo Editor Guide',
-        content: `📷 **Photo Editor** - Professional photo editing
+            },
+            {
+                id: 'photo_editor',
+                title: 'Photo Editor Guide',
+                content: `📷 **Photo Editor** - Professional photo editing
 
 **Features:**
 • Filters and adjustments
@@ -176,11 +176,11 @@ Press Ctrl+S to manually save, or Ctrl+E to export in PNG, JPG, or JSON format.
 • Use non-destructive editing
 • Adjust brightness before color
 • Save edited versions separately`
-      },
-      {
-        id: 'vr_ar_studio',
-        title: 'VR/AR Studio Guide',
-        content: `🥽 **VR/AR Studio** - Immersive experience creation
+            },
+            {
+                id: 'vr_ar_studio',
+                title: 'VR/AR Studio Guide',
+                content: `🥽 **VR/AR Studio** - Immersive experience creation
 
 **Features:**
 • 3D model import
@@ -214,17 +214,17 @@ Press Ctrl+S to manually save, or Ctrl+E to export in PNG, JPG, or JSON format.
 • Consider user comfort (motion sickness)
 • Test with real users
 • Provide fallback for non-VR users`
-      }
-    ]
-  },
-  
-  features: {
-    title: '⚡ Features & Tips',
-    articles: [
-      {
-        id: 'command_palette',
-        title: 'Command Palette (Ctrl+K)',
-        content: `⚡ **Command Palette** - Your productivity superpower
+            }
+        ]
+    },
+
+    features: {
+        title: '⚡ Features & Tips',
+        articles: [
+            {
+                id: 'command_palette',
+                title: 'Command Palette (Ctrl+K)',
+                content: `⚡ **Command Palette** - Your productivity superpower
 
 **What It Does:**
 Instant access to EVERY feature in ForTheWeebs. No more hunting through menus!
@@ -255,11 +255,11 @@ Instant access to EVERY feature in ForTheWeebs. No more hunting through menus!
 • Action - Do things
 • View - Change display
 • Help - Get assistance`
-      },
-      {
-        id: 'keyboard_shortcuts',
-        title: 'Keyboard Shortcuts',
-        content: `⌨️ **Keyboard Shortcuts** - Work at the speed of thought
+            },
+            {
+                id: 'keyboard_shortcuts',
+                title: 'Keyboard Shortcuts',
+                content: `⌨️ **Keyboard Shortcuts** - Work at the speed of thought
 
 **Essential Shortcuts:**
 • Ctrl+K - Command Palette (most important!)
@@ -292,11 +292,11 @@ Instant access to EVERY feature in ForTheWeebs. No more hunting through menus!
 • Ctrl+K is your gateway to everything
 • Customize shortcuts in settings
 • Print a cheat sheet for your desk`
-      },
-      {
-        id: 'auto_save',
-        title: 'Auto-Save & Backups',
-        content: `💾 **Auto-Save** - Never lose your work
+            },
+            {
+                id: 'auto_save',
+                title: 'Auto-Save & Backups',
+                content: `💾 **Auto-Save** - Never lose your work
 
 **How It Works:**
 Your projects automatically save every 30 seconds. No manual saving needed!
@@ -326,11 +326,11 @@ If something goes wrong:
 1. Check auto-save history
 2. Look in project list for duplicates
 3. Contact support if needed`
-      },
-      {
-        id: 'achievements',
-        title: 'Achievement System',
-        content: `🏆 **Achievements** - Track your progress and unlock rewards
+            },
+            {
+                id: 'achievements',
+                title: 'Achievement System',
+                content: `🏆 **Achievements** - Track your progress and unlock rewards
 
 **How It Works:**
 Complete tasks and unlock achievements! Each achievement awards points.
@@ -367,11 +367,11 @@ Complete tasks and unlock achievements! Each achievement awards points.
 • Achievements unlock automatically
 • Some are secret - discover them!
 • Share your achievements on social media`
-      },
-      {
-        id: 'collaboration',
-        title: 'Sharing & Collaboration',
-        content: `🔗 **Sharing Your Work** - Get your creations out there
+            },
+            {
+                id: 'collaboration',
+                title: 'Sharing & Collaboration',
+                content: `🔗 **Sharing Your Work** - Get your creations out there
 
 **Export Options:**
 • PNG - Images with transparency
@@ -408,17 +408,17 @@ Make projects public to:
 • Comments and feedback
 • Version control
 • Team workspaces`
-      }
-    ]
-  },
-  
-  command_reference: {
-    title: '📖 Command Reference',
-    articles: [
-      {
-        id: 'all_commands',
-        title: 'Complete Command List',
-        content: `📋 **All Available Commands** (Use with Ctrl+K)
+            }
+        ]
+    },
+
+    command_reference: {
+        title: '📖 Command Reference',
+        articles: [
+            {
+                id: 'all_commands',
+                title: 'Complete Command List',
+                content: `📋 **All Available Commands** (Use with Ctrl+K)
 
 **CREATE COMMANDS:**
 • "new audio" - New Audio Project
@@ -466,17 +466,17 @@ Type any tool name, feature, or action to find it instantly!
 • Use arrow keys to navigate results
 • Press Enter to execute
 • Press Escape to cancel`
-      }
-    ]
-  },
-  
-  troubleshooting: {
-    title: '🔧 Troubleshooting',
-    articles: [
-      {
-        id: 'common_issues',
-        title: 'Common Issues & Solutions',
-        content: `🔧 **Troubleshooting Guide**
+            }
+        ]
+    },
+
+    troubleshooting: {
+        title: '🔧 Troubleshooting',
+        articles: [
+            {
+                id: 'common_issues',
+                title: 'Common Issues & Solutions',
+                content: `🔧 **Troubleshooting Guide**
 
 **Project Won't Save:**
 ✓ Check internet connection
@@ -519,123 +519,123 @@ Type any tool name, feature, or action to find it instantly!
 • Email: support@fortheweebs.com
 • Discord: Join our community
 • Twitter: @ForTheWeebs`
-      }
-    ]
-  }
+            }
+        ]
+    }
 };
 
 const HelpCenter = ({ initialSection = 'getting_started' }) => {
-  const [activeSection, setActiveSection] = useState(initialSection);
-  const [activeArticle, setActiveArticle] = useState(null);
-  const [searchQuery, setSearchQuery] = useState('');
+    const [activeSection, setActiveSection] = useState(initialSection);
+    const [activeArticle, setActiveArticle] = useState(null);
+    const [searchQuery, setSearchQuery] = useState('');
 
-  const currentSection = HELP_SECTIONS[activeSection];
-  const currentArticle = activeArticle 
-    ? currentSection.articles.find(a => a.id === activeArticle)
-    : null;
+    const currentSection = HELP_SECTIONS[activeSection];
+    const currentArticle = activeArticle
+        ? currentSection.articles.find(a => a.id === activeArticle)
+        : null;
 
-  const filteredArticles = searchQuery
-    ? Object.values(HELP_SECTIONS)
-        .flatMap(section => section.articles)
-        .filter(article =>
-          article.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          article.content.toLowerCase().includes(searchQuery.toLowerCase())
-        )
-    : currentSection.articles;
+    const filteredArticles = searchQuery
+        ? Object.values(HELP_SECTIONS)
+            .flatMap(section => section.articles)
+            .filter(article =>
+                article.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                article.content.toLowerCase().includes(searchQuery.toLowerCase())
+            )
+        : currentSection.articles;
 
-  return (
-    <div className="help-center">
-      <div className="help-sidebar">
-        <div className="help-logo">
-          <h1>📚 Help Center</h1>
-        </div>
-        
-        <div className="help-search">
-          <input
-            type="text"
-            placeholder="Search help articles..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-          />
-        </div>
-
-        <nav className="help-nav">
-          {Object.entries(HELP_SECTIONS).map(([key, section]) => (
-            <button
-              key={key}
-              className={`help-nav-item ${activeSection === key ? 'active' : ''}`}
-              onClick={() => {
-                setActiveSection(key);
-                setActiveArticle(null);
-                setSearchQuery('');
-              }}
-            >
-              {section.title}
-            </button>
-          ))}
-        </nav>
-
-        <div className="help-quick-actions">
-          <button onClick={() => window.startTutorial?.()}>
-            🎓 Restart Tutorial
-          </button>
-          <button onClick={() => alert('Feedback form coming soon!')}>
-            💬 Send Feedback
-          </button>
-        </div>
-      </div>
-
-      <div className="help-content">
-        {currentArticle ? (
-          <div className="help-article">
-            <button 
-              className="back-button"
-              onClick={() => setActiveArticle(null)}
-            >
-              ← Back to {currentSection.title}
-            </button>
-            
-            <h1>{currentArticle.title}</h1>
-            <div className="article-content">
-              {currentArticle.content.split('\n\n').map((paragraph, idx) => {
-                if (paragraph.startsWith('**') && paragraph.endsWith('**')) {
-                  return <h3 key={idx}>{paragraph.replace(/\*\*/g, '')}</h3>;
-                }
-                if (paragraph.startsWith('•')) {
-                  const items = paragraph.split('\n');
-                  return (
-                    <ul key={idx}>
-                      {items.map((item, i) => (
-                        <li key={i}>{item.replace('• ', '')}</li>
-                      ))}
-                    </ul>
-                  );
-                }
-                return <p key={idx}>{paragraph}</p>;
-              })}
-            </div>
-          </div>
-        ) : (
-          <div className="help-articles">
-            <h2>{searchQuery ? 'Search Results' : currentSection.title}</h2>
-            <div className="articles-grid">
-              {filteredArticles.map(article => (
-                <div
-                  key={article.id}
-                  className="article-card"
-                  onClick={() => setActiveArticle(article.id)}
-                >
-                  <h3>{article.title}</h3>
-                  <p>{article.content.substring(0, 150)}...</p>
-                  <span className="read-more">Read more →</span>
+    return (
+        <div className="help-center">
+            <div className="help-sidebar">
+                <div className="help-logo">
+                    <h1>📚 Help Center</h1>
                 </div>
-              ))}
+
+                <div className="help-search">
+                    <input
+                        type="text"
+                        placeholder="Search help articles..."
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                    />
+                </div>
+
+                <nav className="help-nav">
+                    {Object.entries(HELP_SECTIONS).map(([key, section]) => (
+                        <button
+                            key={key}
+                            className={`help-nav-item ${activeSection === key ? 'active' : ''}`}
+                            onClick={() => {
+                                setActiveSection(key);
+                                setActiveArticle(null);
+                                setSearchQuery('');
+                            }}
+                        >
+                            {section.title}
+                        </button>
+                    ))}
+                </nav>
+
+                <div className="help-quick-actions">
+                    <button onClick={() => window.startTutorial?.()}>
+                        🎓 Restart Tutorial
+                    </button>
+                    <button onClick={() => alert('Feedback form coming soon!')}>
+                        💬 Send Feedback
+                    </button>
+                </div>
             </div>
-          </div>
-        )}
-      </div>
-    </div>
-  );
+
+            <div className="help-content">
+                {currentArticle ? (
+                    <div className="help-article">
+                        <button
+                            className="back-button"
+                            onClick={() => setActiveArticle(null)}
+                        >
+                            ← Back to {currentSection.title}
+                        </button>
+
+                        <h1>{currentArticle.title}</h1>
+                        <div className="article-content">
+                            {currentArticle.content.split('\n\n').map((paragraph, idx) => {
+                                if (paragraph.startsWith('**') && paragraph.endsWith('**')) {
+                                    return <h3 key={idx}>{paragraph.replace(/\*\*/g, '')}</h3>;
+                                }
+                                if (paragraph.startsWith('•')) {
+                                    const items = paragraph.split('\n');
+                                    return (
+                                        <ul key={idx}>
+                                            {items.map((item, i) => (
+                                                <li key={i}>{item.replace('• ', '')}</li>
+                                            ))}
+                                        </ul>
+                                    );
+                                }
+                                return <p key={idx}>{paragraph}</p>;
+                            })}
+                        </div>
+                    </div>
+                ) : (
+                    <div className="help-articles">
+                        <h2>{searchQuery ? 'Search Results' : currentSection.title}</h2>
+                        <div className="articles-grid">
+                            {filteredArticles.map(article => (
+                                <div
+                                    key={article.id}
+                                    className="article-card"
+                                    onClick={() => setActiveArticle(article.id)}
+                                >
+                                    <h3>{article.title}</h3>
+                                    <p>{article.content.substring(0, 150)}...</p>
+                                    <span className="read-more">Read more →</span>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                )}
+            </div>
+        </div>
+    );
 };
 
 export default HelpCenter;

@@ -69,15 +69,15 @@ export default function GovernanceRitual() {
       {selected && (
         <div className="form">
           <h2>{actions[selected]}</h2>
-          <input 
-            type="text" 
-            placeholder="Enter user ID or artifact ID" 
+          <input
+            type="text"
+            placeholder="Enter user ID or artifact ID"
             value={targetId}
             onChange={(e) => setTargetId(e.target.value)}
             disabled={submitting}
           />
-          <textarea 
-            placeholder="Reason, context, or legacy note" 
+          <textarea
+            placeholder="Reason, context, or legacy note"
             value={reason}
             onChange={(e) => setReason(e.target.value)}
             disabled={submitting}
@@ -85,11 +85,11 @@ export default function GovernanceRitual() {
           <button onClick={handleSubmit} disabled={submitting}>
             {submitting ? 'Submitting...' : 'Submit Ritual'}
           </button>
-          
+
           {result && (
-            <div style={{ 
-              marginTop: '20px', 
-              padding: '15px', 
+            <div style={{
+              marginTop: '20px',
+              padding: '15px',
               borderRadius: '8px',
               background: result.success ? '#4CAF50' : '#f44336',
               color: 'white'

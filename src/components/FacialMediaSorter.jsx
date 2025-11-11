@@ -64,7 +64,7 @@ export const FacialMediaSorter = ({ userId, tier }) => {
       if (response.ok && data.groups) {
         // Use real face detection results
         setGroupedFaces(data.groups);
-        
+
         // Initialize renaming rules
         const rules = {};
         data.groups.forEach(group => {
@@ -121,7 +121,7 @@ export const FacialMediaSorter = ({ userId, tier }) => {
     ];
 
     setGroupedFaces(mockGroups);
-    
+
     // Initialize renaming rules
     const rules = {};
     mockGroups.forEach(group => {
@@ -220,8 +220,8 @@ export const FacialMediaSorter = ({ userId, tier }) => {
             background: 'rgba(255,255,255,0.03)',
             transition: 'all 0.3s'
           }}
-          onMouseEnter={(e) => e.target.style.borderColor = '#667eea'}
-          onMouseLeave={(e) => e.target.style.borderColor = 'rgba(255,255,255,0.3)'}
+            onMouseEnter={(e) => e.target.style.borderColor = '#667eea'}
+            onMouseLeave={(e) => e.target.style.borderColor = 'rgba(255,255,255,0.3)'}
           >
             <input
               type="file"
@@ -437,9 +437,9 @@ export const FacialMediaSorter = ({ userId, tier }) => {
                         background: 'rgba(0,0,0,0.2)',
                         borderRadius: '5px'
                       }}>
-                        Files will be named:<br/>
-                        <strong>{renamingRules[group.id] || group.suggestedName}_001.jpg</strong><br/>
-                        <strong>{renamingRules[group.id] || group.suggestedName}_002.jpg</strong><br/>
+                        Files will be named:<br />
+                        <strong>{renamingRules[group.id] || group.suggestedName}_001.jpg</strong><br />
+                        <strong>{renamingRules[group.id] || group.suggestedName}_002.jpg</strong><br />
                         etc.
                       </div>
                     </div>
@@ -493,7 +493,7 @@ export const FacialMediaSorter = ({ userId, tier }) => {
                         >
                           <img
                             src={img.url}
-                            alt={`${group.characterName} ${i+1}`}
+                            alt={`${group.characterName} ${i + 1}`}
                             style={{
                               width: '100%',
                               height: '100%',

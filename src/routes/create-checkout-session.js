@@ -17,7 +17,7 @@ export async function POST(request) {
     // Check if Stripe is configured
     if (!process.env.STRIPE_SECRET_KEY) {
       console.warn('STRIPE_SECRET_KEY not configured');
-      return new Response(JSON.stringify({ 
+      return new Response(JSON.stringify({
         error: 'Payment system not configured',
         message: 'Please add STRIPE_SECRET_KEY to environment variables'
       }), {
@@ -38,10 +38,10 @@ export async function POST(request) {
             currency: 'usd',
             product_data: {
               name: tier === 'CREATOR' ? 'Creator Tier' : 'Super Admin Tier',
-              description: tier === 'CREATOR' 
+              description: tier === 'CREATOR'
                 ? 'Unlock AR/VR tools and keep 100% profits'
                 : 'All features + AI superpowers',
-              images: tier === 'SUPER_ADMIN' 
+              images: tier === 'SUPER_ADMIN'
                 ? ['https://fortheweebs.com/images/super-admin-badge.png']
                 : []
             },

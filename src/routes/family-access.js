@@ -208,7 +208,7 @@ async function redeemAccessCode(req, res) {
     if (userId) {
       const { error: updateError } = await supabase
         .from('users')
-        .update({ 
+        .update({
           payment_tier: tier,
           family_access_type: accessCode.type,
           family_access_code: code,
@@ -224,7 +224,7 @@ async function redeemAccessCode(req, res) {
     // Increment used count
     await supabase
       .from('family_access_codes')
-      .update({ 
+      .update({
         used_count: (accessCode.used_count || 0) + 1,
         last_used_at: new Date().toISOString()
       })

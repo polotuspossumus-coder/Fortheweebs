@@ -6,11 +6,11 @@ import './A11ySkipLink.css';
  * Appears on Tab focus, hidden otherwise
  */
 const A11ySkipLink = () => {
-  return (
-    <a href="#main-content" className="skip-link">
-      Skip to main content
-    </a>
-  );
+    return (
+        <a href="#main-content" className="skip-link">
+            Skip to main content
+        </a>
+    );
 };
 
 export default A11ySkipLink;

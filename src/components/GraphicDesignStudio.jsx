@@ -425,7 +425,7 @@ export function GraphicDesignStudio({ userId }) {
                 marginBottom: '20px'
               }}>
                 <h3 style={{ marginBottom: '15px' }}>🎛️ Properties</h3>
-                
+
                 <label style={{ display: 'block', marginBottom: '10px', fontSize: '14px' }}>
                   Name:
                   <input
@@ -525,7 +525,7 @@ export function GraphicDesignStudio({ userId }) {
               padding: '20px'
             }}>
               <h3 style={{ marginBottom: '15px' }}>📚 Layers ({layers.length})</h3>
-              
+
               {layers.length === 0 && (
                 <div style={{ textAlign: 'center', opacity: 0.5, padding: '20px' }}>
                   No layers yet
@@ -538,11 +538,11 @@ export function GraphicDesignStudio({ userId }) {
                     key={layer.id}
                     onClick={() => setSelectedLayer(layer.id)}
                     style={{
-                      background: selectedLayer === layer.id 
-                        ? 'rgba(240, 147, 251, 0.3)' 
+                      background: selectedLayer === layer.id
+                        ? 'rgba(240, 147, 251, 0.3)'
                         : 'rgba(255,255,255,0.1)',
-                      border: selectedLayer === layer.id 
-                        ? '2px solid #f093fb' 
+                      border: selectedLayer === layer.id
+                        ? '2px solid #f093fb'
                         : '1px solid rgba(255,255,255,0.2)',
                       borderRadius: '10px',
                       padding: '12px',

@@ -14,8 +14,8 @@ export async function POST(request) {
     const { action, targetId, reason, timestamp } = await request.json();
 
     if (!action || !targetId || !reason) {
-      return new Response(JSON.stringify({ 
-        error: 'Missing required fields' 
+      return new Response(JSON.stringify({
+        error: 'Missing required fields'
       }), {
         status: 400,
         headers: { 'Content-Type': 'application/json' }
@@ -25,8 +25,8 @@ export async function POST(request) {
     // Validate action type
     const validActions = ['ban', 'crown', 'resurrect'];
     if (!validActions.includes(action)) {
-      return new Response(JSON.stringify({ 
-        error: 'Invalid action type' 
+      return new Response(JSON.stringify({
+        error: 'Invalid action type'
       }), {
         status: 400,
         headers: { 'Content-Type': 'application/json' }
@@ -49,9 +49,9 @@ export async function POST(request) {
 
     if (error) {
       console.error('Database error:', error);
-      return new Response(JSON.stringify({ 
+      return new Response(JSON.stringify({
         error: 'Failed to save ritual',
-        details: error.message 
+        details: error.message
       }), {
         status: 500,
         headers: { 'Content-Type': 'application/json' }
@@ -75,7 +75,7 @@ export async function POST(request) {
     // Update ritual status
     await supabase
       .from('governance_rituals')
-      .update({ 
+      .update({
         status: actionResult.success ? 'approved' : 'pending_review',
         result: actionResult.message
       })
@@ -124,7 +124,7 @@ async function processCrownRestoration(userId, reason) {
   // Restore user privileges
   const { error } = await supabase
     .from('users')
-    .update({ 
+    .update({
       status: 'active',
       restored_at: new Date().toISOString(),
       restoration_reason: reason
@@ -148,7 +148,7 @@ async function processArtifactResurrection(artifactId, reason) {
   // Restore deleted/archived artifact
   const { error } = await supabase
     .from('artifacts')
-    .update({ 
+    .update({
       status: 'active',
       resurrected_at: new Date().toISOString(),
       resurrection_reason: reason

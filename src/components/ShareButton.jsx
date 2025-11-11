@@ -8,24 +8,24 @@ export function ShareButton({ projectData, projectTitle = 'My Project' }) {
 
   const handleShare = async (platform) => {
     const text = `Check out my project: ${projectTitle}`;
-    
+
     switch (platform) {
       case 'twitter':
         window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(shareUrl)}`, '_blank');
         break;
-      
+
       case 'facebook':
         window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`, '_blank');
         break;
-      
+
       case 'reddit':
         window.open(`https://reddit.com/submit?url=${encodeURIComponent(shareUrl)}&title=${encodeURIComponent(projectTitle)}`, '_blank');
         break;
-      
+
       case 'copy':
         await ExportUtils.copyToClipboard(shareUrl);
         break;
-      
+
       case 'native':
         if (navigator.share) {
           try {
