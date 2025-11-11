@@ -62,32 +62,42 @@ export function PremiumSubscription({ userId, currentTier, userBalance = 0 }) {
     }
   };
 
-  const handleUnlock = async (unlockType, price) => {
-    if (userBalance < price) {
-      alert(`❌ Insufficient balance. You need $${price} but only have $${userBalance}.\n\nEarn more from tips, commissions, or print sales!`);
+  const handleUnlock = async (unlockType, price, paymentMethod = 'balance') => {
+    if (paymentMethod === 'balance' && userBalance < price) {
+      alert(`❌ Insufficient balance. You need $${price} but only have $${userBalance}.\n\nOptions:\n1. Earn more from tips/commissions/print sales\n2. Pay with credit card instead`);
       return;
     }
 
-    // In production: Deduct from user's platform wallet
+    // In production: Process payment
     /*
-    const response = await fetch('/api/unlocks/purchase', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        userId,
-        unlockType,
-        price,
-        payFromBalance: true
-      })
-    });
-
-    const result = await response.json();
-    if (result.success) {
-      // Update user's unlocked tools
+    if (paymentMethod === 'balance') {
+      const response = await fetch('/api/unlocks/purchase', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          userId,
+          unlockType,
+          price,
+          payFromBalance: true
+        })
+      });
+      const result = await response.json();
+      if (result.success) {
+        // Update user's unlocked tools
+      }
+    } else if (paymentMethod === 'card') {
+      // Stripe Payment Intent
+      const { clientSecret } = await fetch('/api/unlocks/payment-intent', {
+        method: 'POST',
+        body: JSON.stringify({ userId, unlockType, price })
+      }).then(r => r.json());
+      
+      const stripe = await loadStripe(process.env.STRIPE_PUBLIC_KEY);
+      await stripe.confirmCardPayment(clientSecret);
     }
     */
 
-    alert(`🎉 Unlocked! (Payment integration needed)\n\n$${price} will be deducted from your ForTheWeebs balance.`);
+    alert(`🎉 Unlocked! (Payment integration needed)\n\nPayment method: ${paymentMethod === 'balance' ? 'ForTheWeebs balance' : 'Credit card'}\nAmount: $${price}`);
   };
 
   return (
@@ -114,13 +124,21 @@ export function PremiumSubscription({ userId, currentTier, userBalance = 0 }) {
                 <div className="tool-price">${tool.price}</div>
               </div>
               <p className="tool-description">{tool.description}</p>
-              <button
-                className="unlock-btn"
-                onClick={() => handleUnlock(tool.id, tool.price)}
-                disabled={userBalance < tool.price}
-              >
-                {userBalance >= tool.price ? `🔓 Unlock for $${tool.price}` : `💰 Need $${(tool.price - userBalance).toFixed(2)} more`}
-              </button>
+              <div className="unlock-buttons">
+                <button
+                  className="unlock-btn balance-btn"
+                  onClick={() => handleUnlock(tool.id, tool.price, 'balance')}
+                  disabled={userBalance < tool.price}
+                >
+                  {userBalance >= tool.price ? `� Pay from Balance ($${tool.price})` : `Need $${(tool.price - userBalance).toFixed(2)} more`}
+                </button>
+                <button
+                  className="unlock-btn card-btn"
+                  onClick={() => handleUnlock(tool.id, tool.price, 'card')}
+                >
+                  💳 Pay with Card ($${tool.price})
+                </button>
+              </div>
             </div>
           ))}
         </div>
@@ -195,12 +213,19 @@ export function PremiumSubscription({ userId, currentTier, userBalance = 0 }) {
           <button
             className="tier-btn full-unlock-btn"
             style={{background: `linear-gradient(135deg, ${tiers.full.color}, #f59e0b)`}}
-            onClick={() => handleUnlock('full_platform', tiers.full.price)}
+            onClick={() => handleUnlock('full_platform', tiers.full.price, 'balance')}
             disabled={userBalance < tiers.full.price}
           >
             {userBalance >= tiers.full.price 
-              ? `🚀 Unlock Everything for $${tiers.full.price}` 
-              : `💰 Earn $${(tiers.full.price - userBalance).toFixed(2)} more to unlock`}
+              ? `� Pay from Balance ($${tiers.full.price})` 
+              : `Need $${(tiers.full.price - userBalance).toFixed(2)} more`}
+          </button>
+          <button
+            className="tier-btn full-unlock-btn"
+            style={{background: `linear-gradient(135deg, #10b981, #059669)`, marginTop: '0.5rem'}}
+            onClick={() => handleUnlock('full_platform', tiers.full.price, 'card')}
+          >
+            💳 Pay with Card ($${tiers.full.price})
           </button>
           {userBalance < tiers.full.price && (
             <p className="unlock-tip">
@@ -255,7 +280,15 @@ export function PremiumSubscription({ userId, currentTier, userBalance = 0 }) {
           </div>
           <div className="faq-item">
             <h4>Can I pay with a credit card instead?</h4>
-            <p>Yes! You can pay from your balance OR use a credit card. Your choice.</p>
+            <p>Yes! Every unlock has TWO payment options: (1) Pay from your ForTheWeebs balance, OR (2) Pay with credit card. Your choice.</p>
+          </div>
+          <div className="faq-item">
+            <h4>Can I pay in increments?</h4>
+            <p>Yes! Unlock tools one by one ($25-$200 each) as you earn/afford them. Or save up and do the $500 full unlock at once.</p>
+          </div>
+          <div className="faq-item">
+            <h4>Do I need to unlock tools to earn money?</h4>
+            <p>No! You can earn from tips, commissions, and print-on-demand with the FREE tier. Use those earnings to unlock advanced tools.</p>
           </div>
           <div className="faq-item">
             <h4>What if I only want adult content, not tools?</h4>

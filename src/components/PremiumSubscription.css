@@ -111,28 +111,46 @@
   min-height: 60px;
 }
 
+.unlock-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
 .unlock-btn {
   width: 100%;
   padding: 0.9rem;
-  background: linear-gradient(135deg, #8b5cf6, #d946ef);
   color: #fff;
   border: none;
   border-radius: 8px;
   font-weight: 700;
   cursor: pointer;
   transition: all 0.3s ease;
-  font-size: 1rem;
+  font-size: 0.95rem;
 }
 
-.unlock-btn:hover:not(:disabled) {
+.balance-btn {
+  background: linear-gradient(135deg, #8b5cf6, #d946ef);
+}
+
+.balance-btn:hover:not(:disabled) {
   transform: translateY(-2px);
   box-shadow: 0 5px 20px rgba(139,92,246,0.4);
 }
 
-.unlock-btn:disabled {
+.balance-btn:disabled {
   background: rgba(100,116,139,0.3);
   cursor: not-allowed;
   opacity: 0.6;
+}
+
+.card-btn {
+  background: linear-gradient(135deg, #10b981, #059669);
+}
+
+.card-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 20px rgba(16,185,129,0.4);
 }
 
 /* TIER CARDS */
