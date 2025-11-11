@@ -282,8 +282,9 @@ function PayoutSettings({ userId }) {
           }}>
             <option>PayPal</option>
             <option>Bank Transfer</option>
-            <option>Crypto (BTC/ETH)</option>
             <option>Stripe</option>
+            <option>Bitcoin (Auto-converted to USD)</option>
+            <option>Ethereum (Auto-converted to USD)</option>
           </select>
 
           <h4 style={{ marginTop: '25px', color: '#667eea' }}>Payout Frequency</h4>

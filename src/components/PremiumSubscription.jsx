@@ -238,6 +238,22 @@ export function PremiumSubscription({ userId, currentTier }) {
                 >
                   {processing ? '⏳ Processing...' : `💳 Pay with Card ($${tool.price})`}
                 </button>
+                <button
+                  className="unlock-btn crypto-btn"
+                  onClick={() => handleUnlock(tool.id, tool.price, 'bitcoin')}
+                  disabled={processing}
+                  style={{background: 'linear-gradient(135deg, #f7931a, #f2a900)', fontSize: '0.85rem'}}
+                >
+                  {processing ? '⏳ Processing...' : `₿ Bitcoin ($${Math.round(tool.price * 2)})`}
+                </button>
+                <button
+                  className="unlock-btn crypto-btn"
+                  onClick={() => handleUnlock(tool.id, tool.price, 'ethereum')}
+                  disabled={processing}
+                  style={{background: 'linear-gradient(135deg, #627eea, #5a67d8)', fontSize: '0.85rem'}}
+                >
+                  {processing ? '⏳ Processing...' : `Ξ Ethereum ($${Math.round(tool.price * 4)})`}
+                </button>
               </div>
             </div>
           ))}
