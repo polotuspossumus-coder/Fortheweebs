@@ -73,6 +73,24 @@ export function PremiumSubscription({ userId, currentTier }) {
         '🚀 Priority support',
         '🎁 Never pay monthly again'
       ]
+    },
+    super_admin: {
+      name: '🤫 Shhh... It\'s a Secret',
+      price: 1000,
+      color: '#8b5cf6',
+      tagline: 'You won\'t be disappointed... Trust me.',
+      features: [
+        '✅ Everything in Full Platform',
+        '🔥 Exclusive superpowers not listed here',
+        '🧠 Advanced AI capabilities',
+        '⚡ Admin-level features',
+        '🎯 Custom tools & workflows',
+        '🔓 Future features as they\'re added',
+        '👑 VIP "Secret Member" badge',
+        '💎 Lifetime priority support',
+        '🚀 Beta access to experimental features',
+        '❓ And more surprises...'
+      ]
     }
   };
 
@@ -310,6 +328,74 @@ export function PremiumSubscription({ userId, currentTier }) {
           {userBalance < tiers.full.price && (
             <p className="unlock-tip">
               💡 Tip: Earn from tips, commissions, or print sales to reach $500!
+            </p>
+          )}
+        </div>
+
+        {/* Super Admin Powers - $1000 tier */}
+        <div className="tier-card super-admin-card">
+          <div className="secret-badge">🤫 SECRET TIER</div>
+          <div className="tier-header" style={{borderColor: tiers.super_admin.color}}>
+            <h2 style={{color: tiers.super_admin.color}}>{tiers.super_admin.name}</h2>
+            <div className="tier-price">
+              <span className="price">${tiers.super_admin.price}</span>
+              <span className="period">one-time</span>
+            </div>
+            <p className="tier-tagline" style={{color: tiers.super_admin.color}}>
+              {tiers.super_admin.tagline}
+            </p>
+          </div>
+          <div className="tier-features">
+            {tiers.super_admin.features.map((feature, idx) => (
+              <div key={idx} className="feature-item super-feature">
+                {feature}
+              </div>
+            ))}
+            
+            {/* Only owner sees the real features */}
+            {userId === 'owner' && (
+              <div style={{
+                marginTop: '20px',
+                padding: '15px',
+                background: 'rgba(139, 92, 246, 0.1)',
+                borderRadius: '10px',
+                border: '2px solid #8b5cf6'
+              }}>
+                <div style={{ fontWeight: '700', marginBottom: '10px', color: '#8b5cf6' }}>
+                  👑 OWNER VIEW - Real Features:
+                </div>
+                <div style={{ fontSize: '0.9rem', opacity: 0.9 }}>
+                  ✅ Never pay creator subscription fees<br/>
+                  ✅ AI Content Generation Powers<br/>
+                  ✅ Facial Recognition AI (anime character identification)<br/>
+                  ✅ Set AI to auto-generate content<br/>
+                  ✅ Train AI on your own datasets<br/>
+                  ✅ Admin-level tool access<br/>
+                  ✅ Custom AI models for your content
+                </div>
+              </div>
+            )}
+          </div>
+          <button
+            className="tier-btn super-admin-btn"
+            style={{background: `linear-gradient(135deg, ${tiers.super_admin.color}, #7c3aed)`}}
+            onClick={() => handleUnlock('super_admin_powers', tiers.super_admin.price, 'balance')}
+            disabled={userBalance < tiers.super_admin.price}
+          >
+            {userBalance >= tiers.super_admin.price 
+              ? `🔥 Pay from Balance ($${tiers.super_admin.price})` 
+              : `Need $${(tiers.super_admin.price - userBalance).toFixed(2)} more`}
+          </button>
+          <button
+            className="tier-btn super-admin-btn"
+            style={{background: `linear-gradient(135deg, #ec4899, #db2777)`, marginTop: '0.5rem'}}
+            onClick={() => handleUnlock('super_admin_powers', tiers.super_admin.price, 'card')}
+          >
+            💳 Pay with Card ($${tiers.super_admin.price})
+          </button>
+          {userBalance < tiers.super_admin.price && (
+            <p className="unlock-tip">
+              💎 For serious creators who want superpowers
             </p>
           )}
         </div>
