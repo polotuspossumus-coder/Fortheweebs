@@ -5,8 +5,10 @@ export const TOOL_PRICES = {
   design: 50,
   comics: 75,
   audio: 100,
-  arvr: 200,
-  full_platform: 500, // Unlocks everything
+  cgi: 200,
+  ai: 200,
+  arvr: 500,
+  full_platform: 500, // Unlocks everything (same price as AR/VR alone, better deal)
   super_admin_powers: 1000 // Secret superpowers
 };
 
@@ -15,6 +17,8 @@ export const TOOL_NAMES = {
   design: '🎨 Graphic Design Studio',
   comics: '📚 Comic Book Creator',
   audio: '🎵 Audio Production Studio',
+  cgi: '🎬 CGI Content Studio',
+  ai: '🤖 AI Content Studio',
   arvr: '🎭 AR/VR Studio',
   super_admin_powers: '🤫 Shhh... It\'s a Secret'
 };

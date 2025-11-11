@@ -25,7 +25,9 @@ export function PremiumSubscription({ userId, currentTier }) {
     { id: 'design', name: '🎨 Graphic Design Studio', price: 50, description: 'Professional design tools, templates, exports' },
     { id: 'comics', name: '📚 Comic Book Creator', price: 75, description: 'Unlimited pages, premium templates, AI assistants' },
     { id: 'audio', name: '🎵 Audio Production Studio', price: 100, description: 'Music creation, sound effects, mixing tools' },
-    { id: 'arvr', name: '🎭 AR/VR Studio', price: 200, description: '3D modeling, VR exports, AR filters' }
+    { id: 'cgi', name: '🎬 CGI Content Studio', price: 200, description: 'CGI video generation, 3D rendering, scene creation' },
+    { id: 'ai', name: '🤖 AI Content Studio', price: 200, description: 'AI voice synthesis, character recognition, auto-generation' },
+    { id: 'arvr', name: '🎭 AR/VR Studio', price: 500, description: '3D modeling, VR exports, AR filters, metaverse content' }
   ];
 
   const tiers = {
