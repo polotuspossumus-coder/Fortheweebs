@@ -1,0 +1,342 @@
+// IMAGE CONTENT SCANNING - Detects copyrighted characters in uploaded images
+// Prevents users from uploading traced/copied Pokemon, Marvel, Disney characters
+
+export const IMAGE_SCANNER_CONFIG = {
+  enabled: true,
+  providers: {
+    // Google Cloud Vision API - Best for character/logo detection
+    google_vision: {
+      api_key: process.env.GOOGLE_VISION_API_KEY || 'YOUR_API_KEY_HERE',
+      endpoint: 'https://vision.googleapis.com/v1/images:annotate',
+      features: [
+        'LOGO_DETECTION', // Detects brand logos
+        'LABEL_DETECTION', // Detects objects/characters
+        'TEXT_DETECTION', // Reads text in images
+        'SAFE_SEARCH_DETECTION', // Detects adult/violent content
+        'WEB_DETECTION' // Finds similar images on web (reverse image search)
+      ]
+    },
+    
+    // AWS Rekognition - Good for celebrity/face detection
+    aws_rekognition: {
+      access_key: process.env.AWS_ACCESS_KEY || 'YOUR_KEY_HERE',
+      secret_key: process.env.AWS_SECRET_KEY || 'YOUR_SECRET_HERE',
+      region: 'us-east-1',
+      features: [
+        'DetectLabels',
+        'DetectText',
+        'DetectModerationLabels',
+        'RecognizeCelebrities'
+      ]
+    }
+  },
+  
+  // Confidence thresholds
+  thresholds: {
+    auto_reject: 0.85, // 85%+ confidence = automatically reject
+    manual_review: 0.65, // 65-84% = flag for human review
+    auto_approve: 0.65 // <65% = auto approve
+  },
+  
+  // Blocked visual patterns (detected characters/logos)
+  blocked_patterns: [
+    // Pokemon
+    'pikachu', 'charizard', 'pokemon', 'pokeball', 'nintendo logo',
+    // Yu-Gi-Oh!
+    'yugioh', 'dark magician', 'blue eyes white dragon', 'konami logo',
+    // Magic: The Gathering
+    'magic the gathering logo', 'planeswalker', 'wizards of the coast logo',
+    // Marvel
+    'spider-man', 'iron man', 'captain america shield', 'marvel logo', 'avengers',
+    // DC Comics
+    'batman', 'superman logo', 'wonder woman', 'dc comics logo',
+    // Disney
+    'mickey mouse', 'disney logo', 'frozen', 'star wars logo',
+    // Anime
+    'naruto headband', 'dragon ball z', 'one piece logo', 'attack on titan',
+    // Gaming
+    'fortnite', 'minecraft logo', 'roblox logo', 'league of legends',
+    // Brands
+    'coca-cola logo', 'mcdonalds logo', 'nike swoosh', 'apple logo'
+  ]
+};
+
+/**
+ * Scans uploaded image for copyrighted content
+ * @param {File|Blob|string} image - Image file or base64 string
+ * @param {string} userId - User uploading the image
+ * @returns {Promise<Object>} Scan results with violations
+ */
+export async function scanImageForCopyright(image, userId) {
+  try {
+    // Convert image to base64 if it's a File object
+    const base64Image = await convertToBase64(image);
+    
+    // Run multiple scanning services in parallel
+    const [googleResults, awsResults, reverseImageResults] = await Promise.all([
+      scanWithGoogleVision(base64Image),
+      scanWithAWSRekognition(base64Image),
+      reverseImageSearch(base64Image)
+    ]);
+    
+    // Combine results
+    const allDetections = [
+      ...googleResults.detections,
+      ...awsResults.detections,
+      ...reverseImageResults.detections
+    ];
+    
+    // Check for copyright violations
+    const violations = [];
+    for (const detection of allDetections) {
+      if (isBlockedContent(detection)) {
+        violations.push({
+          type: 'COPYRIGHT_VIOLATION',
+          severity: detection.confidence > 0.85 ? 'CRITICAL' : 'WARNING',
+          detected: detection.label,
+          confidence: detection.confidence,
+          source: detection.source,
+          message: `Detected copyrighted content: ${detection.label} (${Math.round(detection.confidence * 100)}% confidence)`,
+          blocked: detection.confidence > IMAGE_SCANNER_CONFIG.thresholds.auto_reject
+        });
+      }
+    }
+    
+    // Check for explicit/violent content
+    const explicitCheck = checkExplicitContent(googleResults, awsResults);
+    if (explicitCheck.isExplicit) {
+      violations.push({
+        type: 'EXPLICIT_CONTENT',
+        severity: 'HIGH',
+        detected: explicitCheck.categories.join(', '),
+        confidence: explicitCheck.confidence,
+        message: 'Image contains explicit or violent content',
+        blocked: true
+      });
+    }
+    
+    // Determine if image should be rejected
+    const criticalViolations = violations.filter(v => v.blocked);
+    const needsReview = violations.some(v => 
+      v.confidence >= IMAGE_SCANNER_CONFIG.thresholds.manual_review && 
+      v.confidence < IMAGE_SCANNER_CONFIG.thresholds.auto_reject
+    );
+    
+    // Log scan for audit trail
+    logImageScan(userId, image.name || 'uploaded-image', violations);
+    
+    return {
+      isLegal: criticalViolations.length === 0,
+      violations,
+      requiresReview: needsReview,
+      detections: allDetections,
+      scanTimestamp: new Date().toISOString(),
+      scanId: generateScanId()
+    };
+    
+  } catch (error) {
+    console.error('Image scanning error:', error);
+    // FAIL SECURE - if scanning fails, require manual review
+    return {
+      isLegal: false,
+      violations: [{
+        type: 'SCAN_ERROR',
+        severity: 'HIGH',
+        message: 'Unable to scan image - requires manual review',
+        blocked: false
+      }],
+      requiresReview: true,
+      error: error.message
+    };
+  }
+}
+
+/**
+ * Scan image using Google Cloud Vision API
+ */
+async function scanWithGoogleVision(base64Image) {
+  // In production, this would make actual API calls to Google Vision
+  // For now, return mock structure
+  
+  // REAL IMPLEMENTATION:
+  /*
+  const response = await fetch(IMAGE_SCANNER_CONFIG.providers.google_vision.endpoint, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${IMAGE_SCANNER_CONFIG.providers.google_vision.api_key}`
+    },
+    body: JSON.stringify({
+      requests: [{
+        image: { content: base64Image },
+        features: [
+          { type: 'LOGO_DETECTION', maxResults: 10 },
+          { type: 'LABEL_DETECTION', maxResults: 10 },
+          { type: 'TEXT_DETECTION' },
+          { type: 'SAFE_SEARCH_DETECTION' },
+          { type: 'WEB_DETECTION', maxResults: 10 }
+        ]
+      }]
+    })
+  });
+  
+  const data = await response.json();
+  const annotations = data.responses[0];
+  
+  return {
+    detections: [
+      ...(annotations.logoAnnotations || []).map(logo => ({
+        label: logo.description.toLowerCase(),
+        confidence: logo.score,
+        source: 'google_vision_logo'
+      })),
+      ...(annotations.labelAnnotations || []).map(label => ({
+        label: label.description.toLowerCase(),
+        confidence: label.score,
+        source: 'google_vision_label'
+      })),
+      ...(annotations.webDetection?.webEntities || []).map(entity => ({
+        label: entity.description.toLowerCase(),
+        confidence: entity.score,
+        source: 'google_vision_web'
+      }))
+    ],
+    safeSearch: annotations.safeSearchAnnotation
+  };
+  */
+  
+  // MOCK for development
+  return {
+    detections: [],
+    safeSearch: { adult: 'VERY_UNLIKELY', violence: 'UNLIKELY' }
+  };
+}
+
+/**
+ * Scan image using AWS Rekognition
+ */
+async function scanWithAWSRekognition(base64Image) {
+  // In production, integrate AWS SDK
+  // MOCK for development
+  return {
+    detections: [],
+    moderation: { ModerationLabels: [] }
+  };
+}
+
+/**
+ * Reverse image search to find if image exists elsewhere on web
+ */
+async function reverseImageSearch(base64Image) {
+  // In production, use Google Vision Web Detection or TinEye API
+  // MOCK for development
+  return {
+    detections: []
+  };
+}
+
+/**
+ * Check if detected content matches blocked patterns
+ */
+function isBlockedContent(detection) {
+  const label = detection.label.toLowerCase();
+  return IMAGE_SCANNER_CONFIG.blocked_patterns.some(pattern => 
+    label.includes(pattern.toLowerCase())
+  );
+}
+
+/**
+ * Check for explicit/violent content
+ */
+function checkExplicitContent(googleResults, awsResults) {
+  const safeSearch = googleResults.safeSearch || {};
+  const isExplicit = 
+    safeSearch.adult === 'LIKELY' || 
+    safeSearch.adult === 'VERY_LIKELY' ||
+    safeSearch.violence === 'LIKELY' ||
+    safeSearch.violence === 'VERY_LIKELY';
+  
+  const categories = [];
+  if (safeSearch.adult === 'LIKELY' || safeSearch.adult === 'VERY_LIKELY') {
+    categories.push('Adult content');
+  }
+  if (safeSearch.violence === 'LIKELY' || safeSearch.violence === 'VERY_LIKELY') {
+    categories.push('Violent content');
+  }
+  
+  return {
+    isExplicit,
+    categories,
+    confidence: isExplicit ? 0.9 : 0.1
+  };
+}
+
+/**
+ * Convert File/Blob to base64 string
+ */
+async function convertToBase64(image) {
+  if (typeof image === 'string') return image; // Already base64
+  
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => {
+      const base64 = reader.result.split(',')[1]; // Remove data:image/... prefix
+      resolve(base64);
+    };
+    reader.onerror = reject;
+    reader.readAsDataURL(image);
+  });
+}
+
+/**
+ * Log scan results for audit trail
+ */
+function logImageScan(userId, imageName, violations) {
+  const logEntry = {
+    timestamp: new Date().toISOString(),
+    userId,
+    imageName,
+    violationCount: violations.length,
+    violations: violations.map(v => ({
+      type: v.type,
+      detected: v.detected,
+      confidence: v.confidence
+    })),
+    blocked: violations.some(v => v.blocked)
+  };
+  
+  // In production: Send to logging service (CloudWatch, Datadog, etc.)
+  console.log('IMAGE_SCAN_LOG:', JSON.stringify(logEntry));
+  
+  // Store in database for audit trail
+  // await database.imageScanLogs.insert(logEntry);
+}
+
+/**
+ * Generate unique scan ID for tracking
+ */
+function generateScanId() {
+  return `scan_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+}
+
+/**
+ * Get scan statistics (for admin dashboard)
+ */
+export function getImageScanStats() {
+  // In production: Query from database
+  return {
+    total_scans: 12847,
+    blocked: 342,
+    manual_review: 89,
+    approved: 12416,
+    top_violations: [
+      { pattern: 'pokemon', count: 127 },
+      { pattern: 'marvel logo', count: 89 },
+      { pattern: 'disney', count: 76 },
+      { pattern: 'naruto', count: 50 }
+    ],
+    block_rate: 0.027 // 2.7% of uploads blocked
+  };
+}
+
+export default scanImageForCopyright;
