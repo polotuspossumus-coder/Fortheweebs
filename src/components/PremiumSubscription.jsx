@@ -7,6 +7,7 @@ import { unlockTool, getUserBalance, deductBalance, TOOL_PRICES } from '../utils
 export function PremiumSubscription({ userId, currentTier }) {
   const [selectedUnlock, setSelectedUnlock] = useState(null);
   const [userBalance, setUserBalance] = useState(0);
+  const [processing, setProcessing] = useState(false);
 
   useEffect(() => {
     const balance = getUserBalance(userId);
@@ -70,51 +71,59 @@ export function PremiumSubscription({ userId, currentTier }) {
   };
 
   const handleUnlock = async (unlockType, price, paymentMethod = 'balance') => {
-    if (paymentMethod === 'balance') {
-      if (userBalance < price) {
-        alert(`❌ Insufficient balance. You need $${price} but only have $${userBalance}.\n\nOptions:\n1. Earn more from tips/commissions/print sales\n2. Pay with credit card instead`);
-        return;
-      }
+    if (processing) return; // Prevent double-clicks
+    
+    setProcessing(true);
+    
+    try {
+      if (paymentMethod === 'balance') {
+        if (userBalance < price) {
+          alert(`❌ Insufficient balance. You need $${price} but only have $${userBalance}.\n\nOptions:\n1. Earn more from tips/commissions/print sales\n2. Pay with credit card instead`);
+          return;
+        }
 
-      // Deduct from balance
-      const success = deductBalance(userId, price);
-      if (!success) {
-        alert('❌ Payment failed. Please try again.');
-        return;
-      }
+        // Deduct from balance
+        const success = deductBalance(userId, price);
+        if (!success) {
+          alert('❌ Payment failed. Please try again.');
+          return;
+        }
 
-      // Unlock the tool
-      const result = unlockTool(userId, unlockType, 'balance', price);
-      if (result.success) {
-        alert(`🎉 ${result.message}\n\nPaid from balance: $${price}\nRemaining balance: $${(userBalance - price).toFixed(2)}`);
+        // Unlock the tool
+        const result = unlockTool(userId, unlockType, 'balance', price);
+        if (result.success) {
+          alert(`🎉 ${result.message}\n\nPaid from balance: $${price}\nRemaining balance: $${(userBalance - price).toFixed(2)}`);
+          
+          // Update balance display
+          setUserBalance(userBalance - price);
+          
+          // Reload page to show unlocked tool
+          setTimeout(() => window.location.reload(), 1500);
+        } else {
+          alert(`❌ ${result.message}`);
+        }
+      } else if (paymentMethod === 'card') {
+        // In production: Stripe Payment Intent
+        /*
+        const { clientSecret } = await fetch('/api/unlocks/payment-intent', {
+          method: 'POST',
+          body: JSON.stringify({ userId, unlockType, price })
+        }).then(r => r.json());
         
-        // Update balance display
-        setUserBalance(userBalance - price);
+        const stripe = await loadStripe(process.env.STRIPE_PUBLIC_KEY);
+        const result = await stripe.confirmCardPayment(clientSecret);
         
-        // Reload page to show unlocked tool
-        setTimeout(() => window.location.reload(), 1500);
-      } else {
-        alert(`❌ ${result.message}`);
-      }
-    } else if (paymentMethod === 'card') {
-      // In production: Stripe Payment Intent
-      /*
-      const { clientSecret } = await fetch('/api/unlocks/payment-intent', {
-        method: 'POST',
-        body: JSON.stringify({ userId, unlockType, price })
-      }).then(r => r.json());
-      
-      const stripe = await loadStripe(process.env.STRIPE_PUBLIC_KEY);
-      const result = await stripe.confirmCardPayment(clientSecret);
-      
-      if (result.paymentIntent.status === 'succeeded') {
-        const unlockResult = unlockTool(userId, unlockType, 'card', price);
-        alert(`🎉 ${unlockResult.message}`);
-        window.location.reload();
-      }
-      */
+        if (result.paymentIntent.status === 'succeeded') {
+          const unlockResult = unlockTool(userId, unlockType, 'card', price);
+          alert(`🎉 ${unlockResult.message}`);
+          window.location.reload();
+        }
+        */
 
-      alert(`💳 Credit card payment integration pending.\n\nFor now, use "Pay from Balance" option.\nYou can add test balance in the console:\nlocalStorage.setItem('balance_${userId}', '1000')`);
+        alert(`💳 Credit card payment integration pending.\n\nFor now, use "Pay from Balance" option.\nYou can add test balance in the console:\nlocalStorage.setItem('balance_${userId}', '1000')`);
+      }
+    } finally {
+      setProcessing(false);
     }
   };
 
@@ -146,15 +155,16 @@ export function PremiumSubscription({ userId, currentTier }) {
                 <button
                   className="unlock-btn balance-btn"
                   onClick={() => handleUnlock(tool.id, tool.price, 'balance')}
-                  disabled={userBalance < tool.price}
+                  disabled={userBalance < tool.price || processing}
                 >
-                  {userBalance >= tool.price ? `� Pay from Balance ($${tool.price})` : `Need $${(tool.price - userBalance).toFixed(2)} more`}
+                  {processing ? '⏳ Processing...' : userBalance >= tool.price ? `💰 Pay from Balance ($${tool.price})` : `Need $${(tool.price - userBalance).toFixed(2)} more`}
                 </button>
                 <button
                   className="unlock-btn card-btn"
                   onClick={() => handleUnlock(tool.id, tool.price, 'card')}
+                  disabled={processing}
                 >
-                  💳 Pay with Card ($${tool.price})
+                  {processing ? '⏳ Processing...' : `💳 Pay with Card ($${tool.price})`}
                 </button>
               </div>
             </div>

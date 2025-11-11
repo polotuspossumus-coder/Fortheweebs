@@ -24,26 +24,31 @@ export const TOOL_NAMES = {
  * @returns {boolean} - True if unlocked
  */
 export function isToolUnlocked(userId, toolId) {
-  // Admin/owner always has access
-  if (userId === 'owner' || userId === 'admin') {
-    return true;
-  }
+  try {
+    // Admin/owner always has access
+    if (userId === 'owner' || userId === 'admin') {
+      return true;
+    }
 
-  // Check family access code
-  const familyAccessCode = localStorage.getItem(`family_access_${userId}`);
-  if (familyAccessCode) {
-    return true; // Family gets everything free
-  }
+    // Check family access code
+    const familyAccessCode = localStorage.getItem(`family_access_${userId}`);
+    if (familyAccessCode) {
+      return true; // Family gets everything free
+    }
 
-  // Check if user has full platform unlock
-  const fullUnlock = localStorage.getItem(`unlock_full_platform_${userId}`);
-  if (fullUnlock === 'true') {
-    return true;
-  }
+    // Check if user has full platform unlock
+    const fullUnlock = localStorage.getItem(`unlock_full_platform_${userId}`);
+    if (fullUnlock === 'true') {
+      return true;
+    }
 
-  // Check individual tool unlock
-  const toolUnlock = localStorage.getItem(`unlock_${toolId}_${userId}`);
-  return toolUnlock === 'true';
+    // Check individual tool unlock
+    const toolUnlock = localStorage.getItem(`unlock_${toolId}_${userId}`);
+    return toolUnlock === 'true';
+  } catch (error) {
+    console.error('Error checking tool unlock:', error);
+    return false; // Fail closed - if error, show as locked
+  }
 }
 
 /**
@@ -55,37 +60,45 @@ export function isToolUnlocked(userId, toolId) {
  * @returns {object} - Success status and message
  */
 export function unlockTool(userId, toolId, paymentMethod, amount) {
-  const expectedPrice = TOOL_PRICES[toolId];
-  
-  if (!expectedPrice) {
-    return { success: false, message: 'Invalid tool ID' };
+  try {
+    const expectedPrice = TOOL_PRICES[toolId];
+    
+    if (!expectedPrice) {
+      return { success: false, message: 'Invalid tool ID' };
+    }
+
+    if (amount < expectedPrice) {
+      return { success: false, message: `Insufficient payment. Need $${expectedPrice}, got $${amount}` };
+    }
+
+    // Save unlock to localStorage (in production: save to database)
+    localStorage.setItem(`unlock_${toolId}_${userId}`, 'true');
+    localStorage.setItem(`unlock_${toolId}_${userId}_date`, new Date().toISOString());
+    localStorage.setItem(`unlock_${toolId}_${userId}_method`, paymentMethod);
+    localStorage.setItem(`unlock_${toolId}_${userId}_amount`, amount);
+
+    // If full platform unlock, also mark all individual tools as unlocked
+    if (toolId === 'full_platform') {
+      Object.keys(TOOL_PRICES).forEach(tool => {
+        if (tool !== 'full_platform') {
+          localStorage.setItem(`unlock_${tool}_${userId}`, 'true');
+        }
+      });
+    }
+
+    return {
+      success: true,
+      message: `Successfully unlocked ${TOOL_NAMES[toolId] || 'Full Platform Access'}!`,
+      toolId,
+      unlockedAt: new Date().toISOString()
+    };
+  } catch (error) {
+    console.error('Error unlocking tool:', error);
+    return { 
+      success: false, 
+      message: 'An error occurred while unlocking. Please try again or contact support.' 
+    };
   }
-
-  if (amount < expectedPrice) {
-    return { success: false, message: `Insufficient payment. Need $${expectedPrice}, got $${amount}` };
-  }
-
-  // Save unlock to localStorage (in production: save to database)
-  localStorage.setItem(`unlock_${toolId}_${userId}`, 'true');
-  localStorage.setItem(`unlock_${toolId}_${userId}_date`, new Date().toISOString());
-  localStorage.setItem(`unlock_${toolId}_${userId}_method`, paymentMethod);
-  localStorage.setItem(`unlock_${toolId}_${userId}_amount`, amount);
-
-  // If full platform unlock, also mark all individual tools as unlocked
-  if (toolId === 'full_platform') {
-    Object.keys(TOOL_PRICES).forEach(tool => {
-      if (tool !== 'full_platform') {
-        localStorage.setItem(`unlock_${tool}_${userId}`, 'true');
-      }
-    });
-  }
-
-  return {
-    success: true,
-    message: `Successfully unlocked ${TOOL_NAMES[toolId] || 'Full Platform Access'}!`,
-    toolId,
-    unlockedAt: new Date().toISOString()
-  };
 }
 
 /**

@@ -25,6 +25,7 @@ import { TipsAndDonations } from "./components/TipsAndDonations";
 import { CommissionMarketplace } from "./components/CommissionMarketplace";
 import { PremiumSubscription } from "./components/PremiumSubscription";
 import { ToolLockGate } from "./components/ToolLockGate";
+import { DevBalanceManager } from "./components/DevBalanceManager";
 import { getUserBalance } from "./utils/toolUnlockSystem";
 
 export const CreatorDashboard = ({ userId = "demo_user", ipAddress = "127.0.0.1", tier = "free" }) => {
@@ -274,6 +275,9 @@ export const OverviewPanel = () => {
           Upgrade to unlock premium features and advanced tools.
         </p>
       </div>
+
+      {/* Dev balance manager - only shows in development */}
+      <DevBalanceManager userId={userId} />
     </div>
   );
 };
