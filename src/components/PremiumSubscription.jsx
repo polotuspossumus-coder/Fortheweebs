@@ -3,6 +3,12 @@
 import React, { useState, useEffect } from 'react';
 import './PremiumSubscription.css';
 import { unlockTool, getUserBalance, deductBalance, TOOL_PRICES } from '../utils/toolUnlockSystem';
+import { loadStripe } from '@stripe/stripe-js';
+
+// Initialize Stripe (will be null if env var not set)
+const stripePromise = import.meta.env.VITE_STRIPE_PUBLIC_KEY 
+  ? loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY)
+  : null;
 
 export function PremiumSubscription({ userId, currentTier }) {
   const [selectedUnlock, setSelectedUnlock] = useState(null);
@@ -103,24 +109,70 @@ export function PremiumSubscription({ userId, currentTier }) {
           alert(`❌ ${result.message}`);
         }
       } else if (paymentMethod === 'card') {
-        // In production: Stripe Payment Intent
-        /*
-        const { clientSecret } = await fetch('/api/unlocks/payment-intent', {
-          method: 'POST',
-          body: JSON.stringify({ userId, unlockType, price })
-        }).then(r => r.json());
+        // Check if Stripe is configured
+        const stripe = await stripePromise;
         
-        const stripe = await loadStripe(process.env.STRIPE_PUBLIC_KEY);
-        const result = await stripe.confirmCardPayment(clientSecret);
-        
-        if (result.paymentIntent.status === 'succeeded') {
-          const unlockResult = unlockTool(userId, unlockType, 'card', price);
-          alert(`🎉 ${unlockResult.message}`);
-          window.location.reload();
+        if (!stripe || !import.meta.env.VITE_STRIPE_PUBLIC_KEY) {
+          alert(`💳 Stripe not configured yet.\n\nTo enable credit card payments:\n1. Get Stripe API keys from stripe.com\n2. Add to .env file:\n   VITE_STRIPE_PUBLIC_KEY=pk_test_...\n   STRIPE_SECRET_KEY=sk_test_...\n\nFor now, use "Pay from Balance" option.`);
+          return;
         }
-        */
 
-        alert(`💳 Credit card payment integration pending.\n\nFor now, use "Pay from Balance" option.\nYou can add test balance in the console:\nlocalStorage.setItem('balance_${userId}', '1000')`);
+        try {
+          // Create payment intent
+          const response = await fetch('/api/create-unlock-payment', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ userId, toolId: unlockType, price })
+          });
+
+          const data = await response.json();
+
+          if (!data.success) {
+            throw new Error(data.message || 'Failed to create payment');
+          }
+
+          // Confirm payment with Stripe
+          const { error, paymentIntent } = await stripe.confirmCardPayment(data.clientSecret, {
+            payment_method: {
+              card: {
+                // In production, use Stripe Elements for card input
+                // For now, this will prompt Stripe's hosted payment UI
+              }
+            }
+          });
+
+          if (error) {
+            alert(`❌ Payment failed: ${error.message}`);
+            return;
+          }
+
+          if (paymentIntent.status === 'succeeded') {
+            // Verify and unlock
+            const verifyResponse = await fetch('/api/verify-unlock-payment', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                paymentIntentId: paymentIntent.id,
+                userId,
+                toolId: unlockType
+              })
+            });
+
+            const verifyData = await verifyResponse.json();
+
+            if (verifyData.success) {
+              // Unlock in localStorage (in production, this comes from database)
+              const unlockResult = unlockTool(userId, unlockType, 'card', price);
+              alert(`🎉 ${unlockResult.message}\n\nPaid via credit card: $${price}`);
+              setTimeout(() => window.location.reload(), 1500);
+            } else {
+              alert(`❌ Verification failed: ${verifyData.message}`);
+            }
+          }
+        } catch (error) {
+          console.error('Payment error:', error);
+          alert(`❌ Payment failed: ${error.message}\n\nPlease try again or use "Pay from Balance".`);
+        }
       }
     } finally {
       setProcessing(false);

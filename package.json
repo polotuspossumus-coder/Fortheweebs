@@ -31,10 +31,12 @@
     "@react-three/drei": "^10.7.6",
     "@react-three/fiber": "^9.4.0",
     "@react-three/xr": "^6.6.27",
+    "@stripe/stripe-js": "^8.4.0",
     "axios": "^1.6.0",
     "express": "^4.18.2",
     "qrcode": "^1.5.4",
     "react-markdown": "^10.1.0",
+    "stripe": "^19.3.0",
     "three": "^0.181.0"
   }
 }
