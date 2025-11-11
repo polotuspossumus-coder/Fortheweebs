@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import ReactDOM from "react-dom/client";
+import ReactDOM from "react-dom";
 import { LegalDocumentsList } from "./components/LegalDocumentsList.jsx";
 import CreatorSignup from "./CreatorSignup.jsx";
 import PaymentModule from "./PaymentModule.jsx";
@@ -22,7 +22,6 @@ import HelpButton from "./components/HelpButton.jsx";
 import Invite from "./pages/Invite.jsx";
 import { registerServiceWorker } from "./utils/registerServiceWorker.js";
 import "./GovernanceRitual.css";
-import "./mobile.css";
 
 // Register service worker for PWA support
 registerServiceWorker();
@@ -35,6 +34,13 @@ function AppFlow() {
     // Check if this is a referral link
     const params = new URLSearchParams(window.location.search);
     const refCode = params.get('ref') || params.get('referral') || params.get('invite');
+    
+    // Check if user wants to skip directly to dashboard
+    const skipToApp = params.get('app') === 'true';
+    if (skipToApp) {
+      localStorage.setItem("hasOnboarded", "true");
+      return 3; // Go directly to dashboard
+    }
 
     if (refCode) {
       // Store the referral code
@@ -141,12 +147,11 @@ function AppFlow() {
           <GovernanceRitual />
           <BugReporter />
           <CookieConsent />
-          {/* Admin button hidden - access via /?admin=true URL parameter only */}
+          {!isAdmin && !showAdminLogin && (<div style={{ position: 'fixed', bottom: '80px', right: '20px', zIndex: 9998 }}><button onClick={() => setShowAdminLogin(true)} style={{ background: '#222', color: '#FFD700', border: '2px solid #FFD700', padding: '8px 16px', borderRadius: '6px', fontSize: '0.85rem', fontWeight: 600, cursor: 'pointer', opacity: 0.7, transition: 'opacity 0.3s' }} onMouseEnter={(e) => e.target.style.opacity = 1} onMouseLeave={(e) => e.target.style.opacity = 0.7}>🔐 Admin</button></div>)}
         </React.StrictMode>
       </ThemeProvider>
     </ErrorBoundary>
   );
 }
 
-const root = ReactDOM.createRoot(document.getElementById("root"));
-root.render(<AppFlow />);
+ReactDOM.render(<AppFlow />, document.getElementById("root"));
