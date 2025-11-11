@@ -1,4 +1,4 @@
-/* PREMIUM SUBSCRIPTION STYLING */
+/* PREMIUM SUBSCRIPTION STYLING - Earn-to-Unlock Model */
 
 .premium-subscription {
   width: 100%;
@@ -29,7 +29,110 @@
   font-size: 1.2rem;
   color: rgba(255,255,255,0.7);
   max-width: 600px;
-  margin: 0 auto;
+  margin: 0 auto 1.5rem;
+}
+
+.user-balance {
+  display: inline-block;
+  background: linear-gradient(135deg, #10b981, #059669);
+  color: #fff;
+  padding: 0.75rem 2rem;
+  border-radius: 30px;
+  font-size: 1.2rem;
+  font-weight: 700;
+  box-shadow: 0 4px 15px rgba(16,185,129,0.3);
+}
+
+/* TOOL UNLOCKS SECTION */
+
+.tool-unlocks-section {
+  margin-bottom: 4rem;
+}
+
+.tool-unlocks-section h2 {
+  text-align: center;
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+  color: #fff;
+}
+
+.section-subtitle {
+  text-align: center;
+  color: rgba(255,255,255,0.6);
+  margin-bottom: 2rem;
+  font-size: 1.1rem;
+}
+
+.tool-unlocks-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+.tool-unlock-card {
+  background: rgba(15,23,42,0.6);
+  border: 2px solid rgba(139,92,246,0.3);
+  border-radius: 12px;
+  padding: 1.5rem;
+  transition: transform 0.3s ease, border-color 0.3s ease;
+}
+
+.tool-unlock-card:hover {
+  transform: translateY(-5px);
+  border-color: rgba(139,92,246,0.6);
+}
+
+.tool-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.tool-header h3 {
+  font-size: 1.2rem;
+  color: #fff;
+  margin: 0;
+}
+
+.tool-price {
+  background: linear-gradient(135deg, #8b5cf6, #d946ef);
+  color: #fff;
+  padding: 0.4rem 1rem;
+  border-radius: 20px;
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+
+.tool-description {
+  color: rgba(255,255,255,0.7);
+  margin-bottom: 1rem;
+  line-height: 1.5;
+  min-height: 60px;
+}
+
+.unlock-btn {
+  width: 100%;
+  padding: 0.9rem;
+  background: linear-gradient(135deg, #8b5cf6, #d946ef);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 1rem;
+}
+
+.unlock-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 20px rgba(139,92,246,0.4);
+}
+
+.unlock-btn:disabled {
+  background: rgba(100,116,139,0.3);
+  cursor: not-allowed;
+  opacity: 0.6;
 }
 
 /* TIER CARDS */
@@ -64,6 +167,27 @@
 .premium-card:hover {
   transform: scale(1.08);
   box-shadow: 0 15px 40px rgba(139,92,246,0.4);
+}
+
+.adult-card {
+  border: 2px solid #ef4444;
+  box-shadow: 0 0 20px rgba(239,68,68,0.3);
+}
+
+.adult-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 30px rgba(239,68,68,0.4);
+}
+
+.full-unlock-card {
+  border: 2px solid #fbbf24;
+  box-shadow: 0 0 20px rgba(251,191,36,0.3);
+  transform: scale(1.05);
+}
+
+.full-unlock-card:hover {
+  transform: scale(1.08);
+  box-shadow: 0 15px 40px rgba(251,191,36,0.4);
 }
 
 .popular-badge {
@@ -144,6 +268,19 @@
   font-weight: 500;
 }
 
+.full-feature {
+  color: rgba(255,255,255,0.95);
+  font-weight: 600;
+}
+
+.unlock-tip {
+  text-align: center;
+  color: rgba(251,191,36,0.8);
+  font-size: 0.9rem;
+  margin-top: 0.5rem;
+  font-style: italic;
+}
+
 /* BUTTONS */
 
 .tier-btn {
@@ -177,6 +314,26 @@
 
 .premium-btn:hover {
   box-shadow: 0 8px 30px rgba(139,92,246,0.6);
+}
+
+.adult-btn {
+  border: none;
+  color: #fff;
+  box-shadow: 0 5px 20px rgba(239,68,68,0.4);
+}
+
+.adult-btn:hover {
+  box-shadow: 0 8px 30px rgba(239,68,68,0.6);
+}
+
+.full-unlock-btn {
+  border: none;
+  color: #fff;
+  box-shadow: 0 5px 20px rgba(251,191,36,0.4);
+}
+
+.full-unlock-btn:hover:not(:disabled) {
+  box-shadow: 0 8px 30px rgba(251,191,36,0.6);
 }
 
 /* BENEFITS SECTION */
