@@ -1,9 +1,12 @@
 import React, { useState } from 'react';
 import './PrintOnDemand.css';
+import { PRINT_ON_DEMAND_TERMS } from '../utils/printOnDemandTerms';
 
 export function PrintOnDemand() {
   const [activeTab, setActiveTab] = useState('comics');
   const [selectedProduct, setSelectedProduct] = useState(null);
+  const [termsAccepted, setTermsAccepted] = useState(false);
+  const [showTermsModal, setShowTermsModal] = useState(false);
   const [orders, setOrders] = useState([
     {
       id: 'ORD-001',
@@ -243,7 +246,18 @@ export function PrintOnDemand() {
                 <button className="btn-secondary" onClick={() => setSelectedProduct(null)}>
                   Cancel
                 </button>
-                <button className="btn-primary">
+                <button 
+                  className="btn-primary"
+                  onClick={() => {
+                    if (!termsAccepted) {
+                      setShowTermsModal(true);
+                    } else {
+                      // Create product logic
+                      alert('✅ Product created successfully!');
+                      setSelectedProduct(null);
+                    }
+                  }}
+                >
                   Create Product & Go Live
                 </button>
               </div>
@@ -281,6 +295,93 @@ export function PrintOnDemand() {
           </ul>
         </div>
       </div>
+
+      {/* Terms of Service Modal */}
+      {showTermsModal && (
+        <div className="modal-overlay" onClick={() => setShowTermsModal(false)}>
+          <div className="modal-content terms-modal" onClick={e => e.stopPropagation()}>
+            <h2 style={{color: '#818cf8', marginBottom: '1rem'}}>📋 Print-on-Demand Terms of Service</h2>
+            <div className="terms-content" style={{
+              maxHeight: '400px',
+              overflowY: 'auto',
+              background: 'rgba(15, 23, 42, 0.6)',
+              padding: '1.5rem',
+              borderRadius: '8px',
+              marginBottom: '1rem'
+            }}>
+              {PRINT_ON_DEMAND_TERMS.sections.map((section, idx) => (
+                <div key={idx} style={{marginBottom: '1.5rem'}}>
+                  <h3 style={{color: '#94a3b8', fontSize: '1.1rem', marginBottom: '0.75rem'}}>{section.title}</h3>
+                  <p style={{color: '#cbd5e1', fontSize: '0.95rem', lineHeight: '1.6', whiteSpace: 'pre-line'}}>
+                    {section.content}
+                  </p>
+                </div>
+              ))}
+            </div>
+            <div style={{
+              background: 'rgba(239, 68, 68, 0.1)',
+              border: '1px solid #ef4444',
+              padding: '1rem',
+              borderRadius: '8px',
+              marginBottom: '1rem'
+            }}>
+              <p style={{color: '#fca5a5', fontSize: '0.9rem', fontWeight: 600}}>
+                ⚠️ LEGAL WARNING: Creating counterfeit trading cards (e.g., fake Pokémon, Yu-Gi-Oh!, Magic: The Gathering) is ILLEGAL and will result in immediate account termination and legal action.
+              </p>
+            </div>
+            <label className="checkbox-label" style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.75rem',
+              padding: '1rem',
+              background: 'rgba(99, 102, 241, 0.1)',
+              border: '1px solid #6366f1',
+              borderRadius: '8px',
+              marginBottom: '1rem',
+              cursor: 'pointer'
+            }}>
+              <input 
+                type="checkbox"
+                checked={termsAccepted}
+                onChange={(e) => setTermsAccepted(e.target.checked)}
+                style={{width: '20px', height: '20px', cursor: 'pointer'}}
+              />
+              <span style={{color: '#e2e8f0', fontSize: '0.95rem', fontWeight: 500}}>
+                I have read and agree to the Print-on-Demand Terms of Service. I certify all content is 100% original and I accept full legal responsibility for any copyright violations.
+              </span>
+            </label>
+            <div style={{display: 'flex', gap: '1rem'}}>
+              <button 
+                className="btn-secondary" 
+                onClick={() => setShowTermsModal(false)}
+                style={{flex: 1}}
+              >
+                Cancel
+              </button>
+              <button 
+                className="btn-primary" 
+                onClick={() => {
+                  if (!termsAccepted) {
+                    alert('❌ You must accept the terms to continue');
+                    return;
+                  }
+                  setShowTermsModal(false);
+                  alert('✅ Product created successfully!');
+                  setSelectedProduct(null);
+                }}
+                disabled={!termsAccepted}
+                style={{
+                  flex: 1,
+                  opacity: termsAccepted ? 1 : 0.5,
+                  cursor: termsAccepted ? 'pointer' : 'not-allowed'
+                }}
+              >
+                Accept & Create Product
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

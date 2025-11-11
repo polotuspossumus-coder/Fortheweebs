@@ -10,6 +10,9 @@ export function ComicBookCreator({ userId }) {
   const [selectedPanel, setSelectedPanel] = useState(null);
   const [tool, setTool] = useState('select'); // select, bubble, caption, text
   const [comicTitle, setComicTitle] = useState('Untitled Comic');
+  const [showGrid, setShowGrid] = useState(true);
+  const [gridSize, setGridSize] = useState(10); // 10% grid divisions
+  const [snapToGrid, setSnapToGrid] = useState(true);
   const canvasRef = useRef(null);
 
   function createNewPage() {
@@ -310,6 +313,47 @@ export function ComicBookCreator({ userId }) {
               </button>
             ))}
           </div>
+
+          <div style={{ display: 'flex', gap: '10px', alignItems: 'center', marginLeft: 'auto' }}>
+            <button
+              onClick={() => setShowGrid(!showGrid)}
+              style={{
+                ...toolButtonStyle(showGrid ? '#8b5cf6' : '#555'),
+                fontSize: '14px'
+              }}
+              title="Toggle Grid"
+            >
+              {showGrid ? '🔲 Grid ON' : '⬜ Grid OFF'}
+            </button>
+            <button
+              onClick={() => setSnapToGrid(!snapToGrid)}
+              style={{
+                ...toolButtonStyle(snapToGrid ? '#10b981' : '#555'),
+                fontSize: '14px'
+              }}
+              title="Snap to Grid"
+            >
+              {snapToGrid ? '🧲 Snap' : '🔓 Free'}
+            </button>
+            <select
+              value={gridSize}
+              onChange={(e) => setGridSize(Number(e.target.value))}
+              style={{
+                background: 'rgba(139, 92, 246, 0.2)',
+                border: '1px solid #8b5cf6',
+                borderRadius: '8px',
+                color: '#fff',
+                padding: '8px',
+                cursor: 'pointer'
+              }}
+              title="Grid Size"
+            >
+              <option value={5}>5% Grid</option>
+              <option value={10}>10% Grid</option>
+              <option value={12.5}>8x8 Grid</option>
+              <option value={20}>20% Grid</option>
+            </select>
+          </div>
         </div>
 
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 300px', gap: '30px' }}>
@@ -329,6 +373,41 @@ export function ComicBookCreator({ userId }) {
                 background: 'white',
                 border: '3px solid #000'
               }}>
+                {/* Grid Overlay */}
+                {showGrid && (
+                  <div style={{
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
+                    width: '100%',
+                    height: '100%',
+                    pointerEvents: 'none',
+                    zIndex: 1
+                  }}>
+                    {Array.from({ length: 100 / gridSize - 1 }).map((_, i) => (
+                      <React.Fragment key={i}>
+                        <div style={{
+                          position: 'absolute',
+                          left: `${(i + 1) * gridSize}%`,
+                          top: 0,
+                          width: '1px',
+                          height: '100%',
+                          background: 'rgba(139, 92, 246, 0.2)',
+                          borderLeft: (i + 1) * gridSize === 50 ? '1px dashed rgba(139, 92, 246, 0.5)' : 'none'
+                        }} />
+                        <div style={{
+                          position: 'absolute',
+                          top: `${(i + 1) * gridSize}%`,
+                          left: 0,
+                          height: '1px',
+                          width: '100%',
+                          background: 'rgba(139, 92, 246, 0.2)',
+                          borderTop: (i + 1) * gridSize === 50 ? '1px dashed rgba(139, 92, 246, 0.5)' : 'none'
+                        }} />
+                      </React.Fragment>
+                    ))}
+                  </div>
+                )}
                 <div style={{
                   position: 'absolute',
                   top: 0,
@@ -377,18 +456,58 @@ export function ComicBookCreator({ userId }) {
                       )}
 
                       {/* Speech Bubbles */}
-                      {panel.bubbles.map((bubble) => (
-                        <div
-                          key={bubble.id}
-                          style={{
-                            position: 'absolute',
-                            left: `${bubble.x}%`,
-                            top: `${bubble.y}%`,
-                            width: `${bubble.width}%`,
-                            height: `${bubble.height}%`,
-                            background: 'white',
-                            border: '2px solid #000',
-                            borderRadius: bubble.type === 'thought' ? '50%' : '20px',
+                      {panel.bubbles.map((bubble) => {
+                        let bubbleStyle = {
+                          position: 'absolute',
+                          left: `${bubble.x}%`,
+                          top: `${bubble.y}%`,
+                          width: `${bubble.width}%`,
+                          height: `${bubble.height}%`,
+                          background: 'white',
+                          border: '2px solid #000',
+                          borderRadius: '20px',
+                          padding: '10px',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          fontSize: '12px',
+                          textAlign: 'center',
+                          cursor: 'move',
+                          boxSizing: 'border-box',
+                          zIndex: 10
+                        };
+
+                        // Style variations
+                        if (bubble.type === 'thought') {
+                          bubbleStyle.borderRadius = '50%';
+                          bubbleStyle.border = '2px dashed #000';
+                        } else if (bubble.type === 'shout') {
+                          bubbleStyle.borderRadius = '5px';
+                          bubbleStyle.border = '4px solid #000';
+                          bubbleStyle.fontWeight = 'bold';
+                          bubbleStyle.fontSize = '14px';
+                        } else if (bubble.type === 'caption') {
+                          bubbleStyle.borderRadius = '5px';
+                          bubbleStyle.background = '#f3f4f6';
+                          bubbleStyle.fontStyle = 'italic';
+                        } else if (bubble.type === 'sfx') {
+                          bubbleStyle.background = 'transparent';
+                          bubbleStyle.border = 'none';
+                          bubbleStyle.fontSize = '20px';
+                          bubbleStyle.fontWeight = '900';
+                          bubbleStyle.color = '#000';
+                          bubbleStyle.textShadow = '2px 2px 0 white, -2px -2px 0 white, 2px -2px 0 white, -2px 2px 0 white';
+                        } else if (bubble.type === 'whisper') {
+                          bubbleStyle.border = '1px dashed #666';
+                          bubbleStyle.fontSize = '10px';
+                          bubbleStyle.color = '#666';
+                        }
+
+                        return (
+                          <div
+                            key={bubble.id}
+                            style={bubbleStyle}
+                          >
                             padding: '10px',
                             display: 'flex',
                             alignItems: 'center',
@@ -424,7 +543,8 @@ export function ComicBookCreator({ userId }) {
                           bottom: '10px',
                           left: '10px',
                           display: 'flex',
-                          gap: '5px'
+                          gap: '5px',
+                          flexWrap: 'wrap'
                         }}>
                           <button
                             onClick={(e) => {
@@ -432,9 +552,9 @@ export function ComicBookCreator({ userId }) {
                               addBubble(panel.id, 'speech');
                             }}
                             style={panelButtonStyle}
-                            title="Add speech bubble"
+                            title="Speech bubble"
                           >
-                            💬
+                            💬 Speech
                           </button>
                           <button
                             onClick={(e) => {
@@ -442,9 +562,9 @@ export function ComicBookCreator({ userId }) {
                               addBubble(panel.id, 'thought');
                             }}
                             style={panelButtonStyle}
-                            title="Add thought bubble"
+                            title="Thought bubble"
                           >
-                            💭
+                            💭 Thought
                           </button>
                           <button
                             onClick={(e) => {
@@ -452,9 +572,9 @@ export function ComicBookCreator({ userId }) {
                               addBubble(panel.id, 'caption');
                             }}
                             style={panelButtonStyle}
-                            title="Add caption"
+                            title="Narration caption"
                           >
-                            📝
+                            📝 Caption
                           </button>
                           <button
                             onClick={(e) => {
@@ -462,9 +582,29 @@ export function ComicBookCreator({ userId }) {
                               addBubble(panel.id, 'shout');
                             }}
                             style={panelButtonStyle}
-                            title="Add shout"
+                            title="Shout/yell"
                           >
-                            ❗
+                            ❗ Shout
+                          </button>
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              addBubble(panel.id, 'sfx');
+                            }}
+                            style={{...panelButtonStyle, background: '#f59e0b'}}
+                            title="Sound effect"
+                          >
+                            💥 SFX
+                          </button>
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              addBubble(panel.id, 'whisper');
+                            }}
+                            style={{...panelButtonStyle, background: '#6366f1'}}
+                            title="Whisper"
+                          >
+                            🤫 Whisper
                           </button>
                         </div>
                       )}
