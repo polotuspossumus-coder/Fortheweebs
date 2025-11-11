@@ -35,6 +35,18 @@
     </script>
     
     <script type="module" src="/src/index.jsx"></script>
+    <script>
+      // Hide landing page when app loads
+      if (window.location.search.includes('app=true') || 
+          window.location.search.includes('ref=') || 
+          window.location.search.includes('referral=') || 
+          window.location.search.includes('invite=')) {
+        document.addEventListener('DOMContentLoaded', function() {
+          const landing = document.getElementById('landing-page');
+          if (landing) landing.style.display = 'none';
+        });
+      }
+    </script>
     <style>
       * {
         margin: 0;
@@ -627,20 +639,21 @@
     </style>
   </head>
   <body>
-    <div class="floating-shapes">
-      <div class="shape"></div>
-      <div class="shape"></div>
-      <div class="shape"></div>
-    </div>
-    
-    <div class="hero">
-      <h1>🎌 ForTheWeebs</h1>
-      <p class="tagline">The Ultimate Creator Platform for Anime Culture</p>
-      <div class="cta-buttons">
-        <a href="?app=true" class="btn btn-primary">Launch Dashboard</a>
-        <a href="#features" class="btn btn-secondary">Learn More</a>
+    <div id="landing-page">
+      <div class="floating-shapes">
+        <div class="shape"></div>
+        <div class="shape"></div>
+        <div class="shape"></div>
       </div>
-    </div>
+      
+      <div class="hero">
+        <h1>🎌 ForTheWeebs</h1>
+        <p class="tagline">The Ultimate Creator Platform for Anime Culture</p>
+        <div class="cta-buttons">
+          <a href="?app=true" class="btn btn-primary">Launch Dashboard</a>
+          <a href="#features" class="btn btn-secondary">Learn More</a>
+        </div>
+      </div>
 
     <section class="features" id="features">
       <h2>✨ Features</h2>
@@ -809,6 +822,7 @@
       <p>© 2025 ForTheWeebs — Empowering Creators Worldwide</p>
       <p style="margin-top: 10px; opacity: 0.7;">Made with 💜 for the community</p>
     </footer>
+    </div> <!-- End landing-page -->
 
     <!-- React App Mount Point -->
     <div id="root"></div>
