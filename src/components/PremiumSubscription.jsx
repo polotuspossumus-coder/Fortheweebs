@@ -86,8 +86,8 @@ export function PremiumSubscription({ userId, currentTier }) {
         '🔥 Exclusive superpowers not listed here',
         '🧠 Advanced AI capabilities',
         '⚡ Admin-level features',
-        '🎯 Many cool admin toys to experiment with',
-        '🎁 NFT minter (we take 50% of sales - reluctantly)',
+        '🎯 Many cool experimental admin toys',
+        '🤡 NFT minter tossed in for you idiots who like NFTs (50% cut)',
         '🔓 Access to any new secret toys in the future',
         '👑 VIP "Secret Member" badge',
         '💎 Lifetime priority support',
@@ -453,6 +453,147 @@ export function PremiumSubscription({ userId, currentTier }) {
             <h3>Crush Competitors</h3>
             <p>Patreon: 5-12% + monthly fees. Gumroad: 10% + $9/mo. We: 15-25% + $500 forever.</p>
           </div>
+        </div>
+      </div>
+
+      {/* Crypto & NFT Policy Section */}
+      <div className="crypto-nft-policy" style={{
+        background: 'linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%)',
+        borderRadius: '20px',
+        padding: '40px',
+        marginBottom: '40px',
+        border: '2px solid #ff6b6b'
+      }}>
+        <h2 style={{
+          fontSize: '2rem',
+          marginBottom: '30px',
+          textAlign: 'center',
+          color: '#ff6b6b'
+        }}>💰 Our Crypto & NFT Policy (The Honest Truth)</h2>
+        
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+          gap: '30px'
+        }}>
+          {/* Crypto Policy */}
+          <div style={{
+            background: 'rgba(255, 107, 107, 0.1)',
+            padding: '25px',
+            borderRadius: '15px',
+            border: '2px solid #ff6b6b'
+          }}>
+            <h3 style={{
+              fontSize: '1.5rem',
+              marginBottom: '15px',
+              color: '#ffaa00'
+            }}>Bitcoin & Ethereum (Reluctantly Accepted)</h3>
+            
+            <p style={{ marginBottom: '15px', lineHeight: '1.6' }}>
+              Let's be real: <strong>Crypto is useful and we'll accept it if that's all you have</strong>, 
+              but we want USD period.
+            </p>
+            
+            <p style={{ marginBottom: '15px', lineHeight: '1.6' }}>
+              We <strong>only accept Bitcoin and Ethereum</strong> to help people who might be deciding to 
+              invest some crypto in a new venture. That's it.
+            </p>
+            
+            <div style={{
+              background: 'rgba(255, 0, 0, 0.2)',
+              padding: '15px',
+              borderRadius: '10px',
+              marginTop: '15px',
+              border: '2px solid #ff0000'
+            }}>
+              <p style={{
+                fontSize: '1.1rem',
+                fontWeight: '700',
+                color: '#ff6b6b',
+                marginBottom: '10px'
+              }}>⚠️ UPCHARGE IS NON-NEGOTIABLE</p>
+              <ul style={{ marginLeft: '20px', lineHeight: '1.8' }}>
+                <li><strong>$1000 in Bitcoin</strong> (auto-converted to USD)</li>
+                <li><strong>$2000 in Ethereum</strong> (auto-converted to USD)</li>
+              </ul>
+              <p style={{ marginTop: '15px', fontStyle: 'italic', color: '#ffaa00' }}>
+                💡 <strong>Pro tip:</strong> Pay with cash or credit card instead. We're upcharging because 
+                we want American USD.
+              </p>
+            </div>
+          </div>
+
+          {/* NFT Policy */}
+          <div style={{
+            background: 'rgba(139, 92, 246, 0.1)',
+            padding: '25px',
+            borderRadius: '15px',
+            border: '2px solid #8b5cf6'
+          }}>
+            <h3 style={{
+              fontSize: '1.5rem',
+              marginBottom: '15px',
+              color: '#8b5cf6'
+            }}>NFTs Are Stupid (But Available)</h3>
+            
+            <p style={{ marginBottom: '15px', lineHeight: '1.6' }}>
+              <strong>We don't want anything to do with NFTs.</strong> They're stupid. Period.
+            </p>
+            
+            <p style={{ marginBottom: '15px', lineHeight: '1.6' }}>
+              But if some idiot wants to buy an NFT, <strong>we're certainly taking half</strong> because 
+              y'all are both idiots.
+            </p>
+            
+            <div style={{
+              background: 'rgba(139, 92, 246, 0.2)',
+              padding: '15px',
+              borderRadius: '10px',
+              marginTop: '15px',
+              border: '2px solid #8b5cf6'
+            }}>
+              <p style={{
+                fontSize: '1.1rem',
+                fontWeight: '700',
+                color: '#8b5cf6',
+                marginBottom: '10px'
+              }}>🤡 NFT Minter Details:</p>
+              <ul style={{ marginLeft: '20px', lineHeight: '1.8' }}>
+                <li>Tossed into the <strong>$1000 tier</strong> as a random tidbit</li>
+                <li>Bundled with experimental admin toys</li>
+                <li><strong>We take 50% of all NFT sales</strong></li>
+                <li>No exceptions, no negotiations</li>
+              </ul>
+              <p style={{ marginTop: '15px', fontStyle: 'italic', color: '#8b5cf6' }}>
+                This is why it's expensive. We don't want to deal with NFTs, but if you insist on being 
+                an idiot, we're getting paid.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* Bottom Banner */}
+        <div style={{
+          marginTop: '30px',
+          padding: '20px',
+          background: 'rgba(255, 107, 107, 0.1)',
+          borderRadius: '10px',
+          border: '2px dashed #ff6b6b',
+          textAlign: 'center'
+        }}>
+          <p style={{
+            fontSize: '1.2rem',
+            fontWeight: '700',
+            color: '#ff6b6b',
+            marginBottom: '10px'
+          }}>
+            🎯 The Bottom Line
+          </p>
+          <p style={{ lineHeight: '1.6', maxWidth: '800px', margin: '0 auto' }}>
+            We're being brutally honest: <strong>Use cash or credit card</strong> for the best prices. 
+            Crypto is accepted to help investors, but it's premium priced. NFTs are stupid, but if you're 
+            into that nonsense, fine — just know we're taking our cut.
+          </p>
         </div>
       </div>
 
