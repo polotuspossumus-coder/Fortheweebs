@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auto Admin Login - ForTheWeebs</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+        }
+        .container {
+            text-align: center;
+            padding: 40px;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 20px;
+            border: 3px solid #FFD700;
+            max-width: 500px;
+        }
+        .badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+            padding: 12px 30px;
+            border-radius: 50px;
+            font-size: 1.2rem;
+            font-weight: 900;
+            color: #000;
+            box-shadow: 0 6px 25px rgba(255, 215, 0, 0.5);
+            margin-bottom: 30px;
+        }
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 900;
+            margin-bottom: 20px;
+        }
+        .spinner {
+            width: 60px;
+            height: 60px;
+            border: 6px solid rgba(255, 255, 255, 0.1);
+            border-top-color: #FFD700;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 30px auto;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        .status {
+            font-size: 1.1rem;
+            margin: 20px 0;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+        }
+        .success {
+            color: #4ade80;
+        }
+        .error {
+            color: #f87171;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="badge">👑 OWNER ACCESS 👑</div>
+        <h1>Setting Up Permanent Admin Access</h1>
+        <div class="spinner"></div>
+        <div id="status" class="status">Initializing...</div>
+    </div>
+    
+    <script>
+        const statusEl = document.getElementById('status');
+        
+        function updateStatus(message, isSuccess = true) {
+            statusEl.textContent = message;
+            statusEl.className = 'status ' + (isSuccess ? 'success' : 'error');
+        }
+        
+        async function setupPermanentAdmin() {
+            try {
+                // Step 1: Clear old data
+                updateStatus('🧹 Clearing old authentication data...');
+                await new Promise(resolve => setTimeout(resolve, 500));
+                
+                // Don't clear everything, just auth-related items
+                const keysToRemove = ['qr_auth_pending', 'pending_qr_token', 'pending_qr_timestamp'];
+                keysToRemove.forEach(key => localStorage.removeItem(key));
+                
+                // Step 2: Set permanent admin credentials
+                updateStatus('🔐 Setting permanent admin credentials...');
+                await new Promise(resolve => setTimeout(resolve, 500));
+                
+                localStorage.setItem('adminAuthenticated', 'true');
+                localStorage.setItem('adminDeviceId', 'owner_permanent_device');
+                localStorage.setItem('adminPhoneNumber', '+12813819498');
+                localStorage.setItem('userId', 'owner');
+                
+                // Step 3: Add device to authorized list
+                updateStatus('📱 Adding device to authorized list...');
+                await new Promise(resolve => setTimeout(resolve, 500));
+                
+                const authorizedDevices = [{
+                    deviceId: 'owner_permanent_device',
+                    deviceType: 'desktop',
+                    addedAt: Date.now(),
+                    lastUsed: Date.now()
+                }];
+                
+                localStorage.setItem('authorized_devices', JSON.stringify(authorizedDevices));
+                
+                // Step 4: Unlock all tools
+                updateStatus('🔓 Unlocking all tools and features...');
+                await new Promise(resolve => setTimeout(resolve, 500));
+                
+                const toolsToUnlock = [
+                    'photo_tools',
+                    'design_studio',
+                    'comic_maker',
+                    'audio_studio',
+                    'cgi_studio',
+                    'ai_assistant',
+                    'ar_vr_studio',
+                    'full_platform',
+                    'super_admin_powers',
+                    'adult_monthly'
+                ];
+                
+                const unlocks = {};
+                toolsToUnlock.forEach(tool => {
+                    unlocks[tool] = {
+                        unlocked: true,
+                        unlockedAt: Date.now(),
+                        method: 'owner_access',
+                        price: 0
+                    };
+                });
+                
+                localStorage.setItem('tool_unlocks_owner', JSON.stringify(unlocks));
+                
+                // Step 5: Success!
+                updateStatus('✅ Admin access configured successfully!');
+                await new Promise(resolve => setTimeout(resolve, 1000));
+                
+                updateStatus('🚀 Redirecting to admin panel...');
+                await new Promise(resolve => setTimeout(resolve, 1000));
+                
+                // Redirect to main site
+                window.location.href = '/?admin=true';
+                
+            } catch (error) {
+                console.error('Setup error:', error);
+                updateStatus('❌ Setup failed: ' + error.message, false);
+                
+                // Still try to redirect after 3 seconds
+                setTimeout(() => {
+                    window.location.href = '/?admin=true';
+                }, 3000);
+            }
+        }
+        
+        // Start setup
+        setupPermanentAdmin();
+    </script>
+</body>
+</html>

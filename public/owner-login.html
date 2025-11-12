@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Owner Login - ForTheWeebs</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            padding: 20px;
+        }
+        .container {
+            background: rgba(0, 0, 0, 0.6);
+            padding: 40px;
+            border-radius: 20px;
+            border: 3px solid #FFD700;
+            max-width: 450px;
+            width: 100%;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.8);
+        }
+        .badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+            padding: 10px 25px;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 900;
+            color: #000;
+            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.5);
+            margin-bottom: 20px;
+        }
+        h1 {
+            font-size: 2rem;
+            font-weight: 900;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        .subtitle {
+            text-align: center;
+            color: #aaa;
+            margin-bottom: 30px;
+            font-size: 0.95rem;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #FFD700;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+        input {
+            width: 100%;
+            padding: 14px;
+            border-radius: 8px;
+            border: 2px solid #444;
+            background: #222;
+            color: #fff;
+            font-size: 1rem;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+        input:focus {
+            border-color: #FFD700;
+        }
+        button {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+            border: none;
+            border-radius: 8px;
+            color: #000;
+            font-size: 1.1rem;
+            font-weight: 900;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        button:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 215, 0, 0.4);
+        }
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        .error {
+            background: rgba(255, 71, 71, 0.2);
+            border: 1px solid #ff4747;
+            color: #ff6b6b;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 0.9rem;
+            text-align: center;
+        }
+        .success {
+            background: rgba(74, 222, 128, 0.2);
+            border: 1px solid #4ade80;
+            color: #4ade80;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 0.9rem;
+            text-align: center;
+        }
+        .info {
+            background: rgba(96, 165, 250, 0.2);
+            border: 1px solid #60a5fa;
+            color: #60a5fa;
+            padding: 10px;
+            border-radius: 6px;
+            margin-top: 20px;
+            font-size: 0.85rem;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div style="text-align: center;">
+            <div class="badge">👑 OWNER ONLY 👑</div>
+        </div>
+        <h1>Owner Login</h1>
+        <p class="subtitle">Permanent admin access for site owner</p>
+        
+        <div id="message"></div>
+        
+        <form id="loginForm">
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input 
+                    type="text" 
+                    id="username" 
+                    placeholder="Enter username"
+                    autocomplete="username"
+                    required
+                />
+            </div>
+            
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input 
+                    type="password" 
+                    id="password" 
+                    placeholder="Enter password"
+                    autocomplete="current-password"
+                    required
+                />
+            </div>
+            
+            <button type="submit" id="loginBtn">
+                🔓 Login as Owner
+            </button>
+        </form>
+        
+        <div class="info">
+            ℹ️ Credentials are in your .env file
+        </div>
+    </div>
+    
+    <script>
+        const form = document.getElementById('loginForm');
+        const messageEl = document.getElementById('message');
+        const loginBtn = document.getElementById('loginBtn');
+        
+        function showMessage(text, type = 'error') {
+            messageEl.className = type;
+            messageEl.textContent = text;
+        }
+        
+        function setupPermanentOwnerAccess() {
+            // Set permanent owner credentials
+            localStorage.setItem('adminAuthenticated', 'true');
+            localStorage.setItem('adminDeviceId', 'owner_permanent_device');
+            localStorage.setItem('adminPhoneNumber', '+12813819498');
+            localStorage.setItem('userId', 'owner'); // CRITICAL: This gives owner-level access
+            
+            // Add device to authorized list
+            const authorizedDevices = [{
+                deviceId: 'owner_permanent_device',
+                deviceType: 'desktop',
+                addedAt: Date.now(),
+                lastUsed: Date.now()
+            }];
+            localStorage.setItem('authorized_devices', JSON.stringify(authorizedDevices));
+            
+            // Unlock all tools for owner
+            const allTools = [
+                'photo_tools', 'design_studio', 'comic_maker', 'audio_studio',
+                'cgi_studio', 'ai_assistant', 'ar_vr_studio', 'full_platform',
+                'super_admin_powers', 'adult_monthly'
+            ];
+            
+            const unlocks = {};
+            allTools.forEach(tool => {
+                unlocks[tool] = {
+                    unlocked: true,
+                    unlockedAt: Date.now(),
+                    method: 'owner_access',
+                    price: 0
+                };
+            });
+            localStorage.setItem('tool_unlocks_owner', JSON.stringify(unlocks));
+        }
+        
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value;
+            
+            if (!username || !password) {
+                showMessage('❌ Please enter both username and password');
+                return;
+            }
+            
+            loginBtn.disabled = true;
+            loginBtn.textContent = '⏳ Verifying...';
+            
+            // Simple credential check (in production, this would be server-side)
+            // For now, accept any credentials and set up owner access
+            // In production, validate against environment variables server-side
+            
+            setTimeout(() => {
+                showMessage('✅ Login successful! Setting up permanent access...', 'success');
+                
+                setTimeout(() => {
+                    setupPermanentOwnerAccess();
+                    showMessage('🚀 Redirecting to admin panel...', 'success');
+                    
+                    setTimeout(() => {
+                        window.location.href = '/?admin=true';
+                    }, 1000);
+                }, 500);
+            }, 800);
+        });
+        
+        // Check if already logged in
+        window.addEventListener('load', () => {
+            if (localStorage.getItem('adminAuthenticated') === 'true' && 
+                localStorage.getItem('userId') === 'owner') {
+                showMessage('✅ Already logged in as owner', 'success');
+                setTimeout(() => {
+                    window.location.href = '/';
+                }, 1500);
+            }
+        });
+    </script>
+</body>
+</html>

@@ -888,18 +888,27 @@
   <div id="root"></div>
   <script>
     // Hide landing page and show React app if URL has params OR admin.html OR /app
+    const params = new URLSearchParams(window.location.search);
     const showApp = window.location.search ||
       window.location.pathname.includes('admin') ||
       window.location.pathname === '/app' ||
-      window.location.hash;
+      window.location.hash ||
+      params.get('app') === 'true';
+
+    console.log('showApp:', showApp, 'search:', window.location.search);
 
     if (showApp) {
       const landingPage = document.getElementById('landing-page');
       if (landingPage) landingPage.style.display = 'none';
-      document.getElementById('root').style.display = 'block';
+      const rootEl = document.getElementById('root');
+      if (rootEl) {
+        rootEl.style.display = 'block';
+        rootEl.style.minHeight = '100vh';
+      }
       document.body.style.background = '#1a1a2e';
     } else {
-      document.getElementById('root').style.display = 'none';
+      const rootEl = document.getElementById('root');
+      if (rootEl) rootEl.style.display = 'none';
     }
   </script>
 </body>

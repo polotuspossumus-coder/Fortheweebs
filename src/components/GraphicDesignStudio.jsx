@@ -14,6 +14,7 @@ export function GraphicDesignStudio({ userId }) {
   const [selectedLayer, setSelectedLayer] = useState(null);
   const [tool, setTool] = useState('select');
   const [textInput, setTextInput] = useState('');
+  const [isDragging, setIsDragging] = useState(false);
   const canvasRef = useRef(null);
 
   const TOOLS = {
@@ -104,6 +105,47 @@ export function GraphicDesignStudio({ userId }) {
 
     setLayers([...layers, newLayer]);
     setSelectedLayer(newLayer.id);
+  };
+
+  // Drag and drop handlers for images
+  const handleDragEnter = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(true);
+  };
+
+  const handleDragLeave = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(false);
+  };
+
+  const handleDragOver = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+  };
+
+  const handleDrop = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(false);
+
+    const file = e.dataTransfer.files[0];
+    if (file && file.type.startsWith('image/')) {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        const img = new Image();
+        img.onload = () => {
+          addLayer('image', {
+            imageData: event.target.result,
+            width: Math.min(img.width, canvas.width - 100),
+            height: Math.min(img.height, canvas.height - 100)
+          });
+        };
+        img.src = event.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
   };
 
   const addText = () => {
@@ -216,7 +258,37 @@ export function GraphicDesignStudio({ userId }) {
       minHeight: '100vh',
       padding: '40px 20px',
       color: 'white'
-    }}>
+    }}
+      onDragEnter={handleDragEnter}
+      onDragLeave={handleDragLeave}
+      onDragOver={handleDragOver}
+      onDrop={handleDrop}
+    >
+      {isDragging && (
+        <div style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          background: 'rgba(102, 126, 234, 0.9)',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+          zIndex: 9999,
+          fontSize: '48px',
+          fontWeight: 'bold',
+          textAlign: 'center',
+          pointerEvents: 'none'
+        }}>
+          <div style={{ fontSize: '120px', marginBottom: '30px' }}>🖼️</div>
+          <div>Drop Image Here!</div>
+          <div style={{ fontSize: '24px', marginTop: '20px', opacity: 0.9 }}>
+            Will be added as a new layer
+          </div>
+        </div>
+      )}
       <div style={{ maxWidth: '1800px', margin: '0 auto' }}>
         {/* Header */}
         <div style={{

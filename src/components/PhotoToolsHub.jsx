@@ -3,17 +3,23 @@ import { PhotoEnhancementSuite } from './PhotoEnhancementSuite';
 import { DuplicatePhotoDetector } from './DuplicatePhotoDetector';
 import { ProPhotoFilters } from './ProPhotoFilters';
 import { BatchPhotoProcessor } from './BatchPhotoProcessor';
+import { AdvancedPhotoEditor } from './AdvancedPhotoEditor';
+import { MassPhotoProcessor } from './MassPhotoProcessor';
+import { ProPhotoEditor } from './ProPhotoEditor';
 
 /**
  * PhotoToolsHub - Central hub for all photo editing tools
- * Includes enhancement, filters, duplicates, and batch processing
+ * Includes enhancement, filters, duplicates, batch processing, and mass folder processing
  */
 export function PhotoToolsHub({ userId }) {
   const [activeTool, setActiveTool] = useState('enhance');
 
   const TOOLS = [
     { id: 'enhance', name: 'Photo Enhancement', icon: '✨', component: PhotoEnhancementSuite },
-    { id: 'filters', name: 'Pro Filters', icon: '🎨', component: ProPhotoFilters },
+    { id: 'pro', name: 'Pro Editor (Photoshop)', icon: '🎨', component: ProPhotoEditor },
+    { id: 'advanced', name: 'Advanced Editor', icon: '🔧', component: AdvancedPhotoEditor },
+    { id: 'mass', name: 'Mass Processor', icon: '📁', component: MassPhotoProcessor },
+    { id: 'filters', name: 'Pro Filters', icon: '�', component: ProPhotoFilters },
     { id: 'duplicates', name: 'Find Duplicates', icon: '🔍', component: DuplicatePhotoDetector },
     { id: 'batch', name: 'Batch Process', icon: '📦', component: BatchPhotoProcessor }
   ];

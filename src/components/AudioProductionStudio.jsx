@@ -11,6 +11,7 @@ export function AudioProductionStudio({ userId }) {
   const [bpm, setBpm] = useState(120);
   const [audioContext, setAudioContext] = useState(null);
   const [masterVolume, setMasterVolume] = useState(0.8);
+  const [isDragging, setIsDragging] = useState(false);
   const mediaRecorderRef = useRef(null);
   const audioChunksRef = useRef([]);
 
@@ -38,6 +39,59 @@ export function AudioProductionStudio({ userId }) {
     };
     setTracks([...tracks, newTrack]);
     setActiveTrack(newTrack.id);
+  };
+
+  // Drag and drop handlers for audio files
+  const handleDragEnter = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(true);
+  };
+
+  const handleDragLeave = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(false);
+  };
+
+  const handleDragOver = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+  };
+
+  const handleDrop = async (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(false);
+
+    const files = Array.from(e.dataTransfer.files);
+    const audioFiles = files.filter(f => 
+      f.type.startsWith('audio/') || 
+      f.name.match(/\.(mp3|wav|ogg|m4a|flac)$/i)
+    );
+
+    // Create a track for each audio file
+    audioFiles.forEach((file) => {
+      const audioUrl = URL.createObjectURL(file);
+      const newTrack = {
+        id: `track_${Date.now()}_${Math.random()}`,
+        name: `🎤 ${file.name}`,
+        type: 'audio',
+        volume: 0.8,
+        pan: 0,
+        mute: false,
+        solo: false,
+        effects: [],
+        audioUrl: audioUrl,
+        waveform: [],
+        duration: 0
+      };
+      setTracks(prev => [...prev, newTrack]);
+    });
+
+    if (audioFiles.length > 0) {
+      alert(`✅ Added ${audioFiles.length} audio file(s) to tracks!`);
+    }
   };
 
   const startRecording = async (trackId) => {
@@ -122,12 +176,20 @@ export function AudioProductionStudio({ userId }) {
   };
 
   const EFFECTS = [
-    { id: 'reverb', name: 'Reverb', icon: '🌊' },
-    { id: 'delay', name: 'Delay', icon: '⏱️' },
-    { id: 'eq', name: 'EQ', icon: '📊' },
-    { id: 'compressor', name: 'Compressor', icon: '🎚️' },
-    { id: 'distortion', name: 'Distortion', icon: '🔥' },
-    { id: 'chorus', name: 'Chorus', icon: '🎵' }
+    { id: 'reverb', name: 'Reverb', icon: '🌊', params: { roomSize: 0.5, damping: 0.5, wetDry: 0.3 } },
+    { id: 'delay', name: 'Delay', icon: '⏱️', params: { time: 0.5, feedback: 0.3, wetDry: 0.4 } },
+    { id: 'eq', name: 'EQ', icon: '📊', params: { low: 0, mid: 0, high: 0 } },
+    { id: 'compressor', name: 'Compressor', icon: '🎚️', params: { threshold: -20, ratio: 4, attack: 0.003, release: 0.25 } },
+    { id: 'distortion', name: 'Distortion', icon: '🔥', params: { amount: 0.5, tone: 0.5 } },
+    { id: 'chorus', name: 'Chorus', icon: '🎵', params: { rate: 1.5, depth: 0.2, wetDry: 0.5 } },
+    { id: 'flanger', name: 'Flanger', icon: '🌀', params: { rate: 0.5, depth: 0.002, feedback: 0.5 } },
+    { id: 'phaser', name: 'Phaser', icon: '✨', params: { rate: 0.5, depth: 1, feedback: 0.5, stages: 4 } },
+    { id: 'limiter', name: 'Limiter', icon: '📏', params: { threshold: -1, release: 0.05 } },
+    { id: 'gate', name: 'Noise Gate', icon: '🚪', params: { threshold: -50, attack: 0.001, release: 0.1 } },
+    { id: 'autotune', name: 'Auto-Tune', icon: '🎤', params: { key: 'C', scale: 'major', correction: 0.5 } },
+    { id: 'pitch-shift', name: 'Pitch Shift', icon: '↕️', params: { semitones: 0, cents: 0 } },
+    { id: 'time-stretch', name: 'Time Stretch', icon: '⏳', params: { ratio: 1.0, preservePitch: true } },
+    { id: 'stereo-widener', name: 'Stereo Width', icon: '↔️', params: { width: 1.0 } }
   ];
 
   return (
@@ -136,7 +198,37 @@ export function AudioProductionStudio({ userId }) {
       minHeight: '100vh',
       padding: '40px 20px',
       color: 'white'
-    }}>
+    }}
+      onDragEnter={handleDragEnter}
+      onDragLeave={handleDragLeave}
+      onDragOver={handleDragOver}
+      onDrop={handleDrop}
+    >
+      {isDragging && (
+        <div style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          background: 'rgba(102, 126, 234, 0.9)',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+          zIndex: 9999,
+          fontSize: '48px',
+          fontWeight: 'bold',
+          textAlign: 'center',
+          pointerEvents: 'none'
+        }}>
+          <div style={{ fontSize: '120px', marginBottom: '30px' }}>🎵</div>
+          <div>Drop Audio Files Here!</div>
+          <div style={{ fontSize: '24px', marginTop: '20px', opacity: 0.9 }}>
+            Supports MP3, WAV, OGG, M4A, FLAC
+          </div>
+        </div>
+      )}
       <div style={{ maxWidth: '1600px', margin: '0 auto' }}>
         {/* Header */}
         <div style={{
@@ -159,6 +251,51 @@ export function AudioProductionStudio({ userId }) {
             Professional DAW • Multi-track recording • Mixing • Effects • Beat making
           </p>
 
+          {/* BPM and Time Signature */}
+          <div style={{
+            display: 'flex',
+            gap: '20px',
+            marginTop: '20px',
+            alignItems: 'center',
+            background: 'rgba(255,255,255,0.05)',
+            padding: '15px',
+            borderRadius: '12px'
+          }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+              <label style={{ fontSize: '14px', opacity: 0.8 }}>BPM:</label>
+              <input
+                type="number"
+                min="40"
+                max="240"
+                value={bpm}
+                onChange={(e) => setBpm(parseInt(e.target.value))}
+                style={{
+                  background: 'rgba(255,255,255,0.1)',
+                  border: '1px solid rgba(255,255,255,0.2)',
+                  padding: '8px 12px',
+                  borderRadius: '8px',
+                  color: 'white',
+                  width: '70px',
+                  fontSize: '16px',
+                  fontWeight: 'bold'
+                }}
+              />
+              <span style={{ fontSize: '12px', opacity: 0.7 }}>(40-240)</span>
+            </div>
+
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+              <label style={{ fontSize: '14px', opacity: 0.8 }}>Sample Rate:</label>
+              <span style={{ fontSize: '14px', fontWeight: 'bold' }}>
+                {audioContext?.sampleRate ? `${audioContext.sampleRate} Hz` : '44.1 kHz'}
+              </span>
+            </div>
+
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+              <label style={{ fontSize: '14px', opacity: 0.8 }}>Bit Depth:</label>
+              <span style={{ fontSize: '14px', fontWeight: 'bold' }}>24-bit</span>
+            </div>
+          </div>
+
           {/* Transport Controls */}
           <div style={{
             display: 'flex',
@@ -173,29 +310,22 @@ export function AudioProductionStudio({ userId }) {
               <button style={controlButtonStyle}>⏸️ Pause</button>
               <button style={controlButtonStyle}>⏹️ Stop</button>
               <button style={controlButtonStyle}>⏭️ Next</button>
+              <button style={{...controlButtonStyle, background: isRecording ? '#ff4444' : 'rgba(255,68,68,0.2)', border: '1px solid #ff4444'}}>
+                ⏺ {isRecording ? 'Recording...' : 'Record'}
+              </button>
             </div>
 
             <div style={{ display: 'flex', gap: '15px', alignItems: 'center' }}>
-              <label>BPM:</label>
-              <input
-                type="number"
-                value={bpm}
-                onChange={(e) => setBpm(parseInt(e.target.value))}
-                style={{
-                  background: 'rgba(255,255,255,0.1)',
-                  border: '1px solid rgba(255,255,255,0.2)',
-                  padding: '8px 12px',
-                  borderRadius: '8px',
-                  color: 'white',
-                  width: '80px',
-                  fontSize: '16px'
-                }}
-              />
-              <span>🎵</span>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <span style={{ fontSize: '14px', opacity: 0.8 }}>🕐</span>
+                <span style={{ fontFamily: 'monospace', fontSize: '16px', fontWeight: 'bold' }}>
+                  00:00:00
+                </span>
+              </div>
             </div>
 
             <div style={{ display: 'flex', gap: '15px', alignItems: 'center', marginLeft: 'auto' }}>
-              <label>Master:</label>
+              <label style={{ fontSize: '14px', opacity: 0.8 }}>Master Volume:</label>
               <input
                 type="range"
                 min="0"
@@ -205,7 +335,18 @@ export function AudioProductionStudio({ userId }) {
                 onChange={(e) => setMasterVolume(parseFloat(e.target.value))}
                 style={{ width: '150px' }}
               />
-              <span>{Math.round(masterVolume * 100)}%</span>
+              <span style={{ 
+                minWidth: '45px', 
+                fontFamily: 'monospace', 
+                fontSize: '14px',
+                fontWeight: 'bold',
+                color: masterVolume > 0.9 ? '#ff4444' : masterVolume > 0.7 ? '#ffc107' : '#4CAF50'
+              }}>
+                {Math.round(masterVolume * 100)}%
+              </span>
+              <span style={{ fontSize: '14px' }}>
+                {masterVolume > 0.9 ? '⚠️' : masterVolume > 0.7 ? '🔊' : '🔉'}
+              </span>
             </div>
           </div>
         </div>
@@ -243,6 +384,30 @@ export function AudioProductionStudio({ userId }) {
             style={actionButtonStyle('#4facfe')}
           >
             📦 Export Mixdown
+          </button>
+          <button
+            onClick={() => alert('Voice recording with real-time effects coming soon!')}
+            style={actionButtonStyle('#ff6b6b')}
+          >
+            🎙️ Voice Recording
+          </button>
+          <button
+            onClick={() => alert('Import audio files (MP3, WAV, OGG) coming soon!')}
+            style={actionButtonStyle('#51cf66')}
+          >
+            📁 Import Audio
+          </button>
+          <button
+            onClick={() => alert('AI mastering will automatically optimize your mix!')}
+            style={actionButtonStyle('#ffd43b')}
+          >
+            🤖 AI Mastering
+          </button>
+          <button
+            onClick={() => alert('Stem separation will extract vocals, drums, bass, and instruments!')}
+            style={actionButtonStyle('#9775fa')}
+          >
+            🎼 Stem Separation
           </button>
         </div>
 
@@ -349,7 +514,7 @@ export function AudioProductionStudio({ userId }) {
                 {/* Volume/Pan */}
                 <div style={{ display: 'flex', gap: '15px', alignItems: 'center' }}>
                   <div>
-                    <div style={{ fontSize: '12px', marginBottom: '5px' }}>Volume</div>
+                    <div style={{ fontSize: '11px', marginBottom: '5px', opacity: 0.8 }}>Volume</div>
                     <input
                       type="range"
                       min="0"
@@ -359,9 +524,12 @@ export function AudioProductionStudio({ userId }) {
                       onChange={(e) => updateTrack(track.id, { volume: parseFloat(e.target.value) })}
                       style={{ width: '100px' }}
                     />
+                    <div style={{ fontSize: '11px', marginTop: '2px', fontFamily: 'monospace', fontWeight: 'bold' }}>
+                      {Math.round(track.volume * 100)}%
+                    </div>
                   </div>
                   <div>
-                    <div style={{ fontSize: '12px', marginBottom: '5px' }}>Pan</div>
+                    <div style={{ fontSize: '11px', marginBottom: '5px', opacity: 0.8 }}>Pan</div>
                     <input
                       type="range"
                       min="-1"
@@ -371,6 +539,9 @@ export function AudioProductionStudio({ userId }) {
                       onChange={(e) => updateTrack(track.id, { pan: parseFloat(e.target.value) })}
                       style={{ width: '100px' }}
                     />
+                    <div style={{ fontSize: '11px', marginTop: '2px', fontFamily: 'monospace', fontWeight: 'bold' }}>
+                      {track.pan === 0 ? 'C' : track.pan < 0 ? `L${Math.abs(Math.round(track.pan * 100))}` : `R${Math.round(track.pan * 100)}`}
+                    </div>
                   </div>
                 </div>
 
@@ -421,32 +592,65 @@ export function AudioProductionStudio({ userId }) {
                   paddingTop: '20px',
                   borderTop: '1px solid rgba(255,255,255,0.1)'
                 }}>
-                  <h4 style={{ marginBottom: '15px' }}>🎛️ Effects Chain</h4>
-                  <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
-                    {EFFECTS.map(effect => (
-                      <button
-                        key={effect.id}
-                        onClick={() => applyEffect(track.id, effect)}
-                        style={{
-                          background: track.effects.find(e => e.id === effect.id)
-                            ? '#667eea'
-                            : 'rgba(255,255,255,0.1)',
-                          border: 'none',
-                          padding: '10px 20px',
-                          borderRadius: '8px',
-                          color: 'white',
-                          cursor: 'pointer',
-                          fontSize: '14px'
-                        }}
-                      >
-                        {effect.icon} {effect.name}
-                      </button>
-                    ))}
+                  <h4 style={{ marginBottom: '15px', fontSize: '16px' }}>🎛️ Effects Chain ({track.effects.length} active)</h4>
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(140px, 1fr))', gap: '8px' }}>
+                    {EFFECTS.map(effect => {
+                      const isActive = track.effects.find(e => e.id === effect.id);
+                      return (
+                        <button
+                          key={effect.id}
+                          onClick={() => applyEffect(track.id, effect)}
+                          style={{
+                            background: isActive ? '#667eea' : 'rgba(255,255,255,0.1)',
+                            border: isActive ? '2px solid #4CAF50' : '1px solid rgba(255,255,255,0.2)',
+                            padding: '8px 12px',
+                            borderRadius: '8px',
+                            color: 'white',
+                            cursor: 'pointer',
+                            fontSize: '12px',
+                            fontWeight: isActive ? 'bold' : 'normal',
+                            display: 'flex',
+                            flexDirection: 'column',
+                            alignItems: 'center',
+                            gap: '4px',
+                            transition: 'all 0.2s'
+                          }}
+                          title={effect.params ? Object.entries(effect.params).map(([k, v]) => `${k}: ${v}`).join('\n') : ''}
+                        >
+                          <span style={{ fontSize: '20px' }}>{effect.icon}</span>
+                          <span style={{ fontSize: '11px' }}>{effect.name}</span>
+                          {isActive && <span style={{ fontSize: '10px', color: '#4CAF50' }}>✓ ON</span>}
+                        </button>
+                      );
+                    })}
                   </div>
 
                   {track.effects.length > 0 && (
-                    <div style={{ marginTop: '15px' }}>
-                      <strong>Active:</strong> {track.effects.map(e => e.name).join(', ')}
+                    <div style={{ 
+                      marginTop: '15px',
+                      padding: '12px',
+                      background: 'rgba(76, 175, 80, 0.1)',
+                      borderRadius: '8px',
+                      border: '1px solid rgba(76, 175, 80, 0.3)'
+                    }}>
+                      <div style={{ fontSize: '13px', fontWeight: 'bold', marginBottom: '8px' }}>Active Chain:</div>
+                      <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+                        {track.effects.map((e, idx) => (
+                          <span key={idx} style={{ 
+                            background: 'rgba(102, 126, 234, 0.3)',
+                            padding: '4px 10px',
+                            borderRadius: '6px',
+                            fontSize: '12px',
+                            fontWeight: 'bold',
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '5px'
+                          }}>
+                            {e.icon} {e.name}
+                            {idx < track.effects.length - 1 && <span style={{ opacity: 0.5 }}>→</span>}
+                          </span>
+                        ))}
+                      </div>
                     </div>
                   )}
                 </div>

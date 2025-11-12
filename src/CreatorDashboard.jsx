@@ -27,14 +27,18 @@ import { PremiumSubscription } from "./components/PremiumSubscription";
 import { ToolLockGate } from "./components/ToolLockGate";
 import { DevBalanceManager } from "./components/DevBalanceManager";
 import { getUserBalance } from "./utils/toolUnlockSystem";
+import { ProfileCreator } from "./components/ProfileCreator";
+import { AIVideoGenerator } from "./components/AIVideoGenerator";
+import { ProPhotoEditor } from "./components/ProPhotoEditor";
+import { SmartScreenshotSorter } from "./components/SmartScreenshotSorter";
 
 export const CreatorDashboard = ({ userId = "demo_user", ipAddress = "127.0.0.1", tier = "free" }) => {
-  const [tosAccepted, setTosAccepted] = useState(false);
-  const [creatorAgreementAccepted, setCreatorAgreementAccepted] = useState(false);
+  const isAdmin = userId === "owner" || userId === "admin";
+  const [tosAccepted, setTosAccepted] = useState(isAdmin ? true : false); // Owner bypasses TOS
+  const [creatorAgreementAccepted, setCreatorAgreementAccepted] = useState(isAdmin ? true : false); // Owner bypasses agreement
   const [currentTier] = useState(tier || 'General Access');
   const [userBalance, setUserBalance] = useState(0);
   const version = "2025.10";
-  const isAdmin = userId === "owner" || userId === "admin";
 
   // Load user balance on mount
   useEffect(() => {
@@ -59,8 +63,11 @@ export const CreatorDashboard = ({ userId = "demo_user", ipAddress = "127.0.0.1"
     <Tabs defaultValue="overview" className="dashboard-tabs">
       <TabsList>
         <TabsTrigger value="overview">Overview</TabsTrigger>
+        <TabsTrigger value="profile">👤 My Profile</TabsTrigger>
+        <TabsTrigger value="cgi-video">🎬 CGI Video</TabsTrigger>
+        <TabsTrigger value="screenshot-sorter">📸 Screenshot Sorter</TabsTrigger>
         <TabsTrigger value="photos">📸 Photo Tools</TabsTrigger>
-        <TabsTrigger value="music">🎵 Music Studio</TabsTrigger>
+        <TabsTrigger value="music">🎵 Audio Production</TabsTrigger>
         <TabsTrigger value="comics">📚 Comic Creator</TabsTrigger>
         <TabsTrigger value="design">🎨 Graphic Design</TabsTrigger>
         <TabsTrigger value="planner">📅 Content Planner</TabsTrigger>
@@ -81,11 +88,31 @@ export const CreatorDashboard = ({ userId = "demo_user", ipAddress = "127.0.0.1"
         )}
       </TabsList>
       <TabsContent value="overview">
-        <div style={{ marginBottom: 32 }}>
-          <TierInfo currentTier={currentTier} />
-          <UpgradePrompt userId={userId} currentTier={currentTier} />
+        <div style={{ marginBottom: 32, padding: '20px', background: '#667eea', color: 'white', borderRadius: '12px' }}>
+          <h2>🎉 Welcome to Your Creator Dashboard!</h2>
+          <p>Tier: <strong>{tier.toUpperCase()}</strong></p>
+          {isAdmin && <span style={{ marginLeft: '16px', background: '#FFD700', color: '#000', padding: '4px 12px', borderRadius: '6px', fontSize: '0.9rem', fontWeight: 800 }}>👑 OWNER MODE</span>}
+          <p>User ID: {userId}</p>
+          <p>Balance: ${userBalance.toFixed(2)}</p>
         </div>
-        <OverviewPanel />
+        <OverviewPanel userId={userId} />
+      </TabsContent>
+      <TabsContent value="profile">
+        <ProfileCreator userId={userId} tier={tier} />
+      </TabsContent>
+      <TabsContent value="cgi-video">
+        <ToolLockGate userId={userId} toolId="cgi">
+          <AIVideoGenerator userId={userId} tier={tier} />
+        </ToolLockGate>
+      </TabsContent>
+      <TabsContent value="screenshot-sorter">
+        <SmartScreenshotSorter 
+          userId={userId}
+          onProcessComplete={(processed) => {
+            // Optionally open ProPhotoEditor after sorting
+            console.log('Processed images:', processed);
+          }}
+        />
       </TabsContent>
       <TabsContent value="photos">
         <ToolLockGate userId={userId} toolId="photo">
@@ -241,43 +268,163 @@ export const OverlayPanel = () => {
   );
 };
 
-export const OverviewPanel = () => {
-  const stats = {
-    totalUploads: 0,
-    storageUsed: '0 MB',
-    accountAge: 'Just started',
-    tier: 'Free'
+export const OverviewPanel = ({ userId }) => {
+  const [showTutorial, setShowTutorial] = useState(() => {
+    // Check if user has dismissed tutorial
+    return localStorage.getItem(`tutorial_dismissed_${userId}`) !== 'true';
+  });
+
+  const dismissTutorial = () => {
+    localStorage.setItem(`tutorial_dismissed_${userId}`, 'true');
+    setShowTutorial(false);
   };
 
   return (
-    <div style={{ padding: '32px', background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', borderRadius: '12px', color: '#fff' }}>
-      <h2 style={{ marginBottom: '24px', fontSize: '2rem', fontWeight: '800' }}>📊 Dashboard Overview</h2>
-
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '20px', marginBottom: '32px' }}>
-        <div style={{ background: 'rgba(255,255,255,0.1)', padding: '20px', borderRadius: '12px', backdropFilter: 'blur(10px)' }}>
-          <div style={{ fontSize: '2.5rem', fontWeight: '900', marginBottom: '8px' }}>{stats.totalUploads}</div>
-          <div style={{ opacity: 0.9 }}>Total Uploads</div>
-        </div>
-        <div style={{ background: 'rgba(255,255,255,0.1)', padding: '20px', borderRadius: '12px', backdropFilter: 'blur(10px)' }}>
-          <div style={{ fontSize: '2.5rem', fontWeight: '900', marginBottom: '8px' }}>{stats.storageUsed}</div>
-          <div style={{ opacity: 0.9 }}>Storage Used</div>
-        </div>
-        <div style={{ background: 'rgba(255,255,255,0.1)', padding: '20px', borderRadius: '12px', backdropFilter: 'blur(10px)' }}>
-          <div style={{ fontSize: '2.5rem', fontWeight: '900', marginBottom: '8px' }}>✨</div>
-          <div style={{ opacity: 0.9 }}>{stats.tier} Tier</div>
-        </div>
-      </div>
-
-      <div style={{ background: 'rgba(255,255,255,0.1)', padding: '24px', borderRadius: '12px', backdropFilter: 'blur(10px)' }}>
-        <h3 style={{ marginBottom: '16px', fontSize: '1.3rem' }}>🎉 Welcome to ForTheWeebs!</h3>
-        <p style={{ lineHeight: '1.6', opacity: 0.9 }}>
-          Your creator platform is ready! Explore the tabs above to access photo tools, content planning, AR/VR studio, and more.
-          Upgrade to unlock premium features and advanced tools.
+    <div style={{ padding: '24px' }}>
+      {/* Clean Welcome Header */}
+      <div style={{ 
+        padding: '20px', 
+        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', 
+        borderRadius: '12px', 
+        color: '#fff',
+        marginBottom: '20px',
+      }}>
+        <h2 style={{ fontSize: '1.5rem', fontWeight: '700', marginBottom: '8px' }}>
+          Welcome Back! 👋
+        </h2>
+        <p style={{ opacity: 0.9, fontSize: '14px' }}>
+          All your creative tools are ready to use
         </p>
       </div>
 
+      {/* Optional Tutorial (dismissable) */}
+      {showTutorial && (
+        <div style={{ 
+          background: 'rgba(0, 255, 255, 0.05)', 
+          padding: '20px', 
+          borderRadius: '12px', 
+          border: '1px solid rgba(0, 255, 255, 0.2)',
+          marginBottom: '20px',
+          position: 'relative',
+        }}>
+          <button
+            onClick={dismissTutorial}
+            style={{
+              position: 'absolute',
+              top: '10px',
+              right: '10px',
+              background: 'transparent',
+              border: 'none',
+              color: '#888',
+              fontSize: '20px',
+              cursor: 'pointer',
+              padding: '5px 10px',
+            }}
+          >
+            ✕
+          </button>
+          
+          <h3 style={{ marginBottom: '12px', fontSize: '1.1rem', color: '#0ff' }}>
+            🎓 Quick Start Guide
+          </h3>
+          
+          <div style={{ 
+            display: 'grid', 
+            gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', 
+            gap: '12px',
+            marginTop: '15px',
+          }}>
+            <div style={{ background: 'rgba(255,255,255,0.05)', padding: '12px', borderRadius: '8px' }}>
+              <strong style={{ color: '#0ff' }}>📸 Photo Editor</strong>
+              <p style={{ fontSize: '13px', opacity: 0.8, marginTop: '5px' }}>
+                Layers, masks, blend modes - full Photoshop power
+              </p>
+            </div>
+            <div style={{ background: 'rgba(255,255,255,0.05)', padding: '12px', borderRadius: '8px' }}>
+              <strong style={{ color: '#0ff' }}>🎬 CGI Video</strong>
+              <p style={{ fontSize: '13px', opacity: 0.8, marginTop: '5px' }}>
+                Turn photos into AI-generated videos
+              </p>
+            </div>
+            <div style={{ background: 'rgba(255,255,255,0.05)', padding: '12px', borderRadius: '8px' }}>
+              <strong style={{ color: '#0ff' }}>🎵 Audio Studio</strong>
+              <p style={{ fontSize: '13px', opacity: 0.8, marginTop: '5px' }}>
+                Multi-track recording with pro effects
+              </p>
+            </div>
+            <div style={{ background: 'rgba(255,255,255,0.05)', padding: '12px', borderRadius: '8px' }}>
+              <strong style={{ color: '#0ff' }}>👤 Profile</strong>
+              <p style={{ fontSize: '13px', opacity: 0.8, marginTop: '5px' }}>
+                MySpace-style with music libraries
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Quick Access Cards - No Marketing Fluff */}
+      <div style={{ 
+        display: 'grid', 
+        gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', 
+        gap: '15px' 
+      }}>
+        <div style={{ 
+          background: 'linear-gradient(135deg, #667eea, #764ba2)', 
+          padding: '20px', 
+          borderRadius: '12px', 
+          color: '#fff',
+          cursor: 'pointer',
+        }}>
+          <h3 style={{ fontSize: '1.2rem', marginBottom: '8px' }}>📸 Photo Tools</h3>
+          <p style={{ fontSize: '14px', opacity: 0.9 }}>
+            Pro Editor • Mass Processor • Filters
+          </p>
+        </div>
+
+        <div style={{ 
+          background: 'linear-gradient(135deg, #f093fb, #f5576c)', 
+          padding: '20px', 
+          borderRadius: '12px', 
+          color: '#fff',
+          cursor: 'pointer',
+        }}>
+          <h3 style={{ fontSize: '1.2rem', marginBottom: '8px' }}>🎵 Audio</h3>
+          <p style={{ fontSize: '14px', opacity: 0.9 }}>
+            Multi-track • Effects • Export
+          </p>
+        </div>
+
+        <div style={{ 
+          background: 'linear-gradient(135deg, #4facfe, #00f2fe)', 
+          padding: '20px', 
+          borderRadius: '12px', 
+          color: '#fff',
+          cursor: 'pointer',
+        }}>
+          <h3 style={{ fontSize: '1.2rem', marginBottom: '8px' }}>🎬 CGI Video</h3>
+          <p style={{ fontSize: '14px', opacity: 0.9 }}>
+            Photo → Style → Video
+          </p>
+        </div>
+
+        <div style={{ 
+          background: 'linear-gradient(135deg, #43e97b, #38f9d7)', 
+          padding: '20px', 
+          borderRadius: '12px', 
+          color: '#fff',
+          cursor: 'pointer',
+        }}>
+          <h3 style={{ fontSize: '1.2rem', marginBottom: '8px' }}>👤 Profile</h3>
+          <p style={{ fontSize: '14px', opacity: 0.9 }}>
+            Showcase • Music • Content
+          </p>
+        </div>
+      </div>
+
       {/* Dev balance manager - only shows in development */}
-      <DevBalanceManager userId={userId} />
+      <div style={{ marginTop: '20px' }}>
+        <DevBalanceManager userId={userId} />
+      </div>
     </div>
   );
 };
