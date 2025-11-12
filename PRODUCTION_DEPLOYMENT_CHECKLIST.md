@@ -53,24 +53,20 @@ CREATE TABLE user_balances (
 CREATE TABLE transactions (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   user_id TEXT NOT NULL,
-  type TEXT NOT NULL, -- 'tip', 'commission', 'print_sale', 'unlock_payment', 'referral_bonus'
+  type TEXT NOT NULL, -- 'tip', 'commission', 'print_sale', 'unlock_payment'
   amount DECIMAL(10,2) NOT NULL,
   description TEXT,
   payment_method TEXT,
   created_at TIMESTAMP DEFAULT NOW()
 );
 
--- Referrals
-CREATE TABLE referrals (
+-- Invite Tracking (no commissions, just tracking)
+CREATE TABLE invite_usage (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-  referrer_id TEXT NOT NULL,
-  referred_user_id TEXT NOT NULL,
-  referral_code TEXT NOT NULL,
-  status TEXT DEFAULT 'pending', -- 'pending', 'active', 'expired'
-  first_unlock_amount DECIMAL(10,2),
-  commission_earned DECIMAL(10,2),
-  created_at TIMESTAMP DEFAULT NOW(),
-  activated_at TIMESTAMP
+  inviter_id TEXT NOT NULL,
+  invited_user_id TEXT NOT NULL,
+  invite_code TEXT NOT NULL,
+  created_at TIMESTAMP DEFAULT NOW()
 );
 
 -- NFT Mints
@@ -179,7 +175,7 @@ CREATE TABLE ai_models (
 
 **Manual Testing:**
 - [ ] Test all tool unlocks (balance & card payment)
-- [ ] Test referral link tracking
+- [ ] Test invite link sharing (no commissions)
 - [ ] Test admin login (/?admin=true)
 - [ ] Test NFT minting workflow
 - [ ] Test AI character training
@@ -306,7 +302,6 @@ If something breaks in production:
 - **User Acquisition:** Signups per day
 - **Conversion Rate:** Free → Paid unlocks
 - **Revenue:** Total earnings, average transaction
-- **Referrals:** Referral signup rate, referral conversion rate
 - **Engagement:** DAU/MAU, session duration, tools used
 - **Retention:** 7-day, 30-day, 90-day retention rates
 - **Support:** Tickets opened, resolution time
