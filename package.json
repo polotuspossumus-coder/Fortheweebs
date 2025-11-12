@@ -5,8 +5,11 @@
   "main": "index.js",
   "scripts": {
     "dev": "vite",
+    "dev:server": "nodemon server.js",
+    "dev:all": "concurrently \"npm run dev\" \"npm run dev:server\"",
     "build": "vite build",
     "preview": "vite preview",
+    "server": "node server.js",
     "lint": "eslint . --ext .js,.ts,.jsx,.tsx",
     "test": "vitest",
     "analyze": "node scripts/analyze-bundle.js"
@@ -26,14 +29,21 @@
     "vitest": "^4.0.8"
   },
   "dependencies": {
+    "@octokit/rest": "^21.0.2",
     "@radix-ui/react-switch": "^1.2.6",
     "@radix-ui/react-tabs": "^1.1.13",
     "@react-three/drei": "^10.7.6",
     "@react-three/fiber": "^9.4.0",
     "@react-three/xr": "^6.6.27",
     "@stripe/stripe-js": "^8.4.0",
+    "@supabase/supabase-js": "^2.39.0",
     "axios": "^1.6.0",
+    "concurrently": "^9.1.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
     "express": "^4.18.2",
+    "nodemon": "^3.1.9",
+    "openai": "^4.79.1",
     "qrcode": "^1.5.4",
     "react-markdown": "^10.1.0",
     "stripe": "^19.3.0",
