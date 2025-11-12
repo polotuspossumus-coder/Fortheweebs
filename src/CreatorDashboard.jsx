@@ -31,6 +31,7 @@ import { ProfileCreator } from "./components/ProfileCreator";
 import { AIVideoGenerator } from "./components/AIVideoGenerator";
 import { ProPhotoEditor } from "./components/ProPhotoEditor";
 import { SmartScreenshotSorter } from "./components/SmartScreenshotSorter";
+import { AIBugFixer } from "./components/AIBugFixer";
 
 export const CreatorDashboard = ({ userId = "demo_user", ipAddress = "127.0.0.1", tier = "free" }) => {
   const isAdmin = userId === "owner" || userId === "admin";
@@ -63,6 +64,7 @@ export const CreatorDashboard = ({ userId = "demo_user", ipAddress = "127.0.0.1"
     <Tabs defaultValue="overview" className="dashboard-tabs">
       <TabsList>
         <TabsTrigger value="overview">Overview</TabsTrigger>
+        <TabsTrigger value="bug-fixer">🐛 Report Bug</TabsTrigger>
         <TabsTrigger value="profile">👤 My Profile</TabsTrigger>
         <TabsTrigger value="cgi-video">🎬 CGI Video</TabsTrigger>
         <TabsTrigger value="screenshot-sorter">📸 Screenshot Sorter</TabsTrigger>
@@ -96,6 +98,9 @@ export const CreatorDashboard = ({ userId = "demo_user", ipAddress = "127.0.0.1"
           <p>Balance: ${userBalance.toFixed(2)}</p>
         </div>
         <OverviewPanel userId={userId} />
+      </TabsContent>
+      <TabsContent value="bug-fixer">
+        <AIBugFixer userId={userId} />
       </TabsContent>
       <TabsContent value="profile">
         <ProfileCreator userId={userId} tier={tier} />
