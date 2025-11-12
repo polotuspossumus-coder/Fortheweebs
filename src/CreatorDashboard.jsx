@@ -32,6 +32,8 @@ import { AIVideoGenerator } from "./components/AIVideoGenerator";
 import { ProPhotoEditor } from "./components/ProPhotoEditor";
 import { SmartScreenshotSorter } from "./components/SmartScreenshotSorter";
 import { AIBugFixer } from "./components/AIBugFixer";
+import { LanguageSelector } from "./components/LanguageSelector";
+import { t } from "./utils/i18n";
 
 export const CreatorDashboard = ({ userId = "demo_user", ipAddress = "127.0.0.1", tier = "free" }) => {
   const isAdmin = userId === "owner" || userId === "admin";
@@ -90,7 +92,10 @@ export const CreatorDashboard = ({ userId = "demo_user", ipAddress = "127.0.0.1"
         )}
       </TabsList>
       <TabsContent value="overview">
-        <div style={{ marginBottom: 32, padding: '20px', background: '#667eea', color: 'white', borderRadius: '12px' }}>
+        <div style={{ marginBottom: 32, padding: '20px', background: '#667eea', color: 'white', borderRadius: '12px', position: 'relative' }}>
+          <div style={{ position: 'absolute', top: '20px', right: '20px' }}>
+            <LanguageSelector />
+          </div>
           <h2>🎉 Welcome to Your Creator Dashboard!</h2>
           <p>Tier: <strong>{tier.toUpperCase()}</strong></p>
           {isAdmin && <span style={{ marginLeft: '16px', background: '#FFD700', color: '#000', padding: '4px 12px', borderRadius: '6px', fontSize: '0.9rem', fontWeight: 800 }}>👑 OWNER MODE</span>}

@@ -6,6 +6,8 @@ import {
   setPreferredCurrency,
   CURRENCY_CONFIG 
 } from './utils/currencyConverter';
+import { t, getCurrentLanguage } from './utils/i18n';
+import { LanguageSelector } from './components/LanguageSelector';
 
 /**
  * PaymentModule - Tier selection and Stripe checkout with Multi-Currency Support
@@ -199,11 +201,16 @@ export default function PaymentModule({ onPaymentComplete }) {
           Unlock your creative potential with ForTheWeebs
         </p>
 
-        {/* Currency Selector */}
+        {/* Language and Currency Selectors */}
         <div style={{
-          textAlign: 'center',
-          marginBottom: '30px'
+          display: 'flex',
+          justifyContent: 'center',
+          gap: '15px',
+          marginBottom: '30px',
+          flexWrap: 'wrap'
         }}>
+          <LanguageSelector />
+          
           <button
             onClick={() => setShowCurrencySelector(!showCurrencySelector)}
             style={{
@@ -214,11 +221,23 @@ export default function PaymentModule({ onPaymentComplete }) {
               color: 'white',
               cursor: 'pointer',
               fontSize: '1rem',
-              fontWeight: '600'
+              fontWeight: '600',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '8px'
             }}
           >
-            💱 Currency: {CURRENCY_CONFIG[userCurrency]?.name || userCurrency} ({CURRENCY_CONFIG[userCurrency]?.symbol || '$'})
+            <span>💱</span>
+            <span>{CURRENCY_CONFIG[userCurrency]?.symbol || '$'} {userCurrency}</span>
+            <span style={{ fontSize: '0.8rem', opacity: 0.7 }}>▼</span>
           </button>
+        </div>
+
+        {/* Currency Selector */}
+        <div style={{
+          textAlign: 'center',
+          marginBottom: '30px'
+        }}>
           
           {showCurrencySelector && (
             <div style={{
