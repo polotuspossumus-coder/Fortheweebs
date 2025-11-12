@@ -4,7 +4,7 @@ export const PRINT_ON_DEMAND_TERMS = {
   title: 'Print-on-Demand & Content Creation Terms',
   version: '1.0',
   effective_date: '2025-11-10',
-  
+
   sections: [
     {
       id: 'intellectual_property',
@@ -127,10 +127,10 @@ Any disputes governed by arbitration in [Your Jurisdiction]. Class action waiver
       `
     }
   ],
-  
+
   acceptance_required: true,
   acceptance_text: 'I have read and agree to the Print-on-Demand Terms. I certify that all content I upload is original or properly licensed, and I understand I may face legal consequences for copyright infringement.',
-  
+
   updates_policy: 'We may update these terms at any time. Continued use after updates = acceptance of new terms.'
 };
 

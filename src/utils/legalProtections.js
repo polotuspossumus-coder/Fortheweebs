@@ -10,7 +10,7 @@ export const LEGAL_PROTECTIONS = {
     'final fantasy', 'square enix',
     'digimon', 'bandai',
     'cardfight vanguard', 'bushiroad',
-    
+
     // Anime/Manga Properties
     'naruto', 'shueisha', 'viz media',
     'dragon ball', 'dragonball', 'akira toriyama',
@@ -21,31 +21,31 @@ export const LEGAL_PROTECTIONS = {
     'demon slayer', 'kimetsu no yaiba',
     'jujutsu kaisen', 'gege akutami',
     'sailor moon', 'naoko takeuchi',
-    
+
     // Marvel/DC
     'marvel', 'spider-man', 'spiderman', 'iron man', 'avengers',
     'dc comics', 'superman', 'batman', 'wonder woman', 'justice league',
-    
+
     // Disney
     'disney', 'mickey mouse', 'frozen', 'star wars', 'pixar',
-    
+
     // Gaming
     'fortnite', 'epic games',
     'minecraft', 'mojang',
     'roblox',
     'league of legends', 'riot games',
-    
+
     // Other Major IPs
     'harry potter', 'lord of the rings', 'game of thrones'
   ],
-  
+
   // Content that requires age verification (18+)
   ADULT_CONTENT_FLAGS: [
     'nude', 'nudity', 'nsfw', 'explicit', '18+', 'adult only',
     'pornographic', 'hentai', 'ecchi', 'sex', 'pussy', 'cock',
     'gore', 'graphic violence', 'dismemberment', 'blood'
   ],
-  
+
   // PROHIBITED CONTENT - Only truly illegal/harmful content
   PROHIBITED_CONTENT: [
     'child sexual', 'child porn', 'cp', 'pedo', 'loli', 'shota', 'minor sexual', // CSAM - ZERO TOLERANCE
@@ -53,7 +53,7 @@ export const LEGAL_PROTECTIONS = {
     'counterfeit', 'fake id', 'stolen credit card', 'fraud', // Fraud
     'nigger', 'kike', 'faggot targeting' // Extreme racial/homophobic slurs (targeted harassment)
   ],
-  
+
   // EXPLICITLY ALLOWED (with 18+ age gate)
   ALLOWED_ADULT_CONTENT: [
     'gore', 'violence', 'blood', 'dismemberment', 'graphic horror', // Horror/violence ALLOWED
@@ -65,7 +65,7 @@ export const LEGAL_PROTECTIONS = {
 export function checkContentLegality(text, cardData = null) {
   const issues = [];
   const textLower = text.toLowerCase();
-  
+
   // Check for trademarked content
   for (const trademark of LEGAL_PROTECTIONS.BLOCKED_TRADEMARKS) {
     if (textLower.includes(trademark)) {
@@ -77,7 +77,7 @@ export function checkContentLegality(text, cardData = null) {
       });
     }
   }
-  
+
   // Check for prohibited content (ONLY illegal/harmful content)
   for (const term of LEGAL_PROTECTIONS.PROHIBITED_CONTENT) {
     if (textLower.includes(term)) {
@@ -89,7 +89,7 @@ export function checkContentLegality(text, cardData = null) {
       });
     }
   }
-  
+
   // Check for adult content (requires age gate, but NOT blocked)
   let hasAdultContent = false;
   for (const term of LEGAL_PROTECTIONS.ADULT_CONTENT_FLAGS) {
@@ -98,7 +98,7 @@ export function checkContentLegality(text, cardData = null) {
       break;
     }
   }
-  
+
   if (hasAdultContent) {
     issues.push({
       type: 'adult',
@@ -108,7 +108,7 @@ export function checkContentLegality(text, cardData = null) {
       blocked: false // NOT blocked, just needs age gate
     });
   }
-  
+
   // Check for suspicious quantities (anti-counterfeit)
   if (cardData && cardData.quantity > 500) {
     issues.push({
@@ -118,7 +118,7 @@ export function checkContentLegality(text, cardData = null) {
       requiresReview: true
     });
   }
-  
+
   return {
     isLegal: !issues.some(i => i.blocked),
     issues,
@@ -185,17 +185,17 @@ export function getUserVerificationRequirements(contentType, quantity) {
     identity_verified: false,
     waiting_period_days: 0
   };
-  
+
   // High quantity = more verification
   if (quantity > 100) {
     requirements.payment_method_verified = true;
     requirements.waiting_period_days = 3;
   }
-  
+
   if (quantity > 1000) {
     requirements.identity_verified = true;
     requirements.waiting_period_days = 7;
   }
-  
+
   return requirements;
 }

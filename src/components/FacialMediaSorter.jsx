@@ -176,16 +176,16 @@ export const FacialMediaSorter = ({ userId, tier, hasSuperAdminPowers = false })
       }}>
         <div style={{
           display: 'inline-block',
-          background: hasSuperAdminPowers 
-            ? 'linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)' 
+          background: hasSuperAdminPowers
+            ? 'linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)'
             : 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
           padding: '8px 24px',
           borderRadius: '30px',
           fontSize: '0.9rem',
           fontWeight: '700',
           marginBottom: '20px',
-          boxShadow: hasSuperAdminPowers 
-            ? '0 4px 15px rgba(139, 92, 246, 0.5)' 
+          boxShadow: hasSuperAdminPowers
+            ? '0 4px 15px rgba(139, 92, 246, 0.5)'
             : '0 4px 15px rgba(102, 126, 234, 0.4)'
         }}>
           👤 FACIAL RECOGNITION SORTER {hasSuperAdminPowers ? '🔥 ENHANCED' : '(FREE)'}

@@ -5,6 +5,7 @@ Complete guide to deploy ForTheWeebs to production with full backend infrastruct
 ## 📋 Pre-Deployment Checklist
 
 ### ✅ Code Quality
+
 - [ ] All features tested locally
 - [ ] No console errors in browser
 - [ ] All API endpoints working
@@ -15,6 +16,7 @@ Complete guide to deploy ForTheWeebs to production with full backend infrastruct
 - [ ] Mobile responsive design verified
 
 ### ✅ Environment Configuration
+
 - [ ] `.env` file configured with all API keys
 - [ ] Supabase database schema executed
 - [ ] Stripe webhook configured
@@ -22,6 +24,7 @@ Complete guide to deploy ForTheWeebs to production with full backend infrastruct
 - [ ] OpenAI API key working with GPT-4
 
 ### ✅ Security
+
 - [ ] `.env` file in `.gitignore`
 - [ ] No API keys in source code
 - [ ] CORS properly configured
@@ -31,12 +34,13 @@ Complete guide to deploy ForTheWeebs to production with full backend infrastruct
 ## 🌐 Deploy Frontend (Netlify)
 
 ### Already Configured ✅
+
 Your frontend is already set up to auto-deploy on Netlify!
 
 ### Verify Netlify Configuration
 
 1. **Go to Netlify Dashboard**:
-   - https://app.netlify.com/
+   - <https://app.netlify.com/>
 
 2. **Check Build Settings**:
    - Build command: `npm run build`
@@ -45,8 +49,9 @@ Your frontend is already set up to auto-deploy on Netlify!
 
 3. **Configure Environment Variables**:
    Go to: **Site settings → Environment variables**
-   
+
    Add these variables:
+
    ```
    # Stripe
    VITE_STRIPE_PUBLISHABLE_KEY=pk_live_your_production_key
@@ -85,7 +90,7 @@ Your frontend is already set up to auto-deploy on Netlify!
 
 ### Option 1: Railway (Recommended - $5/month)
 
-1. **Sign Up**: https://railway.app/
+1. **Sign Up**: <https://railway.app/>
    - Login with GitHub
 
 2. **Create New Project**:
@@ -101,6 +106,7 @@ Your frontend is already set up to auto-deploy on Netlify!
 
 4. **Add Environment Variables**:
    Click **Variables** tab:
+
    ```
    # Node
    NODE_ENV=production
@@ -141,7 +147,7 @@ Your frontend is already set up to auto-deploy on Netlify!
 
 ### Option 2: Render (Free Tier Available)
 
-1. **Sign Up**: https://render.com/
+1. **Sign Up**: <https://render.com/>
    - Login with GitHub
 
 2. **Create Web Service**:
@@ -164,14 +170,16 @@ Your frontend is already set up to auto-deploy on Netlify!
 
 ### Option 3: Heroku ($7/month)
 
-1. **Sign Up**: https://heroku.com/
-   
+1. **Sign Up**: <https://heroku.com/>
+
 2. **Install Heroku CLI**:
+
    ```powershell
    # Download from: https://devcenter.heroku.com/articles/heroku-cli
    ```
 
 3. **Deploy**:
+
    ```powershell
    heroku login
    heroku create fortheweebs-backend
@@ -187,10 +195,11 @@ Your frontend is already set up to auto-deploy on Netlify!
 ## 🗄️ Deploy Database (Supabase)
 
 ### Already Set Up! ✅
+
 Your Supabase database is ready. Just verify:
 
 1. **Production Configuration**:
-   - Go to https://supabase.com/dashboard
+   - Go to <https://supabase.com/dashboard>
    - Select your project
    - Go to **Settings → API**
    - Verify using production keys in .env
@@ -212,7 +221,7 @@ Your Supabase database is ready. Just verify:
 
 ### Critical: Switch to Live Mode
 
-1. **Stripe Dashboard**: https://dashboard.stripe.com/
+1. **Stripe Dashboard**: <https://dashboard.stripe.com/>
    - Toggle **Viewing test data** → **OFF** (top left)
 
 2. **Get Live API Keys**:
@@ -226,9 +235,9 @@ Your Supabase database is ready. Just verify:
    - Click **Add endpoint**
    - Endpoint URL: `https://your-backend.railway.app/api/stripe-webhook`
    - Select events:
-     * `checkout.session.completed`
-     * `checkout.session.expired`
-     * `payment_intent.payment_failed`
+     - `checkout.session.completed`
+     - `checkout.session.expired`
+     - `payment_intent.payment_failed`
    - Click **Add endpoint**
 
 4. **Get Webhook Secret**:
@@ -236,6 +245,7 @@ Your Supabase database is ready. Just verify:
    - Click **Reveal** under **Signing secret**
    - Copy webhook secret (starts with `whsec_`)
    - Add to Railway environment variables:
+
      ```
      STRIPE_WEBHOOK_SECRET=whsec_your_production_secret
      ```
@@ -249,6 +259,7 @@ Your Supabase database is ready. Just verify:
 ## 🧪 Production Testing
 
 ### Test Payment Flow
+
 1. Use **real credit card** (you can refund after testing)
 2. Go to your production site
 3. Click **Become a Creator** ($500)
@@ -261,6 +272,7 @@ Your Supabase database is ready. Just verify:
 6. **Refund** the test payment in Stripe dashboard
 
 ### Test AI Bug Fixer
+
 1. Go to Dashboard → 🐛 **Report Bug**
 2. Upload screenshot
 3. Submit bug report
@@ -269,16 +281,18 @@ Your Supabase database is ready. Just verify:
    - Code fix generates
    - GitHub PR created
    - PR link works
-5. Check OpenAI usage: https://platform.openai.com/usage
+5. Check OpenAI usage: <https://platform.openai.com/usage>
 6. Check GitHub for PR
 
 ### Test Multi-Currency
+
 1. Change currency to EUR/GBP/JPY
 2. Verify prices convert correctly
 3. Complete test payment
 4. Verify you receive USD in Stripe
 
 ### Test Multi-Language
+
 1. Switch to different languages
 2. Verify translations load
 3. Test RTL languages (Arabic, Hebrew)
@@ -287,11 +301,13 @@ Your Supabase database is ready. Just verify:
 ## 📊 Monitoring & Analytics
 
 ### Set Up Error Tracking (Sentry)
+
 ```powershell
 npm install @sentry/react
 ```
 
 Add to `src/main.jsx`:
+
 ```javascript
 import * as Sentry from "@sentry/react";
 
@@ -303,7 +319,9 @@ Sentry.init({
 ```
 
 ### Set Up Analytics (Google Analytics)
+
 Add to `index.html`:
+
 ```html
 <!-- Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
@@ -318,34 +336,41 @@ Add to `index.html`:
 ### Monitor API Costs
 
 **OpenAI Usage**:
-- Dashboard: https://platform.openai.com/usage
-- Set spending limits: https://platform.openai.com/account/limits
+
+- Dashboard: <https://platform.openai.com/usage>
+- Set spending limits: <https://platform.openai.com/account/limits>
 - Estimated: $5-20/month with normal usage
 
 **Railway Costs**:
-- Dashboard: https://railway.app/account/usage
+
+- Dashboard: <https://railway.app/account/usage>
 - $5/month credit included
 - ~$5-10/month for backend hosting
 
 **Supabase Usage**:
-- Dashboard: https://supabase.com/dashboard/project/_/settings/billing
+
+- Dashboard: <https://supabase.com/dashboard/project/_/settings/billing>
 - Free tier: 500MB database, 2GB bandwidth
 - Upgrade if needed: $25/month
 
 ## 🔒 Security Best Practices
 
 ### SSL/HTTPS ✅
+
 - Netlify: Auto-configured
 - Railway: Auto-configured
 - Supabase: Always HTTPS
 
 ### Environment Variables ✅
+
 - Never commit `.env` file
 - Use platform-specific env var management
 - Rotate keys regularly
 
 ### CORS Configuration ✅
+
 Already configured in `server.js`:
+
 ```javascript
 app.use(cors({
   origin: process.env.VITE_APP_URL,
@@ -354,7 +379,9 @@ app.use(cors({
 ```
 
 ### Rate Limiting (Optional)
+
 Add to `server.js`:
+
 ```javascript
 import rateLimit from 'express-rate-limit';
 
@@ -369,52 +396,60 @@ app.use('/api/', limiter);
 ## 🚨 Troubleshooting
 
 ### Frontend not loading
+
 - Check Netlify deploy logs
 - Verify environment variables set
 - Check browser console for errors
 - Verify VITE_API_URL points to backend
 
 ### Backend errors
+
 - Check Railway logs: `railway logs`
 - Verify all environment variables set
 - Test health endpoint: `curl https://your-backend.railway.app/health`
 - Check for CORS errors
 
 ### Stripe webhook failing
+
 - Verify webhook URL is correct
 - Check webhook signing secret matches
 - View webhook logs in Stripe dashboard
 - Ensure endpoint returns 200 status
 
 ### OpenAI API errors
+
 - Check API key is valid
 - Verify payment method on file
 - Check usage limits not exceeded
 - Review error message in logs
 
 ### GitHub PR creation failing
+
 - Verify token has `repo` scope
 - Check GITHUB_REPO_OWNER and GITHUB_REPO_NAME correct
 - Ensure token not expired
-- Check rate limits: https://docs.github.com/en/rest/rate-limit
+- Check rate limits: <https://docs.github.com/en/rest/rate-limit>
 
 ## 📈 Scaling Considerations
 
 ### When to Upgrade
 
 **Database (Supabase)**:
+
 - Upgrade to Pro ($25/month) when:
-  * Database > 500MB
-  * Bandwidth > 2GB/month
-  * Need point-in-time recovery
+  - Database > 500MB
+  - Bandwidth > 2GB/month
+  - Need point-in-time recovery
 
 **Backend (Railway)**:
+
 - Upgrade plan when:
-  * Traffic > 100,000 requests/month
-  * Need > 512MB RAM
-  * Response times slow
+  - Traffic > 100,000 requests/month
+  - Need > 512MB RAM
+  - Response times slow
 
 **OpenAI**:
+
 - Monitor costs closely
 - Consider caching common analyses
 - Implement rate limiting for users
@@ -422,12 +457,14 @@ app.use('/api/', limiter);
 ### Performance Optimization
 
 **Frontend**:
+
 - Images already optimized
 - Code splitting configured
 - Terser minification enabled
 - CSS code splitting active
 
 **Backend**:
+
 - Add Redis caching for frequent queries
 - Use connection pooling for Supabase
 - Implement request queuing for AI calls
@@ -436,6 +473,7 @@ app.use('/api/', limiter);
 ## 🎉 Go Live Checklist
 
 ### Final Steps
+
 - [ ] Frontend deployed to Netlify
 - [ ] Backend deployed to Railway/Render/Heroku
 - [ ] Database verified on Supabase
@@ -468,13 +506,14 @@ Once everything is verified, announce your launch:
    - Offer launch discount (optional)
 
 3. **Product Hunt** (optional):
-   - Submit for visibility: https://www.producthunt.com/
+   - Submit for visibility: <https://www.producthunt.com/>
 
 ## 💰 Pricing Summary
 
 ### Monthly Costs (Expected)
 
 **Free Tier**:
+
 - Netlify: $0 (frontend)
 - Railway: $5 credit → ~$5-10 actual cost
 - Supabase: $0 (up to 500MB)
@@ -482,11 +521,13 @@ Once everything is verified, announce your launch:
 - Stripe: $0 + 2.9% + 30¢ per transaction
 
 **Pay-Per-Use**:
+
 - OpenAI: ~$10-30/month (light usage)
 
 **Total**: ~$15-40/month
 
 ### Revenue Potential
+
 - Creator Tier: $500/user
 - Super Admin Tier: $1000/user
 - **Break even**: 1 Creator signup/month
@@ -495,17 +536,19 @@ Once everything is verified, announce your launch:
 ## 📞 Support
 
 ### Useful Resources
-- Netlify Docs: https://docs.netlify.com/
-- Railway Docs: https://docs.railway.app/
-- Supabase Docs: https://supabase.com/docs
-- Stripe Docs: https://stripe.com/docs
-- OpenAI Docs: https://platform.openai.com/docs
+
+- Netlify Docs: <https://docs.netlify.com/>
+- Railway Docs: <https://docs.railway.app/>
+- Supabase Docs: <https://supabase.com/docs>
+- Stripe Docs: <https://stripe.com/docs>
+- OpenAI Docs: <https://platform.openai.com/docs>
 
 ### Need Help?
-- GitHub Issues: https://github.com/polotuspossumus-coder/Fortheweebs/issues
-- Stripe Support: https://support.stripe.com/
-- Supabase Discord: https://discord.supabase.com/
-- Railway Discord: https://discord.gg/railway
+
+- GitHub Issues: <https://github.com/polotuspossumus-coder/Fortheweebs/issues>
+- Stripe Support: <https://support.stripe.com/>
+- Supabase Discord: <https://discord.supabase.com/>
+- Railway Discord: <https://discord.gg/railway>
 
 ---
 

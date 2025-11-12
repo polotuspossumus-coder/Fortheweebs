@@ -68,7 +68,7 @@ export function isToolUnlocked(userId, toolId) {
 export function unlockTool(userId, toolId, paymentMethod, amount) {
   try {
     const expectedPrice = TOOL_PRICES[toolId];
-    
+
     if (!expectedPrice) {
       return { success: false, message: 'Invalid tool ID' };
     }
@@ -100,9 +100,9 @@ export function unlockTool(userId, toolId, paymentMethod, amount) {
     };
   } catch (error) {
     console.error('Error unlocking tool:', error);
-    return { 
-      success: false, 
-      message: 'An error occurred while unlocking. Please try again or contact support.' 
+    return {
+      success: false,
+      message: 'An error occurred while unlocking. Please try again or contact support.'
     };
   }
 }
@@ -123,7 +123,7 @@ export function getUnlockedTools(userId) {
   }
 
   const unlockedTools = [];
-  
+
   Object.keys(TOOL_PRICES).forEach(toolId => {
     if (isToolUnlocked(userId, toolId)) {
       unlockedTools.push(toolId);
@@ -151,14 +151,14 @@ export function getUserBalance(userId) {
  */
 export function deductBalance(userId, amount) {
   const currentBalance = getUserBalance(userId);
-  
+
   if (currentBalance < amount) {
     return false; // Insufficient funds
   }
 
   const newBalance = currentBalance - amount;
   localStorage.setItem(`balance_${userId}`, newBalance.toString());
-  
+
   return true;
 }
 
@@ -171,9 +171,9 @@ export function deductBalance(userId, amount) {
 export function addBalance(userId, amount, source) {
   const currentBalance = getUserBalance(userId);
   const newBalance = currentBalance + amount;
-  
+
   localStorage.setItem(`balance_${userId}`, newBalance.toString());
-  
+
   // Log transaction (in production: save to database)
   const transactions = JSON.parse(localStorage.getItem(`transactions_${userId}`) || '[]');
   transactions.push({
@@ -184,7 +184,7 @@ export function addBalance(userId, amount, source) {
     timestamp: new Date().toISOString()
   });
   localStorage.setItem(`transactions_${userId}`, JSON.stringify(transactions));
-  
+
   return newBalance;
 }
 
@@ -218,7 +218,7 @@ export function hasAdultAccess(userId) {
   // Check if user has active adult content subscription ($5/month)
   const adultSubscription = localStorage.getItem(`adult_subscription_${userId}`);
   const subscriptionExpiry = localStorage.getItem(`adult_subscription_expiry_${userId}`);
-  
+
   if (adultSubscription === 'active' && subscriptionExpiry) {
     const expiryDate = new Date(subscriptionExpiry);
     return expiryDate > new Date(); // Not expired
@@ -236,7 +236,7 @@ export function getUnlockProgress(userId) {
   const unlockedTools = getUnlockedTools(userId);
   const totalTools = Object.keys(TOOL_NAMES).length;
   const balance = getUserBalance(userId);
-  
+
   const totalSpent = unlockedTools.reduce((sum, toolId) => {
     if (toolId === 'full_platform') return sum;
     const amount = localStorage.getItem(`unlock_${toolId}_${userId}_amount`);

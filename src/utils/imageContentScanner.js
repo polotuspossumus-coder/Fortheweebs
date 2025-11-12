@@ -16,7 +16,7 @@ export const IMAGE_SCANNER_CONFIG = {
         'WEB_DETECTION' // Finds similar images on web (reverse image search)
       ]
     },
-    
+
     // AWS Rekognition - Good for celebrity/face detection
     aws_rekognition: {
       access_key: process.env.AWS_ACCESS_KEY || 'YOUR_KEY_HERE',
@@ -30,14 +30,14 @@ export const IMAGE_SCANNER_CONFIG = {
       ]
     }
   },
-  
+
   // Confidence thresholds
   thresholds: {
     auto_reject: 0.85, // 85%+ confidence = automatically reject
     manual_review: 0.65, // 65-84% = flag for human review
     auto_approve: 0.65 // <65% = auto approve
   },
-  
+
   // Blocked visual patterns (detected characters/logos)
   blocked_patterns: [
     // Pokemon
@@ -71,21 +71,21 @@ export async function scanImageForCopyright(image, userId) {
   try {
     // Convert image to base64 if it's a File object
     const base64Image = await convertToBase64(image);
-    
+
     // Run multiple scanning services in parallel
     const [googleResults, awsResults, reverseImageResults] = await Promise.all([
       scanWithGoogleVision(base64Image),
       scanWithAWSRekognition(base64Image),
       reverseImageSearch(base64Image)
     ]);
-    
+
     // Combine results
     const allDetections = [
       ...googleResults.detections,
       ...awsResults.detections,
       ...reverseImageResults.detections
     ];
-    
+
     // Check for copyright violations
     const violations = [];
     for (const detection of allDetections) {
@@ -101,7 +101,7 @@ export async function scanImageForCopyright(image, userId) {
         });
       }
     }
-    
+
     // Check for explicit/violent content
     const explicitCheck = checkExplicitContent(googleResults, awsResults);
     if (explicitCheck.isExplicit) {
@@ -114,17 +114,17 @@ export async function scanImageForCopyright(image, userId) {
         blocked: true
       });
     }
-    
+
     // Determine if image should be rejected
     const criticalViolations = violations.filter(v => v.blocked);
-    const needsReview = violations.some(v => 
-      v.confidence >= IMAGE_SCANNER_CONFIG.thresholds.manual_review && 
+    const needsReview = violations.some(v =>
+      v.confidence >= IMAGE_SCANNER_CONFIG.thresholds.manual_review &&
       v.confidence < IMAGE_SCANNER_CONFIG.thresholds.auto_reject
     );
-    
+
     // Log scan for audit trail
     logImageScan(userId, image.name || 'uploaded-image', violations);
-    
+
     return {
       isLegal: criticalViolations.length === 0,
       violations,
@@ -133,7 +133,7 @@ export async function scanImageForCopyright(image, userId) {
       scanTimestamp: new Date().toISOString(),
       scanId: generateScanId()
     };
-    
+
   } catch (error) {
     console.error('Image scanning error:', error);
     // FAIL SECURE - if scanning fails, require manual review
@@ -157,7 +157,7 @@ export async function scanImageForCopyright(image, userId) {
 async function scanWithGoogleVision(base64Image) {
   // In production, this would make actual API calls to Google Vision
   // For now, return mock structure
-  
+
   // REAL IMPLEMENTATION:
   /*
   const response = await fetch(IMAGE_SCANNER_CONFIG.providers.google_vision.endpoint, {
@@ -204,7 +204,7 @@ async function scanWithGoogleVision(base64Image) {
     safeSearch: annotations.safeSearchAnnotation
   };
   */
-  
+
   // MOCK for development
   return {
     detections: [],
@@ -240,7 +240,7 @@ async function reverseImageSearch(base64Image) {
  */
 function isBlockedContent(detection) {
   const label = detection.label.toLowerCase();
-  return IMAGE_SCANNER_CONFIG.blocked_patterns.some(pattern => 
+  return IMAGE_SCANNER_CONFIG.blocked_patterns.some(pattern =>
     label.includes(pattern.toLowerCase())
   );
 }
@@ -250,12 +250,12 @@ function isBlockedContent(detection) {
  */
 function checkExplicitContent(googleResults, awsResults) {
   const safeSearch = googleResults.safeSearch || {};
-  const isExplicit = 
-    safeSearch.adult === 'LIKELY' || 
+  const isExplicit =
+    safeSearch.adult === 'LIKELY' ||
     safeSearch.adult === 'VERY_LIKELY' ||
     safeSearch.violence === 'LIKELY' ||
     safeSearch.violence === 'VERY_LIKELY';
-  
+
   const categories = [];
   if (safeSearch.adult === 'LIKELY' || safeSearch.adult === 'VERY_LIKELY') {
     categories.push('Adult content');
@@ -263,7 +263,7 @@ function checkExplicitContent(googleResults, awsResults) {
   if (safeSearch.violence === 'LIKELY' || safeSearch.violence === 'VERY_LIKELY') {
     categories.push('Violent content');
   }
-  
+
   return {
     isExplicit,
     categories,
@@ -276,7 +276,7 @@ function checkExplicitContent(googleResults, awsResults) {
  */
 async function convertToBase64(image) {
   if (typeof image === 'string') return image; // Already base64
-  
+
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
     reader.onload = () => {
@@ -304,10 +304,10 @@ function logImageScan(userId, imageName, violations) {
     })),
     blocked: violations.some(v => v.blocked)
   };
-  
+
   // In production: Send to logging service (CloudWatch, Datadog, etc.)
   console.log('IMAGE_SCAN_LOG:', JSON.stringify(logEntry));
-  
+
   // Store in database for audit trail
   // await database.imageScanLogs.insert(logEntry);
 }

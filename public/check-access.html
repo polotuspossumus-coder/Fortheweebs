@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,6 +14,7 @@
             color: #fff;
             min-height: 100vh;
         }
+
         .container {
             max-width: 800px;
             margin: 0 auto;
@@ -21,11 +23,13 @@
             border-radius: 15px;
             border: 2px solid #FFD700;
         }
+
         h1 {
             color: #FFD700;
             text-align: center;
             margin-bottom: 30px;
         }
+
         .status-item {
             padding: 15px;
             margin: 10px 0;
@@ -33,23 +37,28 @@
             background: rgba(255, 255, 255, 0.05);
             border-left: 4px solid #666;
         }
+
         .status-item.good {
             border-left-color: #4ade80;
             background: rgba(74, 222, 128, 0.1);
         }
+
         .status-item.bad {
             border-left-color: #f87171;
             background: rgba(248, 113, 113, 0.1);
         }
+
         .label {
             color: #FFD700;
             font-weight: bold;
             margin-bottom: 5px;
         }
+
         .value {
             color: #fff;
             font-size: 1.1rem;
         }
+
         button {
             width: 100%;
             padding: 15px;
@@ -62,14 +71,17 @@
             font-weight: 900;
             cursor: pointer;
         }
+
         button:hover {
             opacity: 0.9;
         }
+
         .fix-btn {
             background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%);
         }
     </style>
 </head>
+
 <body>
     <div class="container">
         <h1>👑 Owner Access Status Check</h1>
@@ -78,19 +90,19 @@
         <button onclick="location.reload()">🔄 Refresh Status</button>
         <button onclick="location.href='/'">🏠 Go to Main Site</button>
     </div>
-    
+
     <script>
         function checkStatus() {
             const statusEl = document.getElementById('status');
             let html = '';
-            
+
             // Check all localStorage values
             const userId = localStorage.getItem('userId');
             const adminAuth = localStorage.getItem('adminAuthenticated');
             const deviceId = localStorage.getItem('adminDeviceId');
             const phoneNumber = localStorage.getItem('adminPhoneNumber');
             const devices = localStorage.getItem('authorized_devices');
-            
+
             // User ID
             html += `<div class="status-item ${userId === 'owner' ? 'good' : 'bad'}">
                 <div class="label">User ID:</div>
@@ -99,7 +111,7 @@
                     ${userId === 'owner' ? '✅ Correct - You are the owner' : '❌ Should be "owner"'}
                 </div>
             </div>`;
-            
+
             // Admin Auth
             html += `<div class="status-item ${adminAuth === 'true' ? 'good' : 'bad'}">
                 <div class="label">Admin Authenticated:</div>
@@ -108,7 +120,7 @@
                     ${adminAuth === 'true' ? '✅ You are authenticated' : '❌ Should be "true"'}
                 </div>
             </div>`;
-            
+
             // Device ID
             html += `<div class="status-item ${deviceId ? 'good' : 'bad'}">
                 <div class="label">Device ID:</div>
@@ -117,7 +129,7 @@
                     ${deviceId ? '✅ Device registered' : '❌ Device not registered'}
                 </div>
             </div>`;
-            
+
             // Phone Number
             html += `<div class="status-item ${phoneNumber === '+12813819498' ? 'good' : 'bad'}">
                 <div class="label">Phone Number:</div>
@@ -126,7 +138,7 @@
                     ${phoneNumber === '+12813819498' ? '✅ Owner phone verified' : '❌ Should be +12813819498'}
                 </div>
             </div>`;
-            
+
             // Authorized Devices
             html += `<div class="status-item ${devices ? 'good' : 'bad'}">
                 <div class="label">Authorized Devices:</div>
@@ -135,21 +147,21 @@
                     ${devices ? '✅ Device list configured' : '❌ Device list missing'}
                 </div>
             </div>`;
-            
+
             // Overall Status
             const allGood = userId === 'owner' && adminAuth === 'true' && deviceId && phoneNumber === '+12813819498' && devices;
-            
+
             html = `<div class="status-item ${allGood ? 'good' : 'bad'}" style="margin-bottom: 20px; font-size: 1.2rem;">
                 <div class="label">Overall Status:</div>
                 <div class="value">${allGood ? '✅ OWNER ACCESS ACTIVE' : '❌ OWNER ACCESS NOT ACTIVE'}</div>
             </div>` + html;
-            
+
             statusEl.innerHTML = html;
         }
-        
+
         function fixAccess() {
             console.log('Fixing owner access...');
-            
+
             // Set all required values
             localStorage.setItem('userId', 'owner');
             localStorage.setItem('adminAuthenticated', 'true');
@@ -161,13 +173,14 @@
                 addedAt: Date.now(),
                 lastUsed: Date.now()
             }]));
-            
+
             alert('✅ Owner access fixed! The page will refresh to show updated status.');
             location.reload();
         }
-        
+
         // Check status on load
         checkStatus();
     </script>
 </body>
+
 </html>

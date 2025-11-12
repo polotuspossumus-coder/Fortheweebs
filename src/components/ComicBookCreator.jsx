@@ -272,7 +272,7 @@ export function ComicBookCreator({ userId }) {
             <button onClick={addPage} style={toolButtonStyle('#2ecc71')}>
               ➕ Page
             </button>
-            <select 
+            <select
               onChange={(e) => {
                 const template = e.target.value;
                 if (template && confirm(`Apply ${TEMPLATES[template].name} template to current page?`)) {
@@ -520,22 +520,22 @@ export function ComicBookCreator({ userId }) {
                               fontWeight: bubble.type === 'shout' ? 'bold' : 'normal'
                             }}
                           >
-                          <textarea
-                            value={bubble.text}
-                            onChange={(e) => updateBubbleText(panel.id, bubble.id, e.target.value)}
-                            style={{
-                              width: '100%',
-                              height: '100%',
-                              border: 'none',
-                              background: 'transparent',
-                              resize: 'none',
-                              fontSize: 'inherit',
-                              fontFamily: 'Comic Sans MS, cursive',
-                              textAlign: 'center'
-                            }}
-                          />
-                        </div>
-                      );
+                            <textarea
+                              value={bubble.text}
+                              onChange={(e) => updateBubbleText(panel.id, bubble.id, e.target.value)}
+                              style={{
+                                width: '100%',
+                                height: '100%',
+                                border: 'none',
+                                background: 'transparent',
+                                resize: 'none',
+                                fontSize: 'inherit',
+                                fontFamily: 'Comic Sans MS, cursive',
+                                textAlign: 'center'
+                              }}
+                            />
+                          </div>
+                        );
                       })}
 
                       {selectedPanel === panel.id && panel.image && (
@@ -592,7 +592,7 @@ export function ComicBookCreator({ userId }) {
                               e.stopPropagation();
                               addBubble(panel.id, 'sfx');
                             }}
-                            style={{...panelButtonStyle, background: '#f59e0b'}}
+                            style={{ ...panelButtonStyle, background: '#f59e0b' }}
                             title="Sound effect"
                           >
                             💥 SFX
@@ -602,7 +602,7 @@ export function ComicBookCreator({ userId }) {
                               e.stopPropagation();
                               addBubble(panel.id, 'whisper');
                             }}
-                            style={{...panelButtonStyle, background: '#6366f1'}}
+                            style={{ ...panelButtonStyle, background: '#6366f1' }}
                             title="Whisper"
                           >
                             🤫 Whisper

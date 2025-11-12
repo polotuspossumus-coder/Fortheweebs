@@ -4,28 +4,33 @@
 
 **Admin button is now HIDDEN** from regular users. Only you know how to access it.
 
-### How to Access Admin Mode:
+### How to Access Admin Mode
 
 **Method 1: Secret URL Parameter**
+
 ```
 https://fortheweebs.netlify.app/?admin=true
 ```
+
 or locally:
+
 ```
 http://localhost:3002/?admin=true
 ```
 
 **Method 2: Direct Admin Page**
+
 ```
 https://fortheweebs.netlify.app/admin.html
 ```
 
 **Method 3: Recovery Access**
+
 ```
 https://fortheweebs.netlify.app/?recovery=true
 ```
 
-### What Happens:
+### What Happens
 
 1. Navigate to URL with `?admin=true`
 2. Shows QR code authentication
@@ -38,7 +43,7 @@ https://fortheweebs.netlify.app/?recovery=true
    - All tools unlocked (no paywall)
    - Admin-only features
 
-### Security Features:
+### Security Features
 
 - ✅ No visible admin button for regular users
 - ✅ QR code authentication required
@@ -47,13 +52,15 @@ https://fortheweebs.netlify.app/?recovery=true
 - ✅ Can logout/revoke devices anytime
 - ✅ Session never expires (permanent login)
 
-### Regular Users See:
+### Regular Users See
+
 - Normal dashboard
 - Tool unlock paywalls
 - Premium subscription options
 - **NO admin button anywhere**
 
-### You See:
+### You See
+
 - Everything unlocked
 - 👑 OWNER badge
 - Family Access System (tab)
@@ -68,6 +75,7 @@ This is for **YOUR EYES ONLY**. Regular users have no way to access admin mode w
 ---
 
 **Quick Access:**
+
 - Admin: `/?admin=true`
 - Recovery: `/?recovery=true`
 - Direct: `/admin.html`

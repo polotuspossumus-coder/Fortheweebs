@@ -3,6 +3,7 @@
 ## Quick Start (5 minutes)
 
 ### 1. Install Dependencies
+
 ```bash
 npm install
 ```
@@ -50,6 +51,7 @@ Then fill in your API keys (see sections below for how to get each key).
 4. Create new key → `OPENAI_API_KEY`
 
 **Models needed:**
+
 - `gpt-4-vision-preview` (for screenshot analysis)
 - `gpt-4-turbo-preview` (for code generation)
 
@@ -68,11 +70,13 @@ Then fill in your API keys (see sections below for how to get each key).
 ### 7. Run the Application
 
 **Option 1: Run both frontend and backend together**
+
 ```bash
 npm run dev:all
 ```
 
 **Option 2: Run separately**
+
 ```bash
 # Terminal 1 - Frontend
 npm run dev
@@ -82,8 +86,9 @@ npm run dev:server
 ```
 
 Your app will be running at:
-- Frontend: http://localhost:3002
-- Backend API: http://localhost:3001
+
+- Frontend: <http://localhost:3002>
+- Backend API: <http://localhost:3001>
 
 ---
 
@@ -120,7 +125,7 @@ NODE_ENV=development
 
 ### Test Payment Flow
 
-1. Go to http://localhost:3002
+1. Go to <http://localhost:3002>
 2. Click payment tier
 3. Use Stripe test card:
    - Card: `4242 4242 4242 4242`
@@ -161,6 +166,7 @@ NODE_ENV=development
 ### Or Deploy Backend Separately
 
 Deploy backend to:
+
 - Railway.app
 - Render.com
 - Heroku
@@ -173,17 +179,20 @@ Then update `VITE_API_URL` to your deployed backend URL.
 ## 💡 Optional Services
 
 ### Email Notifications (SendGrid)
+
 ```bash
 SENDGRID_API_KEY=SG...
 EMAIL_FROM=noreply@fortheweebs.com
 ```
 
 ### Crypto Payments (Coinbase Commerce)
+
 ```bash
 COINBASE_COMMERCE_API_KEY=...
 ```
 
 ### Analytics (Google Analytics)
+
 ```bash
 GOOGLE_ANALYTICS_ID=G-XXXXXXXXXX
 ```
@@ -202,12 +211,14 @@ GOOGLE_ANALYTICS_ID=G-XXXXXXXXXX
 ## 📚 API Endpoints
 
 ### Stripe Payments
+
 - `POST /api/create-checkout-session` - Create payment session
 - `POST /api/stripe-webhook` - Stripe webhook handler
 - `GET /api/user/:userId/tier` - Get user tier
 - `GET /api/user/:userId/payments` - Get payment history
 
 ### AI Bug Fixer
+
 - `POST /api/ai/analyze-screenshot` - Analyze bug screenshot
 - `POST /api/ai/generate-fix` - Generate code fix
 - `POST /api/ai/create-pr` - Create GitHub PR with fix
@@ -218,21 +229,26 @@ GOOGLE_ANALYTICS_ID=G-XXXXXXXXXX
 ## 🐛 Troubleshooting
 
 ### "Cannot find module" errors
+
 ```bash
 npm install
 ```
 
 ### Stripe webhook not receiving events
+
 - Use Stripe CLI for local testing:
+
 ```bash
 stripe listen --forward-to localhost:3001/api/stripe-webhook
 ```
 
 ### OpenAI rate limit errors
+
 - Add payment method to OpenAI account
 - Increase rate limits in OpenAI dashboard
 
 ### Supabase connection errors
+
 - Check URL and keys are correct
 - Verify database schema is applied
 - Check RLS policies allow access
@@ -242,6 +258,7 @@ stripe listen --forward-to localhost:3001/api/stripe-webhook
 ## 📞 Need Help?
 
 Check the logs:
+
 - Backend: Check terminal running `npm run dev:server`
 - Frontend: Check browser console
 - Stripe: Check Dashboard → Developers → Logs

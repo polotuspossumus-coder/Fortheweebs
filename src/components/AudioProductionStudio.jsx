@@ -65,8 +65,8 @@ export function AudioProductionStudio({ userId }) {
     setIsDragging(false);
 
     const files = Array.from(e.dataTransfer.files);
-    const audioFiles = files.filter(f => 
-      f.type.startsWith('audio/') || 
+    const audioFiles = files.filter(f =>
+      f.type.startsWith('audio/') ||
       f.name.match(/\.(mp3|wav|ogg|m4a|flac)$/i)
     );
 
@@ -310,7 +310,7 @@ export function AudioProductionStudio({ userId }) {
               <button style={controlButtonStyle}>⏸️ Pause</button>
               <button style={controlButtonStyle}>⏹️ Stop</button>
               <button style={controlButtonStyle}>⏭️ Next</button>
-              <button style={{...controlButtonStyle, background: isRecording ? '#ff4444' : 'rgba(255,68,68,0.2)', border: '1px solid #ff4444'}}>
+              <button style={{ ...controlButtonStyle, background: isRecording ? '#ff4444' : 'rgba(255,68,68,0.2)', border: '1px solid #ff4444' }}>
                 ⏺ {isRecording ? 'Recording...' : 'Record'}
               </button>
             </div>
@@ -335,9 +335,9 @@ export function AudioProductionStudio({ userId }) {
                 onChange={(e) => setMasterVolume(parseFloat(e.target.value))}
                 style={{ width: '150px' }}
               />
-              <span style={{ 
-                minWidth: '45px', 
-                fontFamily: 'monospace', 
+              <span style={{
+                minWidth: '45px',
+                fontFamily: 'monospace',
                 fontSize: '14px',
                 fontWeight: 'bold',
                 color: masterVolume > 0.9 ? '#ff4444' : masterVolume > 0.7 ? '#ffc107' : '#4CAF50'
@@ -626,7 +626,7 @@ export function AudioProductionStudio({ userId }) {
                   </div>
 
                   {track.effects.length > 0 && (
-                    <div style={{ 
+                    <div style={{
                       marginTop: '15px',
                       padding: '12px',
                       background: 'rgba(76, 175, 80, 0.1)',
@@ -636,7 +636,7 @@ export function AudioProductionStudio({ userId }) {
                       <div style={{ fontSize: '13px', fontWeight: 'bold', marginBottom: '8px' }}>Active Chain:</div>
                       <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
                         {track.effects.map((e, idx) => (
-                          <span key={idx} style={{ 
+                          <span key={idx} style={{
                             background: 'rgba(102, 126, 234, 0.3)',
                             padding: '4px 10px',
                             borderRadius: '6px',

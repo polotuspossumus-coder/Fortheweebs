@@ -5,43 +5,56 @@
     html {
         font-size: 14px;
     }
-    
+
     body {
         overflow-x: hidden;
     }
-    
+
     /* Form inputs */
-    input, textarea, select, button {
-        font-size: 16px !important; /* Prevents iOS zoom on focus */
+    input,
+    textarea,
+    select,
+    button {
+        font-size: 16px !important;
+        /* Prevents iOS zoom on focus */
     }
-    
+
     /* Buttons */
-    button, .btn {
-        min-height: 44px; /* iOS touch target size */
+    button,
+    .btn {
+        min-height: 44px;
+        /* iOS touch target size */
         padding: 0.75rem 1rem !important;
     }
-    
+
     /* Modals and dialogs */
-    [role="dialog"], .modal {
+    [role="dialog"],
+    .modal {
         max-width: 95vw !important;
         margin: 0.5rem !important;
     }
-    
+
     /* Tables */
     table {
         display: block;
         overflow-x: auto;
         -webkit-overflow-scrolling: touch;
     }
-    
+
     /* Images */
     img {
         max-width: 100%;
         height: auto;
     }
-    
+
     /* Prevent text overflow */
-    h1, h2, h3, h4, h5, h6, p {
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6,
+    p {
         word-wrap: break-word;
         overflow-wrap: break-word;
     }
@@ -51,15 +64,15 @@
     html {
         font-size: 13px;
     }
-    
+
     h1 {
         font-size: 1.75rem !important;
     }
-    
+
     h2 {
         font-size: 1.5rem !important;
     }
-    
+
     h3 {
         font-size: 1.25rem !important;
     }
@@ -67,7 +80,10 @@
 
 /* Touch-friendly spacing */
 @media (hover: none) and (pointer: coarse) {
-    button, a, [role="button"] {
+
+    button,
+    a,
+    [role="button"] {
         min-height: 44px;
         min-width: 44px;
     }
@@ -75,7 +91,9 @@
 
 /* Landscape mobile orientation */
 @media (max-height: 480px) and (orientation: landscape) {
-    .hero, header {
+
+    .hero,
+    header {
         padding: 1rem !important;
     }
 }
@@ -85,7 +103,7 @@
     .desktop-only {
         display: none !important;
     }
-    
+
     .mobile-only {
         display: block !important;
     }
@@ -96,7 +114,7 @@
     .desktop-only {
         display: block !important;
     }
-    
+
     .mobile-only {
         display: none !important;
     }

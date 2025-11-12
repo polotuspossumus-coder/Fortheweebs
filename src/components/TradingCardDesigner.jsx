@@ -139,9 +139,9 @@ export function TradingCardDesigner({ userId }) {
       'digimon', 'bandai',
       'one piece', 'naruto', 'dragon ball'
     ];
-    
+
     const cardText = JSON.stringify(cardData.frontDesign.elements).toLowerCase();
-    
+
     for (const term of bannedTerms) {
       if (cardText.includes(term)) {
         return {
@@ -150,7 +150,7 @@ export function TradingCardDesigner({ userId }) {
         };
       }
     }
-    
+
     return { verified: true, reason: 'Original content verified' };
   };
 
@@ -162,8 +162,8 @@ export function TradingCardDesigner({ userId }) {
           Design custom trading cards with professional templates
         </p>
         <div className="copyright-notice">
-          <strong>⚠️ Copyright Policy:</strong> Only create original cards with your own artwork and characters. 
-          Copying Pokémon, Yu-Gi-Oh!, Magic: The Gathering, or any copyrighted franchise is strictly prohibited 
+          <strong>⚠️ Copyright Policy:</strong> Only create original cards with your own artwork and characters.
+          Copying Pokémon, Yu-Gi-Oh!, Magic: The Gathering, or any copyrighted franchise is strictly prohibited
           and will result in immediate account suspension.
         </div>
       </div>
@@ -173,8 +173,8 @@ export function TradingCardDesigner({ userId }) {
           <h2>Choose a Template</h2>
           <div className="templates-grid">
             {Object.entries(TEMPLATES).map(([key, template]) => (
-              <div 
-                key={key} 
+              <div
+                key={key}
                 className="template-card"
                 onClick={() => {
                   setSelectedTemplate(key);
@@ -201,9 +201,9 @@ export function TradingCardDesigner({ userId }) {
           <div className="editor-sidebar">
             <div className="sidebar-section">
               <h3>📐 Card Size</h3>
-              <select 
+              <select
                 value={currentCard.size}
-                onChange={(e) => setCurrentCard({...currentCard, size: e.target.value})}
+                onChange={(e) => setCurrentCard({ ...currentCard, size: e.target.value })}
               >
                 {Object.entries(CARD_SIZES).map(([key, size]) => (
                   <option key={key} value={key}>{size.name}</option>
@@ -218,7 +218,7 @@ export function TradingCardDesigner({ userId }) {
                   <button
                     key={finish.value}
                     className={`finish-btn ${currentCard.finish === finish.value ? 'active' : ''} ${finish.premium ? 'premium' : ''}`}
-                    onClick={() => setCurrentCard({...currentCard, finish: finish.value})}
+                    onClick={() => setCurrentCard({ ...currentCard, finish: finish.value })}
                   >
                     <span className="finish-icon">{finish.icon}</span>
                     <span>{finish.label}</span>
@@ -239,7 +239,7 @@ export function TradingCardDesigner({ userId }) {
                       borderColor: currentCard.rarity === tier.value ? tier.color : 'transparent',
                       color: tier.color
                     }}
-                    onClick={() => setCurrentCard({...currentCard, rarity: tier.value})}
+                    onClick={() => setCurrentCard({ ...currentCard, rarity: tier.value })}
                   >
                     {tier.label}
                   </button>
@@ -253,15 +253,15 @@ export function TradingCardDesigner({ userId }) {
                 {TEMPLATES[currentCard.template].elements.map((element) => (
                   <div key={element} className="element-control">
                     <label>{element}</label>
-                    <input 
-                      type="text" 
+                    <input
+                      type="text"
                       placeholder={`Enter ${element}...`}
                       onChange={(e) => {
                         const value = e.target.value;
-                        const newCard = {...currentCard};
+                        const newCard = { ...currentCard };
                         newCard.frontDesign.elements[element] = value;
                         setCurrentCard(newCard);
-                        
+
                         // Real-time copyright check
                         const check = checkContentLegality(value, newCard);
                         if (!check.isLegal) {
@@ -279,11 +279,11 @@ export function TradingCardDesigner({ userId }) {
             <div className="sidebar-section">
               <h3>🖼️ Upload Artwork</h3>
               <div className="upload-area">
-                <input 
-                  type="file" 
-                  accept="image/*" 
-                  id="card-image" 
-                  style={{display: 'none'}}
+                <input
+                  type="file"
+                  accept="image/*"
+                  id="card-image"
+                  style={{ display: 'none' }}
                   onChange={(e) => {
                     const file = e.target.files[0];
                     if (file) {
@@ -296,7 +296,7 @@ export function TradingCardDesigner({ userId }) {
                       // Process image upload here
                       const reader = new FileReader();
                       reader.onload = (event) => {
-                        const newCard = {...currentCard};
+                        const newCard = { ...currentCard };
                         newCard.frontDesign.image = event.target.result;
                         setCurrentCard(newCard);
                       };
@@ -315,11 +315,11 @@ export function TradingCardDesigner({ userId }) {
               <h3>✅ Copyright Verification</h3>
               <div className="copyright-check">
                 <label className="checkbox-label">
-                  <input 
+                  <input
                     type="checkbox"
                     checked={currentCard?.originalWork || false}
                     onChange={(e) => {
-                      const newCard = {...currentCard};
+                      const newCard = { ...currentCard };
                       newCard.originalWork = e.target.checked;
                       setCurrentCard(newCard);
                     }}
@@ -339,13 +339,13 @@ export function TradingCardDesigner({ userId }) {
             <div className="sidebar-section">
               <h3>🔄 Card Back Design</h3>
               <div className="upload-area">
-                <input type="file" accept="image/*" id="card-back" style={{display: 'none'}}
+                <input type="file" accept="image/*" id="card-back" style={{ display: 'none' }}
                   onChange={(e) => {
                     const file = e.target.files[0];
                     if (file) {
                       const reader = new FileReader();
                       reader.onload = (event) => {
-                        const newCard = {...currentCard};
+                        const newCard = { ...currentCard };
                         newCard.backDesign.logo = event.target.result;
                         setCurrentCard(newCard);
                       };
@@ -362,11 +362,11 @@ export function TradingCardDesigner({ userId }) {
                 <label style={{ color: '#94a3b8', fontSize: '0.9rem', marginBottom: '0.5rem', display: 'block' }}>
                   Background Color
                 </label>
-                <input 
-                  type="color" 
+                <input
+                  type="color"
                   value={currentCard.backDesign.background}
                   onChange={(e) => {
-                    const newCard = {...currentCard};
+                    const newCard = { ...currentCard };
                     newCard.backDesign.background = e.target.value;
                     setCurrentCard(newCard);
                   }}
@@ -378,23 +378,23 @@ export function TradingCardDesigner({ userId }) {
             <div className="sidebar-section">
               <h3>✅ Copyright Verification</h3>
               <label className="checkbox-label">
-                <input 
-                  type="checkbox" 
+                <input
+                  type="checkbox"
                   checked={currentCard.originalWork}
-                  onChange={(e) => setCurrentCard({...currentCard, originalWork: e.target.checked})}
+                  onChange={(e) => setCurrentCard({ ...currentCard, originalWork: e.target.checked })}
                 />
                 <span>I certify this is 100% original content</span>
               </label>
               <p style={{ color: '#64748b', fontSize: '0.85rem', marginTop: '0.5rem' }}>
                 No Pokémon, Yu-Gi-Oh!, MTG, or copyrighted characters
               </p>
-              <button 
+              <button
                 className="btn-secondary"
                 style={{ width: '100%', marginTop: '0.75rem' }}
                 onClick={async () => {
                   const result = await verifyCopyright(currentCard);
                   if (result.verified) {
-                    setCurrentCard({...currentCard, copyrightVerified: true});
+                    setCurrentCard({ ...currentCard, copyrightVerified: true });
                     alert('✅ ' + result.reason);
                   } else {
                     alert('❌ ' + result.reason);
@@ -422,7 +422,7 @@ export function TradingCardDesigner({ userId }) {
               <button className="btn-secondary" onClick={() => setCurrentCard(null)}>
                 ← Back to Templates
               </button>
-              <button 
+              <button
                 className="btn-primary"
                 disabled={!currentCard.originalWork || !currentCard.copyrightVerified || copyrightWarning !== null}
                 style={{
@@ -434,7 +434,7 @@ export function TradingCardDesigner({ userId }) {
                     setShowTermsModal(true);
                   } else {
                     // Save card logic
-                    setCards([...cards, {...currentCard, id: Date.now()}]);
+                    setCards([...cards, { ...currentCard, id: Date.now() }]);
                     setCurrentCard(null);
                   }
                 }}
@@ -446,22 +446,22 @@ export function TradingCardDesigner({ userId }) {
 
           <div className="card-preview-area">
             <div className="preview-tabs">
-              <button 
+              <button
                 className={`preview-tab ${currentCard.viewSide === 'front' ? 'active' : ''}`}
-                onClick={() => setCurrentCard({...currentCard, viewSide: 'front'})}
+                onClick={() => setCurrentCard({ ...currentCard, viewSide: 'front' })}
               >
                 Front
               </button>
-              <button 
+              <button
                 className={`preview-tab ${currentCard.viewSide === 'back' ? 'active' : ''}`}
-                onClick={() => setCurrentCard({...currentCard, viewSide: 'back'})}
+                onClick={() => setCurrentCard({ ...currentCard, viewSide: 'back' })}
               >
                 Back
               </button>
             </div>
-            
+
             {currentCard.viewSide !== 'back' ? (
-              <div 
+              <div
                 className="card-canvas"
                 style={{
                   width: CARD_SIZES[currentCard.size].width,
@@ -469,8 +469,8 @@ export function TradingCardDesigner({ userId }) {
                   background: currentCard.frontDesign.background,
                   position: 'relative',
                   border: `3px solid ${RARITY_TIERS.find(t => t.value === currentCard.rarity)?.color}`,
-                  boxShadow: currentCard.finish === 'holographic' 
-                    ? '0 0 30px rgba(139, 92, 246, 0.6)' 
+                  boxShadow: currentCard.finish === 'holographic'
+                    ? '0 0 30px rgba(139, 92, 246, 0.6)'
                     : '0 8px 24px rgba(0, 0, 0, 0.4)'
                 }}
               >
@@ -498,7 +498,7 @@ export function TradingCardDesigner({ userId }) {
                 </div>
               </div>
             ) : (
-              <div 
+              <div
                 className="card-canvas"
                 style={{
                   width: CARD_SIZES[currentCard.size].width,
@@ -506,8 +506,8 @@ export function TradingCardDesigner({ userId }) {
                   background: currentCard.backDesign.background,
                   position: 'relative',
                   border: `3px solid ${RARITY_TIERS.find(t => t.value === currentCard.rarity)?.color}`,
-                  boxShadow: currentCard.finish === 'holographic' 
-                    ? '0 0 30px rgba(139, 92, 246, 0.6)' 
+                  boxShadow: currentCard.finish === 'holographic'
+                    ? '0 0 30px rgba(139, 92, 246, 0.6)'
                     : '0 8px 24px rgba(0, 0, 0, 0.4)',
                   display: 'flex',
                   alignItems: 'center',
@@ -516,9 +516,9 @@ export function TradingCardDesigner({ userId }) {
                 }}
               >
                 {currentCard.backDesign.customArt ? (
-                  <img 
-                    src={currentCard.backDesign.customArt} 
-                    alt="Card back" 
+                  <img
+                    src={currentCard.backDesign.customArt}
+                    alt="Card back"
                     style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                   />
                 ) : (
@@ -570,12 +570,12 @@ export function TradingCardDesigner({ userId }) {
           <h2>Your Cards ({cards.length})</h2>
           <div className="cards-grid">
             {cards.map((card) => (
-              <div 
-                key={card.id} 
+              <div
+                key={card.id}
                 className="saved-card-thumb"
                 onClick={() => setCurrentCard(card)}
               >
-                <div className="thumb-preview" style={{borderColor: RARITY_TIERS.find(t => t.value === card.rarity)?.color}}>
+                <div className="thumb-preview" style={{ borderColor: RARITY_TIERS.find(t => t.value === card.rarity)?.color }}>
                   {card.frontDesign.elements.name || 'Untitled Card'}
                 </div>
                 <span className="thumb-info">
@@ -591,7 +591,7 @@ export function TradingCardDesigner({ userId }) {
       {copyrightWarning && copyrightWarning.length > 0 && (
         <div className="modal-overlay" onClick={() => setCopyrightWarning(null)}>
           <div className="modal-content copyright-warning-modal" onClick={e => e.stopPropagation()}>
-            <h2 style={{color: '#ef4444', display: 'flex', alignItems: 'center', gap: '0.5rem'}}>
+            <h2 style={{ color: '#ef4444', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
               ⚠️ Copyright Violation Detected
             </h2>
             <div className="warning-issues">
@@ -603,10 +603,10 @@ export function TradingCardDesigner({ userId }) {
                   borderRadius: '8px',
                   marginBottom: '0.75rem'
                 }}>
-                  <strong style={{color: issue.severity === 'critical' ? '#ef4444' : '#fbbf24'}}>
+                  <strong style={{ color: issue.severity === 'critical' ? '#ef4444' : '#fbbf24' }}>
                     {issue.type.toUpperCase()}:
                   </strong>
-                  <p style={{color: '#e2e8f0', marginTop: '0.5rem'}}>{issue.message}</p>
+                  <p style={{ color: '#e2e8f0', marginTop: '0.5rem' }}>{issue.message}</p>
                 </div>
               ))}
             </div>
@@ -617,14 +617,14 @@ export function TradingCardDesigner({ userId }) {
               borderRadius: '8px',
               marginTop: '1rem'
             }}>
-              <p style={{color: '#818cf8', fontSize: '0.9rem'}}>
+              <p style={{ color: '#818cf8', fontSize: '0.9rem' }}>
                 <strong>💡 Legal Notice:</strong> Using trademarked names or copyrighted characters violates intellectual property law and our Terms of Service. Create original content or obtain proper licensing.
               </p>
             </div>
-            <button 
-              className="btn-primary" 
+            <button
+              className="btn-primary"
               onClick={() => setCopyrightWarning(null)}
-              style={{marginTop: '1rem', width: '100%'}}
+              style={{ marginTop: '1rem', width: '100%' }}
             >
               I Understand
             </button>
@@ -636,7 +636,7 @@ export function TradingCardDesigner({ userId }) {
       {showTermsModal && (
         <div className="modal-overlay" onClick={() => setShowTermsModal(false)}>
           <div className="modal-content terms-modal" onClick={e => e.stopPropagation()}>
-            <h2 style={{color: '#818cf8', marginBottom: '1rem'}}>📋 Print-on-Demand Terms of Service</h2>
+            <h2 style={{ color: '#818cf8', marginBottom: '1rem' }}>📋 Print-on-Demand Terms of Service</h2>
             <div className="terms-content" style={{
               maxHeight: '400px',
               overflowY: 'auto',
@@ -646,9 +646,9 @@ export function TradingCardDesigner({ userId }) {
               marginBottom: '1rem'
             }}>
               {PRINT_ON_DEMAND_TERMS.sections.map((section, idx) => (
-                <div key={idx} style={{marginBottom: '1.5rem'}}>
-                  <h3 style={{color: '#94a3b8', fontSize: '1.1rem', marginBottom: '0.75rem'}}>{section.title}</h3>
-                  <p style={{color: '#cbd5e1', fontSize: '0.95rem', lineHeight: '1.6', whiteSpace: 'pre-line'}}>
+                <div key={idx} style={{ marginBottom: '1.5rem' }}>
+                  <h3 style={{ color: '#94a3b8', fontSize: '1.1rem', marginBottom: '0.75rem' }}>{section.title}</h3>
+                  <p style={{ color: '#cbd5e1', fontSize: '0.95rem', lineHeight: '1.6', whiteSpace: 'pre-line' }}>
                     {section.content}
                   </p>
                 </div>
@@ -664,26 +664,26 @@ export function TradingCardDesigner({ userId }) {
               borderRadius: '8px',
               marginBottom: '1rem'
             }}>
-              <input 
+              <input
                 type="checkbox"
                 checked={termsAccepted}
                 onChange={(e) => setTermsAccepted(e.target.checked)}
-                style={{width: '20px', height: '20px', cursor: 'pointer'}}
+                style={{ width: '20px', height: '20px', cursor: 'pointer' }}
               />
-              <span style={{color: '#e2e8f0', fontSize: '0.95rem', fontWeight: 500}}>
+              <span style={{ color: '#e2e8f0', fontSize: '0.95rem', fontWeight: 500 }}>
                 I have read and agree to the Print-on-Demand Terms of Service. I certify all content is 100% original and I accept full legal responsibility.
               </span>
             </label>
-            <div style={{display: 'flex', gap: '1rem'}}>
-              <button 
-                className="btn-secondary" 
+            <div style={{ display: 'flex', gap: '1rem' }}>
+              <button
+                className="btn-secondary"
                 onClick={() => setShowTermsModal(false)}
-                style={{flex: 1}}
+                style={{ flex: 1 }}
               >
                 Cancel
               </button>
-              <button 
-                className="btn-primary" 
+              <button
+                className="btn-primary"
                 onClick={() => {
                   if (!termsAccepted) {
                     alert('❌ You must accept the terms to continue');
@@ -691,7 +691,7 @@ export function TradingCardDesigner({ userId }) {
                   }
                   setShowTermsModal(false);
                   // Save card logic
-                  setCards([...cards, {...currentCard, id: Date.now()}]);
+                  setCards([...cards, { ...currentCard, id: Date.now() }]);
                   setCurrentCard(null);
                 }}
                 disabled={!termsAccepted}

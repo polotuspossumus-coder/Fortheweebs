@@ -13,7 +13,7 @@ export function TipsAndDonations({ creatorId, creatorName }) {
 
   const handleSendTip = async () => {
     const amount = customAmount || tipAmount;
-    
+
     // In production: Integrate Stripe Payment Intent
     /*
     const response = await fetch('/api/tips/create', {
@@ -33,7 +33,7 @@ export function TipsAndDonations({ creatorId, creatorName }) {
     const stripe = await loadStripe(process.env.STRIPE_PUBLIC_KEY);
     await stripe.confirmCardPayment(clientSecret);
     */
-    
+
     // Mock success
     setShowSuccess(true);
     setTimeout(() => {

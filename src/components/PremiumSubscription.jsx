@@ -6,7 +6,7 @@ import { unlockTool, getUserBalance, deductBalance, TOOL_PRICES } from '../utils
 import { loadStripe } from '@stripe/stripe-js';
 
 // Initialize Stripe (will be null if env var not set)
-const stripePromise = import.meta.env.VITE_STRIPE_PUBLIC_KEY 
+const stripePromise = import.meta.env.VITE_STRIPE_PUBLIC_KEY
   ? loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY)
   : null;
 
@@ -104,9 +104,9 @@ export function PremiumSubscription({ userId, currentTier }) {
 
   const handleUnlock = async (unlockType, price, paymentMethod = 'balance') => {
     if (processing) return; // Prevent double-clicks
-    
+
     setProcessing(true);
-    
+
     try {
       if (paymentMethod === 'balance') {
         if (userBalance < price) {
@@ -125,10 +125,10 @@ export function PremiumSubscription({ userId, currentTier }) {
         const result = unlockTool(userId, unlockType, 'balance', price);
         if (result.success) {
           alert(`🎉 ${result.message}\n\nPaid from balance: $${price}\nRemaining balance: $${(userBalance - price).toFixed(2)}`);
-          
+
           // Update balance display
           setUserBalance(userBalance - price);
-          
+
           // Reload page to show unlocked tool
           setTimeout(() => window.location.reload(), 1500);
         } else {
@@ -137,7 +137,7 @@ export function PremiumSubscription({ userId, currentTier }) {
       } else if (paymentMethod === 'card') {
         // Check if Stripe is configured
         const stripe = await stripePromise;
-        
+
         if (!stripe || !import.meta.env.VITE_STRIPE_PUBLIC_KEY) {
           alert(`💳 Stripe not configured yet.\n\nTo enable credit card payments:\n1. Get Stripe API keys from stripe.com\n2. Add to .env file:\n   VITE_STRIPE_PUBLIC_KEY=pk_test_...\n   STRIPE_SECRET_KEY=sk_test_...\n\nFor now, use "Pay from Balance" option.`);
           return;
@@ -248,7 +248,7 @@ export function PremiumSubscription({ userId, currentTier }) {
                   className="unlock-btn crypto-btn"
                   onClick={() => handleUnlock(tool.id, tool.price, 'bitcoin')}
                   disabled={processing}
-                  style={{background: 'linear-gradient(135deg, #f7931a, #f2a900)', fontSize: '0.85rem'}}
+                  style={{ background: 'linear-gradient(135deg, #f7931a, #f2a900)', fontSize: '0.85rem' }}
                 >
                   {processing ? '⏳ Processing...' : `₿ Bitcoin ($${Math.round(tool.price * 2)})`}
                 </button>
@@ -256,7 +256,7 @@ export function PremiumSubscription({ userId, currentTier }) {
                   className="unlock-btn crypto-btn"
                   onClick={() => handleUnlock(tool.id, tool.price, 'ethereum')}
                   disabled={processing}
-                  style={{background: 'linear-gradient(135deg, #627eea, #5a67d8)', fontSize: '0.85rem'}}
+                  style={{ background: 'linear-gradient(135deg, #627eea, #5a67d8)', fontSize: '0.85rem' }}
                 >
                   {processing ? '⏳ Processing...' : `Ξ Ethereum ($${Math.round(tool.price * 4)})`}
                 </button>
@@ -270,8 +270,8 @@ export function PremiumSubscription({ userId, currentTier }) {
       <div className="tiers-container">
         {/* Free Tier */}
         <div className="tier-card">
-          <div className="tier-header" style={{borderColor: tiers.free.color}}>
-            <h2 style={{color: tiers.free.color}}>{tiers.free.name}</h2>
+          <div className="tier-header" style={{ borderColor: tiers.free.color }}>
+            <h2 style={{ color: tiers.free.color }}>{tiers.free.name}</h2>
             <div className="tier-price">
               <span className="price">${tiers.free.price}</span>
             </div>
@@ -283,15 +283,15 @@ export function PremiumSubscription({ userId, currentTier }) {
               </div>
             ))}
           </div>
-          <button className="tier-btn" style={{borderColor: tiers.free.color, color: tiers.free.color}} disabled>
+          <button className="tier-btn" style={{ borderColor: tiers.free.color, color: tiers.free.color }} disabled>
             Current Plan
           </button>
         </div>
 
         {/* Adult Access - $5/month */}
         <div className="tier-card adult-card">
-          <div className="tier-header" style={{borderColor: tiers.adult.color}}>
-            <h2 style={{color: tiers.adult.color}}>{tiers.adult.name}</h2>
+          <div className="tier-header" style={{ borderColor: tiers.adult.color }}>
+            <h2 style={{ color: tiers.adult.color }}>{tiers.adult.name}</h2>
             <div className="tier-price">
               <span className="price">${tiers.adult.price}</span>
               <span className="period">/month</span>
@@ -307,7 +307,7 @@ export function PremiumSubscription({ userId, currentTier }) {
           </div>
           <button
             className="tier-btn adult-btn"
-            style={{background: `linear-gradient(135deg, ${tiers.adult.color}, #dc2626)`}}
+            style={{ background: `linear-gradient(135deg, ${tiers.adult.color}, #dc2626)` }}
             onClick={() => handleUnlock('adult_monthly', tiers.adult.price)}
           >
             🔞 Get Adult Access
@@ -317,8 +317,8 @@ export function PremiumSubscription({ userId, currentTier }) {
         {/* Full Platform Unlock - $500 one-time */}
         <div className="tier-card full-unlock-card">
           <div className="popular-badge">⭐ BEST VALUE</div>
-          <div className="tier-header" style={{borderColor: tiers.full.color}}>
-            <h2 style={{color: tiers.full.color}}>{tiers.full.name}</h2>
+          <div className="tier-header" style={{ borderColor: tiers.full.color }}>
+            <h2 style={{ color: tiers.full.color }}>{tiers.full.name}</h2>
             <div className="tier-price">
               <span className="price">${tiers.full.price}</span>
               <span className="period">one-time</span>
@@ -334,17 +334,17 @@ export function PremiumSubscription({ userId, currentTier }) {
           </div>
           <button
             className="tier-btn full-unlock-btn"
-            style={{background: `linear-gradient(135deg, ${tiers.full.color}, #f59e0b)`}}
+            style={{ background: `linear-gradient(135deg, ${tiers.full.color}, #f59e0b)` }}
             onClick={() => handleUnlock('full_platform', tiers.full.price, 'balance')}
             disabled={userBalance < tiers.full.price}
           >
-            {userBalance >= tiers.full.price 
-              ? `� Pay from Balance ($${tiers.full.price})` 
+            {userBalance >= tiers.full.price
+              ? `� Pay from Balance ($${tiers.full.price})`
               : `Need $${(tiers.full.price - userBalance).toFixed(2)} more`}
           </button>
           <button
             className="tier-btn full-unlock-btn"
-            style={{background: `linear-gradient(135deg, #10b981, #059669)`, marginTop: '0.5rem'}}
+            style={{ background: `linear-gradient(135deg, #10b981, #059669)`, marginTop: '0.5rem' }}
             onClick={() => handleUnlock('full_platform', tiers.full.price, 'card')}
           >
             💳 Pay with Card ($${tiers.full.price})
@@ -359,13 +359,13 @@ export function PremiumSubscription({ userId, currentTier }) {
         {/* Super Admin Powers - $1000 tier */}
         <div className="tier-card super-admin-card">
           <div className="secret-badge">🤫 SECRET TIER</div>
-          <div className="tier-header" style={{borderColor: tiers.super_admin.color}}>
-            <h2 style={{color: tiers.super_admin.color}}>{tiers.super_admin.name}</h2>
+          <div className="tier-header" style={{ borderColor: tiers.super_admin.color }}>
+            <h2 style={{ color: tiers.super_admin.color }}>{tiers.super_admin.name}</h2>
             <div className="tier-price">
               <span className="price">${tiers.super_admin.price}</span>
               <span className="period">one-time</span>
             </div>
-            <p className="tier-tagline" style={{color: tiers.super_admin.color}}>
+            <p className="tier-tagline" style={{ color: tiers.super_admin.color }}>
               {tiers.super_admin.tagline}
             </p>
           </div>
@@ -375,7 +375,7 @@ export function PremiumSubscription({ userId, currentTier }) {
                 {feature}
               </div>
             ))}
-            
+
             {/* Only owner sees the real features */}
             {userId === 'owner' && (
               <div style={{
@@ -389,12 +389,12 @@ export function PremiumSubscription({ userId, currentTier }) {
                   👑 OWNER VIEW - Real Features:
                 </div>
                 <div style={{ fontSize: '0.9rem', opacity: 0.9 }}>
-                  ✅ Never pay creator subscription fees<br/>
-                  ✅ AI Content Generation Powers<br/>
-                  ✅ Facial Recognition AI (anime character identification)<br/>
-                  ✅ Set AI to auto-generate content<br/>
-                  ✅ Train AI on your own datasets<br/>
-                  ✅ Admin-level tool access<br/>
+                  ✅ Never pay creator subscription fees<br />
+                  ✅ AI Content Generation Powers<br />
+                  ✅ Facial Recognition AI (anime character identification)<br />
+                  ✅ Set AI to auto-generate content<br />
+                  ✅ Train AI on your own datasets<br />
+                  ✅ Admin-level tool access<br />
                   ✅ Custom AI models for your content
                 </div>
               </div>
@@ -402,17 +402,17 @@ export function PremiumSubscription({ userId, currentTier }) {
           </div>
           <button
             className="tier-btn super-admin-btn"
-            style={{background: `linear-gradient(135deg, ${tiers.super_admin.color}, #7c3aed)`}}
+            style={{ background: `linear-gradient(135deg, ${tiers.super_admin.color}, #7c3aed)` }}
             onClick={() => handleUnlock('super_admin_powers', tiers.super_admin.price, 'balance')}
             disabled={userBalance < tiers.super_admin.price}
           >
-            {userBalance >= tiers.super_admin.price 
-              ? `🔥 Pay from Balance ($${tiers.super_admin.price})` 
+            {userBalance >= tiers.super_admin.price
+              ? `🔥 Pay from Balance ($${tiers.super_admin.price})`
               : `Need $${(tiers.super_admin.price - userBalance).toFixed(2)} more`}
           </button>
           <button
             className="tier-btn super-admin-btn"
-            style={{background: `linear-gradient(135deg, #ec4899, #db2777)`, marginTop: '0.5rem'}}
+            style={{ background: `linear-gradient(135deg, #ec4899, #db2777)`, marginTop: '0.5rem' }}
             onClick={() => handleUnlock('super_admin_powers', tiers.super_admin.price, 'card')}
           >
             💳 Pay with Card ($${tiers.super_admin.price})
@@ -508,7 +508,7 @@ export function PremiumSubscription({ userId, currentTier }) {
               color: '#fbbf24',
               marginBottom: '20px'
             }}>Great for Creators</p>
-            
+
             <div style={{ fontSize: '1.05rem', lineHeight: '2' }}>
               <div style={{ color: '#10b981' }}>✅ ALL tools unlocked</div>
               <div style={{ color: '#10b981' }}>✅ Adult content included</div>
@@ -557,7 +557,7 @@ export function PremiumSubscription({ userId, currentTier }) {
               color: '#8b5cf6',
               marginBottom: '20px'
             }}>For Power Users & Professionals</p>
-            
+
             <div style={{ fontSize: '1.05rem', lineHeight: '2' }}>
               <div style={{ color: '#10b981' }}>✅ Everything in $500 tier</div>
               <div style={{ color: '#fbbf24', fontWeight: '700', fontSize: '1.15rem' }}>💰 ZERO PLATFORM FEES (0%!)</div>
@@ -588,9 +588,9 @@ export function PremiumSubscription({ userId, currentTier }) {
                 marginBottom: '10px'
               }}>💡 ROI Calculation:</p>
               <p style={{ fontSize: '0.95rem', lineHeight: '1.6', color: '#e0e0e0' }}>
-                If you earn just <strong>$2000</strong> on ForTheWeebs:<br/>
-                • $500 tier: Pay <strong>$300-500 in fees</strong> (15-25%)<br/>
-                • $1000 tier: Pay <strong>$0 in fees</strong> (0%)<br/>
+                If you earn just <strong>$2000</strong> on ForTheWeebs:<br />
+                • $500 tier: Pay <strong>$300-500 in fees</strong> (15-25%)<br />
+                • $1000 tier: Pay <strong>$0 in fees</strong> (0%)<br />
                 <span style={{ color: '#10b981', fontWeight: '700' }}>You break even immediately and save forever.</span>
               </p>
             </div>
@@ -618,8 +618,8 @@ export function PremiumSubscription({ userId, currentTier }) {
             maxWidth: '900px',
             margin: '0 auto'
           }}>
-            <strong>$500 tier is perfect</strong> if you just want all the tools and don't mind paying standard platform fees.<br/>
-            <strong>$1000 tier pays for itself</strong> the moment you earn $2000+ because you keep 100% of everything.<br/>
+            <strong>$500 tier is perfect</strong> if you just want all the tools and don't mind paying standard platform fees.<br />
+            <strong>$1000 tier pays for itself</strong> the moment you earn $2000+ because you keep 100% of everything.<br />
             Plus you get <strong>exclusive AI features, NFT minting, experimental tools, and lifetime VIP treatment</strong>.
           </p>
           <p style={{
@@ -647,7 +647,7 @@ export function PremiumSubscription({ userId, currentTier }) {
           textAlign: 'center',
           color: '#ff6b6b'
         }}>💰 Our Crypto & NFT Policy (The Honest Truth)</h2>
-        
+
         <div style={{
           display: 'grid',
           gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
@@ -665,17 +665,17 @@ export function PremiumSubscription({ userId, currentTier }) {
               marginBottom: '15px',
               color: '#ffaa00'
             }}>Bitcoin & Ethereum (Reluctantly Accepted)</h3>
-            
+
             <p style={{ marginBottom: '15px', lineHeight: '1.6' }}>
-              Let's be real: <strong>Crypto is useful and we'll accept it if that's all you have</strong>, 
+              Let's be real: <strong>Crypto is useful and we'll accept it if that's all you have</strong>,
               but we want USD period.
             </p>
-            
+
             <p style={{ marginBottom: '15px', lineHeight: '1.6' }}>
-              We <strong>only accept Bitcoin and Ethereum</strong> to help people offload crypto they want 
+              We <strong>only accept Bitcoin and Ethereum</strong> to help people offload crypto they want
               to convert. That's it.
             </p>
-            
+
             <div style={{
               background: 'rgba(255, 0, 0, 0.2)',
               padding: '15px',
@@ -694,7 +694,7 @@ export function PremiumSubscription({ userId, currentTier }) {
                 <li><strong>$2000 in Ethereum</strong> (auto-converted to USD)</li>
               </ul>
               <p style={{ marginTop: '15px', fontStyle: 'italic', color: '#ffaa00' }}>
-                💡 <strong>Pro tip:</strong> Pay with cash or credit card instead. We're upcharging because 
+                💡 <strong>Pro tip:</strong> Pay with cash or credit card instead. We're upcharging because
                 we want American USD.
               </p>
             </div>
@@ -712,16 +712,16 @@ export function PremiumSubscription({ userId, currentTier }) {
               marginBottom: '15px',
               color: '#8b5cf6'
             }}>NFTs Are Stupid (But Available)</h3>
-            
+
             <p style={{ marginBottom: '15px', lineHeight: '1.6' }}>
               <strong>We don't want anything to do with NFTs.</strong> They're stupid. Period.
             </p>
-            
+
             <p style={{ marginBottom: '15px', lineHeight: '1.6' }}>
-              But if some idiot wants to buy an NFT, <strong>we're certainly taking half</strong> because 
+              But if some idiot wants to buy an NFT, <strong>we're certainly taking half</strong> because
               y'all are both idiots.
             </p>
-            
+
             <div style={{
               background: 'rgba(139, 92, 246, 0.2)',
               padding: '15px',
@@ -742,7 +742,7 @@ export function PremiumSubscription({ userId, currentTier }) {
                 <li>No exceptions, no negotiations</li>
               </ul>
               <p style={{ marginTop: '15px', fontStyle: 'italic', color: '#8b5cf6' }}>
-                This is why it's expensive. We don't want to deal with NFTs, but if you insist on being 
+                This is why it's expensive. We don't want to deal with NFTs, but if you insist on being
                 an idiot, we're getting paid.
               </p>
             </div>
@@ -767,8 +767,8 @@ export function PremiumSubscription({ userId, currentTier }) {
             🎯 The Bottom Line
           </p>
           <p style={{ lineHeight: '1.6', maxWidth: '800px', margin: '0 auto' }}>
-            We're being brutally honest: <strong>Use cash or credit card</strong> for the best prices. 
-            Crypto is accepted to help people offload it and convert to USD, but it's premium priced. NFTs are stupid, but if you're 
+            We're being brutally honest: <strong>Use cash or credit card</strong> for the best prices.
+            Crypto is accepted to help people offload it and convert to USD, but it's premium priced. NFTs are stupid, but if you're
             into that nonsense, fine — just know we're taking our cut.
           </p>
         </div>
@@ -811,13 +811,13 @@ export function PremiumSubscription({ userId, currentTier }) {
       <div className="premium-cta">
         <h2>Ready to unlock everything?</h2>
         <p>Start earning today. Unlock tools as you grow. No monthly fees (except adult content).</p>
-        <button 
-          className="btn-primary cta-btn" 
+        <button
+          className="btn-primary cta-btn"
           onClick={() => handleUnlock('full_platform', tiers.full.price)}
           disabled={userBalance < tiers.full.price}
         >
-          {userBalance >= tiers.full.price 
-            ? `🚀 Unlock Everything for $${tiers.full.price}` 
+          {userBalance >= tiers.full.price
+            ? `🚀 Unlock Everything for $${tiers.full.price}`
             : `💰 Earn $${(tiers.full.price - userBalance).toFixed(2)} more`}
         </button>
         <p className="cta-disclaimer">One-time payment. No monthly fees. Keep forever.</p>

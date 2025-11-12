@@ -174,18 +174,18 @@
         -webkit-overflow-scrolling: touch;
         scrollbar-width: thin;
     }
-    
+
     [role="tab"] {
         padding: 0.75rem 1rem;
         font-size: 0.875rem;
         white-space: nowrap;
     }
-    
+
     [role="tabpanel"] {
         padding: 1rem;
         min-height: 200px;
     }
-    
+
     .dashboard-tabs {
         font-size: 0.875rem;
     }
@@ -196,12 +196,12 @@
         gap: 0.125rem;
         padding: 0.25rem;
     }
-    
+
     [role="tab"] {
         padding: 0.5rem 0.75rem;
         font-size: 0.8125rem;
     }
-    
+
     [role="tabpanel"] {
         padding: 0.75rem;
     }

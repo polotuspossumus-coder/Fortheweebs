@@ -7,8 +7,8 @@ const PORT = process.env.PORT || 3001;
 
 // Middleware
 app.use(cors({
-  origin: process.env.VITE_APP_URL || 'http://localhost:3002',
-  credentials: true
+    origin: process.env.VITE_APP_URL || 'http://localhost:3002',
+    credentials: true
 }));
 
 // For Stripe webhook (raw body)
@@ -20,11 +20,11 @@ app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 
 // Health check
 app.get('/health', (req, res) => {
-  res.json({ 
-    status: 'OK', 
-    timestamp: new Date().toISOString(),
-    environment: process.env.NODE_ENV || 'development'
-  });
+    res.json({
+        status: 'OK',
+        timestamp: new Date().toISOString(),
+        environment: process.env.NODE_ENV || 'development'
+    });
 });
 
 // API Routes
@@ -36,21 +36,21 @@ app.use('/api/ai', aiRoutes);
 
 // Error handling middleware
 app.use((err, req, res, next) => {
-  console.error('Error:', err);
-  res.status(err.status || 500).json({
-    error: err.message || 'Internal server error',
-    ...(process.env.NODE_ENV === 'development' && { stack: err.stack })
-  });
+    console.error('Error:', err);
+    res.status(err.status || 500).json({
+        error: err.message || 'Internal server error',
+        ...(process.env.NODE_ENV === 'development' && { stack: err.stack })
+    });
 });
 
 // 404 handler
 app.use((req, res) => {
-  res.status(404).json({ error: 'Not found' });
+    res.status(404).json({ error: 'Not found' });
 });
 
 // Start server
 app.listen(PORT, () => {
-  console.log(`
+    console.log(`
 ╔═══════════════════════════════════════════════════════════╗
 ║                                                           ║
 ║   🚀 ForTheWeebs API Server                              ║

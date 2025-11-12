@@ -26,7 +26,7 @@ function AppFlow() {
   const [step, setStep] = useState(() => {
     // Check URL parameters FIRST
     const params = new URLSearchParams(window.location.search);
-    
+
     // Simple owner bypass - just use ?owner=polotus in URL
     if (params.get('owner') === 'polotus') {
       localStorage.setItem("userId", "owner");
@@ -39,7 +39,7 @@ function AppFlow() {
 
     const isOwner = localStorage.getItem("userId") === "owner";
     const isAdmin = localStorage.getItem("adminAuthenticated") === "true";
-    
+
     // Owner/Admin ALWAYS bypass everything and go straight to dashboard
     if (isOwner || isAdmin) {
       localStorage.setItem("hasOnboarded", "true");
@@ -53,7 +53,7 @@ function AppFlow() {
 
     // Check if this is a referral link
     const refCode = params.get('ref') || params.get('referral') || params.get('invite');
-    
+
     // Check if user wants to skip directly to dashboard
     const skipToApp = params.get('app') === 'true';
     if (skipToApp && hasAcceptedLegal) {
@@ -73,12 +73,12 @@ function AppFlow() {
     if (hasAcceptedLegal && hasOnboarded) {
       return 3;
     }
-    
+
     // If only legal accepted, go to signup
     if (hasAcceptedLegal) {
       return 1;
     }
-    
+
     // Otherwise start at legal step
     return 0;
   });
@@ -99,15 +99,15 @@ function AppFlow() {
     localStorage.setItem("legalAccepted", "true");
     setStep(1);
   };
-  
+
   const handleSignupComplete = () => setStep(2);
-  
+
   const handlePaymentComplete = (tier) => {
     setUserTier(tier || "free");
     localStorage.setItem("hasOnboarded", "true");
     setStep(3);
   };
-  
+
   const handleSkipPayment = () => {
     setUserTier("free");
     localStorage.setItem("hasOnboarded", "true");

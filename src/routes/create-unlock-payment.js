@@ -16,7 +16,7 @@ export default async function handler(req, res) {
 
     // Check if Stripe is configured
     if (!process.env.STRIPE_SECRET_KEY) {
-      return res.status(503).json({ 
+      return res.status(503).json({
         error: 'Stripe not configured',
         message: 'Payment processing is not available yet. Please use balance payment or contact support.'
       });

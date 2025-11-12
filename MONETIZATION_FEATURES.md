@@ -14,16 +14,19 @@ Your approved monetization features are now LIVE on fortheweebs.netlify.app:
 ## ☕ TIPS & DONATIONS
 
 ### How It Works
+
 - Creators get a "Tip" button on their profiles
 - Fans can send tips: $3, $5, $10, $25, $50, $100 (or custom amount)
 - Optional message (200 characters)
 - Instant payment via Stripe
 
 ### Revenue Split
+
 - **Creator receives: 97%** (after Stripe 3% processing fee)
 - **Platform takes: 0%** (this builds goodwill with creators)
 
 ### Features
+
 ✅ Preset tip amounts with gradient buttons  
 ✅ Custom amount input  
 ✅ Optional message field  
@@ -33,11 +36,13 @@ Your approved monetization features are now LIVE on fortheweebs.netlify.app:
 ✅ Modal overlay for tip flow  
 
 ### Integration Needed
+
 ⏳ Stripe Payment Intent API key  
 ⏳ Backend endpoint: `POST /api/tips/create`  
 ⏳ Database: Tips table (amount, creatorId, fanId, message, timestamp)  
 
 ### Status
+
 ✅ Complete UI  
 ⏳ Needs Stripe integration (commented in code, ready to activate)
 
@@ -46,17 +51,20 @@ Your approved monetization features are now LIVE on fortheweebs.netlify.app:
 ## 💼 COMMISSION MARKETPLACE
 
 ### How It Works
+
 - Creators list custom commission services (art, comics, designs, etc.)
 - Clients browse marketplace, request commissions
 - Platform handles escrow payment
 - Creator delivers work, gets paid
 
 ### Revenue Split
+
 - **Creator receives: 85%** (before Stripe fees)
 - **Platform takes: 15%** (you approved "seems fair")
 - **Stripe fee: 2.9% + $0.30** (deducted from creator's 85%)
 
 Example: $150 commission
+
 - Client pays: $150
 - Platform fee (15%): -$22.50
 - Stripe fee (2.9% + $0.30): -$4.67
@@ -88,18 +96,21 @@ Example: $150 commission
    - **Live pricing calculator** (shows platform fee + Stripe fee)
 
 ### Integration Needed
+
 ⏳ Stripe Connect for payouts  
 ⏳ Backend API:  
-   - `POST /api/commissions/create` (create listing)  
-   - `GET /api/commissions/list` (browse with filters)  
-   - `POST /api/commissions/request` (client requests commission)  
-   - `POST /api/commissions/accept` (creator accepts request)  
-   - `POST /api/commissions/deliver` (creator submits final work)  
-   - `POST /api/commissions/complete` (release escrow payment)  
+
+- `POST /api/commissions/create` (create listing)  
+- `GET /api/commissions/list` (browse with filters)  
+- `POST /api/commissions/request` (client requests commission)  
+- `POST /api/commissions/accept` (creator accepts request)  
+- `POST /api/commissions/deliver` (creator submits final work)  
+- `POST /api/commissions/complete` (release escrow payment)  
 ⏳ Database: Commissions table, Requests table, Transactions table  
 ⏳ AWS S3 for example images  
 
 ### Status
+
 ✅ Complete UI with filters, forms, pricing calculator  
 ✅ Mobile responsive  
 ⏳ Needs backend + Stripe Connect
@@ -109,26 +120,31 @@ Example: $150 commission
 ## 💎 PREMIUM SUBSCRIPTION
 
 ### How It Works
+
 - Free tier: Browse SFW content, upload unlimited, earn from print-on-demand
 - Premium tier: **$5/month** - Full adult content access + perks
 
 ### What Premium Unlocks
 
 #### 🔞 Adult Content
+
 - Full access to NSFW artwork, hentai, adult comics
 - Create & sell adult content
 - Gore/violence/horror content (18+ age gated)
 - No censorship (only illegal content blocked: CSAM, terrorism, fraud, etc.)
 
 #### 💼 Commission Marketplace Access
+
 - Only premium members can offer/request commissions
 - Prevents spam/abuse
 
 #### 💰 Better Revenue Split
+
 - **80/20 split on print-on-demand** (instead of 75/25 for free users)
 - Example: $100 print order → Premium creator gets $80 instead of $75
 
 #### ⭐ Premium Perks
+
 - Premium profile badge (⭐ Premium)
 - Advanced analytics (views, engagement, revenue sources, demographics)
 - Exclusive premium-only contests
@@ -136,6 +152,7 @@ Example: $150 commission
 - $5 in free tips per month (to send to other creators)
 
 ### Features
+
 ✅ 2-tier comparison cards (Free vs Premium)  
 ✅ "Why Go Premium?" benefits grid (6 cards)  
 ✅ FAQ section (cancel anytime, age verification, etc.)  
@@ -144,6 +161,7 @@ Example: $150 commission
 ✅ Mobile responsive  
 
 ### Integration Needed
+
 ⏳ Stripe subscription (recurring billing)  
 ⏳ Backend endpoint: `POST /api/subscriptions/create`  
 ⏳ Database: Subscriptions table (userId, tier, status, start_date, next_billing_date)  
@@ -151,6 +169,7 @@ Example: $150 commission
 ⏳ Content tagging system (mark content as 18+, show age gate modals)  
 
 ### Status
+
 ✅ Complete UI with pricing, benefits, FAQ  
 ⏳ Needs Stripe subscription integration  
 ⏳ Needs age verification system (code exists in `ageVerification.js`)
@@ -160,10 +179,12 @@ Example: $150 commission
 ## 📦 PRINT-ON-DEMAND (EXISTING)
 
 ### Revenue Split
+
 - **Creator: 75%** (free users) or **80%** (premium users)
 - **Platform: 25%** (free) or **20%** (premium) - you confirmed "i keep 25%"
 
 ### Products
+
 - Comics ($12.50)
 - Trading Cards ($1.75-$3)
 - Posters ($15)
@@ -172,6 +193,7 @@ Example: $150 commission
 - Novels ($14)
 
 ### Status
+
 ✅ Already deployed with legal protection (commit c440ad0)  
 ✅ Integrated trademark blocking  
 ✅ TOS acceptance required  
@@ -205,18 +227,21 @@ Example: $150 commission
 ### Example Creator Earnings
 
 **Small Creator (100 fans)**
+
 - Tips: 20 tips/month × $5 avg = $97 (after Stripe)
 - Commissions: 2/month × $100 = $170 (after fees)
 - Print: 5 orders/month × $20 = $75 (75% cut)
 - **Total: ~$342/month**
 
 **Mid-Tier Creator (1,000 fans, Premium)**
+
 - Tips: 100 tips/month × $10 avg = $970 (after Stripe)
 - Commissions: 10/month × $150 = $1,275 (after fees)
 - Print: 30 orders/month × $25 = $600 (80% cut)
 - **Total: ~$2,845/month**
 
 **Top Creator (10,000 fans, Premium)**
+
 - Tips: 500 tips/month × $20 avg = $9,700 (after Stripe)
 - Commissions: 30/month × $200 = $5,100 (after fees)
 - Print: 100 orders/month × $30 = $2,400 (80% cut)
@@ -225,12 +250,14 @@ Example: $150 commission
 ### Platform Revenue Potential
 
 **1,000 active creators:**
+
 - Commissions (15% of ~$500k/month): **$75,000/month**
 - Print-on-demand (25% of ~$200k/month): **$50,000/month**
 - Premium subs (20% adoption × 1000 × $5): **$1,000/month**
 - **Total: ~$126,000/month** ($1.5M/year)
 
 **10,000 active creators (scale):**
+
 - Commissions: **$750,000/month**
 - Print-on-demand: **$500,000/month**
 - Premium subs: **$10,000/month**
@@ -241,6 +268,7 @@ Example: $150 commission
 ## 🚀 DEPLOYMENT STATUS
 
 ### ✅ DEPLOYED (Commit a17e068)
+
 - TipsAndDonations.jsx (135 lines)
 - TipsAndDonations.css (261 lines)
 - CommissionMarketplace.jsx (274 lines)
@@ -250,9 +278,10 @@ Example: $150 commission
 - CreatorDashboard.jsx (updated with 3 new tabs)
 
 ### 📍 Live URL
-https://fortheweebs.netlify.app
+<https://fortheweebs.netlify.app>
 
 ### 🎯 Navigation
+
 Dashboard → **☕ Tips** tab  
 Dashboard → **💼 Commissions** tab  
 Dashboard → **💎 Premium** tab  
@@ -262,24 +291,29 @@ Dashboard → **💎 Premium** tab
 ## ⏳ NEXT STEPS TO GO FULLY LIVE
 
 ### 1. Stripe Integration (CRITICAL)
+
 ```bash
 # Install Stripe SDK
 npm install @stripe/stripe-js stripe
 ```
 
 Set environment variables:
+
 - `STRIPE_PUBLIC_KEY` (frontend)
 - `STRIPE_SECRET_KEY` (backend)
 - `STRIPE_WEBHOOK_SECRET` (backend)
 
 ### 2. Backend API (Node.js/Express recommended)
+
 Create endpoints:
+
 - `/api/tips/create` (Payment Intent)
 - `/api/commissions/*` (CRUD operations)
 - `/api/subscriptions/create` (Recurring billing)
 - `/api/webhooks/stripe` (Handle payment events)
 
 ### 3. Database Schema (Supabase/PostgreSQL)
+
 ```sql
 -- Tips table
 CREATE TABLE tips (
@@ -338,22 +372,26 @@ CREATE TABLE subscriptions (
 ```
 
 ### 4. Age Verification (for adult content)
+
 - Integrate Stripe Identity OR Onfido for 18+ verification
 - Show age gate modal before accessing 18+ content
 - Code exists in `src/utils/ageVerification.js` (ready to use)
 
 ### 5. AWS S3 Setup (for commission example images)
+
 ```bash
 # Install AWS SDK
 npm install aws-sdk
 ```
 
 Environment variables:
+
 - `AWS_ACCESS_KEY_ID`
 - `AWS_SECRET_ACCESS_KEY`
 - `AWS_S3_BUCKET_NAME`
 
 ### 6. Testing Checklist
+
 - [ ] Stripe test mode (use test cards: 4242 4242 4242 4242)
 - [ ] Tip flow: Select amount → Add message → Pay → Success
 - [ ] Commission flow: Create listing → Browse → Request → Accept → Deliver → Complete
@@ -391,18 +429,21 @@ All features are LIVE with full UI. We just need to activate Stripe payments."
 ## 🔥 REVENUE PROJECTIONS
 
 ### Conservative (Year 1)
+
 - 1,000 creators
 - 20% premium adoption
 - Avg $500/month per creator in transactions
 - **Platform revenue: ~$100k/month** ($1.2M/year)
 
 ### Moderate (Year 2)
+
 - 5,000 creators
 - 30% premium adoption
 - Avg $800/month per creator in transactions
 - **Platform revenue: ~$500k/month** ($6M/year)
 
 ### Aggressive (Year 3)
+
 - 20,000 creators
 - 40% premium adoption
 - Avg $1,200/month per creator in transactions

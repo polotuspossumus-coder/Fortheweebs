@@ -5,6 +5,7 @@
 ### 1. Environment Variables Setup
 
 **Required for Netlify/Vercel:**
+
 ```bash
 # Stripe (Switch to LIVE keys)
 VITE_STRIPE_PUBLIC_KEY=pk_live_xxxxx
@@ -28,6 +29,7 @@ NOWPAYMENTS_API_KEY=xxxxx
 ### 2. Database Migration (localStorage → Supabase)
 
 **Create Supabase Tables:**
+
 ```sql
 -- Tool Unlocks
 CREATE TABLE tool_unlocks (
@@ -111,11 +113,12 @@ CREATE TABLE ai_models (
 
 ### 3. Stripe Webhook Setup
 
-**Configure webhooks at:** https://dashboard.stripe.com/webhooks
+**Configure webhooks at:** <https://dashboard.stripe.com/webhooks>
 
 **Endpoint:** `https://yoursite.com/api/stripe-webhook`
 
 **Events to listen for:**
+
 - `payment_intent.succeeded`
 - `payment_intent.payment_failed`
 - `charge.refunded`
@@ -174,6 +177,7 @@ CREATE TABLE ai_models (
 ### 9. Testing Checklist
 
 **Manual Testing:**
+
 - [ ] Test all tool unlocks (balance & card payment)
 - [ ] Test invite link sharing (no commissions)
 - [ ] Test admin login (/?admin=true)
@@ -186,6 +190,7 @@ CREATE TABLE ai_models (
 - [ ] Test error states and fallbacks
 
 **Automated Testing:**
+
 - [ ] Unit tests for critical functions
 - [ ] Integration tests for payment flows
 - [ ] E2E tests for user journeys
@@ -194,6 +199,7 @@ CREATE TABLE ai_models (
 ### 10. Deployment Steps
 
 **Netlify Deployment:**
+
 ```bash
 # Install Netlify CLI
 npm install -g netlify-cli
@@ -208,6 +214,7 @@ netlify deploy --prod
 ```
 
 **Vercel Deployment:**
+
 ```bash
 # Install Vercel CLI
 npm install -g vercel
@@ -217,6 +224,7 @@ vercel --prod
 ```
 
 **Post-Deployment:**
+
 - [ ] Verify all environment variables are set
 - [ ] Test live site thoroughly
 - [ ] Check SSL certificate is active
@@ -227,6 +235,7 @@ vercel --prod
 ### 11. Launch Announcement
 
 **Social Media:**
+
 - [ ] Twitter launch thread
 - [ ] Reddit post (r/anime, r/AnimeArt, r/manga)
 - [ ] Discord server announcement
@@ -234,11 +243,13 @@ vercel --prod
 - [ ] TikTok teaser video
 
 **Email Marketing:**
+
 - [ ] Send to beta testers/waitlist
 - [ ] Early bird pricing reminder
 - [ ] Launch day email blast
 
 **Press/Influencer Outreach:**
+
 - [ ] Send press release to anime/tech blogs
 - [ ] Reach out to anime YouTubers
 - [ ] Contact podcast hosts for interviews
@@ -246,6 +257,7 @@ vercel --prod
 ### 12. Post-Launch Monitoring
 
 **First Week:**
+
 - [ ] Monitor server performance
 - [ ] Track conversion rates
 - [ ] Respond to user feedback
@@ -254,6 +266,7 @@ vercel --prod
 - [ ] Track referral signups
 
 **First Month:**
+
 - [ ] Analyze user behavior patterns
 - [ ] Identify drop-off points
 - [ ] Gather testimonials

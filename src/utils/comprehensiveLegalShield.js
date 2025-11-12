@@ -34,7 +34,7 @@ export const PLATFORM_LEGAL_SHIELD = {
     copyright_scanning: true,
     patent_awareness: true,
     trade_secret_protection: true,
-    
+
     // Image content scanning (AI-powered)
     image_scanning: {
       enabled: true,
@@ -168,7 +168,7 @@ export const PLATFORM_LEGAL_SHIELD = {
       'Illegal drugs sales / weapons trafficking',
       'Fraud / scams / phishing'
     ],
-    
+
     // ALLOWED CONTENT (18+ with age gate):
     allowed_adult_content: [
       'NSFW artwork (nudity, sexual content)',
@@ -224,7 +224,7 @@ export const PLATFORM_LEGAL_SHIELD = {
       clickwrap_agreement: true, // User must click "I Agree"
       version_tracking: true, // Track which TOS version user agreed to
       notification_of_changes: true, // Email users when TOS changes
-      
+
       key_clauses: [
         'LIMITATION OF LIABILITY - Platform not liable for user actions',
         'INDEMNIFICATION - Users agree to defend platform in lawsuits',
@@ -282,7 +282,7 @@ export const PLATFORM_LEGAL_SHIELD = {
     no_unemployment_insurance: true,
     irs_1099_reporting: true, // Report as contractors
     right_to_work_verification: false, // Not required for contractors
-    
+
     contractor_agreement_clauses: [
       'Independent contractor status',
       'No employee relationship',

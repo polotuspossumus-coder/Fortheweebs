@@ -5,9 +5,9 @@
   max-width: 1400px;
   margin: 0 auto;
   padding: 2rem;
-  background: linear-gradient(180deg, rgba(26,26,46,0.9), rgba(15,23,42,0.9));
+  background: linear-gradient(180deg, rgba(26, 26, 46, 0.9), rgba(15, 23, 42, 0.9));
   border-radius: 20px;
-  box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
 }
 
 .premium-header {
@@ -27,7 +27,7 @@
 
 .premium-subtitle {
   font-size: 1.2rem;
-  color: rgba(255,255,255,0.7);
+  color: rgba(255, 255, 255, 0.7);
   max-width: 600px;
   margin: 0 auto 1.5rem;
 }
@@ -40,7 +40,7 @@
   border-radius: 30px;
   font-size: 1.2rem;
   font-weight: 700;
-  box-shadow: 0 4px 15px rgba(16,185,129,0.3);
+  box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
 }
 
 /* TOOL UNLOCKS SECTION */
@@ -58,7 +58,7 @@
 
 .section-subtitle {
   text-align: center;
-  color: rgba(255,255,255,0.6);
+  color: rgba(255, 255, 255, 0.6);
   margin-bottom: 2rem;
   font-size: 1.1rem;
 }
@@ -70,8 +70,8 @@
 }
 
 .tool-unlock-card {
-  background: rgba(15,23,42,0.6);
-  border: 2px solid rgba(139,92,246,0.3);
+  background: rgba(15, 23, 42, 0.6);
+  border: 2px solid rgba(139, 92, 246, 0.3);
   border-radius: 12px;
   padding: 1.5rem;
   transition: transform 0.3s ease, border-color 0.3s ease;
@@ -79,7 +79,7 @@
 
 .tool-unlock-card:hover {
   transform: translateY(-5px);
-  border-color: rgba(139,92,246,0.6);
+  border-color: rgba(139, 92, 246, 0.6);
 }
 
 .tool-header {
@@ -105,7 +105,7 @@
 }
 
 .tool-description {
-  color: rgba(255,255,255,0.7);
+  color: rgba(255, 255, 255, 0.7);
   margin-bottom: 1rem;
   line-height: 1.5;
   min-height: 60px;
@@ -135,11 +135,11 @@
 
 .balance-btn:hover:not(:disabled) {
   transform: translateY(-2px);
-  box-shadow: 0 5px 20px rgba(139,92,246,0.4);
+  box-shadow: 0 5px 20px rgba(139, 92, 246, 0.4);
 }
 
 .balance-btn:disabled {
-  background: rgba(100,116,139,0.3);
+  background: rgba(100, 116, 139, 0.3);
   cursor: not-allowed;
   opacity: 0.6;
 }
@@ -150,7 +150,7 @@
 
 .card-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 5px 20px rgba(16,185,129,0.4);
+  box-shadow: 0 5px 20px rgba(16, 185, 129, 0.4);
 }
 
 /* TIER CARDS */
@@ -163,49 +163,49 @@
 }
 
 .tier-card {
-  background: rgba(15,23,42,0.6);
+  background: rgba(15, 23, 42, 0.6);
   border-radius: 16px;
   padding: 2rem;
-  border: 2px solid rgba(100,116,139,0.3);
+  border: 2px solid rgba(100, 116, 139, 0.3);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   position: relative;
 }
 
 .tier-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 10px 30px rgba(139,92,246,0.2);
+  box-shadow: 0 10px 30px rgba(139, 92, 246, 0.2);
 }
 
 .premium-card {
   border: 2px solid #8b5cf6;
-  box-shadow: 0 0 20px rgba(139,92,246,0.3);
+  box-shadow: 0 0 20px rgba(139, 92, 246, 0.3);
   transform: scale(1.05);
 }
 
 .premium-card:hover {
   transform: scale(1.08);
-  box-shadow: 0 15px 40px rgba(139,92,246,0.4);
+  box-shadow: 0 15px 40px rgba(139, 92, 246, 0.4);
 }
 
 .adult-card {
   border: 2px solid #ef4444;
-  box-shadow: 0 0 20px rgba(239,68,68,0.3);
+  box-shadow: 0 0 20px rgba(239, 68, 68, 0.3);
 }
 
 .adult-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 10px 30px rgba(239,68,68,0.4);
+  box-shadow: 0 10px 30px rgba(239, 68, 68, 0.4);
 }
 
 .full-unlock-card {
   border: 2px solid #fbbf24;
-  box-shadow: 0 0 20px rgba(251,191,36,0.3);
+  box-shadow: 0 0 20px rgba(251, 191, 36, 0.3);
   transform: scale(1.05);
 }
 
 .full-unlock-card:hover {
   transform: scale(1.08);
-  box-shadow: 0 15px 40px rgba(251,191,36,0.4);
+  box-shadow: 0 15px 40px rgba(251, 191, 36, 0.4);
 }
 
 .popular-badge {
@@ -219,7 +219,7 @@
   border-radius: 20px;
   font-weight: 700;
   font-size: 0.9rem;
-  box-shadow: 0 4px 10px rgba(251,191,36,0.3);
+  box-shadow: 0 4px 10px rgba(251, 191, 36, 0.3);
 }
 
 .secret-badge {
@@ -233,13 +233,20 @@
   border-radius: 20px;
   font-weight: 700;
   font-size: 0.9rem;
-  box-shadow: 0 4px 10px rgba(139,92,246,0.5);
+  box-shadow: 0 4px 10px rgba(139, 92, 246, 0.5);
   animation: pulse 2s infinite;
 }
 
 @keyframes pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.7; }
+
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.7;
+  }
 }
 
 .tier-header {
@@ -271,12 +278,12 @@
 
 .tier-price .period {
   font-size: 1rem;
-  color: rgba(255,255,255,0.6);
+  color: rgba(255, 255, 255, 0.6);
 }
 
 .tier-tagline {
   font-size: 0.95rem;
-  color: rgba(255,255,255,0.7);
+  color: rgba(255, 255, 255, 0.7);
   margin-top: 0.5rem;
 }
 
@@ -292,9 +299,9 @@
 
 .feature-item {
   font-size: 0.95rem;
-  color: rgba(255,255,255,0.8);
+  color: rgba(255, 255, 255, 0.8);
   padding: 0.5rem 0;
-  border-bottom: 1px solid rgba(255,255,255,0.05);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .feature-item:last-child {
@@ -302,18 +309,18 @@
 }
 
 .premium-feature {
-  color: rgba(255,255,255,0.95);
+  color: rgba(255, 255, 255, 0.95);
   font-weight: 500;
 }
 
 .full-feature {
-  color: rgba(255,255,255,0.95);
+  color: rgba(255, 255, 255, 0.95);
   font-weight: 600;
 }
 
 .unlock-tip {
   text-align: center;
-  color: rgba(251,191,36,0.8);
+  color: rgba(251, 191, 36, 0.8);
   font-size: 0.9rem;
   margin-top: 0.5rem;
   font-style: italic;
@@ -336,7 +343,7 @@
 
 .tier-btn:hover:not(:disabled) {
   transform: translateY(-2px);
-  box-shadow: 0 5px 15px rgba(139,92,246,0.3);
+  box-shadow: 0 5px 15px rgba(139, 92, 246, 0.3);
 }
 
 .tier-btn:disabled {
@@ -347,31 +354,31 @@
 .premium-btn {
   border: none;
   color: #fff;
-  box-shadow: 0 5px 20px rgba(139,92,246,0.4);
+  box-shadow: 0 5px 20px rgba(139, 92, 246, 0.4);
 }
 
 .premium-btn:hover {
-  box-shadow: 0 8px 30px rgba(139,92,246,0.6);
+  box-shadow: 0 8px 30px rgba(139, 92, 246, 0.6);
 }
 
 .adult-btn {
   border: none;
   color: #fff;
-  box-shadow: 0 5px 20px rgba(239,68,68,0.4);
+  box-shadow: 0 5px 20px rgba(239, 68, 68, 0.4);
 }
 
 .adult-btn:hover {
-  box-shadow: 0 8px 30px rgba(239,68,68,0.6);
+  box-shadow: 0 8px 30px rgba(239, 68, 68, 0.6);
 }
 
 .full-unlock-btn {
   border: none;
   color: #fff;
-  box-shadow: 0 5px 20px rgba(251,191,36,0.4);
+  box-shadow: 0 5px 20px rgba(251, 191, 36, 0.4);
 }
 
 .full-unlock-btn:hover:not(:disabled) {
-  box-shadow: 0 8px 30px rgba(251,191,36,0.6);
+  box-shadow: 0 8px 30px rgba(251, 191, 36, 0.6);
 }
 
 /* BENEFITS SECTION */
@@ -394,8 +401,8 @@
 }
 
 .benefit-card {
-  background: rgba(15,23,42,0.6);
-  border: 1px solid rgba(139,92,246,0.2);
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid rgba(139, 92, 246, 0.2);
   border-radius: 12px;
   padding: 2rem;
   text-align: center;
@@ -404,7 +411,7 @@
 
 .benefit-card:hover {
   transform: translateY(-5px);
-  border-color: rgba(139,92,246,0.5);
+  border-color: rgba(139, 92, 246, 0.5);
 }
 
 .benefit-icon {
@@ -419,7 +426,7 @@
 }
 
 .benefit-card p {
-  color: rgba(255,255,255,0.7);
+  color: rgba(255, 255, 255, 0.7);
   line-height: 1.6;
 }
 
@@ -428,9 +435,9 @@
 .faq-section {
   margin: 4rem 0;
   padding: 3rem;
-  background: rgba(15,23,42,0.4);
+  background: rgba(15, 23, 42, 0.4);
   border-radius: 16px;
-  border: 1px solid rgba(139,92,246,0.2);
+  border: 1px solid rgba(139, 92, 246, 0.2);
 }
 
 .faq-section h2 {
@@ -455,7 +462,7 @@
 }
 
 .faq-item p {
-  color: rgba(255,255,255,0.8);
+  color: rgba(255, 255, 255, 0.8);
   line-height: 1.6;
 }
 
@@ -464,9 +471,9 @@
 .premium-cta {
   text-align: center;
   padding: 3rem;
-  background: linear-gradient(135deg, rgba(139,92,246,0.2), rgba(217,70,239,0.2));
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.2), rgba(217, 70, 239, 0.2));
   border-radius: 16px;
-  border: 2px solid rgba(139,92,246,0.3);
+  border: 2px solid rgba(139, 92, 246, 0.3);
   margin-top: 4rem;
 }
 
@@ -478,7 +485,7 @@
 
 .premium-cta p {
   font-size: 1.2rem;
-  color: rgba(255,255,255,0.7);
+  color: rgba(255, 255, 255, 0.7);
   margin-bottom: 2rem;
 }
 
@@ -492,18 +499,18 @@
   border-radius: 12px;
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 5px 20px rgba(139,92,246,0.4);
+  box-shadow: 0 5px 20px rgba(139, 92, 246, 0.4);
 }
 
 .cta-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 30px rgba(139,92,246,0.6);
+  box-shadow: 0 8px 30px rgba(139, 92, 246, 0.6);
 }
 
 .cta-disclaimer {
   margin-top: 1rem;
   font-size: 0.9rem;
-  color: rgba(255,255,255,0.5);
+  color: rgba(255, 255, 255, 0.5);
 }
 
 /* PREMIUM BADGE FOR PROFILES */
@@ -518,7 +525,7 @@
   border-radius: 20px;
   font-size: 0.85rem;
   font-weight: 600;
-  box-shadow: 0 2px 8px rgba(139,92,246,0.3);
+  box-shadow: 0 2px 8px rgba(139, 92, 246, 0.3);
 }
 
 /* MOBILE RESPONSIVE */

@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { 
-  getPreferredCurrency, 
-  convertPrice, 
-  formatPrice, 
+import {
+  getPreferredCurrency,
+  convertPrice,
+  formatPrice,
   setPreferredCurrency,
-  CURRENCY_CONFIG 
+  CURRENCY_CONFIG
 } from './utils/currencyConverter';
 import { t, getCurrentLanguage } from './utils/i18n';
 import { LanguageSelector } from './components/LanguageSelector';
@@ -27,7 +27,7 @@ export default function PaymentModule({ onPaymentComplete }) {
     const loadCurrency = async () => {
       const currency = getPreferredCurrency();
       setUserCurrency(currency);
-      
+
       // Convert all tier prices
       const prices = {};
       for (const tier of tiers) {
@@ -38,7 +38,7 @@ export default function PaymentModule({ onPaymentComplete }) {
       }
       setConvertedPrices(prices);
     };
-    
+
     loadCurrency();
   }, [userCurrency]);
 
@@ -46,7 +46,7 @@ export default function PaymentModule({ onPaymentComplete }) {
     setUserCurrency(newCurrency);
     setPreferredCurrency(newCurrency);
     setShowCurrencySelector(false);
-    
+
     // Re-convert prices
     const prices = {};
     for (const tier of tiers) {
@@ -61,10 +61,10 @@ export default function PaymentModule({ onPaymentComplete }) {
   const getDisplayPrice = (tier) => {
     if (tier.price === 0) return '$0';
     if (userCurrency === 'USD') return `$${tier.price}`;
-    
+
     const converted = convertedPrices[tier.id];
     if (!converted) return `$${tier.price}`;
-    
+
     return formatPrice(converted, userCurrency);
   };
 
@@ -210,7 +210,7 @@ export default function PaymentModule({ onPaymentComplete }) {
           flexWrap: 'wrap'
         }}>
           <LanguageSelector />
-          
+
           <button
             onClick={() => setShowCurrencySelector(!showCurrencySelector)}
             style={{
@@ -238,7 +238,7 @@ export default function PaymentModule({ onPaymentComplete }) {
           textAlign: 'center',
           marginBottom: '30px'
         }}>
-          
+
           {showCurrencySelector && (
             <div style={{
               position: 'fixed',
@@ -320,7 +320,7 @@ export default function PaymentModule({ onPaymentComplete }) {
               </p>
             </div>
           )}
-          
+
           {showCurrencySelector && (
             <div
               onClick={() => setShowCurrencySelector(false)}
@@ -421,9 +421,9 @@ export default function PaymentModule({ onPaymentComplete }) {
                   <>
                     <span style={{ fontSize: '1rem', opacity: 0.7 }}> one-time</span>
                     {userCurrency !== 'USD' && (
-                      <div style={{ 
-                        fontSize: '0.9rem', 
-                        opacity: 0.6, 
+                      <div style={{
+                        fontSize: '0.9rem',
+                        opacity: 0.6,
                         fontWeight: 'normal',
                         marginTop: '5px'
                       }}>

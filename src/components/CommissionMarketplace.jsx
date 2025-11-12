@@ -58,7 +58,7 @@ export function CommissionMarketplace({ userId, isCreator }) {
       completedCount: 0,
       examples: []
     }]);
-    
+
     setNewCommission({
       title: '',
       description: '',
@@ -67,7 +67,7 @@ export function CommissionMarketplace({ userId, isCreator }) {
       slots: 1,
       tags: []
     });
-    
+
     setActiveTab('my-commissions');
   };
 
@@ -81,7 +81,7 @@ export function CommissionMarketplace({ userId, isCreator }) {
       </div>
 
       <div className="marketplace-tabs">
-        <button 
+        <button
           className={activeTab === 'browse' ? 'active' : ''}
           onClick={() => setActiveTab('browse')}
         >
@@ -89,13 +89,13 @@ export function CommissionMarketplace({ userId, isCreator }) {
         </button>
         {isCreator && (
           <>
-            <button 
+            <button
               className={activeTab === 'my-commissions' ? 'active' : ''}
               onClick={() => setActiveTab('my-commissions')}
             >
               📋 My Commissions
             </button>
-            <button 
+            <button
               className={activeTab === 'create' ? 'active' : ''}
               onClick={() => setActiveTab('create')}
             >
@@ -185,7 +185,7 @@ export function CommissionMarketplace({ userId, isCreator }) {
                 type="text"
                 placeholder="e.g., Character Illustration, Portrait, Comic Page"
                 value={newCommission.title}
-                onChange={e => setNewCommission({...newCommission, title: e.target.value})}
+                onChange={e => setNewCommission({ ...newCommission, title: e.target.value })}
               />
             </div>
 
@@ -194,7 +194,7 @@ export function CommissionMarketplace({ userId, isCreator }) {
               <textarea
                 placeholder="Describe what you'll create, your style, any limitations..."
                 value={newCommission.description}
-                onChange={e => setNewCommission({...newCommission, description: e.target.value})}
+                onChange={e => setNewCommission({ ...newCommission, description: e.target.value })}
                 rows={5}
               />
             </div>
@@ -206,7 +206,7 @@ export function CommissionMarketplace({ userId, isCreator }) {
                   type="number"
                   placeholder="150"
                   value={newCommission.price}
-                  onChange={e => setNewCommission({...newCommission, price: e.target.value})}
+                  onChange={e => setNewCommission({ ...newCommission, price: e.target.value })}
                 />
                 <small>You receive 85% (${(newCommission.price * 0.85).toFixed(2)})</small>
               </div>
@@ -215,7 +215,7 @@ export function CommissionMarketplace({ userId, isCreator }) {
                 <label>Turnaround Time</label>
                 <select
                   value={newCommission.turnaroundDays}
-                  onChange={e => setNewCommission({...newCommission, turnaroundDays: parseInt(e.target.value)})}
+                  onChange={e => setNewCommission({ ...newCommission, turnaroundDays: parseInt(e.target.value) })}
                 >
                   <option value={3}>3 days</option>
                   <option value={7}>7 days</option>
@@ -232,7 +232,7 @@ export function CommissionMarketplace({ userId, isCreator }) {
                   min="1"
                   max="10"
                   value={newCommission.slots}
-                  onChange={e => setNewCommission({...newCommission, slots: parseInt(e.target.value)})}
+                  onChange={e => setNewCommission({ ...newCommission, slots: parseInt(e.target.value) })}
                 />
                 <small>How many clients you can take</small>
               </div>
@@ -241,7 +241,7 @@ export function CommissionMarketplace({ userId, isCreator }) {
             <div className="form-group">
               <label>Upload Examples</label>
               <div className="upload-area">
-                <input type="file" accept="image/*" multiple style={{display: 'none'}} id="examples-upload" />
+                <input type="file" accept="image/*" multiple style={{ display: 'none' }} id="examples-upload" />
                 <label htmlFor="examples-upload" className="upload-btn">
                   📁 Upload Example Images
                 </label>
@@ -254,7 +254,7 @@ export function CommissionMarketplace({ userId, isCreator }) {
               <input
                 type="text"
                 placeholder="anime, character, fullbody, color"
-                onChange={e => setNewCommission({...newCommission, tags: e.target.value.split(',').map(t => t.trim())})}
+                onChange={e => setNewCommission({ ...newCommission, tags: e.target.value.split(',').map(t => t.trim()) })}
               />
             </div>
 

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -16,6 +17,7 @@
             justify-content: center;
             color: #fff;
         }
+
         .container {
             text-align: center;
             padding: 60px;
@@ -24,6 +26,7 @@
             border: 3px solid #FFD700;
             max-width: 500px;
         }
+
         .badge {
             display: inline-block;
             background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
@@ -34,15 +37,18 @@
             color: #000;
             margin-bottom: 30px;
         }
+
         h1 {
             font-size: 2.5rem;
             margin-bottom: 20px;
         }
+
         p {
             font-size: 1.2rem;
             color: #aaa;
             margin-bottom: 40px;
         }
+
         button {
             width: 100%;
             padding: 20px;
@@ -55,10 +61,12 @@
             cursor: pointer;
             transition: transform 0.2s, box-shadow 0.2s;
         }
+
         button:hover {
             transform: translateY(-3px);
             box-shadow: 0 8px 25px rgba(255, 215, 0, 0.5);
         }
+
         #status {
             margin-top: 30px;
             font-size: 1.1rem;
@@ -66,6 +74,7 @@
             border-radius: 8px;
             display: none;
         }
+
         .success {
             background: rgba(74, 222, 128, 0.3);
             border: 2px solid #4ade80;
@@ -74,33 +83,34 @@
         }
     </style>
 </head>
+
 <body>
     <div class="container">
         <div class="badge">👑 OWNER ACCESS 👑</div>
         <h1>One-Click Setup</h1>
         <p>Click the button below to activate permanent owner access</p>
-        
+
         <button onclick="activateOwnerAccess()">
             🚀 ACTIVATE OWNER ACCESS
         </button>
-        
+
         <div id="status"></div>
     </div>
-    
+
     <script>
         function activateOwnerAccess() {
             const statusEl = document.getElementById('status');
             const button = document.querySelector('button');
-            
+
             button.disabled = true;
             button.textContent = '⏳ Setting up...';
-            
+
             // Set permanent owner credentials
             localStorage.setItem('adminAuthenticated', 'true');
             localStorage.setItem('userId', 'owner');
             localStorage.setItem('adminDeviceId', 'owner_permanent_device');
             localStorage.setItem('adminPhoneNumber', '+12813819498');
-            
+
             // Add authorized device
             localStorage.setItem('authorized_devices', JSON.stringify([{
                 deviceId: 'owner_permanent_device',
@@ -108,11 +118,11 @@
                 addedAt: Date.now(),
                 lastUsed: Date.now()
             }]));
-            
+
             // Show success
             statusEl.className = 'success';
             statusEl.textContent = '✅ Owner access activated! Redirecting...';
-            
+
             // Redirect to main site
             setTimeout(() => {
                 window.location.href = '/';
@@ -120,4 +130,5 @@
         }
     </script>
 </body>
+
 </html>

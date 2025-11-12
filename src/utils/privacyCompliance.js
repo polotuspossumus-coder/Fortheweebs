@@ -5,7 +5,7 @@ export const PRIVACY_COMPLIANCE = {
   gdpr: {
     enabled: true,
     applies_to: ['EU', 'EEA', 'UK'], // European Economic Area
-    
+
     user_rights: {
       right_to_access: {
         description: 'Users can download all their personal data',
@@ -13,46 +13,46 @@ export const PRIVACY_COMPLIANCE = {
         format: 'JSON or CSV',
         implementation: 'downloadUserData(userId)'
       },
-      
+
       right_to_rectification: {
         description: 'Users can correct inaccurate data',
         response_time: '30 days',
         implementation: 'updateUserData(userId, corrections)'
       },
-      
+
       right_to_erasure: {
         description: 'Right to be forgotten',
         response_time: '30 days',
         exceptions: ['Legal obligation to retain (taxes)', 'Ongoing disputes'],
         implementation: 'deleteUserAccount(userId, reason)'
       },
-      
+
       right_to_restriction: {
         description: 'Limit how we use data',
         response_time: '30 days',
         implementation: 'restrictDataProcessing(userId, restrictions)'
       },
-      
+
       right_to_portability: {
         description: 'Export data to another service',
         response_time: '30 days',
         format: 'Machine-readable JSON',
         implementation: 'exportUserData(userId)'
       },
-      
+
       right_to_object: {
         description: 'Object to certain processing (marketing)',
         response_time: 'Immediate',
         implementation: 'optOutOfMarketing(userId)'
       },
-      
+
       right_to_withdraw_consent: {
         description: 'Withdraw consent for data processing',
         response_time: 'Immediate',
         implementation: 'withdrawConsent(userId, consentType)'
       }
     },
-    
+
     data_breach_notification: {
       notify_authority_within: '72 hours',
       notify_users_if: 'High risk to rights and freedoms',
@@ -65,7 +65,7 @@ export const PRIVACY_COMPLIANCE = {
         'Measures taken to address breach'
       ]
     },
-    
+
     cookie_consent: {
       required: true,
       opt_in: true, // Must opt-in (not opt-out)
@@ -77,12 +77,12 @@ export const PRIVACY_COMPLIANCE = {
       }
     }
   },
-  
+
   // CCPA (California Consumer Privacy Act)
   ccpa: {
     enabled: true,
     applies_to: ['California residents'],
-    
+
     user_rights: {
       right_to_know: {
         description: 'Know what personal info we collect',
@@ -94,26 +94,26 @@ export const PRIVACY_COMPLIANCE = {
           'Third parties we share with'
         ]
       },
-      
+
       right_to_delete: {
         description: 'Delete personal information',
         response_time: '45 days',
         exceptions: ['Complete transaction', 'Comply with legal obligation', 'Internal use reasonably aligned with expectations']
       },
-      
+
       right_to_opt_out_of_sale: {
         description: 'Do Not Sell My Personal Information',
         response_time: 'Immediate',
         implementation: 'optOutOfDataSale(userId)',
         note: 'ForTheWeebs does NOT sell personal data, so this is automatically complied with'
       },
-      
+
       right_to_non_discrimination: {
         description: 'Cannot discriminate for exercising CCPA rights',
         prohibited: ['Deny services', 'Charge different prices', 'Provide different service level']
       }
     },
-    
+
     do_not_sell_link: {
       required: true,
       placement: 'Footer of every page',
@@ -121,7 +121,7 @@ export const PRIVACY_COMPLIANCE = {
       url: '/privacy/do-not-sell'
     }
   },
-  
+
   // Data collected (full disclosure)
   data_collection: {
     account_data: {
@@ -130,35 +130,35 @@ export const PRIVACY_COMPLIANCE = {
       retention: 'Until account deleted + 30 days',
       third_parties: ['None']
     },
-    
+
     profile_data: {
       collected: ['Display name', 'Bio', 'Avatar', 'Social links', 'Portfolio content'],
       purpose: 'Public profile display',
       retention: 'Until account deleted + 30 days',
       third_parties: ['None']
     },
-    
+
     payment_data: {
       collected: ['Credit card last 4 digits', 'Billing address', 'Tax ID (W-9/W-8)'],
       purpose: 'Payment processing and tax compliance',
       retention: '7 years (IRS requirement)',
       third_parties: ['Stripe', 'PayPal', 'IRS']
     },
-    
+
     content_data: {
       collected: ['Artwork', 'Comics', 'Trading cards', 'Text', 'Comments'],
       purpose: 'Platform functionality',
       retention: 'Until deleted by user or account closure',
       third_parties: ['AWS S3 (hosting)', 'Print-on-demand partners (for orders)']
     },
-    
+
     usage_data: {
       collected: ['IP address', 'Browser type', 'Device type', 'Pages visited', 'Time spent', 'Clicks'],
       purpose: 'Analytics and fraud prevention',
       retention: '2 years',
       third_parties: ['Google Analytics', 'Cloudflare']
     },
-    
+
     cookies: {
       collected: ['Session token', 'Preferences', 'Analytics IDs'],
       purpose: 'Authentication and user experience',
@@ -166,7 +166,7 @@ export const PRIVACY_COMPLIANCE = {
       third_parties: ['Google Analytics']
     }
   },
-  
+
   // International data transfers
   data_transfers: {
     primary_location: 'United States (AWS us-east-1)',
@@ -198,7 +198,7 @@ export async function downloadUserData(userId) {
       accountCreated: '2024-01-15T10:30:00Z',
       lastLogin: '2025-11-10T08:45:00Z'
     },
-    
+
     profile: {
       bio: 'Artist and creator',
       avatar: 'https://cdn.fortheweebs.com/avatars/user123.jpg',
@@ -207,34 +207,34 @@ export async function downloadUserData(userId) {
         instagram: '@example'
       }
     },
-    
+
     content: {
       artworks: [], // List of artwork IDs and URLs
       comics: [],
       tradingCards: [],
       comments: []
     },
-    
+
     financial: {
       totalEarnings: 1247.50,
       pendingPayouts: 324.75,
       transactions: [], // List of transactions
       taxForms: ['W-9 on file']
     },
-    
+
     activity: {
       loginHistory: [], // Last 100 logins with IP and timestamp
       pageViews: [], // Last 1000 page views
       searches: [] // Last 500 searches
     },
-    
+
     preferences: {
       emailNotifications: true,
       newsletter: false,
       contentFilter: 'moderate',
       theme: 'dark'
     },
-    
+
     legal: {
       tosAccepted: '2024-01-15T10:30:00Z',
       tosVersion: '1.2',
@@ -243,14 +243,14 @@ export async function downloadUserData(userId) {
       contentRemovals: [] // Any content removed by moderation
     }
   };
-  
+
   // Convert to JSON
   const json = JSON.stringify(userData, null, 2);
-  
+
   // In production: Generate downloadable file
   // const blob = new Blob([json], { type: 'application/json' });
   // return URL.createObjectURL(blob);
-  
+
   return userData;
 }
 
@@ -262,7 +262,7 @@ export async function deleteUserAccount(userId, reason) {
   const hasActiveDisputes = false; // Check database
   const hasUnpaidInvoices = false; // Check database
   const needsTaxRecords = false; // Check if within 7-year IRS requirement
-  
+
   if (hasActiveDisputes || hasUnpaidInvoices || needsTaxRecords) {
     return {
       success: false,
@@ -275,14 +275,14 @@ export async function deleteUserAccount(userId, reason) {
       canDeleteAfter: '2030-12-31' // Example date
     };
   }
-  
+
   // Soft delete (30-day grace period)
   // await database.users.update(userId, {
   //   deletedAt: new Date(),
   //   deletionReason: reason,
   //   scheduledPermanentDeletion: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
   // });
-  
+
   // Anonymize immediately visible data
   // await database.users.update(userId, {
   //   email: `deleted_${userId}@fortheweebs.com`,
@@ -291,10 +291,10 @@ export async function deleteUserAccount(userId, reason) {
   //   avatar: null,
   //   bio: null
   // });
-  
+
   // Schedule permanent deletion in 30 days
   // await scheduleTask('permanentlyDeleteUser', userId, Date.now() + 30 * 24 * 60 * 60 * 1000);
-  
+
   return {
     success: true,
     message: 'Account scheduled for deletion in 30 days. You can cancel by logging in within 30 days.',
@@ -308,7 +308,7 @@ export async function deleteUserAccount(userId, reason) {
 export async function optOutOfDataSale(userId) {
   // ForTheWeebs doesn't sell data, so this is automatic compliance
   // await database.users.update(userId, { optedOutOfDataSale: true });
-  
+
   return {
     success: true,
     message: 'ForTheWeebs does not sell your personal information to third parties. This setting has been recorded.'
@@ -327,14 +327,14 @@ export async function notifyDataBreach(breachDetails) {
     breachCause, // 'SQL injection', 'Phishing attack', etc.
     mitigationSteps
   } = breachDetails;
-  
+
   // Determine if high risk
-  const isHighRisk = 
+  const isHighRisk =
     dataCategories.includes('payment_info') ||
     dataCategories.includes('ssn') ||
     dataCategories.includes('id_documents') ||
     affectedUserCount > 1000;
-  
+
   // GDPR: Notify authority within 72 hours
   if (isWithin72Hours(discoveryDate)) {
     // await notifyDataProtectionAuthority({
@@ -343,7 +343,7 @@ export async function notifyDataBreach(breachDetails) {
     //   email: 'edps@europa.eu'
     // });
   }
-  
+
   // GDPR: Notify users if high risk
   if (isHighRisk) {
     // await notifyAffectedUsers(affectedUserCount, {
@@ -351,7 +351,7 @@ export async function notifyDataBreach(breachDetails) {
     //   message: `We discovered a data breach on ${breachDate}...`
     // });
   }
-  
+
   // Public disclosure
   // await publishSecurityAdvisory({
   //   title: 'Security Incident Notification',
@@ -360,7 +360,7 @@ export async function notifyDataBreach(breachDetails) {
   //   dataCategories: dataCategories,
   //   mitigationSteps: mitigationSteps
   // });
-  
+
   return {
     authorityNotified: isWithin72Hours(discoveryDate),
     usersNotified: isHighRisk,
@@ -411,10 +411,10 @@ export async function trackPrivacyPolicyAcceptance(userId, policyVersion, ipAddr
     ipAddress,
     userAgent: navigator.userAgent
   };
-  
+
   // Store in database for legal proof
   // await database.policyAcceptances.insert(acceptance);
-  
+
   return acceptance;
 }
 

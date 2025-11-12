@@ -5,7 +5,7 @@ export const AGE_VERIFICATION_CONFIG = {
   adult_content_age: 18,
   alcohol_tobacco_age: 21,
   gambling_age: 21,
-  
+
   verification_methods: {
     // Tier 1: Basic verification (13-17 year olds)
     email_verification: {
@@ -13,7 +13,7 @@ export const AGE_VERIFICATION_CONFIG = {
       method: 'Email confirmation link',
       proof_level: 'LOW'
     },
-    
+
     // Tier 2: Credit card verification (18+)
     credit_card: {
       required_for_age: 18,
@@ -21,7 +21,7 @@ export const AGE_VERIFICATION_CONFIG = {
       proof_level: 'MEDIUM',
       note: 'Must be 18+ to have credit card'
     },
-    
+
     // Tier 3: ID verification (18+, for adult content creators)
     id_verification: {
       required_for_age: 18,
@@ -30,10 +30,10 @@ export const AGE_VERIFICATION_CONFIG = {
       proof_level: 'HIGH',
       required_for: ['Adult content creation', 'High-volume sales (>$10k/year)']
     }
-    
+
     // NO SSN VERIFICATION - Too invasive, not international-friendly
   },
-  
+
   // Parental consent for users under 13
   parental_consent: {
     required: true,
@@ -53,7 +53,7 @@ export const AGE_RESTRICTIONS = {
     blocked: ['Everything - COPPA violation without parental consent'],
     message: 'You must be at least 13 years old to use ForTheWeebs, or have verifiable parental consent.'
   },
-  
+
   age_13_to_17: {
     allowed: [
       'View PG-13 content',
@@ -72,7 +72,7 @@ export const AGE_RESTRICTIONS = {
       content_filter: 'strict' // Filters out 18+ content only
     }
   },
-  
+
   age_18_plus: {
     allowed: [
       'All content types',
@@ -88,7 +88,7 @@ export const AGE_RESTRICTIONS = {
       'Content promoting minors sexually'
     ]
   },
-  
+
   age_21_plus: {
     allowed: [
       'Alcohol/tobacco-related content',
@@ -109,7 +109,7 @@ export const AGE_RESTRICTIONS = {
 export async function verifyAge(userId, claimedAge, method, data) {
   try {
     let result;
-    
+
     switch (method) {
       case 'email':
         result = await verifyByEmail(userId, data.email);
@@ -129,10 +129,10 @@ export async function verifyAge(userId, claimedAge, method, data) {
       default:
         throw new Error(`Unknown verification method: ${method}`);
     }
-    
+
     // Log verification attempt
     logAgeVerification(userId, method, result);
-    
+
     return {
       verified: result.success,
       verifiedAge: result.age,
@@ -141,7 +141,7 @@ export async function verifyAge(userId, claimedAge, method, data) {
       expiresAt: calculateExpiration(method),
       restrictions: getAgeRestrictions(result.age)
     };
-    
+
   } catch (error) {
     console.error('Age verification error:', error);
     return {
@@ -160,11 +160,11 @@ async function verifyByEmail(userId, email) {
   // Send confirmation email
   const token = generateVerificationToken();
   // await sendVerificationEmail(email, token);
-  
+
   // User must click link in email
   // This only proves email ownership, not age
   // Used as minimum barrier for 13+ users
-  
+
   return {
     success: true,
     age: 13, // Minimum age we can verify with email
@@ -191,7 +191,7 @@ async function verifyByCreditCard(userId, cardToken) {
   // Immediately refund
   await stripe.refunds.create({ payment_intent: charge.id });
   */
-  
+
   return {
     success: true,
     age: 18, // Must be 18+ to have credit card
@@ -220,7 +220,7 @@ async function verifyByIDUpload(userId, idImage, selfie) {
     issuingCountry: verification.country
   };
   */
-  
+
   // MOCK for development
   return {
     success: true,
@@ -250,7 +250,7 @@ async function verifyBySSN(userId, ssnLast4, dob) {
     confidence: 'VERY_HIGH'
   };
   */
-  
+
   // MOCK for development
   const age = calculateAge(dob);
   return {
@@ -266,7 +266,7 @@ async function verifyBySSN(userId, ssnLast4, dob) {
 async function verifyParentalConsent(userId, data) {
   // Verify parent's age first (must be 18+)
   const parentVerification = await verifyByCreditCard(userId, data.parentCardToken);
-  
+
   if (!parentVerification.success) {
     return {
       success: false,
@@ -274,7 +274,7 @@ async function verifyParentalConsent(userId, data) {
       error: 'Parent verification failed'
     };
   }
-  
+
   // Log parental consent
   // await database.parentalConsents.insert({
   //   userId: userId,
@@ -282,7 +282,7 @@ async function verifyParentalConsent(userId, data) {
   //   consentDate: new Date(),
   //   verificationMethod: 'credit_card'
   // });
-  
+
   return {
     success: true,
     age: data.childAge, // Child's actual age
@@ -305,7 +305,7 @@ export function canAccessContent(userAge, contentRating) {
     'ALCOHOL': 21,
     'GAMBLING': 21
   };
-  
+
   const requiredAge = ratingRequirements[contentRating] || 0;
   return userAge >= requiredAge;
 }
@@ -328,11 +328,11 @@ function calculateAge(dob) {
   const today = new Date();
   let age = today.getFullYear() - birthDate.getFullYear();
   const monthDiff = today.getMonth() - birthDate.getMonth();
-  
+
   if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
     age--;
   }
-  
+
   return age;
 }
 
@@ -348,7 +348,7 @@ function calculateExpiration(method) {
     ssn: 1825, // 5 years
     parental_consent: 365 // 1 year (re-verify annually)
   };
-  
+
   const daysValid = expirations[method] || 365;
   now.setDate(now.getDate() + daysValid);
   return now.toISOString();
@@ -373,7 +373,7 @@ function logAgeVerification(userId, method, result) {
     verifiedAge: result.age,
     confidence: result.confidence
   };
-  
+
   console.log('AGE_VERIFICATION_LOG:', JSON.stringify(logEntry));
   // await database.ageVerificationLogs.insert(logEntry);
 }
@@ -383,7 +383,7 @@ function logAgeVerification(userId, method, result) {
  */
 export function AgeGateModal({ contentRating, onVerified, onCancel }) {
   const requiredAge = contentRating === 'ADULT' ? 18 : contentRating === 'GAMBLING' ? 21 : 13;
-  
+
   return {
     title: '🔞 Age Verification Required',
     message: `This content is rated ${contentRating} and requires age verification (${requiredAge}+).`,

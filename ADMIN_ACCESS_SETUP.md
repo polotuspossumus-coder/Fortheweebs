@@ -15,6 +15,7 @@ VITE_ADMIN_SECRET_KEY=ftw_admin_2025_secure_key_change_this
 ```
 
 **Example:**
+
 ```bash
 VITE_ADMIN_USERNAME=polot
 VITE_ADMIN_PASSWORD=MySecurePass123!
@@ -35,6 +36,7 @@ npm run dev
 ### Step 3: Access Admin Panel
 
 Open your browser to:
+
 ```
 http://localhost:3002/?admin=true
 ```
@@ -48,6 +50,7 @@ Login with your username/password from Step 1.
 ### **Option 1: Browser Bookmark (Easiest)**
 
 Create a bookmark with this URL:
+
 ```
 http://localhost:3002/?admin=true&quick_auth=true
 ```
@@ -57,6 +60,7 @@ This skips the login screen if you're already authenticated.
 ### **Option 2: LocalStorage Flag**
 
 Open browser console (F12) and run:
+
 ```javascript
 localStorage.setItem('adminAuthenticated', 'true');
 localStorage.setItem('adminDeviceId', 'owner_permanent_device');
@@ -100,6 +104,7 @@ Then visit: `http://localhost:3002/auto-admin.html`
 ## 🚀 WHAT YOU GET AS ADMIN
 
 ### **Automatic Access:**
+
 ✅ All tools unlocked (no payment required)
 ✅ All features enabled
 ✅ NFT Minter
@@ -123,12 +128,15 @@ Then visit: `http://localhost:3002/auto-admin.html`
 ## 🔧 TROUBLESHOOTING
 
 ### "Not Authorized"
+
 1. Check `.env` file has correct values
 2. Restart dev server: `npm run dev`
 3. Clear browser cache and try again
 
 ### "Device Not Authorized"
+
 Run this in browser console (F12):
+
 ```javascript
 // Clear old auth data
 localStorage.clear();
@@ -151,7 +159,9 @@ location.reload();
 ```
 
 ### "Tools Still Locked"
+
 The system checks `userId === 'owner'`. Make sure:
+
 ```javascript
 localStorage.setItem('userId', 'owner');
 ```

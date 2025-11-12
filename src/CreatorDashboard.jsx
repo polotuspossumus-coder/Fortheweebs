@@ -116,7 +116,7 @@ export const CreatorDashboard = ({ userId = "demo_user", ipAddress = "127.0.0.1"
         </ToolLockGate>
       </TabsContent>
       <TabsContent value="screenshot-sorter">
-        <SmartScreenshotSorter 
+        <SmartScreenshotSorter
           userId={userId}
           onProcessComplete={(processed) => {
             // Optionally open ProPhotoEditor after sorting
@@ -144,50 +144,50 @@ export const CreatorDashboard = ({ userId = "demo_user", ipAddress = "127.0.0.1"
           <div style={{ marginBottom: '2rem' }}>
             <h2 style={{ marginBottom: '1rem' }}>🎨 Design Tools</h2>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '1rem', marginBottom: '2rem' }}>
-              <button 
-              style={{
-                padding: '1.5rem',
-                background: 'rgba(139, 92, 246, 0.1)',
-                border: '2px solid #8b5cf6',
-                borderRadius: '12px',
-                color: '#fff',
-                fontWeight: 600,
-                cursor: 'pointer',
-                transition: 'all 0.3s ease'
-              }}
-              onClick={() => document.querySelector('[value="design-studio"]')?.click()}
-            >
-              🎨 Graphic Design Studio
-            </button>
-            <button 
-              style={{
-                padding: '1.5rem',
-                background: 'rgba(139, 92, 246, 0.1)',
-                border: '2px solid #8b5cf6',
-                borderRadius: '12px',
-                color: '#fff',
-                fontWeight: 600,
-                cursor: 'pointer',
-                transition: 'all 0.3s ease'
-              }}
-              onClick={() => document.querySelector('[value="cards"]')?.click()}
-            >
-              🎴 Trading Card Designer
-            </button>
+              <button
+                style={{
+                  padding: '1.5rem',
+                  background: 'rgba(139, 92, 246, 0.1)',
+                  border: '2px solid #8b5cf6',
+                  borderRadius: '12px',
+                  color: '#fff',
+                  fontWeight: 600,
+                  cursor: 'pointer',
+                  transition: 'all 0.3s ease'
+                }}
+                onClick={() => document.querySelector('[value="design-studio"]')?.click()}
+              >
+                🎨 Graphic Design Studio
+              </button>
+              <button
+                style={{
+                  padding: '1.5rem',
+                  background: 'rgba(139, 92, 246, 0.1)',
+                  border: '2px solid #8b5cf6',
+                  borderRadius: '12px',
+                  color: '#fff',
+                  fontWeight: 600,
+                  cursor: 'pointer',
+                  transition: 'all 0.3s ease'
+                }}
+                onClick={() => document.querySelector('[value="cards"]')?.click()}
+              >
+                🎴 Trading Card Designer
+              </button>
+            </div>
           </div>
-        </div>
-        <Tabs defaultValue="design-studio">
-          <TabsList style={{ marginBottom: '2rem' }}>
-            <TabsTrigger value="design-studio">Graphic Design</TabsTrigger>
-            <TabsTrigger value="cards">Trading Cards</TabsTrigger>
-          </TabsList>
-          <TabsContent value="design-studio">
-            <GraphicDesignStudio userId={userId} />
-          </TabsContent>
-          <TabsContent value="cards">
-            <TradingCardDesigner userId={userId} />
-          </TabsContent>
-        </Tabs>
+          <Tabs defaultValue="design-studio">
+            <TabsList style={{ marginBottom: '2rem' }}>
+              <TabsTrigger value="design-studio">Graphic Design</TabsTrigger>
+              <TabsTrigger value="cards">Trading Cards</TabsTrigger>
+            </TabsList>
+            <TabsContent value="design-studio">
+              <GraphicDesignStudio userId={userId} />
+            </TabsContent>
+            <TabsContent value="cards">
+              <TradingCardDesigner userId={userId} />
+            </TabsContent>
+          </Tabs>
         </ToolLockGate>
       </TabsContent>
       <TabsContent value="planner">
@@ -292,10 +292,10 @@ export const OverviewPanel = ({ userId }) => {
   return (
     <div style={{ padding: '24px' }}>
       {/* Clean Welcome Header */}
-      <div style={{ 
-        padding: '20px', 
-        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', 
-        borderRadius: '12px', 
+      <div style={{
+        padding: '20px',
+        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+        borderRadius: '12px',
         color: '#fff',
         marginBottom: '20px',
       }}>
@@ -309,10 +309,10 @@ export const OverviewPanel = ({ userId }) => {
 
       {/* Optional Tutorial (dismissable) */}
       {showTutorial && (
-        <div style={{ 
-          background: 'rgba(0, 255, 255, 0.05)', 
-          padding: '20px', 
-          borderRadius: '12px', 
+        <div style={{
+          background: 'rgba(0, 255, 255, 0.05)',
+          padding: '20px',
+          borderRadius: '12px',
           border: '1px solid rgba(0, 255, 255, 0.2)',
           marginBottom: '20px',
           position: 'relative',
@@ -333,14 +333,14 @@ export const OverviewPanel = ({ userId }) => {
           >
             ✕
           </button>
-          
+
           <h3 style={{ marginBottom: '12px', fontSize: '1.1rem', color: '#0ff' }}>
             🎓 Quick Start Guide
           </h3>
-          
-          <div style={{ 
-            display: 'grid', 
-            gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', 
+
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
             gap: '12px',
             marginTop: '15px',
           }}>
@@ -373,15 +373,15 @@ export const OverviewPanel = ({ userId }) => {
       )}
 
       {/* Quick Access Cards - No Marketing Fluff */}
-      <div style={{ 
-        display: 'grid', 
-        gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', 
-        gap: '15px' 
+      <div style={{
+        display: 'grid',
+        gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
+        gap: '15px'
       }}>
-        <div style={{ 
-          background: 'linear-gradient(135deg, #667eea, #764ba2)', 
-          padding: '20px', 
-          borderRadius: '12px', 
+        <div style={{
+          background: 'linear-gradient(135deg, #667eea, #764ba2)',
+          padding: '20px',
+          borderRadius: '12px',
           color: '#fff',
           cursor: 'pointer',
         }}>
@@ -391,10 +391,10 @@ export const OverviewPanel = ({ userId }) => {
           </p>
         </div>
 
-        <div style={{ 
-          background: 'linear-gradient(135deg, #f093fb, #f5576c)', 
-          padding: '20px', 
-          borderRadius: '12px', 
+        <div style={{
+          background: 'linear-gradient(135deg, #f093fb, #f5576c)',
+          padding: '20px',
+          borderRadius: '12px',
           color: '#fff',
           cursor: 'pointer',
         }}>
@@ -404,10 +404,10 @@ export const OverviewPanel = ({ userId }) => {
           </p>
         </div>
 
-        <div style={{ 
-          background: 'linear-gradient(135deg, #4facfe, #00f2fe)', 
-          padding: '20px', 
-          borderRadius: '12px', 
+        <div style={{
+          background: 'linear-gradient(135deg, #4facfe, #00f2fe)',
+          padding: '20px',
+          borderRadius: '12px',
           color: '#fff',
           cursor: 'pointer',
         }}>
@@ -417,10 +417,10 @@ export const OverviewPanel = ({ userId }) => {
           </p>
         </div>
 
-        <div style={{ 
-          background: 'linear-gradient(135deg, #43e97b, #38f9d7)', 
-          padding: '20px', 
-          borderRadius: '12px', 
+        <div style={{
+          background: 'linear-gradient(135deg, #43e97b, #38f9d7)',
+          padding: '20px',
+          borderRadius: '12px',
           color: '#fff',
           cursor: 'pointer',
         }}>

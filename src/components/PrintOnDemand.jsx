@@ -75,26 +75,26 @@ export function PrintOnDemand() {
       </div>
 
       <div className="pod-tabs">
-        <button 
-          className={activeTab === 'comics' ? 'active' : ''} 
+        <button
+          className={activeTab === 'comics' ? 'active' : ''}
           onClick={() => setActiveTab('comics')}
         >
           📚 Comics & Books
         </button>
-        <button 
-          className={activeTab === 'cards' ? 'active' : ''} 
+        <button
+          className={activeTab === 'cards' ? 'active' : ''}
           onClick={() => setActiveTab('cards')}
         >
           🎴 Trading Cards
         </button>
-        <button 
-          className={activeTab === 'merch' ? 'active' : ''} 
+        <button
+          className={activeTab === 'merch' ? 'active' : ''}
           onClick={() => setActiveTab('merch')}
         >
           🎨 Art Prints & Merch
         </button>
-        <button 
-          className={activeTab === 'orders' ? 'active' : ''} 
+        <button
+          className={activeTab === 'orders' ? 'active' : ''}
           onClick={() => setActiveTab('orders')}
         >
           📊 Orders & Sales
@@ -171,7 +171,7 @@ export function PrintOnDemand() {
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
             <button className="close-modal" onClick={() => setSelectedProduct(null)}>×</button>
             <h2>Create {selectedProduct.name}</h2>
-            
+
             <div className="setup-wizard">
               <div className="wizard-step">
                 <h3>📁 Step 1: Upload Your Files</h3>
@@ -246,7 +246,7 @@ export function PrintOnDemand() {
                 <button className="btn-secondary" onClick={() => setSelectedProduct(null)}>
                   Cancel
                 </button>
-                <button 
+                <button
                   className="btn-primary"
                   onClick={() => {
                     if (!termsAccepted) {
@@ -300,7 +300,7 @@ export function PrintOnDemand() {
       {showTermsModal && (
         <div className="modal-overlay" onClick={() => setShowTermsModal(false)}>
           <div className="modal-content terms-modal" onClick={e => e.stopPropagation()}>
-            <h2 style={{color: '#818cf8', marginBottom: '1rem'}}>📋 Print-on-Demand Terms of Service</h2>
+            <h2 style={{ color: '#818cf8', marginBottom: '1rem' }}>📋 Print-on-Demand Terms of Service</h2>
             <div className="terms-content" style={{
               maxHeight: '400px',
               overflowY: 'auto',
@@ -310,9 +310,9 @@ export function PrintOnDemand() {
               marginBottom: '1rem'
             }}>
               {PRINT_ON_DEMAND_TERMS.sections.map((section, idx) => (
-                <div key={idx} style={{marginBottom: '1.5rem'}}>
-                  <h3 style={{color: '#94a3b8', fontSize: '1.1rem', marginBottom: '0.75rem'}}>{section.title}</h3>
-                  <p style={{color: '#cbd5e1', fontSize: '0.95rem', lineHeight: '1.6', whiteSpace: 'pre-line'}}>
+                <div key={idx} style={{ marginBottom: '1.5rem' }}>
+                  <h3 style={{ color: '#94a3b8', fontSize: '1.1rem', marginBottom: '0.75rem' }}>{section.title}</h3>
+                  <p style={{ color: '#cbd5e1', fontSize: '0.95rem', lineHeight: '1.6', whiteSpace: 'pre-line' }}>
                     {section.content}
                   </p>
                 </div>
@@ -325,7 +325,7 @@ export function PrintOnDemand() {
               borderRadius: '8px',
               marginBottom: '1rem'
             }}>
-              <p style={{color: '#fca5a5', fontSize: '0.9rem', fontWeight: 600}}>
+              <p style={{ color: '#fca5a5', fontSize: '0.9rem', fontWeight: 600 }}>
                 ⚠️ LEGAL WARNING: Creating counterfeit trading cards (e.g., fake Pokémon, Yu-Gi-Oh!, Magic: The Gathering) is ILLEGAL and will result in immediate account termination and legal action.
               </p>
             </div>
@@ -340,26 +340,26 @@ export function PrintOnDemand() {
               marginBottom: '1rem',
               cursor: 'pointer'
             }}>
-              <input 
+              <input
                 type="checkbox"
                 checked={termsAccepted}
                 onChange={(e) => setTermsAccepted(e.target.checked)}
-                style={{width: '20px', height: '20px', cursor: 'pointer'}}
+                style={{ width: '20px', height: '20px', cursor: 'pointer' }}
               />
-              <span style={{color: '#e2e8f0', fontSize: '0.95rem', fontWeight: 500}}>
+              <span style={{ color: '#e2e8f0', fontSize: '0.95rem', fontWeight: 500 }}>
                 I have read and agree to the Print-on-Demand Terms of Service. I certify all content is 100% original and I accept full legal responsibility for any copyright violations.
               </span>
             </label>
-            <div style={{display: 'flex', gap: '1rem'}}>
-              <button 
-                className="btn-secondary" 
+            <div style={{ display: 'flex', gap: '1rem' }}>
+              <button
+                className="btn-secondary"
                 onClick={() => setShowTermsModal(false)}
-                style={{flex: 1}}
+                style={{ flex: 1 }}
               >
                 Cancel
               </button>
-              <button 
-                className="btn-primary" 
+              <button
+                className="btn-primary"
                 onClick={() => {
                   if (!termsAccepted) {
                     alert('❌ You must accept the terms to continue');

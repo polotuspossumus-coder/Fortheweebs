@@ -66,7 +66,7 @@ export function DevBalanceManager({ userId }) {
               ×
             </button>
           </div>
-          
+
           <div style={{ marginBottom: '10px', fontSize: '14px' }}>
             Current Balance: <strong>${balance.toFixed(2)}</strong>
           </div>
