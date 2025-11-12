@@ -495,8 +495,8 @@ export function PremiumSubscription({ userId, currentTier }) {
             </p>
             
             <p style={{ marginBottom: '15px', lineHeight: '1.6' }}>
-              We <strong>only accept Bitcoin and Ethereum</strong> to help people who might be deciding to 
-              invest some crypto in a new venture. That's it.
+              We <strong>only accept Bitcoin and Ethereum</strong> to help people offload crypto they want 
+              to convert. That's it.
             </p>
             
             <div style={{
@@ -591,7 +591,7 @@ export function PremiumSubscription({ userId, currentTier }) {
           </p>
           <p style={{ lineHeight: '1.6', maxWidth: '800px', margin: '0 auto' }}>
             We're being brutally honest: <strong>Use cash or credit card</strong> for the best prices. 
-            Crypto is accepted to help investors, but it's premium priced. NFTs are stupid, but if you're 
+            Crypto is accepted to help people offload it and convert to USD, but it's premium priced. NFTs are stupid, but if you're 
             into that nonsense, fine — just know we're taking our cut.
           </p>
         </div>
