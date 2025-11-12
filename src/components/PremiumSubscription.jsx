@@ -83,16 +83,21 @@ export function PremiumSubscription({ userId, currentTier }) {
       tagline: 'You won\'t be disappointed... Trust me.',
       features: [
         '✅ Everything in Full Platform',
-        '🔥 Exclusive superpowers not listed here',
-        '🧠 Advanced AI capabilities',
-        '⚡ Admin-level features',
-        '🎯 Many cool experimental admin toys',
-        '🤡 NFT minter tossed in for you idiots who like NFTs (50% cut)',
-        '🔓 Access to any new secret toys in the future',
-        '👑 VIP "Secret Member" badge',
-        '💎 Lifetime priority support',
-        '🚀 Beta access to experimental features',
-        '❓ And more surprises...'
+        '� ZERO platform fees (0% instead of 15-25%)',
+        '💰 Keep 100% of tips, commissions, and sales',
+        '🧠 AI Character Recognition (anime ID)',
+        '🤖 Train custom AI models on your datasets',
+        '⚡ Auto-content generation with AI',
+        '� Unlimited AI asset generation',
+        '🎯 Experimental admin tools & features',
+        '🤡 NFT minter (50% cut because NFTs are stupid)',
+        '� First access to ALL future secret features',
+        '👑 Exclusive "Secret Member" VIP badge',
+        '💎 White-glove priority support (24/7)',
+        '🚀 Beta features before public release',
+        '📈 Advanced analytics & insights dashboard',
+        '🎁 Lifetime grandfathered pricing (never pay more)',
+        '❓ And many more undisclosed perks...'
       ]
     }
   };
@@ -453,6 +458,178 @@ export function PremiumSubscription({ userId, currentTier }) {
             <h3>Crush Competitors</h3>
             <p>Patreon: 5-12% + monthly fees. Gumroad: 10% + $9/mo. We: 15-25% + $500 forever.</p>
           </div>
+        </div>
+      </div>
+
+      {/* $500 vs $1000 Tier Comparison */}
+      <div className="tier-comparison-section" style={{
+        background: 'linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%)',
+        borderRadius: '20px',
+        padding: '40px',
+        marginBottom: '40px',
+        border: '2px solid #8b5cf6'
+      }}>
+        <h2 style={{
+          fontSize: '2.5rem',
+          marginBottom: '15px',
+          textAlign: 'center',
+          background: 'linear-gradient(135deg, #fbbf24 0%, #8b5cf6 100%)',
+          WebkitBackgroundClip: 'text',
+          WebkitTextFillColor: 'transparent',
+          backgroundClip: 'text'
+        }}>⚖️ $500 vs $1000: What's the Difference?</h2>
+        <p style={{
+          textAlign: 'center',
+          fontSize: '1.1rem',
+          color: '#999',
+          marginBottom: '40px'
+        }}>Is the $1000 tier worth 2x the price? Let's break it down.</p>
+
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))',
+          gap: '30px'
+        }}>
+          {/* $500 Full Platform */}
+          <div style={{
+            background: 'rgba(251, 191, 36, 0.1)',
+            padding: '30px',
+            borderRadius: '15px',
+            border: '2px solid #fbbf24'
+          }}>
+            <h3 style={{
+              fontSize: '1.8rem',
+              marginBottom: '10px',
+              color: '#fbbf24'
+            }}>🌟 $500 Full Platform</h3>
+            <p style={{
+              fontSize: '1.3rem',
+              fontWeight: '700',
+              color: '#fbbf24',
+              marginBottom: '20px'
+            }}>Great for Creators</p>
+            
+            <div style={{ fontSize: '1.05rem', lineHeight: '2' }}>
+              <div style={{ color: '#10b981' }}>✅ ALL tools unlocked</div>
+              <div style={{ color: '#10b981' }}>✅ Adult content included</div>
+              <div style={{ color: '#10b981' }}>✅ 80/20 revenue split</div>
+              <div style={{ color: '#10b981' }}>✅ Premium badge</div>
+              <div style={{ color: '#10b981' }}>✅ Priority support</div>
+              <div style={{ color: '#10b981' }}>✅ Advanced analytics</div>
+              <div style={{ color: '#ef4444', marginTop: '15px' }}>❌ Still pay 15-25% fees</div>
+              <div style={{ color: '#ef4444' }}>❌ No AI character recognition</div>
+              <div style={{ color: '#ef4444' }}>❌ No custom AI training</div>
+              <div style={{ color: '#ef4444' }}>❌ No NFT minter</div>
+              <div style={{ color: '#ef4444' }}>❌ No experimental features</div>
+              <div style={{ color: '#ef4444' }}>❌ No future secret toys</div>
+            </div>
+          </div>
+
+          {/* $1000 Super Admin Powers */}
+          <div style={{
+            background: 'rgba(139, 92, 246, 0.1)',
+            padding: '30px',
+            borderRadius: '15px',
+            border: '3px solid #8b5cf6',
+            boxShadow: '0 10px 40px rgba(139, 92, 246, 0.3)',
+            position: 'relative'
+          }}>
+            <div style={{
+              position: 'absolute',
+              top: '-15px',
+              right: '20px',
+              background: 'linear-gradient(135deg, #ec4899 0%, #db2777 100%)',
+              color: 'white',
+              padding: '8px 20px',
+              borderRadius: '20px',
+              fontWeight: '700',
+              fontSize: '0.9rem'
+            }}>🔥 BEST VALUE</div>
+
+            <h3 style={{
+              fontSize: '1.8rem',
+              marginBottom: '10px',
+              color: '#8b5cf6'
+            }}>👑 $1000 Super Admin</h3>
+            <p style={{
+              fontSize: '1.3rem',
+              fontWeight: '700',
+              color: '#8b5cf6',
+              marginBottom: '20px'
+            }}>For Power Users & Professionals</p>
+            
+            <div style={{ fontSize: '1.05rem', lineHeight: '2' }}>
+              <div style={{ color: '#10b981' }}>✅ Everything in $500 tier</div>
+              <div style={{ color: '#fbbf24', fontWeight: '700', fontSize: '1.15rem' }}>💰 ZERO PLATFORM FEES (0%!)</div>
+              <div style={{ color: '#fbbf24', fontWeight: '700' }}>💵 Keep 100% of ALL earnings</div>
+              <div style={{ color: '#8b5cf6', fontWeight: '700' }}>🧠 AI Character Recognition</div>
+              <div style={{ color: '#8b5cf6', fontWeight: '700' }}>🤖 Train Custom AI Models</div>
+              <div style={{ color: '#8b5cf6', fontWeight: '700' }}>⚡ Auto-Content Generation</div>
+              <div style={{ color: '#8b5cf6', fontWeight: '700' }}>🎨 Unlimited AI Assets</div>
+              <div style={{ color: '#8b5cf6', fontWeight: '700' }}>🤡 NFT Minter (50% cut)</div>
+              <div style={{ color: '#8b5cf6', fontWeight: '700' }}>🔮 All Future Secret Features</div>
+              <div style={{ color: '#8b5cf6', fontWeight: '700' }}>👑 Exclusive VIP Badge</div>
+              <div style={{ color: '#8b5cf6', fontWeight: '700' }}>💎 White-Glove Support 24/7</div>
+              <div style={{ color: '#8b5cf6', fontWeight: '700' }}>🚀 Beta Access to Everything</div>
+              <div style={{ color: '#8b5cf6', fontWeight: '700' }}>🎁 Grandfathered Forever</div>
+            </div>
+
+            <div style={{
+              marginTop: '20px',
+              padding: '20px',
+              background: 'rgba(251, 191, 36, 0.2)',
+              borderRadius: '10px',
+              border: '2px solid #fbbf24'
+            }}>
+              <p style={{
+                fontSize: '1.1rem',
+                fontWeight: '700',
+                color: '#fbbf24',
+                marginBottom: '10px'
+              }}>💡 ROI Calculation:</p>
+              <p style={{ fontSize: '0.95rem', lineHeight: '1.6', color: '#e0e0e0' }}>
+                If you earn just <strong>$2000</strong> on ForTheWeebs:<br/>
+                • $500 tier: Pay <strong>$300-500 in fees</strong> (15-25%)<br/>
+                • $1000 tier: Pay <strong>$0 in fees</strong> (0%)<br/>
+                <span style={{ color: '#10b981', fontWeight: '700' }}>You break even immediately and save forever.</span>
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* Bottom Summary */}
+        <div style={{
+          marginTop: '40px',
+          padding: '30px',
+          background: 'rgba(139, 92, 246, 0.1)',
+          borderRadius: '15px',
+          border: '2px dashed #8b5cf6',
+          textAlign: 'center'
+        }}>
+          <h3 style={{
+            fontSize: '1.8rem',
+            color: '#8b5cf6',
+            marginBottom: '15px'
+          }}>🎯 The Bottom Line</h3>
+          <p style={{
+            fontSize: '1.15rem',
+            lineHeight: '1.8',
+            color: '#e0e0e0',
+            maxWidth: '900px',
+            margin: '0 auto'
+          }}>
+            <strong>$500 tier is perfect</strong> if you just want all the tools and don't mind paying standard platform fees.<br/>
+            <strong>$1000 tier pays for itself</strong> the moment you earn $2000+ because you keep 100% of everything.<br/>
+            Plus you get <strong>exclusive AI features, NFT minting, experimental tools, and lifetime VIP treatment</strong>.
+          </p>
+          <p style={{
+            fontSize: '1.3rem',
+            fontWeight: '700',
+            color: '#fbbf24',
+            marginTop: '20px'
+          }}>
+            For serious creators: $1000 tier = Infinite ROI 🚀
+          </p>
         </div>
       </div>
 
