@@ -1,13 +1,70 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { 
+  getPreferredCurrency, 
+  convertPrice, 
+  formatPrice, 
+  setPreferredCurrency,
+  CURRENCY_CONFIG 
+} from './utils/currencyConverter';
 
 /**
- * PaymentModule - Tier selection and Stripe checkout
+ * PaymentModule - Tier selection and Stripe checkout with Multi-Currency Support
  * Offers $500 CREATOR tier and $1000 SUPER_ADMIN tier
+ * Automatically shows prices in user's local currency (converted to USD on backend)
  */
 export default function PaymentModule({ onPaymentComplete }) {
   const [selectedTier, setSelectedTier] = useState(null);
   const [processing, setProcessing] = useState(false);
   const [error, setError] = useState(null);
+  const [userCurrency, setUserCurrency] = useState('USD');
+  const [convertedPrices, setConvertedPrices] = useState({});
+  const [showCurrencySelector, setShowCurrencySelector] = useState(false);
+
+  // Load user's currency preference and convert prices
+  useEffect(() => {
+    const loadCurrency = async () => {
+      const currency = getPreferredCurrency();
+      setUserCurrency(currency);
+      
+      // Convert all tier prices
+      const prices = {};
+      for (const tier of tiers) {
+        if (tier.price > 0) {
+          const converted = await convertPrice(tier.price, currency);
+          prices[tier.id] = converted;
+        }
+      }
+      setConvertedPrices(prices);
+    };
+    
+    loadCurrency();
+  }, [userCurrency]);
+
+  const handleCurrencyChange = async (newCurrency) => {
+    setUserCurrency(newCurrency);
+    setPreferredCurrency(newCurrency);
+    setShowCurrencySelector(false);
+    
+    // Re-convert prices
+    const prices = {};
+    for (const tier of tiers) {
+      if (tier.price > 0) {
+        const converted = await convertPrice(tier.price, newCurrency);
+        prices[tier.id] = converted;
+      }
+    }
+    setConvertedPrices(prices);
+  };
+
+  const getDisplayPrice = (tier) => {
+    if (tier.price === 0) return '$0';
+    if (userCurrency === 'USD') return `$${tier.price}`;
+    
+    const converted = convertedPrices[tier.id];
+    if (!converted) return `$${tier.price}`;
+    
+    return formatPrice(converted, userCurrency);
+  };
 
   const tiers = [
     {
@@ -84,7 +141,10 @@ export default function PaymentModule({ onPaymentComplete }) {
         },
         body: JSON.stringify({
           tier: tier.id,
-          price: tier.price,
+          price: tier.price, // Always send USD price to backend
+          priceUSD: tier.price,
+          displayCurrency: userCurrency,
+          displayPrice: convertedPrices[tier.id],
           successUrl: `${window.location.origin}/success?tier=${tier.id}`,
           cancelUrl: window.location.href
         })
@@ -133,11 +193,130 @@ export default function PaymentModule({ onPaymentComplete }) {
         <p style={{
           textAlign: 'center',
           fontSize: '1.2rem',
-          marginBottom: '50px',
+          marginBottom: '30px',
           opacity: 0.9
         }}>
           Unlock your creative potential with ForTheWeebs
         </p>
+
+        {/* Currency Selector */}
+        <div style={{
+          textAlign: 'center',
+          marginBottom: '30px'
+        }}>
+          <button
+            onClick={() => setShowCurrencySelector(!showCurrencySelector)}
+            style={{
+              background: 'rgba(255,255,255,0.1)',
+              border: '1px solid rgba(255,255,255,0.3)',
+              borderRadius: '10px',
+              padding: '10px 20px',
+              color: 'white',
+              cursor: 'pointer',
+              fontSize: '1rem',
+              fontWeight: '600'
+            }}
+          >
+            💱 Currency: {CURRENCY_CONFIG[userCurrency]?.name || userCurrency} ({CURRENCY_CONFIG[userCurrency]?.symbol || '$'})
+          </button>
+          
+          {showCurrencySelector && (
+            <div style={{
+              position: 'fixed',
+              top: '50%',
+              left: '50%',
+              transform: 'translate(-50%, -50%)',
+              background: '#1a1a2e',
+              border: '2px solid #667eea',
+              borderRadius: '15px',
+              padding: '30px',
+              zIndex: 1000,
+              maxHeight: '70vh',
+              overflowY: 'auto',
+              maxWidth: '600px',
+              width: '90%'
+            }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+                <h3 style={{ margin: 0 }}>Select Your Currency</h3>
+                <button
+                  onClick={() => setShowCurrencySelector(false)}
+                  style={{
+                    background: 'transparent',
+                    border: 'none',
+                    color: 'white',
+                    fontSize: '1.5rem',
+                    cursor: 'pointer'
+                  }}
+                >
+                  ✕
+                </button>
+              </div>
+              <div style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fill, minmax(150px, 1fr))',
+                gap: '10px'
+              }}>
+                {Object.entries(CURRENCY_CONFIG).map(([code, config]) => (
+                  <button
+                    key={code}
+                    onClick={() => handleCurrencyChange(code)}
+                    style={{
+                      background: userCurrency === code ? '#667eea' : 'rgba(255,255,255,0.1)',
+                      border: userCurrency === code ? '2px solid #764ba2' : '1px solid rgba(255,255,255,0.2)',
+                      borderRadius: '8px',
+                      padding: '12px',
+                      color: 'white',
+                      cursor: 'pointer',
+                      fontSize: '0.9rem',
+                      textAlign: 'left',
+                      transition: 'all 0.2s ease'
+                    }}
+                    onMouseEnter={(e) => {
+                      if (userCurrency !== code) {
+                        e.target.style.background = 'rgba(102, 126, 234, 0.3)';
+                      }
+                    }}
+                    onMouseLeave={(e) => {
+                      if (userCurrency !== code) {
+                        e.target.style.background = 'rgba(255,255,255,0.1)';
+                      }
+                    }}
+                  >
+                    <div style={{ fontWeight: 'bold', marginBottom: '4px' }}>
+                      {config.symbol} {code}
+                    </div>
+                    <div style={{ fontSize: '0.8rem', opacity: 0.7 }}>
+                      {config.name}
+                    </div>
+                  </button>
+                ))}
+              </div>
+              <p style={{
+                marginTop: '20px',
+                fontSize: '0.85rem',
+                opacity: 0.7,
+                textAlign: 'center'
+              }}>
+                All prices automatically converted to USD for processing
+              </p>
+            </div>
+          )}
+          
+          {showCurrencySelector && (
+            <div
+              onClick={() => setShowCurrencySelector(false)}
+              style={{
+                position: 'fixed',
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0,
+                background: 'rgba(0,0,0,0.7)',
+                zIndex: 999
+              }}
+            />
+          )}
+        </div>
 
         {error && (
           <div style={{
@@ -218,9 +397,21 @@ export default function PaymentModule({ onPaymentComplete }) {
                 fontWeight: '900',
                 marginBottom: '10px'
               }}>
-                ${tier.price}
+                {getDisplayPrice(tier)}
                 {tier.price > 0 && (
-                  <span style={{ fontSize: '1rem', opacity: 0.7 }}> one-time</span>
+                  <>
+                    <span style={{ fontSize: '1rem', opacity: 0.7 }}> one-time</span>
+                    {userCurrency !== 'USD' && (
+                      <div style={{ 
+                        fontSize: '0.9rem', 
+                        opacity: 0.6, 
+                        fontWeight: 'normal',
+                        marginTop: '5px'
+                      }}>
+                        ≈ ${tier.price} USD
+                      </div>
+                    )}
+                  </>
                 )}
               </div>
 
@@ -285,6 +476,7 @@ export default function PaymentModule({ onPaymentComplete }) {
         }}>
           <p style={{ fontSize: '0.9rem', opacity: 0.7 }}>
             💳 Secure payment powered by Stripe<br />
+            🌍 Pay in your local currency (auto-converted to USD)<br />
             🔒 One-time payment, no subscriptions<br />
             ✨ Instant access after purchase
           </p>
