@@ -27,6 +27,13 @@ function AppFlow() {
     // Check URL parameters FIRST
     const params = new URLSearchParams(window.location.search);
 
+    console.log('🔍 Checking URL params:', {
+      familyCode: params.get('familyCode'),
+      family: params.get('family'),
+      code: params.get('code'),
+      owner: params.get('owner')
+    });
+
     // Simple owner bypass - just use ?owner=polotus in URL
     if (params.get('owner') === 'polotus') {
       localStorage.setItem("userId", "owner");
@@ -40,13 +47,15 @@ function AppFlow() {
     // Check for family access code FIRST (before anything else)
     const familyCode = params.get('familyCode') || params.get('family') || params.get('code');
     if (familyCode) {
+      console.log('🎁 Family code found:', familyCode);
       // Store the family access code
       localStorage.setItem('pending_family_code', familyCode);
       // Grant full access immediately for family members
       localStorage.setItem("legalAccepted", "true");
       localStorage.setItem("tosAccepted", "true");
       localStorage.setItem("hasOnboarded", "true");
-      console.log('🎁 Family access code detected:', familyCode);
+      localStorage.setItem(`family_access_user`, familyCode);
+      console.log('✅ Family access granted, going to dashboard');
       // Go straight to dashboard
       return 3;
     }
@@ -101,6 +110,9 @@ function AppFlow() {
     return localStorage.getItem("userId") === "owner" || localStorage.getItem("adminAuthenticated") === "true";
   });
   const [referralCode] = useState(() => localStorage.getItem('referral_code'));
+  const [hasFamilyAccess] = useState(() => !!localStorage.getItem('pending_family_code') || !!localStorage.getItem('family_access_user'));
+
+  console.log('🚀 AppFlow render:', { step, isAdmin, hasFamilyAccess });
 
   // Check if this is the invite page
   if (window.location.pathname === '/invite' || window.location.pathname.startsWith('/invite/')) {
@@ -145,6 +157,11 @@ function AppFlow() {
             {isAdmin && (
               <div style={{ position: 'absolute', right: '20px', top: '50%', transform: 'translateY(-50%)', display: 'flex', alignItems: 'center', gap: '12px' }}>
                 <span style={{ background: '#FFD700', color: '#000', padding: '4px 12px', borderRadius: '6px', fontSize: '0.85rem', fontWeight: 800 }}>👑 OWNER</span>
+              </div>
+            )}
+            {hasFamilyAccess && !isAdmin && (
+              <div style={{ position: 'absolute', right: '20px', top: '50%', transform: 'translateY(-50%)', display: 'flex', alignItems: 'center', gap: '12px' }}>
+                <span style={{ background: '#10b981', color: 'white', padding: '4px 12px', borderRadius: '6px', fontSize: '0.85rem', fontWeight: 800 }}>🎁 FAMILY ACCESS</span>
               </div>
             )}
           </div>
