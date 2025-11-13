@@ -45,6 +45,17 @@
       box-sizing: border-box;
     }
 
+    #root {
+      position: relative;
+      z-index: 1000;
+      display: none;
+    }
+
+    #landing-page {
+      position: relative;
+      z-index: 1;
+    }
+
     body {
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
       background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #d946ef 100%);
@@ -902,11 +913,20 @@
 
     if (showApp) {
       const landingPage = document.getElementById('landing-page');
-      if (landingPage) landingPage.style.display = 'none';
+      if (landingPage) {
+        landingPage.style.display = 'none';
+        landingPage.style.visibility = 'hidden';
+        landingPage.style.opacity = '0';
+        landingPage.style.pointerEvents = 'none';
+        landingPage.style.position = 'absolute';
+        landingPage.style.zIndex = '-1';
+      }
       const rootEl = document.getElementById('root');
       if (rootEl) {
         rootEl.style.display = 'block';
         rootEl.style.minHeight = '100vh';
+        rootEl.style.position = 'relative';
+        rootEl.style.zIndex = '1000';
       }
       document.body.style.background = '#1a1a2e';
     } else {
@@ -919,11 +939,20 @@
       const params2 = new URLSearchParams(window.location.search);
       if (params2.get('app') === 'true' || window.location.search) {
         const landingPage = document.getElementById('landing-page');
-        if (landingPage) landingPage.style.display = 'none';
+        if (landingPage) {
+          landingPage.style.display = 'none';
+          landingPage.style.visibility = 'hidden';
+          landingPage.style.opacity = '0';
+          landingPage.style.pointerEvents = 'none';
+          landingPage.style.position = 'absolute';
+          landingPage.style.zIndex = '-1';
+        }
         const rootEl = document.getElementById('root');
         if (rootEl) {
           rootEl.style.display = 'block';
           rootEl.style.minHeight = '100vh';
+          rootEl.style.position = 'relative';
+          rootEl.style.zIndex = '1000';
         }
         document.body.style.background = '#1a1a2e';
       }
