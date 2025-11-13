@@ -1,55 +1,165 @@
 .graphic-design-suite {
     width: 100%;
     height: 100vh;
-    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-    color: #fff;
-    font-family: 'Segoe UI', system-ui, sans-serif;
-}
-
-/* Template Gallery */
-.template-gallery {
+    background: #1e1e1e;
+    color: #cccccc;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     display: flex;
     flex-direction: column;
-    height: 100%;
+}
+
+/* Professional Header Bar */
+.professional-header {
+    background: #2d2d2d;
+    border-bottom: 1px solid #3e3e3e;
+    padding: 8px 16px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    height: 48px;
+}
+
+.professional-header select,
+.professional-header input {
+    background: #3e3e3e;
+    border: 1px solid #555;
+    color: #cccccc;
+    padding: 6px 12px;
+    border-radius: 4px;
+    font-size: 13px;
+}
+
+.professional-header select:focus,
+.professional-header input:focus {
+    outline: none;
+    border-color: #007acc;
+}
+
+.professional-header button {
+    background: #007acc;
+    border: none;
+    color: white;
+    padding: 6px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 13px;
+}
+
+.professional-header button:hover {
+    background: #005a9e;
+
+
+/* Professional Workspace Layout */
+.professional-workspace {
+    display: flex;
+    flex: 1;
     overflow: hidden;
 }
 
-.gallery-header {
+.left-toolbar {
+    width: 56px;
+    background: #252525;
+    border-right: 1px solid #3e3e3e;
+    display: flex;
+    flex-direction: column;
+    padding: 8px 0;
+}
+
+.tool-button {
+    width: 40px;
+    height: 40px;
+    margin: 4px 8px;
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    color: #cccccc;
+    cursor: pointer;
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    padding: 1.5rem 2rem;
-    background: linear-gradient(135deg, #0f3460 0%, #16213e 100%);
-    border-bottom: 2px solid #533483;
-    box-shadow: 0 4px 20px rgba(83, 52, 131, 0.3);
+    justify-content: center;
+    font-size: 18px;
 }
 
-.gallery-header h2 {
-    margin: 0;
-    font-size: 2rem;
-    background: linear-gradient(135deg, #e94560 0%, #533483 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+.tool-button:hover {
+    background: #3e3e3e;
 }
 
-.btn-new-blank {
-    padding: 0.8rem 1.5rem;
-    background: linear-gradient(135deg, #00d2ff 0%, #3a47d5 100%);
-    color: #fff;
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-    font-size: 1rem;
+.tool-button.active {
+    background: #094771;
+    border-color: #007acc;
+}
+
+.canvas-area {
+    flex: 1;
+    background: #1e1e1e;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: auto;
+    position: relative;
+}
+
+.design-canvas {
+    background: white;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+    position: relative;
+    transform-origin: center;
+}
+
+.right-panel {
+    width: 280px;
+    background: #252525;
+    border-left: 1px solid #3e3e3e;
+    overflow-y: auto;
+    padding: 16px;
+}
+
+.panel-section {
+    margin-bottom: 24px;
+}
+
+.panel-section h3 {
+    font-size: 13px;
     font-weight: 600;
-    transition: all 0.3s ease;
+    color: #cccccc;
+    margin: 0 0 12px 0;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
-.btn-new-blank:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 6px 20px rgba(0, 210, 255, 0.5);
+.property-row {
+    margin-bottom: 12px;
 }
 
+.property-row label {
+    display: block;
+    font-size: 12px;
+    color: #999;
+    margin-bottom: 4px;
+}
+
+.property-row input,
+.property-row select,
+.property-row textarea {
+    width: 100%;
+    background: #3e3e3e;
+    border: 1px solid #555;
+    color: #cccccc;
+    padding: 6px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+}
+
+.property-row input[type="range"] {
+    padding: 0;
+}
+
+.property-row input[type="color"] {
+    height: 32px;
+    padding: 2px;
+}
+
+/* Categories */
 .categories {
     display: flex;
     gap: 0.5rem;

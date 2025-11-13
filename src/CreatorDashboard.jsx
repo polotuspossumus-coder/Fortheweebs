@@ -17,12 +17,13 @@ import { ContentPlanner } from "./components/ContentPlanner";
 import { InfluencerVerification } from "./components/InfluencerVerification";
 import { FamilyAccessSystem } from "./components/FamilyAccessSystem";
 import { AudioProductionStudio } from "./components/AudioProductionStudio";
-import { GraphicDesignStudio } from "./components/GraphicDesignStudio";
+import GraphicDesignSuitePro from "./components/GraphicDesignSuitePro";
 import { PrintOnDemand } from "./components/PrintOnDemand";
 import { TradingCardDesigner } from "./components/TradingCardDesigner";
 import { TipsAndDonations } from "./components/TipsAndDonations";
 import { CommissionMarketplace } from "./components/CommissionMarketplace";
 import { PremiumSubscription } from "./components/PremiumSubscription";
+
 import { ToolLockGate } from "./components/ToolLockGate";
 import { DevBalanceManager } from "./components/DevBalanceManager";
 import { getUserBalance } from "./utils/toolUnlockSystem";
@@ -199,7 +200,7 @@ export const CreatorDashboard = ({ userId = "demo_user", ipAddress = "127.0.0.1"
               <TabsTrigger value="cards">Trading Cards</TabsTrigger>
             </TabsList>
             <TabsContent value="design-studio">
-              <GraphicDesignStudio userId={userId} />
+              <GraphicDesignSuitePro />
             </TabsContent>
             <TabsContent value="cards">
               <TradingCardDesigner userId={userId} />
