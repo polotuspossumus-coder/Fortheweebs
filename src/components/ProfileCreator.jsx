@@ -143,11 +143,116 @@ export function ProfileCreator({ userId }) {
     };
 
     const generateCGIAvatar = async () => {
-        alert('🎨 CGI Avatar Generator\n\nThis will use AI to generate a custom 3D avatar!\nFeatures:\n• Anime/realistic styles\n• Custom hair, clothes, poses\n• Export as PNG or 3D model\n\nComing soon!');
+        if (!profile.avatar) {
+            alert('⚠️ Please upload a photo first!\n\nThe avatar generator needs a base image to work with.');
+            return;
+        }
+
+        const confirmed = confirm('🎨 Generate Avatar\n\nThis will create a stylized avatar from your current photo.\n\nChoose a style:\n• OK = Anime Style (rounded, vibrant)\n• Cancel = Go back');
+        
+        if (!confirmed) return;
+
+        try {
+            // Create canvas for avatar generation
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            canvas.width = 400;
+            canvas.height = 400;
+
+            // Load the current avatar
+            const img = new Image();
+            img.onload = () => {
+                // Draw circular avatar
+                ctx.save();
+                ctx.beginPath();
+                ctx.arc(200, 200, 180, 0, Math.PI * 2);
+                ctx.closePath();
+                ctx.clip();
+
+                // Calculate aspect ratio fit
+                const scale = Math.max(400 / img.width, 400 / img.height);
+                const x = (400 / 2) - (img.width / 2) * scale;
+                const y = (400 / 2) - (img.height / 2) * scale;
+                
+                ctx.drawImage(img, x, y, img.width * scale, img.height * scale);
+                ctx.restore();
+
+                // Add anime-style border
+                ctx.strokeStyle = '#FF1493';
+                ctx.lineWidth = 8;
+                ctx.beginPath();
+                ctx.arc(200, 200, 180, 0, Math.PI * 2);
+                ctx.stroke();
+
+                // Add inner glow
+                ctx.strokeStyle = 'rgba(255, 20, 147, 0.3)';
+                ctx.lineWidth = 20;
+                ctx.beginPath();
+                ctx.arc(200, 200, 170, 0, Math.PI * 2);
+                ctx.stroke();
+
+                // Convert to data URL and set as avatar
+                const generated = canvas.toDataURL('image/png');
+                setProfile({ ...profile, avatar: generated });
+                alert('✅ Avatar generated successfully!\n\nYour new stylized avatar is ready.');
+            };
+            img.src = profile.avatar;
+        } catch (error) {
+            alert('❌ Avatar generation failed\n\nPlease try uploading a different image.');
+            console.error('Avatar generation error:', error);
+        }
     };
 
     const generateCGIBanner = async () => {
-        alert('🌌 CGI Banner Generator\n\nCreate stunning 3D banners with:\n• Custom environments\n• Dynamic lighting\n• Animated effects\n• Your characters/objects\n\nComing soon!');
+        if (!profile.banner) {
+            alert('⚠️ Please upload a banner image first!\n\nThe banner generator needs a base image to work with.');
+            return;
+        }
+
+        const style = confirm('🌌 Generate Banner\n\nThis will create a stylized banner from your current image.\n\nChoose a style:\n• OK = Gradient Overlay (vibrant colors)\n• Cancel = Go back');
+        
+        if (!style) return;
+
+        try {
+            // Create canvas for banner generation
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            canvas.width = 1500;
+            canvas.height = 500;
+
+            // Load the current banner
+            const img = new Image();
+            img.onload = () => {
+                // Draw banner with aspect ratio fit
+                const scale = Math.max(1500 / img.width, 500 / img.height);
+                const x = (1500 / 2) - (img.width / 2) * scale;
+                const y = (500 / 2) - (img.height / 2) * scale;
+                
+                ctx.drawImage(img, x, y, img.width * scale, img.height * scale);
+
+                // Add gradient overlay
+                const gradient = ctx.createLinearGradient(0, 0, 1500, 500);
+                gradient.addColorStop(0, 'rgba(102, 126, 234, 0.6)');
+                gradient.addColorStop(0.5, 'rgba(118, 75, 162, 0.4)');
+                gradient.addColorStop(1, 'rgba(237, 66, 100, 0.6)');
+                ctx.fillStyle = gradient;
+                ctx.fillRect(0, 0, 1500, 500);
+
+                // Add edge glow
+                ctx.strokeStyle = 'rgba(255, 255, 255, 0.3)';
+                ctx.lineWidth = 4;
+                ctx.strokeRect(0, 0, 1500, 500);
+
+                // Convert to data URL and set as banner
+                const generated = canvas.toDataURL('image/jpeg', 0.95);
+                setProfile({ ...profile, banner: generated });
+                alert('✅ Banner generated successfully!\n\nYour new stylized banner is ready.');
+            };
+            img.src = profile.banner;
+        } catch (error) {
+            alert('❌ Banner generation failed\n\nPlease try uploading a different image.');
+            console.error('Banner generation error:', error);
+        }
     };
 
     return (
