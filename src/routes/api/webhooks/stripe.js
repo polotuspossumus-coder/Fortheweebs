@@ -4,20 +4,14 @@
  */
 
 import Stripe from 'stripe';
-import admin from 'firebase-admin';
+import { createClient } from '@supabase/supabase-js';
 
-// Initialize Firebase Admin (serverside only)
-if (!admin.apps.length) {
-  admin.initializeApp({
-    credential: admin.credential.cert({
-      projectId: process.env.FIREBASE_PROJECT_ID,
-      clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
-      privateKey: process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, '\n')
-    })
-  });
-}
+// Initialize Supabase client (serverside)
+const supabase = createClient(
+  process.env.VITE_SUPABASE_URL,
+  process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.VITE_SUPABASE_ANON_KEY
+);
 
-const db = admin.firestore();
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || 'sk_test_PLACEHOLDER');
 const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET || 'whsec_PLACEHOLDER';
 
@@ -96,35 +90,43 @@ async function handlePaymentSuccess(paymentIntent) {
 
   try {
     // Create transaction record
-    await db.collection('transactions').add({
+    await supabase.from('transactions').insert({
       type,
-      paymentIntentId: paymentIntent.id,
+      payment_intent_id: paymentIntent.id,
       amount: paymentIntent.amount / 100,
       currency: paymentIntent.currency,
       status: 'completed',
-      creatorId,
-      buyerId,
-      createdAt: admin.firestore.FieldValue.serverTimestamp()
+      creator_id: creatorId,
+      buyer_id: buyerId,
+      created_at: new Date().toISOString()
     });
 
     if (type === 'tip') {
       // Record tip in database
-      await db.collection('tips').add({
-        senderId: buyerId,
-        creatorId,
+      await supabase.from('tips').insert({
+        sender_id: buyerId,
+        creator_id: creatorId,
         amount: paymentIntent.amount / 100,
         currency: paymentIntent.currency,
         message: message || '',
-        paymentIntentId: paymentIntent.id,
-        createdAt: admin.firestore.FieldValue.serverTimestamp()
+        payment_intent_id: paymentIntent.id,
+        created_at: new Date().toISOString()
       });
 
       // Update creator balance
-      const creatorRef = db.collection('users').doc(creatorId);
-      await creatorRef.update({
-        balance: admin.firestore.FieldValue.increment(paymentIntent.amount / 100),
-        updatedAt: admin.firestore.FieldValue.serverTimestamp()
-      });
+      const { data: user } = await supabase
+        .from('users')
+        .select('balance')
+        .eq('id', creatorId)
+        .single();
+
+      await supabase
+        .from('users')
+        .update({
+          balance: (user?.balance || 0) + paymentIntent.amount / 100,
+          updated_at: new Date().toISOString()
+        })
+        .eq('id', creatorId);
 
       console.log(`✅ Tip recorded: $${paymentIntent.amount / 100} to creator ${creatorId}`);
     }
@@ -134,26 +136,34 @@ async function handlePaymentSuccess(paymentIntent) {
       const platformFee = parseFloat(paymentIntent.metadata.platformFee) / 100;
       const creatorAmount = parseFloat(paymentIntent.metadata.creatorAmount) / 100;
 
-      await db.collection('commissionOrders').add({
-        commissionId,
-        buyerId,
-        creatorId,
-        totalAmount: paymentIntent.amount / 100,
-        platformFee,
-        creatorAmount,
+      await supabase.from('commission_orders').insert({
+        commission_id: commissionId,
+        buyer_id: buyerId,
+        creator_id: creatorId,
+        total_amount: paymentIntent.amount / 100,
+        platform_fee: platformFee,
+        creator_amount: creatorAmount,
         status: 'pending',
-        paymentStatus: 'paid',
-        paymentIntentId: paymentIntent.id,
-        createdAt: admin.firestore.FieldValue.serverTimestamp(),
-        updatedAt: admin.firestore.FieldValue.serverTimestamp()
+        payment_status: 'paid',
+        payment_intent_id: paymentIntent.id,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString()
       });
 
       // Update creator balance (85% after platform fee)
-      const creatorRef = db.collection('users').doc(creatorId);
-      await creatorRef.update({
-        balance: admin.firestore.FieldValue.increment(creatorAmount),
-        updatedAt: admin.firestore.FieldValue.serverTimestamp()
-      });
+      const { data: creator } = await supabase
+        .from('users')
+        .select('balance')
+        .eq('id', creatorId)
+        .single();
+
+      await supabase
+        .from('users')
+        .update({
+          balance: (creator?.balance || 0) + creatorAmount,
+          updated_at: new Date().toISOString()
+        })
+        .eq('id', creatorId);
 
       console.log(`✅ Commission purchase recorded: $${creatorAmount} to creator ${creatorId}`);
     }
@@ -173,16 +183,16 @@ async function handlePaymentFailed(paymentIntent) {
 
   try {
     // Record failed transaction
-    await db.collection('transactions').add({
+    await supabase.from('transactions').insert({
       type,
-      paymentIntentId: paymentIntent.id,
+      payment_intent_id: paymentIntent.id,
       amount: paymentIntent.amount / 100,
       currency: paymentIntent.currency,
       status: 'failed',
-      creatorId,
-      buyerId,
-      errorMessage: paymentIntent.last_payment_error?.message,
-      createdAt: admin.firestore.FieldValue.serverTimestamp()
+      creator_id: creatorId,
+      buyer_id: buyerId,
+      error_message: paymentIntent.last_payment_error?.message,
+      created_at: new Date().toISOString()
     });
 
     console.log(`❌ Failed payment recorded for ${type}`);
@@ -205,26 +215,34 @@ async function handleSubscriptionUpdate(subscription) {
 
   try {
     // Create/update subscription record
-    const subscriptionRef = db.collection('subscriptions').doc(subscription.id);
-    await subscriptionRef.set({
-      userId,
-      tier,
-      status,
-      stripeSubscriptionId: subscription.id,
-      stripeCustomerId: subscription.customer,
-      currentPeriodStart: admin.firestore.Timestamp.fromDate(new Date(subscription.current_period_start * 1000)),
-      currentPeriodEnd: admin.firestore.Timestamp.fromDate(new Date(subscription.current_period_end * 1000)),
-      cancelAtPeriodEnd: subscription.cancel_at_period_end,
-      updatedAt: admin.firestore.FieldValue.serverTimestamp()
-    }, { merge: true });
+    const { error: subError } = await supabase
+      .from('subscriptions')
+      .upsert({
+        id: subscription.id,
+        user_id: userId,
+        tier,
+        status,
+        stripe_subscription_id: subscription.id,
+        stripe_customer_id: subscription.customer,
+        current_period_start: new Date(subscription.current_period_start * 1000).toISOString(),
+        current_period_end: new Date(subscription.current_period_end * 1000).toISOString(),
+        cancel_at_period_end: subscription.cancel_at_period_end,
+        updated_at: new Date().toISOString()
+      });
+
+    if (subError) throw subError;
 
     // Update user's tier
-    const userRef = db.collection('users').doc(userId);
-    await userRef.update({
-      tier,
-      subscriptionStatus: status,
-      updatedAt: admin.firestore.FieldValue.serverTimestamp()
-    });
+    const { error: userError } = await supabase
+      .from('users')
+      .update({
+        tier,
+        subscription_status: status,
+        updated_at: new Date().toISOString()
+      })
+      .eq('id', userId);
+
+    if (userError) throw userError;
 
     console.log(`✅ Subscription updated for user ${userId}: tier=${tier}, status=${status}`);
   } catch (error) {
@@ -233,30 +251,30 @@ async function handleSubscriptionUpdate(subscription) {
 }
 
 async function handleSubscriptionCanceled(subscription) {
-  const { userId, tier } = subscription.metadata;
-
-  console.log('Subscription canceled:', {
-    subscriptionId: subscription.id,
-    userId,
-    tier
-  });
-
   try {
     // Update subscription status in database
-    const subscriptionRef = db.collection('subscriptions').doc(subscription.id);
-    await subscriptionRef.update({
-      status: 'canceled',
-      canceledAt: admin.firestore.FieldValue.serverTimestamp(),
-      updatedAt: admin.firestore.FieldValue.serverTimestamp()
-    });
+    const { error: subError } = await supabase
+      .from('subscriptions')
+      .update({
+        status: 'canceled',
+        canceled_at: new Date().toISOString(),
+        updated_at: new Date().toISOString()
+      })
+      .eq('id', subscription.id);
+
+    if (subError) throw subError;
 
     // Downgrade user to free tier
-    const userRef = db.collection('users').doc(userId);
-    await userRef.update({
-      tier: 'free',
-      subscriptionStatus: 'canceled',
-      updatedAt: admin.firestore.FieldValue.serverTimestamp()
-    });
+    const { error: userError } = await supabase
+      .from('users')
+      .update({
+        tier: 'free',
+        subscription_status: 'canceled',
+        updated_at: new Date().toISOString()
+      })
+      .eq('id', userId);
+
+    if (userError) throw userError;
 
     console.log(`✅ User ${userId} downgraded from ${tier} to free`);
   } catch (error) {
@@ -273,14 +291,14 @@ async function handleInvoicePaid(invoice) {
 
   try {
     // Record invoice payment
-    await db.collection('transactions').add({
+    await supabase.from('transactions').insert({
       type: 'subscription_payment',
-      invoiceId: invoice.id,
-      subscriptionId: invoice.subscription,
+      invoice_id: invoice.id,
+      subscription_id: invoice.subscription,
       amount: invoice.amount_paid / 100,
       currency: invoice.currency,
       status: 'completed',
-      createdAt: admin.firestore.FieldValue.serverTimestamp()
+      created_at: new Date().toISOString()
     });
 
     console.log(`✅ Invoice payment recorded: $${invoice.amount_paid / 100}`);
@@ -298,23 +316,25 @@ async function handleInvoiceFailed(invoice) {
 
   try {
     // Record failed invoice
-    await db.collection('transactions').add({
+    await supabase.from('transactions').insert({
       type: 'subscription_payment',
-      invoiceId: invoice.id,
-      subscriptionId: invoice.subscription,
+      invoice_id: invoice.id,
+      subscription_id: invoice.subscription,
       amount: invoice.amount_due / 100,
       currency: invoice.currency,
       status: 'failed',
-      createdAt: admin.firestore.FieldValue.serverTimestamp()
+      created_at: new Date().toISOString()
     });
 
     // Update subscription status
     if (invoice.subscription) {
-      const subscriptionRef = db.collection('subscriptions').doc(invoice.subscription);
-      await subscriptionRef.update({
-        status: 'past_due',
-        updatedAt: admin.firestore.FieldValue.serverTimestamp()
-      });
+      await supabase
+        .from('subscriptions')
+        .update({
+          status: 'past_due',
+          updated_at: new Date().toISOString()
+        })
+        .eq('id', invoice.subscription);
     }
 
     console.log(`❌ Failed invoice recorded: $${invoice.amount_due / 100}`);
