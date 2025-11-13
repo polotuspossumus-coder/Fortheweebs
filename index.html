@@ -898,7 +898,7 @@
       window.location.hash ||
       params.get('app') === 'true';
 
-    console.log('showApp:', showApp, 'search:', window.location.search);
+    console.log('showApp:', showApp, 'search:', window.location.search, 'params:', params.get('app'));
 
     if (showApp) {
       const landingPage = document.getElementById('landing-page');
@@ -913,6 +913,21 @@
       const rootEl = document.getElementById('root');
       if (rootEl) rootEl.style.display = 'none';
     }
+    
+    // Backup: Re-check after a short delay in case React hasn't mounted yet
+    setTimeout(() => {
+      const params2 = new URLSearchParams(window.location.search);
+      if (params2.get('app') === 'true' || window.location.search) {
+        const landingPage = document.getElementById('landing-page');
+        if (landingPage) landingPage.style.display = 'none';
+        const rootEl = document.getElementById('root');
+        if (rootEl) {
+          rootEl.style.display = 'block';
+          rootEl.style.minHeight = '100vh';
+        }
+        document.body.style.background = '#1a1a2e';
+      }
+    }, 100);
   </script>
 </body>
 
