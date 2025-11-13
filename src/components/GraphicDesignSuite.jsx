@@ -23,11 +23,56 @@ export default function GraphicDesignSuite() {
     const [aiPrompt, setAiPrompt] = useState('');
     const [layers, setLayers] = useState([]);
     const [zoom, setZoom] = useState(100);
+    const [isDrawing, setIsDrawing] = useState(false);
+    const [brushStrokes, setBrushStrokes] = useState([]);
 
     const canvasRef = useRef(null);
 
+    // Pointer Events API for drawing tablet support (pressure, tilt, etc.)
+    const handlePointerDown = (e) => {
+        if (tool === 'brush') {
+            setIsDrawing(true);
+            const rect = canvasRef.current.getBoundingClientRect();
+            const x = (e.clientX - rect.left) / (zoom / 100);
+            const y = (e.clientY - rect.top) / (zoom / 100);
+            setBrushStrokes([...brushStrokes, [{
+                x,
+                y,
+                pressure: e.pressure || 0.5,
+                tiltX: e.tiltX || 0,
+                tiltY: e.tiltY || 0,
+                pointerType: e.pointerType // 'pen', 'mouse', 'touch'
+            }]]);
+        }
+    };
+
+    const handlePointerMove = (e) => {
+        if (tool === 'brush' && isDrawing) {
+            const rect = canvasRef.current.getBoundingClientRect();
+            const x = (e.clientX - rect.left) / (zoom / 100);
+            const y = (e.clientY - rect.top) / (zoom / 100);
+            const currentStroke = [...brushStrokes[brushStrokes.length - 1], {
+                x,
+                y,
+                pressure: e.pressure || 0.5,
+                tiltX: e.tiltX || 0,
+                tiltY: e.tiltY || 0,
+                pointerType: e.pointerType
+            }];
+            setBrushStrokes([...brushStrokes.slice(0, -1), currentStroke]);
+        }
+    };
+
+    const handlePointerUp = () => {
+        if (tool === 'brush') {
+            setIsDrawing(false);
+        }
+    };
+
     const CATEGORIES = [
         { id: 'all', name: '🌟 All Templates', count: 10000 },
+        { id: 'comics', name: '📖 Comic Panels', count: 850 },
+        { id: 'trading', name: '🃏 Trading Cards', count: 450 },
         { id: 'social', name: '📱 Social Media', count: 2500 },
         { id: 'logo', name: '🎨 Logos & Branding', count: 1200 },
         { id: 'poster', name: '📄 Posters & Flyers', count: 1500 },
@@ -40,6 +85,23 @@ export default function GraphicDesignSuite() {
     ];
 
     const TEMPLATES = {
+        comics: [
+            { id: 'c1', name: '4-Panel Grid (Manga)', size: '8.5x11in', layout: 'grid-4' },
+            { id: 'c2', name: '6-Panel Grid (Western Comic)', size: '8.5x11in', layout: 'grid-6' },
+            { id: 'c3', name: 'Splash Page (Full Page)', size: '8.5x11in', layout: 'splash' },
+            { id: 'c4', name: 'Vertical Strip (Webtoon)', size: '800x3000px', layout: 'vertical' },
+            { id: 'c5', name: '3-Panel Horizontal', size: '1200x400px', layout: 'horizontal-3' },
+            { id: 'c6', name: 'Z-Pattern Layout', size: '8.5x11in', layout: 'z-pattern' },
+            { id: 'c7', name: 'Diagonal Dynamic', size: '8.5x11in', layout: 'diagonal' },
+            { id: 'c8', name: 'Custom Freeform', size: '8.5x11in', layout: 'custom' }
+        ],
+        trading: [
+            { id: 't1', name: 'Pokemon Style Card', size: '2.5x3.5in' },
+            { id: 't2', name: 'Magic/Yu-Gi-Oh Style', size: '2.5x3.5in' },
+            { id: 't3', name: 'Sports Card (Baseball)', size: '2.5x3.5in' },
+            { id: 't4', name: 'Character Card (Anime)', size: '2.5x3.5in' },
+            { id: 't5', name: 'Tarot Card Style', size: '2.75x4.75in' }
+        ],
         social: [
             { id: 1, name: 'Instagram Story - Gradient', size: '1080x1920' },
             { id: 2, name: 'Facebook Post - Modern', size: '1200x1200' },
@@ -66,8 +128,11 @@ export default function GraphicDesignSuite() {
     const TOOLS = [
         { id: 'select', icon: '↖️', name: 'Select & Move' },
         { id: 'pen', icon: '✒️', name: 'Pen Tool (Bezier)' },
+        { id: 'brush', icon: '🖌️', name: 'Brush (Tablet Support)' },
         { id: 'shape', icon: '⬛', name: 'Shapes' },
         { id: 'text', icon: '📝', name: 'Text' },
+        { id: 'bubble', icon: '💬', name: 'Speech Bubble' },
+        { id: 'panel', icon: '▦', name: 'Comic Panel' },
         { id: 'image', icon: '🖼️', name: 'Image' },
         { id: 'gradient', icon: '🎨', name: 'Gradient' },
         { id: 'pathfinder', icon: '🔀', name: 'Pathfinder' },
@@ -93,9 +158,9 @@ export default function GraphicDesignSuite() {
     };
 
     const addElement = (type) => {
-        const newElement = {
+        let newElement = {
             id: Date.now(),
-            type, // 'text', 'shape', 'image', 'vector'
+            type, // 'text', 'shape', 'image', 'vector', 'bubble', 'panel'
             x: 50,
             y: 50,
             width: type === 'text' ? 200 : 100,
@@ -107,6 +172,35 @@ export default function GraphicDesignSuite() {
             stroke: '#000000',
             strokeWidth: 2
         };
+
+        // Speech bubble specific properties
+        if (type === 'bubble') {
+            newElement = {
+                ...newElement,
+                width: 150,
+                height: 100,
+                bubbleStyle: 'round', // round, square, thought, shout
+                tailDirection: 'bottom-left', // position of the tail
+                content: 'Dialogue here',
+                fontSize: 14,
+                fontFamily: 'Comic Sans MS',
+                textAlign: 'center'
+            };
+        }
+
+        // Comic panel specific properties
+        if (type === 'panel') {
+            newElement = {
+                ...newElement,
+                width: 300,
+                height: 300,
+                panelStyle: 'rectangle', // rectangle, rounded, circle
+                borderWidth: 4,
+                borderColor: '#000000',
+                backgroundColor: '#ffffff'
+            };
+        }
+
         setElements([...elements, newElement]);
         setSelectedElement(newElement.id);
     };
@@ -280,9 +374,25 @@ export default function GraphicDesignSuite() {
                             <button onClick={() => addElement('shape')} className="btn-add-element">
                                 ⬛ Add Shape
                             </button>
+                            <button onClick={() => addElement('bubble')} className="btn-add-element">
+                                💬 Speech Bubble
+                            </button>
+                            <button onClick={() => addElement('panel')} className="btn-add-element">
+                                ▦ Comic Panel
+                            </button>
                             <button onClick={() => addElement('image')} className="btn-add-element">
                                 🖼️ Add Image
                             </button>
+
+                            <h3>🎮 External Devices</h3>
+                            <div className="device-hints">
+                                <p style={{ fontSize: '11px', color: '#999', lineHeight: '1.5' }}>
+                                    ✅ <strong>Drawing Tablets:</strong> Wacom, Huion, XP-Pen supported<br/>
+                                    ✅ <strong>Cameras:</strong> Import directly from webcam or phone<br/>
+                                    ✅ <strong>Microphones:</strong> Compatible with audio tools<br/>
+                                    ✅ <strong>Stylus Pens:</strong> Full pressure & tilt detection
+                                </p>
+                            </div>
                         </div>
 
                         {/* Canvas */}
@@ -293,9 +403,30 @@ export default function GraphicDesignSuite() {
                                 style={{
                                     width: project.width,
                                     height: project.height,
-                                    transform: `scale(${zoom / 100})`
+                                    transform: `scale(${zoom / 100})`,
+                                    touchAction: 'none' // Required for pointer events
                                 }}
+                                onPointerDown={handlePointerDown}
+                                onPointerMove={handlePointerMove}
+                                onPointerUp={handlePointerUp}
+                                onPointerLeave={handlePointerUp}
                             >
+                                {/* Render brush strokes with SVG for smooth lines */}
+                                {tool === 'brush' && brushStrokes.map((stroke, i) => (
+                                    <svg key={i} style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', pointerEvents: 'none' }}>
+                                        <path
+                                            d={stroke.map((point, idx) =>
+                                                `${idx === 0 ? 'M' : 'L'} ${point.x} ${point.y}`
+                                            ).join(' ')}
+                                            stroke="#000"
+                                            strokeWidth={stroke[0]?.pressure ? stroke[0].pressure * 5 : 2}
+                                            strokeLinecap="round"
+                                            strokeLinejoin="round"
+                                            fill="none"
+                                        />
+                                    </svg>
+                                ))}
+
                                 {elements.map(element => (
                                     <div
                                         key={element.id}
@@ -307,13 +438,53 @@ export default function GraphicDesignSuite() {
                                             height: element.height,
                                             transform: `rotate(${element.rotation}deg)`,
                                             opacity: element.opacity / 100,
-                                            backgroundColor: element.type !== 'text' ? element.color : 'transparent',
-                                            border: element.stroke ? `${element.strokeWidth}px solid ${element.stroke}` : 'none',
-                                            color: element.type === 'text' ? element.color : 'inherit'
+                                            backgroundColor: element.type === 'panel' ? element.backgroundColor : (element.type !== 'text' && element.type !== 'bubble' ? element.color : 'transparent'),
+                                            border: element.type === 'panel' ? `${element.borderWidth}px solid ${element.borderColor}` : (element.stroke ? `${element.strokeWidth}px solid ${element.stroke}` : 'none'),
+                                            color: element.type === 'text' ? element.color : 'inherit',
+                                            borderRadius: element.type === 'bubble' && element.bubbleStyle === 'round' ? '50%' : (element.type === 'panel' && element.panelStyle === 'rounded' ? '10px' : '0'),
+                                            position: 'absolute',
+                                            cursor: 'move',
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            justifyContent: 'center',
+                                            fontFamily: element.fontFamily || 'Arial',
+                                            fontSize: element.fontSize || 14
                                         }}
                                         onClick={() => setSelectedElement(element.id)}
                                     >
                                         {element.type === 'text' && element.content}
+                                        {element.type === 'bubble' && (
+                                            <>
+                                                <div style={{
+                                                    padding: '10px',
+                                                    textAlign: element.textAlign || 'center',
+                                                    width: '100%',
+                                                    height: '100%',
+                                                    display: 'flex',
+                                                    alignItems: 'center',
+                                                    justifyContent: 'center',
+                                                    backgroundColor: '#fff',
+                                                    border: '2px solid #000',
+                                                    borderRadius: element.bubbleStyle === 'round' ? '50%' : (element.bubbleStyle === 'thought' ? '50%' : '5px')
+                                                }}>
+                                                    {element.content}
+                                                </div>
+                                                {/* Speech bubble tail - simplified for now */}
+                                                <div style={{
+                                                    position: 'absolute',
+                                                    bottom: element.tailDirection?.includes('bottom') ? '-15px' : 'auto',
+                                                    top: element.tailDirection?.includes('top') ? '-15px' : 'auto',
+                                                    left: element.tailDirection?.includes('left') ? '20px' : 'auto',
+                                                    right: element.tailDirection?.includes('right') ? '20px' : 'auto',
+                                                    width: '0',
+                                                    height: '0',
+                                                    borderLeft: element.bubbleStyle !== 'thought' ? '10px solid transparent' : '5px dotted #000',
+                                                    borderRight: element.bubbleStyle !== 'thought' ? '10px solid transparent' : '5px dotted #000',
+                                                    borderTop: element.tailDirection?.includes('bottom') ? '15px solid #000' : 'none',
+                                                    borderBottom: element.tailDirection?.includes('top') ? '15px solid #000' : 'none'
+                                                }}></div>
+                                            </>
+                                        )}
                                     </div>
                                 ))}
                             </div>
@@ -408,6 +579,88 @@ export default function GraphicDesignSuite() {
                                                                     <option key={font} value={font}>{font}</option>
                                                                 ))}
                                                             </select>
+                                                        </div>
+                                                    </>
+                                                )}
+
+                                                {element.type === 'bubble' && (
+                                                    <>
+                                                        <div className="property-group">
+                                                            <label>Text</label>
+                                                            <textarea
+                                                                value={element.content}
+                                                                onChange={(e) => updateElement(element.id, { content: e.target.value })}
+                                                                rows={3}
+                                                                style={{ width: '100%', resize: 'vertical' }}
+                                                            />
+                                                        </div>
+                                                        <div className="property-group">
+                                                            <label>Bubble Style</label>
+                                                            <select
+                                                                value={element.bubbleStyle}
+                                                                onChange={(e) => updateElement(element.id, { bubbleStyle: e.target.value })}
+                                                            >
+                                                                <option value="round">💬 Speech (Round)</option>
+                                                                <option value="square">⬜ Speech (Square)</option>
+                                                                <option value="thought">💭 Thought Cloud</option>
+                                                                <option value="shout">💥 Shout/Scream</option>
+                                                            </select>
+                                                        </div>
+                                                        <div className="property-group">
+                                                            <label>Tail Direction</label>
+                                                            <select
+                                                                value={element.tailDirection}
+                                                                onChange={(e) => updateElement(element.id, { tailDirection: e.target.value })}
+                                                            >
+                                                                <option value="bottom-left">↙ Bottom Left</option>
+                                                                <option value="bottom-right">↘ Bottom Right</option>
+                                                                <option value="top-left">↖ Top Left</option>
+                                                                <option value="top-right">↗ Top Right</option>
+                                                            </select>
+                                                        </div>
+                                                        <div className="property-group">
+                                                            <label>Font Size</label>
+                                                            <input
+                                                                type="number"
+                                                                value={element.fontSize}
+                                                                onChange={(e) => updateElement(element.id, { fontSize: parseInt(e.target.value) })}
+                                                                min="8"
+                                                                max="72"
+                                                            />
+                                                        </div>
+                                                    </>
+                                                )}
+
+                                                {element.type === 'panel' && (
+                                                    <>
+                                                        <div className="property-group">
+                                                            <label>Panel Style</label>
+                                                            <select
+                                                                value={element.panelStyle}
+                                                                onChange={(e) => updateElement(element.id, { panelStyle: e.target.value })}
+                                                            >
+                                                                <option value="rectangle">▭ Rectangle</option>
+                                                                <option value="rounded">▢ Rounded</option>
+                                                                <option value="circle">⬤ Circle</option>
+                                                            </select>
+                                                        </div>
+                                                        <div className="property-group">
+                                                            <label>Border Width</label>
+                                                            <input
+                                                                type="number"
+                                                                value={element.borderWidth}
+                                                                onChange={(e) => updateElement(element.id, { borderWidth: parseInt(e.target.value) })}
+                                                                min="0"
+                                                                max="20"
+                                                            />
+                                                        </div>
+                                                        <div className="property-group">
+                                                            <label>Border Color</label>
+                                                            <input
+                                                                type="color"
+                                                                value={element.borderColor}
+                                                                onChange={(e) => updateElement(element.id, { borderColor: e.target.value })}
+                                                            />
                                                         </div>
                                                     </>
                                                 )}

@@ -17,7 +17,6 @@ import { ContentPlanner } from "./components/ContentPlanner";
 import { InfluencerVerification } from "./components/InfluencerVerification";
 import { FamilyAccessSystem } from "./components/FamilyAccessSystem";
 import { AudioProductionStudio } from "./components/AudioProductionStudio";
-import { ComicBookCreator } from "./components/ComicBookCreator";
 import { GraphicDesignStudio } from "./components/GraphicDesignStudio";
 import { PrintOnDemand } from "./components/PrintOnDemand";
 import { TradingCardDesigner } from "./components/TradingCardDesigner";
@@ -115,7 +114,6 @@ export const CreatorDashboard = ({ userId = "demo_user", ipAddress = "127.0.0.1"
         <TabsTrigger value="cgi-video">🎬 CGI Video</TabsTrigger>
         <TabsTrigger value="photos">📸 Photo Tools</TabsTrigger>
         <TabsTrigger value="music">🎵 Audio Production</TabsTrigger>
-        <TabsTrigger value="comics">📚 Comic Creator</TabsTrigger>
         <TabsTrigger value="design">🎨 Graphic Design</TabsTrigger>
         <TabsTrigger value="planner">📅 Content Planner</TabsTrigger>
         <TabsTrigger value="arvr">🎭 AR/VR Studio</TabsTrigger>
@@ -166,11 +164,6 @@ export const CreatorDashboard = ({ userId = "demo_user", ipAddress = "127.0.0.1"
       <TabsContent value="music">
         <ToolLockGate userId={userId} toolId="audio">
           <AudioProductionStudio userId={userId} />
-        </ToolLockGate>
-      </TabsContent>
-      <TabsContent value="comics">
-        <ToolLockGate userId={userId} toolId="comics">
-          <ComicBookCreator userId={userId} />
         </ToolLockGate>
       </TabsContent>
       <TabsContent value="design">
