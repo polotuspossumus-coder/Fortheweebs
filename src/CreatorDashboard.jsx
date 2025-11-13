@@ -30,7 +30,6 @@ import { getUserBalance } from "./utils/toolUnlockSystem";
 import { ProfileCreator } from "./components/ProfileCreator";
 import { AIVideoGenerator } from "./components/AIVideoGenerator";
 import { ProPhotoEditor } from "./components/ProPhotoEditor";
-import { SmartScreenshotSorter } from "./components/SmartScreenshotSorter";
 import { AIBugFixer } from "./components/AIBugFixer";
 import { LanguageSelector } from "./components/LanguageSelector";
 import { t } from "./utils/i18n";
@@ -114,7 +113,6 @@ export const CreatorDashboard = ({ userId = "demo_user", ipAddress = "127.0.0.1"
         <TabsTrigger value="bug-fixer">🐛 Report Bug</TabsTrigger>
         <TabsTrigger value="profile">👤 My Profile</TabsTrigger>
         <TabsTrigger value="cgi-video">🎬 CGI Video</TabsTrigger>
-        <TabsTrigger value="screenshot-sorter">📸 Screenshot Sorter</TabsTrigger>
         <TabsTrigger value="photos">📸 Photo Tools</TabsTrigger>
         <TabsTrigger value="music">🎵 Audio Production</TabsTrigger>
         <TabsTrigger value="comics">📚 Comic Creator</TabsTrigger>
@@ -159,15 +157,6 @@ export const CreatorDashboard = ({ userId = "demo_user", ipAddress = "127.0.0.1"
         <ToolLockGate userId={userId} toolId="cgi">
           <AIVideoGenerator userId={userId} tier={tier} />
         </ToolLockGate>
-      </TabsContent>
-      <TabsContent value="screenshot-sorter">
-        <SmartScreenshotSorter
-          userId={userId}
-          onProcessComplete={(processed) => {
-            // Optionally open ProPhotoEditor after sorting
-            console.log('Processed images:', processed);
-          }}
-        />
       </TabsContent>
       <TabsContent value="photos">
         <ToolLockGate userId={userId} toolId="photo">
