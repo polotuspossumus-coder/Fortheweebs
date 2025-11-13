@@ -5,21 +5,35 @@ const { createClient } = require('@supabase/supabase-js');
 
 const router = express.Router();
 
-// Initialize OpenAI
-const openai = new OpenAI({
-    apiKey: process.env.OPENAI_API_KEY
-});
+// Check if API keys are configured
+const hasOpenAI = !!process.env.OPENAI_API_KEY;
+const hasGitHub = !!process.env.GITHUB_TOKEN;
+const hasSupabase = !!(process.env.VITE_SUPABASE_URL && (process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.VITE_SUPABASE_ANON_KEY));
 
-// Initialize GitHub
-const octokit = new Octokit({
-    auth: process.env.GITHUB_TOKEN
-});
+// Initialize OpenAI (only if key exists)
+let openai;
+if (hasOpenAI) {
+    openai = new OpenAI({
+        apiKey: process.env.OPENAI_API_KEY
+    });
+}
 
-// Initialize Supabase
-const supabase = createClient(
-    process.env.VITE_SUPABASE_URL,
-    process.env.SUPABASE_SERVICE_ROLE_KEY
-);
+// Initialize GitHub (only if token exists)
+let octokit;
+if (hasGitHub) {
+    octokit = new Octokit({
+        auth: process.env.GITHUB_TOKEN
+    });
+}
+
+// Initialize Supabase (only if configured)
+let supabase;
+if (hasSupabase) {
+    supabase = createClient(
+        process.env.VITE_SUPABASE_URL,
+        process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.VITE_SUPABASE_ANON_KEY
+    );
+}
 
 /**
  * Analyze Bug Screenshot with GPT-4 Vision

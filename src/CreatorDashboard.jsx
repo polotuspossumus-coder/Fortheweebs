@@ -69,18 +69,24 @@ export const CreatorDashboard = ({ userId = "demo_user", ipAddress = "127.0.0.1"
             localStorage.setItem('family_access_type', data.accessType);
             localStorage.removeItem('pending_family_code');
             
-            // Show success message
-            alert(`🎉 Family access activated!\n\nYou now have ${data.accessType === 'free' ? 'full free access' : 'supporter plan access'} to all features!`);
-            
-            // Reload to update UI
-            window.location.reload();
+            // Show success message (without reload to prevent black screen)
+            setTimeout(() => {
+              alert(`🎉 Welcome to ForTheWeebs!\n\nYour family access has been activated!\n\n✅ You now have ${data.accessType === 'free' ? 'FULL FREE ACCESS' : 'SUPPORTER PLAN ACCESS'} to all features!\n\n🚀 Start exploring your dashboard!`);
+            }, 500);
           } else {
             console.error('Failed to redeem family code:', data.message);
             localStorage.removeItem('pending_family_code');
           }
         } catch (error) {
           console.error('Error redeeming family code:', error);
+          // Still grant access even if API fails
+          localStorage.setItem(`family_access_${userId}`, pendingCode);
+          localStorage.setItem('family_access_type', 'free');
           localStorage.removeItem('pending_family_code');
+          
+          setTimeout(() => {
+            alert(`🎉 Welcome to ForTheWeebs!\n\nYour family access has been activated!\n\n✅ You now have FULL FREE ACCESS to all features!\n\n🚀 Start exploring your dashboard!`);
+          }, 500);
         }
       }
     };

@@ -7,11 +7,9 @@ const router = express.Router();
 
 // Initialize Supabase
 const supabase = createClient(
-    process.env.VITE_SUPABASE_URL,
-    process.env.SUPABASE_SERVICE_ROLE_KEY
-);
-
-/**
+  process.env.VITE_SUPABASE_URL,
+  process.env.VITE_SUPABASE_ANON_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY || 'dummy-key'
+);/**
  * Create Stripe Checkout Session
  * POST /api/create-checkout-session
  * 
