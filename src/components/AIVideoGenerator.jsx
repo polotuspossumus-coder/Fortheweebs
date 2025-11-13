@@ -11,6 +11,9 @@ export const AIVideoGenerator = ({ userId, tier }) => {
     const [isDragging, setIsDragging] = useState(false);
     const fileInputRef = useRef(null);
 
+    // Only show dev warnings in development mode
+    const isDev = import.meta.env.DEV;
+
     // Video style presets
     const VIDEO_STYLES = [
         { id: 'anime', name: 'Anime/Manga', description: 'Japanese animation style with vibrant colors' },
@@ -732,31 +735,33 @@ export const AIVideoGenerator = ({ userId, tier }) => {
                 </div>
             </div>
 
-            {/* Backend Integration Notice */}
-            <div style={{
-                marginTop: '30px',
-                padding: '20px',
-                background: 'rgba(255, 255, 0, 0.1)',
-                border: '1px solid rgba(255, 255, 0, 0.3)',
-                borderRadius: '12px',
-                fontSize: '14px',
-                color: '#ffff00',
-            }}>
-                <h3 style={{ marginBottom: '10px', fontSize: '16px' }}>⚠️ Backend Integration Required</h3>
-                <p style={{ color: '#aaa', lineHeight: '1.6' }}>
-                    This UI is complete and ready. To enable actual AI video generation, you'll need to:
-                </p>
-                <ul style={{ paddingLeft: '20px', marginTop: '10px', lineHeight: '1.8', color: '#aaa' }}>
-                    <li>Set up backend API endpoint (<code style={{ color: '#0ff' }}>/api/generate-video</code>)</li>
-                    <li>Integrate AI model (Stable Diffusion Video, Runway ML, Pika Labs, or similar)</li>
-                    <li>Handle file uploads and processing pipeline</li>
-                    <li>Store generated videos (cloud storage)</li>
-                    <li>Implement progress tracking (WebSocket or polling)</li>
-                </ul>
-                <p style={{ marginTop: '10px', color: '#888', fontSize: '12px' }}>
-                    Currently showing simulated generation. Replace the TODO section in <code>handleGenerate()</code> with your API call.
-                </p>
-            </div>
+            {/* Backend Integration Notice - Only show in development */}
+            {isDev && (
+                <div style={{
+                    marginTop: '30px',
+                    padding: '20px',
+                    background: 'rgba(255, 255, 0, 0.1)',
+                    border: '1px solid rgba(255, 255, 0, 0.3)',
+                    borderRadius: '12px',
+                    fontSize: '14px',
+                    color: '#ffff00',
+                }}>
+                    <h3 style={{ marginBottom: '10px', fontSize: '16px' }}>⚠️ Backend Integration Required</h3>
+                    <p style={{ color: '#aaa', lineHeight: '1.6' }}>
+                        This UI is complete and ready. To enable actual AI video generation, you'll need to:
+                    </p>
+                    <ul style={{ paddingLeft: '20px', marginTop: '10px', lineHeight: '1.8', color: '#aaa' }}>
+                        <li>Set up backend API endpoint (<code style={{ color: '#0ff' }}>/api/generate-video</code>)</li>
+                        <li>Integrate AI model (Stable Diffusion Video, Runway ML, Pika Labs, or similar)</li>
+                        <li>Handle file uploads and processing pipeline</li>
+                        <li>Store generated videos (cloud storage)</li>
+                        <li>Implement progress tracking (WebSocket or polling)</li>
+                    </ul>
+                    <p style={{ marginTop: '10px', color: '#888', fontSize: '12px' }}>
+                        Currently showing simulated generation. Replace the TODO section in <code>handleGenerate()</code> with your API call.
+                    </p>
+                </div>
+            )}
         </div>
     );
 };
