@@ -1,4 +1,5 @@
 import React, { useState, useRef } from 'react';
+import JSZip from 'jszip';
 
 /**
  * MassPhotoProcessor - Handle 12,000+ images
@@ -27,6 +28,10 @@ export function MassPhotoProcessor({ userId }) {
         autoEnhance: true,
         aspectRatio: '16:9',
         alignment: 'center',
+        splitGrids: false, // NEW: Auto-detect and split image grids
+        gridDetection: 'auto', // auto, 2x2, 3x3, 4x4, custom
+        gridRows: 2,
+        gridCols: 2,
         deleteJunk: true,
         minSize: 100, // KB
         maxSize: 50000, // KB (50MB)
@@ -187,6 +192,64 @@ export function MassPhotoProcessor({ userId }) {
                     canvas.height = img.height;
                     ctx.drawImage(img, 0, 0);
 
+                    // Grid splitting if enabled
+                    if (params.splitGrids) {
+                        let rows = params.gridRows;
+                        let cols = params.gridCols;
+
+                        // Auto-detect grid
+                        if (params.gridDetection === 'auto') {
+                            const detected = detectGrid(canvas, ctx);
+                            if (detected.rows > 1 || detected.cols > 1) {
+                                rows = detected.rows;
+                                cols = detected.cols;
+                            }
+                        } else if (params.gridDetection === '2x2') {
+                            rows = cols = 2;
+                        } else if (params.gridDetection === '3x3') {
+                            rows = cols = 3;
+                        } else if (params.gridDetection === '4x4') {
+                            rows = cols = 4;
+                        }
+
+                        // Split into cells
+                        const cells = splitGrid(canvas, ctx, rows, cols);
+                        
+                        // Process each cell
+                        const cellBlobs = [];
+                        let processed = 0;
+
+                        cells.forEach((cellCanvas, idx) => {
+                            const cellCtx = cellCanvas.getContext('2d');
+
+                            // Auto-crop if enabled
+                            if (params.autoCrop) {
+                                applyCrop(cellCanvas, cellCtx, cellCanvas);
+                            }
+
+                            // Auto-enhance if enabled
+                            if (params.autoEnhance) {
+                                applyEnhancement(cellCanvas, cellCtx);
+                            }
+
+                            // Convert to blob
+                            cellCanvas.toBlob(
+                                (blob) => {
+                                    cellBlobs.push({ blob, index: idx });
+                                    processed++;
+                                    if (processed === cells.length) {
+                                        resolve(cellBlobs); // Return array of blobs
+                                    }
+                                },
+                                `image/${params.outputFormat}`,
+                                params.outputQuality / 100
+                            );
+                        });
+
+                        return; // Exit early for grid processing
+                    }
+
+                    // Standard single-image processing
                     // Auto-crop if enabled
                     if (params.autoCrop) {
                         applyCrop(canvas, ctx, img);
@@ -254,6 +317,94 @@ export function MassPhotoProcessor({ userId }) {
         canvas.width = targetWidth;
         canvas.height = targetHeight;
         ctx.putImageData(imageData, 0, 0);
+    };
+
+    // GRID SPLITTING - Detect and split multi-image grids
+    const detectGrid = (canvas, ctx) => {
+        const width = canvas.width;
+        const height = canvas.height;
+        const imageData = ctx.getImageData(0, 0, width, height);
+        const data = imageData.data;
+
+        // Scan for consistent white/black lines (grid separators)
+        const horizontalLines = [];
+        const verticalLines = [];
+
+        // Check horizontal lines
+        for (let y = 0; y < height; y++) {
+            let whiteCells = 0;
+            for (let x = 0; x < width; x++) {
+                const idx = (y * width + x) * 4;
+                const brightness = (data[idx] + data[idx + 1] + data[idx + 2]) / 3;
+                if (brightness > 240 || brightness < 15) whiteCells++;
+            }
+            if (whiteCells / width > 0.95) { // 95% white/black = separator
+                horizontalLines.push(y);
+            }
+        }
+
+        // Check vertical lines
+        for (let x = 0; x < width; x++) {
+            let whiteCells = 0;
+            for (let y = 0; y < height; y++) {
+                const idx = (y * width + x) * 4;
+                const brightness = (data[idx] + data[idx + 1] + data[idx + 2]) / 3;
+                if (brightness > 240 || brightness < 15) whiteCells++;
+            }
+            if (whiteCells / height > 0.95) {
+                verticalLines.push(x);
+            }
+        }
+
+        // Filter out adjacent lines (keep only significant gaps)
+        const filterLines = (lines, minGap = 50) => {
+            const filtered = [];
+            for (let i = 0; i < lines.length; i++) {
+                if (i === 0 || lines[i] - lines[i - 1] > minGap) {
+                    filtered.push(lines[i]);
+                }
+            }
+            return filtered;
+        };
+
+        const hLines = filterLines(horizontalLines, height * 0.1);
+        const vLines = filterLines(verticalLines, width * 0.1);
+
+        // Return grid dimensions
+        return {
+            rows: hLines.length + 1,
+            cols: vLines.length + 1,
+            horizontalLines: hLines,
+            verticalLines: vLines
+        };
+    };
+
+    const splitGrid = (canvas, ctx, rows, cols) => {
+        const cellWidth = Math.floor(canvas.width / cols);
+        const cellHeight = Math.floor(canvas.height / rows);
+        const cells = [];
+
+        for (let row = 0; row < rows; row++) {
+            for (let col = 0; col < cols; col++) {
+                const cellCanvas = document.createElement('canvas');
+                cellCanvas.width = cellWidth;
+                cellCanvas.height = cellHeight;
+                const cellCtx = cellCanvas.getContext('2d');
+
+                const x = col * cellWidth;
+                const y = row * cellHeight;
+
+                cellCtx.drawImage(
+                    canvas,
+                    x, y, cellWidth, cellHeight,
+                    0, 0, cellWidth, cellHeight
+                );
+
+                cells.push(cellCanvas);
+            }
+        }
+
+        return cells;
     };
 
     const applyEnhancement = (canvas, ctx) => {
@@ -367,15 +518,32 @@ export function MassPhotoProcessor({ userId }) {
                     continue;
                 }
 
-                newStats.processed++;
-                processedResults.push({
-                    name: file.name,
-                    status: 'success',
-                    reason: 'Processed successfully',
-                    size: file.size,
-                    newSize: processedBlob.size,
-                    blob: processedBlob
-                });
+                // Handle grid splits (returns array) or single image (returns blob)
+                if (Array.isArray(processedBlob)) {
+                    // Grid was split into multiple images
+                    processedBlob.forEach((cell, cellIdx) => {
+                        newStats.processed++;
+                        processedResults.push({
+                            name: `${file.name.split('.')[0]}_cell_${cellIdx + 1}`,
+                            status: 'success',
+                            reason: `Grid split (${cellIdx + 1}/${processedBlob.length})`,
+                            size: file.size,
+                            newSize: cell.blob.size,
+                            blob: cell.blob
+                        });
+                    });
+                } else {
+                    // Single image processed
+                    newStats.processed++;
+                    processedResults.push({
+                        name: file.name,
+                        status: 'success',
+                        reason: 'Processed successfully',
+                        size: file.size,
+                        newSize: processedBlob.size,
+                        blob: processedBlob
+                    });
+                }
 
             } catch (err) {
                 newStats.errors++;
@@ -397,19 +565,37 @@ export function MassPhotoProcessor({ userId }) {
         alert(`✅ Processing complete!\n\nProcessed: ${newStats.processed}\nDuplicates: ${newStats.duplicates}\nDeleted: ${newStats.deleted}\nErrors: ${newStats.errors}`);
     };
 
-    const downloadAll = () => {
+    const downloadAll = async () => {
         const successfulResults = results.filter(r => r.status === 'success' && r.blob);
+        
+        if (successfulResults.length === 0) {
+            alert('No processed images to download');
+            return;
+        }
 
+        // Create ZIP file
+        const zip = new JSZip();
+        
         successfulResults.forEach((result, index) => {
-            const url = URL.createObjectURL(result.blob);
-            const link = document.createElement('a');
-            link.href = url;
-            link.download = `processed_${index + 1}_${result.name.split('.')[0]}.${params.outputFormat}`;
-            link.click();
-            URL.revokeObjectURL(url);
+            const filename = `processed_${index + 1}_${result.name.split('.')[0]}.${params.outputFormat}`;
+            zip.file(filename, result.blob);
         });
 
-        alert(`Downloaded ${successfulResults.length} processed images!`);
+        // Generate ZIP and download
+        const zipBlob = await zip.generateAsync({ 
+            type: 'blob',
+            compression: 'DEFLATE',
+            compressionOptions: { level: 6 }
+        });
+
+        const url = URL.createObjectURL(zipBlob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = `processed_photos_${Date.now()}.zip`;
+        link.click();
+        URL.revokeObjectURL(url);
+
+        alert(`Downloaded ${successfulResults.length} processed images in ZIP file!`);
     };
 
     const downloadReport = () => {
@@ -625,6 +811,64 @@ export function MassPhotoProcessor({ userId }) {
                                                 <option value="bottom">Bottom (Cut Top)</option>
                                             </select>
                                         </div>
+                                    </div>
+                                )}
+                            </div>
+
+                            {/* Grid Splitting */}
+                            <div style={sectionStyle}>
+                                <label style={labelStyle}>
+                                    <input
+                                        type="checkbox"
+                                        checked={params.splitGrids}
+                                        onChange={(e) => setParams({ ...params, splitGrids: e.target.checked })}
+                                    />
+                                    <span style={{ marginLeft: '10px' }}>✨ Split Image Grids</span>
+                                </label>
+
+                                {params.splitGrids && (
+                                    <div style={{ marginLeft: '28px', marginTop: '10px' }}>
+                                        <div style={{ marginBottom: '10px' }}>
+                                            <label style={{ fontSize: '14px' }}>Grid Detection:</label>
+                                            <select
+                                                value={params.gridDetection}
+                                                onChange={(e) => setParams({ ...params, gridDetection: e.target.value })}
+                                                style={selectStyle}
+                                            >
+                                                <option value="auto">🤖 Auto-Detect (Smart)</option>
+                                                <option value="2x2">2×2 Grid</option>
+                                                <option value="3x3">3×3 Grid</option>
+                                                <option value="4x4">4×4 Grid</option>
+                                                <option value="custom">Custom Grid</option>
+                                            </select>
+                                        </div>
+
+                                        {params.gridDetection === 'custom' && (
+                                            <div style={{ display: 'flex', gap: '10px', marginTop: '10px' }}>
+                                                <div>
+                                                    <label style={{ fontSize: '14px' }}>Rows:</label>
+                                                    <input
+                                                        type="number"
+                                                        min="1"
+                                                        max="10"
+                                                        value={params.gridRows}
+                                                        onChange={(e) => setParams({ ...params, gridRows: parseInt(e.target.value) })}
+                                                        style={{ ...selectStyle, width: '60px' }}
+                                                    />
+                                                </div>
+                                                <div>
+                                                    <label style={{ fontSize: '14px' }}>Cols:</label>
+                                                    <input
+                                                        type="number"
+                                                        min="1"
+                                                        max="10"
+                                                        value={params.gridCols}
+                                                        onChange={(e) => setParams({ ...params, gridCols: parseInt(e.target.value) })}
+                                                        style={{ ...selectStyle, width: '60px' }}
+                                                    />
+                                                </div>
+                                            </div>
+                                        )}
                                     </div>
                                 )}
                             </div>
