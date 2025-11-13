@@ -47,16 +47,16 @@
 
 .professional-header button:hover {
     background: #005a9e;
+}
 
+/* Professional Workspace Layout */
+.professional-workspace {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+}
 
-    /* Professional Workspace Layout */
-    .professional-workspace {
-        display: flex;
-        flex: 1;
-        overflow: hidden;
-    }
-
-    .left-toolbar {
+.left-toolbar {
         width: 56px;
         background: #252525;
         border-right: 1px solid #3e3e3e;
