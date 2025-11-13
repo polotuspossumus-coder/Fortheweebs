@@ -87,6 +87,19 @@
       z-index: 1;
     }
 
+    #root {
+      z-index: 1000 !important;
+    }
+
+    #landing-page.hidden {
+      display: none !important;
+      visibility: hidden !important;
+      opacity: 0 !important;
+      pointer-events: none !important;
+      position: absolute !important;
+      z-index: -1 !important;
+    }
+
     .hero {
       text-align: center;
       padding: 120px 20px 100px;
@@ -149,6 +162,8 @@
       justify-content: center;
       flex-wrap: wrap;
       animation: fadeInUp 1.2s ease;
+      position: relative;
+      z-index: 10;
     }
 
     .btn {
@@ -162,6 +177,8 @@
       text-decoration: none;
       display: inline-block;
       letter-spacing: -0.01em;
+      position: relative;
+      z-index: 10;
     }
 
     .btn-primary {
@@ -914,19 +931,12 @@
     if (showApp) {
       const landingPage = document.getElementById('landing-page');
       if (landingPage) {
-        landingPage.style.display = 'none';
-        landingPage.style.visibility = 'hidden';
-        landingPage.style.opacity = '0';
-        landingPage.style.pointerEvents = 'none';
-        landingPage.style.position = 'absolute';
-        landingPage.style.zIndex = '-1';
+        landingPage.classList.add('hidden');
       }
       const rootEl = document.getElementById('root');
       if (rootEl) {
         rootEl.style.display = 'block';
         rootEl.style.minHeight = '100vh';
-        rootEl.style.position = 'relative';
-        rootEl.style.zIndex = '1000';
       }
       document.body.style.background = '#1a1a2e';
     } else {
@@ -940,19 +950,12 @@
       if (params2.get('app') === 'true' || window.location.search) {
         const landingPage = document.getElementById('landing-page');
         if (landingPage) {
-          landingPage.style.display = 'none';
-          landingPage.style.visibility = 'hidden';
-          landingPage.style.opacity = '0';
-          landingPage.style.pointerEvents = 'none';
-          landingPage.style.position = 'absolute';
-          landingPage.style.zIndex = '-1';
+          landingPage.classList.add('hidden');
         }
         const rootEl = document.getElementById('root');
         if (rootEl) {
           rootEl.style.display = 'block';
           rootEl.style.minHeight = '100vh';
-          rootEl.style.position = 'relative';
-          rootEl.style.zIndex = '1000';
         }
         document.body.style.background = '#1a1a2e';
       }
