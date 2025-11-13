@@ -78,8 +78,8 @@ export default function GraphicDesignSuite() {
         { id: 'poster', name: '📄 Posters & Flyers', count: 1500 },
         { id: 'business', name: '💼 Business Cards', count: 800 },
         { id: 'presentation', name: '📊 Presentations', count: 1000 },
-        { id: 'youtube', name: '🎬 YouTube Thumbnails', count: 900 },
-        { id: 'twitch', name: '🎮 Twitch Overlays', count: 600 },
+        { id: 'video', name: '🎬 Video Thumbnails', count: 900 },
+        { id: 'streaming', name: '🎮 Stream Overlays', count: 600 },
         { id: 'merch', name: '👕 Merch Designs', count: 700 },
         { id: 'invitation', name: '💌 Invitations', count: 800 }
     ];
@@ -103,11 +103,25 @@ export default function GraphicDesignSuite() {
             { id: 't5', name: 'Tarot Card Style', size: '2.75x4.75in' }
         ],
         social: [
-            { id: 1, name: 'Instagram Story - Gradient', size: '1080x1920' },
-            { id: 2, name: 'Facebook Post - Modern', size: '1200x1200' },
-            { id: 3, name: 'Twitter Header - Neon', size: '1500x500' },
-            { id: 4, name: 'LinkedIn Banner - Professional', size: '1584x396' },
-            { id: 5, name: 'TikTok Cover - Animated', size: '1080x1920' }
+            { id: 1, name: 'Story Format - Gradient', size: '1080x1920' },
+            { id: 2, name: 'Square Post - Modern', size: '1200x1200' },
+            { id: 3, name: 'Wide Banner - Neon', size: '1500x500' },
+            { id: 4, name: 'Professional Header', size: '1584x396' },
+            { id: 5, name: 'Vertical Cover - Animated', size: '1080x1920' }
+        ],
+        video: [
+            { id: 'v1', name: 'Widescreen Thumbnail', size: '1280x720' },
+            { id: 'v2', name: 'HD Video Thumbnail', size: '1920x1080' },
+            { id: 'v3', name: 'Clickbait Style', size: '1280x720' },
+            { id: 'v4', name: 'Gaming Thumbnail', size: '1280x720' },
+            { id: 'v5', name: 'Tutorial Thumbnail', size: '1280x720' }
+        ],
+        streaming: [
+            { id: 's1', name: 'Full Overlay Pack', size: '1920x1080' },
+            { id: 's2', name: 'Starting Soon Screen', size: '1920x1080' },
+            { id: 's3', name: 'BRB Screen', size: '1920x1080' },
+            { id: 's4', name: 'Facecam Border', size: '500x500' },
+            { id: 's5', name: 'Alert Box', size: '400x200' }
         ],
         logo: [
             { id: 6, name: 'Minimalist Tech Logo', size: '1000x1000' },
