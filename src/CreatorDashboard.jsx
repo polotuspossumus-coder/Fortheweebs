@@ -455,10 +455,12 @@ export const OverviewPanel = ({ userId }) => {
         </div>
       </div>
 
-      {/* Dev balance manager - only shows in development */}
-      <div style={{ marginTop: '20px' }}>
-        <DevBalanceManager userId={userId} />
-      </div>
+      {/* Dev balance manager - OWNER ONLY */}
+      {userId === "owner" && (
+        <div style={{ marginTop: '20px' }}>
+          <DevBalanceManager userId={userId} />
+        </div>
+      )}
     </div>
   );
 };
