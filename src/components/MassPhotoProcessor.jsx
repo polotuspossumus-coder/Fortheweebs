@@ -104,8 +104,31 @@ export function MassPhotoProcessor({ userId }) {
                 });
             } else if (item.isDirectory) {
                 const dirReader = item.createReader();
-                dirReader.readEntries(async (entries) => {
-                    for (const entry of entries) {
+                const readAllEntries = async () => {
+                    const allEntries = [];
+                    
+                    // readEntries only returns 100 at a time, so we need to call it repeatedly
+                    const readBatch = () => {
+                        return new Promise((resolveBatch) => {
+                            dirReader.readEntries(async (entries) => {
+                                if (entries.length > 0) {
+                                    allEntries.push(...entries);
+                                    // If we got 100 entries, there might be more
+                                    if (entries.length === 100) {
+                                        await readBatch();
+                                    }
+                                }
+                                resolveBatch();
+                            });
+                        });
+                    };
+                    
+                    await readBatch();
+                    return allEntries;
+                };
+                
+                readAllEntries().then(async (allEntries) => {
+                    for (const entry of allEntries) {
                         await traverseFileTree(entry, filesList);
                     }
                     resolve();
