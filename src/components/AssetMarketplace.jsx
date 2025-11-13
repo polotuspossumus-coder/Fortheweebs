@@ -141,15 +141,15 @@ const AssetMarketplace = ({ userBalance = 0, onPurchase, onSell }) => {
             },
             {
                 id: 10,
-                name: 'Photoshop Actions Pack',
+                name: 'Photo Actions Pack',
                 category: 'photo',
                 price: 16.99,
                 author: 'ActionMaster',
                 rating: 4.6,
                 downloads: 27654,
                 thumbnail: '⚡',
-                description: '100 time-saving Photoshop actions',
-                tags: ['photo', 'photoshop', 'action', 'automation'],
+                description: '100 time-saving photo editing actions',
+                tags: ['photo', 'editing', 'action', 'automation'],
                 fileSize: '23 MB'
             }
         ];

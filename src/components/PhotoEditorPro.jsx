@@ -2,12 +2,12 @@ import React, { useState, useRef, useEffect } from 'react';
 import './PhotoEditorPro.css';
 
 /**
- * PhotoEditorPro - Destroys Photoshop for 99% of use cases
+ * PhotoEditorPro - Professional photo editor for 99% of use cases
  * 
- * Better than Photoshop because:
+ * Better than subscription-based software because:
  * - Way easier to use (no 2-week learning curve)
- * - Meme generator with templates (Photoshop doesn't have this)
- * - GIF creator built-in (Photoshop charges extra)
+ * - Meme generator with templates built-in
+ * - GIF creator built-in (no extra fees)
  * - AI-powered batch processing (way faster)
  * - Layer system (just as good, easier to understand)
  * - One-time payment vs $240/year forever

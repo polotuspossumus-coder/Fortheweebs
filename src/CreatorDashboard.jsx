@@ -381,7 +381,7 @@ export const OverviewPanel = ({ userId }) => {
             <div style={{ background: 'rgba(255,255,255,0.05)', padding: '12px', borderRadius: '8px' }}>
               <strong style={{ color: '#0ff' }}>📸 Photo Editor</strong>
               <p style={{ fontSize: '13px', opacity: 0.8, marginTop: '5px' }}>
-                Layers, masks, blend modes - full Photoshop power
+                Layers, masks, blend modes - professional editing power
               </p>
             </div>
             <div style={{ background: 'rgba(255,255,255,0.05)', padding: '12px', borderRadius: '8px' }}>

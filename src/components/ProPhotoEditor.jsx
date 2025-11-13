@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 
 /**
- * ProPhotoEditor - Full Photoshop-level editor
+ * ProPhotoEditor - Professional-level photo editor
  * Features: Layers, Masks, Blend Modes, Filters, Selection Tools, Adjustments
  * Multi-parameter editing, Non-destructive workflow
  */
@@ -72,7 +72,7 @@ export function ProPhotoEditor({ userId }) {
         { id: 'pop', name: 'Pop Art', icon: '🎭' },
     ];
 
-    // Blend modes (like Photoshop)
+    // Blend modes (professional standard)
     const BLEND_MODES = [
         'normal', 'multiply', 'screen', 'overlay', 'soft-light', 'hard-light',
         'darken', 'lighten', 'color-dodge', 'color-burn', 'difference',
@@ -388,7 +388,7 @@ export function ProPhotoEditor({ userId }) {
                     🎨 Pro Photo Editor
                 </h1>
                 <p style={{ color: '#aaa', fontSize: '14px' }}>
-                    Full Photoshop-level editing • Layers • Masks • Blend Modes • Filters
+                    Professional-level editing • Layers • Masks • Blend Modes • Filters
                 </p>
             </div>
 

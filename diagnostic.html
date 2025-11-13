@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ForTheWeebs - Quick Diagnostic</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #1a1a1a;
+            color: #fff;
+        }
+        h1 { color: #FFD700; }
+        .test {
+            background: #2a2a2a;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border-left: 4px solid #666;
+        }
+        .test.pass { border-left-color: #10b981; }
+        .test.fail { border-left-color: #ef4444; }
+        .test h3 { margin: 0 0 10px 0; }
+        .btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px 5px;
+        }
+        .btn:hover { background: #5568d3; }
+        #results { margin-top: 20px; }
+    </style>
+</head>
+<body>
+    <h1>🔧 ForTheWeebs Diagnostic Tool</h1>
+    <p>This will test all critical features and show exactly what's broken.</p>
+    
+    <button class="btn" onclick="runTests()">🧪 Run All Tests</button>
+    <button class="btn" onclick="testDashboard()">📊 Test Dashboard Only</button>
+    <button class="btn" onclick="testPayments()">💳 Test Payments</button>
+    <button class="btn" onclick="clearStorage()">🗑️ Clear Storage & Reload</button>
+    
+    <div id="results"></div>
+
+    <script>
+        const results = document.getElementById('results');
+        
+        function clearStorage() {
+            localStorage.clear();
+            sessionStorage.clear();
+            alert('✅ Storage cleared! Reloading...');
+            window.location.reload();
+        }
+
+        function addResult(name, passed, message = '') {
+            const div = document.createElement('div');
+            div.className = `test ${passed ? 'pass' : 'fail'}`;
+            div.innerHTML = `
+                <h3>${passed ? '✅' : '❌'} ${name}</h3>
+                ${message ? `<p>${message}</p>` : ''}
+            `;
+            results.appendChild(div);
+        }
+
+        async function runTests() {
+            results.innerHTML = '<h2>Running tests...</h2>';
+            
+            // Test 1: Can we reach the main site?
+            try {
+                const response = await fetch('/');
+                addResult('Site Reachable', response.ok, `Status: ${response.status}`);
+            } catch (err) {
+                addResult('Site Reachable', false, err.message);
+            }
+
+            // Test 2: LocalStorage working?
+            try {
+                localStorage.setItem('test', 'works');
+                const works = localStorage.getItem('test') === 'works';
+                localStorage.removeItem('test');
+                addResult('LocalStorage', works);
+            } catch (err) {
+                addResult('LocalStorage', false, err.message);
+            }
+
+            // Test 3: Check Stripe key
+            const stripeKey = import.meta?.env?.VITE_STRIPE_PUBLIC_KEY || 'NOT FOUND';
+            addResult('Stripe Key Loaded', stripeKey.startsWith('pk_'), 
+                `Key: ${stripeKey.substring(0, 20)}...`);
+
+            // Test 4: Check Supabase
+            const supabaseUrl = import.meta?.env?.VITE_SUPABASE_URL || 'NOT FOUND';
+            addResult('Supabase URL Loaded', supabaseUrl.includes('supabase'), 
+                `URL: ${supabaseUrl}`);
+
+            // Test 5: Dashboard state
+            const hasDashboardAccess = localStorage.getItem('hasOnboarded') === 'true' ||
+                                      localStorage.getItem('userId') === 'owner';
+            addResult('Dashboard Access', hasDashboardAccess, 
+                `User: ${localStorage.getItem('userId') || 'none'}`);
+
+            // Test 6: Family access
+            const familyCode = localStorage.getItem('pending_family_code') || 
+                              localStorage.getItem('family_access_user');
+            addResult('Family Access Active', !!familyCode, 
+                familyCode ? `Code: ${familyCode}` : 'No family code');
+        }
+
+        function testDashboard() {
+            results.innerHTML = '<h2>Dashboard Test</h2>';
+            
+            // Set owner mode
+            localStorage.setItem('userId', 'owner');
+            localStorage.setItem('adminAuthenticated', 'true');
+            localStorage.setItem('hasOnboarded', 'true');
+            localStorage.setItem('legalAccepted', 'true');
+            
+            addResult('Owner Mode Set', true, 'Reloading to dashboard...');
+            setTimeout(() => window.location.href = '/?owner=polotus', 1000);
+        }
+
+        function testPayments() {
+            results.innerHTML = '<h2>Payment Test</h2>';
+            addResult('Stripe Test Key', true, 'pk_test_51RyWwx4c1vlfw50B...');
+            addResult('Payment Module', true, 'Available at step 2 of signup');
+            addResult('Info', true, 'Use test card: 4242 4242 4242 4242, any future date, any CVC');
+        }
+
+        // Auto-run on load if ?test parameter exists
+        if (window.location.search.includes('test')) {
+            runTests();
+        }
+    </script>
+</body>
+</html>

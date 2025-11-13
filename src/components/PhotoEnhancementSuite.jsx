@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 
 /**
  * PhotoEnhancementSuite - Professional photo editing with auto-crop, pixel restoration, and enhancements
- * Competes with Photoshop, Instagram, Facebook filters
+ * Competes with professional editing software and social media filters
  * No monthly fees, no censorship
  */
 export function PhotoEnhancementSuite({ userId }) {
@@ -298,7 +298,7 @@ export function PhotoEnhancementSuite({ userId }) {
           Professional photo editing • No monthly fees • No censorship
         </p>
         <p style={{ fontSize: '14px', opacity: 0.7, marginTop: '10px' }}>
-          Competes with Photoshop, Instagram, Facebook filters
+          Competes with professional editing software and social media filters
         </p>
       </div>
 
@@ -467,7 +467,7 @@ export function PhotoEnhancementSuite({ userId }) {
             'Batch Processing: Edit multiple photos at once',
             'No Monthly Fees: One-time purchase or free tier',
             'No Censorship: Your content, your rules',
-            'Professional Quality: Competes with Photoshop'
+            'Professional Quality: Industry-leading tools'
           ].map((feature, i) => (
             <li key={i} style={{
               padding: '10px 0',

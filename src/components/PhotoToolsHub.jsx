@@ -16,7 +16,7 @@ export function PhotoToolsHub({ userId }) {
 
   const TOOLS = [
     { id: 'enhance', name: 'Photo Enhancement', icon: '✨', component: PhotoEnhancementSuite },
-    { id: 'pro', name: 'Pro Editor (Photoshop)', icon: '🎨', component: ProPhotoEditor },
+    { id: 'pro', name: 'Pro Editor', icon: '🎨', component: ProPhotoEditor },
     { id: 'advanced', name: 'Advanced Editor', icon: '🔧', component: AdvancedPhotoEditor },
     { id: 'mass', name: 'Mass Processor', icon: '📁', component: MassPhotoProcessor },
     { id: 'filters', name: 'Pro Filters', icon: '�', component: ProPhotoFilters },
@@ -153,7 +153,7 @@ export function PhotoToolsHub({ userId }) {
             💰 No Monthly Fees • No Subscriptions
           </h3>
           <p style={{ fontSize: '16px', opacity: 0.9 }}>
-            Unlike Photoshop ($60/month), Instagram filters, or other paid tools,
+            Unlike subscription-based editing software ($60/month), social media filters, or other paid tools,
             all our photo features are included with your one-time purchase.
             No censorship, no restrictions, just professional quality tools that work offline.
           </p>
