@@ -130,7 +130,7 @@ export const CreatorDashboard = ({ userId = "demo_user", ipAddress = "127.0.0.1"
         <TabsTrigger value="payments">Payments</TabsTrigger>
         <TabsTrigger value="legal">Legal</TabsTrigger>
         {isAdmin && (
-          <TabsTrigger value="family-access">🎁 Family Access</TabsTrigger>
+          <TabsTrigger value="family-access">🎁 Friends & Family</TabsTrigger>
         )}
         {userId === "owner" && (
           <TabsTrigger value="earnings">Earnings</TabsTrigger>
