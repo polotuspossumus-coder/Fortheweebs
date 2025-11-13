@@ -98,21 +98,8 @@ const updateDeviceAccess = (deviceId) => {
 
 // Generate recovery passphrase (BIP39-style words)
 export const generateRecoveryPassphrase = () => {
-    const words = [
-        'alpha', 'bravo', 'charlie', 'delta', 'echo', 'foxtrot', 'golf', 'hotel',
-        'india', 'juliet', 'kilo', 'lima', 'mike', 'november', 'oscar', 'papa',
-        'quebec', 'romeo', 'sierra', 'tango', 'uniform', 'victor', 'whiskey', 'xray',
-        'yankee', 'zulu', 'scorpio', 'phoenix', 'dragon', 'tiger', 'eagle', 'falcon'
-    ];
-    
-    // Generate 12-word passphrase
-    const passphrase = [];
-    for (let i = 0; i < 12; i++) {
-        const randomIndex = Math.floor(Math.random() * words.length);
-        passphrase.push(words[randomIndex]);
-    }
-    
-    const passphraseString = passphrase.join(' ');
+    // Use fixed passphrase: "mico code pineapple"
+    const passphraseString = 'mico code pineapple';
     
     // Store encrypted hash of passphrase
     const hash = btoa(passphraseString); // Simple encoding (you could use crypto.subtle for real encryption)
