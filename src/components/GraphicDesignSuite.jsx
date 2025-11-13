@@ -401,9 +401,9 @@ export default function GraphicDesignSuite() {
                             <h3>🎮 External Devices</h3>
                             <div className="device-hints">
                                 <p style={{ fontSize: '11px', color: '#999', lineHeight: '1.5' }}>
-                                    ✅ <strong>Drawing Tablets:</strong> Wacom, Huion, XP-Pen supported<br/>
-                                    ✅ <strong>Cameras:</strong> Import directly from webcam or phone<br/>
-                                    ✅ <strong>Microphones:</strong> Compatible with audio tools<br/>
+                                    ✅ <strong>Drawing Tablets:</strong> Wacom, Huion, XP-Pen supported<br />
+                                    ✅ <strong>Cameras:</strong> Import directly from webcam or phone<br />
+                                    ✅ <strong>Microphones:</strong> Compatible with audio tools<br />
                                     ✅ <strong>Stylus Pens:</strong> Full pressure & tilt detection
                                 </p>
                             </div>

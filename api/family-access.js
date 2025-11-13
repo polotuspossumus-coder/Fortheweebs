@@ -130,7 +130,7 @@ router.post('/redeem', async (req, res) => {
 
     // Store in localStorage on client side
     const storageKey = `family_access_${userId || 'user'}`;
-    
+
     return res.status(200).json({
       success: true,
       message: 'Access code redeemed successfully',

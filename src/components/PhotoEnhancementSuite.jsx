@@ -419,7 +419,7 @@ export function PhotoEnhancementSuite({ userId }) {
           <button onClick={redo} disabled={historyIndex >= history.length - 1} style={buttonStyle}>
             ↷ Redo
           </button>
-          <button onClick={downloadImage} style={{...buttonStyle, background: '#4CAF50'}}>
+          <button onClick={downloadImage} style={{ ...buttonStyle, background: '#4CAF50' }}>
             💾 Download
           </button>
         </div>

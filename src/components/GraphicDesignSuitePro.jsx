@@ -14,7 +14,7 @@ export default function GraphicDesignSuitePro() {
     const [isDrawing, setIsDrawing] = useState(false);
     const [brushStrokes, setBrushStrokes] = useState([]);
     const [comicGrid, setComicGrid] = useState({ rows: 2, cols: 2, visible: false });
-    
+
     const canvasRef = useRef(null);
 
     const TEMPLATE_PRESETS = [
@@ -57,7 +57,7 @@ export default function GraphicDesignSuitePro() {
             template: preset.value
         });
         setElements([]);
-        
+
         // Auto-add comic panels if comic template
         if (template.startsWith('comic-')) {
             const panelCount = parseInt(template.split('-')[1]);
@@ -70,7 +70,7 @@ export default function GraphicDesignSuitePro() {
         const rows = Math.ceil(count / cols);
         const panelWidth = project.width / cols;
         const panelHeight = project.height / rows;
-        
+
         const panels = [];
         for (let i = 0; i < count; i++) {
             const col = i % cols;
@@ -201,7 +201,7 @@ export default function GraphicDesignSuitePro() {
                     <div style={{ fontSize: '48px' }}>🎨</div>
                     <h2 style={{ margin: 0, color: '#cccccc' }}>Select a template to begin</h2>
                     <p style={{ color: '#999', maxWidth: '500px', textAlign: 'center', lineHeight: '1.6' }}>
-                        Professional design tools for comics, graphics, posters, and more. 
+                        Professional design tools for comics, graphics, posters, and more.
                         Full tablet support with pressure sensitivity. Industry-standard workflow.
                     </p>
                 </div>
@@ -218,8 +218,8 @@ export default function GraphicDesignSuitePro() {
                         <option key={t.value} value={t.value}>{t.label}</option>
                     ))}
                 </select>
-                <input 
-                    type="text" 
+                <input
+                    type="text"
                     value={project.name}
                     onChange={(e) => setProject({ ...project, name: e.target.value })}
                     style={{ width: '200px' }}
@@ -287,10 +287,10 @@ export default function GraphicDesignSuitePro() {
                                     top: el.y,
                                     width: el.width,
                                     height: el.height,
-                                    border: el.type === 'panel' ? `${el.borderWidth}px solid ${el.borderColor}` : 
-                                            selectedElement === el.id ? '2px solid #007acc' : 'none',
-                                    background: el.type === 'panel' ? el.backgroundColor : 
-                                               el.type === 'bubble' ? '#ffffff' : 'transparent',
+                                    border: el.type === 'panel' ? `${el.borderWidth}px solid ${el.borderColor}` :
+                                        selectedElement === el.id ? '2px solid #007acc' : 'none',
+                                    background: el.type === 'panel' ? el.backgroundColor :
+                                        el.type === 'bubble' ? '#ffffff' : 'transparent',
                                     borderRadius: el.type === 'bubble' && el.bubbleStyle === 'speech' ? '20px' : '0',
                                     cursor: 'move',
                                     display: 'flex',
@@ -328,7 +328,7 @@ export default function GraphicDesignSuitePro() {
                                     ▢ Add Shape
                                 </button>
                             </div>
-                            
+
                             {project.template?.startsWith('comic') && (
                                 <div style={{ marginTop: '20px' }}>
                                     <h3>Comic Tools</h3>
@@ -349,12 +349,12 @@ export default function GraphicDesignSuitePro() {
                         <div>
                             <div className="panel-section">
                                 <h3>Properties</h3>
-                                
+
                                 {selectedEl.type === 'bubble' && (
                                     <>
                                         <div className="property-row">
                                             <label>Text</label>
-                                            <textarea 
+                                            <textarea
                                                 value={selectedEl.content}
                                                 onChange={(e) => updateElement(selectedEl.id, { content: e.target.value })}
                                                 rows={3}
@@ -444,9 +444,9 @@ export default function GraphicDesignSuitePro() {
                     <div className="panel-section" style={{ marginTop: '24px', paddingTop: '24px', borderTop: '1px solid #3e3e3e' }}>
                         <h3>External Device Support</h3>
                         <p style={{ fontSize: '11px', color: '#999', lineHeight: '1.6', margin: 0 }}>
-                            ✓ Drawing tablets (pressure/tilt)<br/>
-                            ✓ Stylus pens (Apple Pencil, etc)<br/>
-                            ✓ Camera import<br/>
+                            ✓ Drawing tablets (pressure/tilt)<br />
+                            ✓ Stylus pens (Apple Pencil, etc)<br />
+                            ✓ Camera import<br />
                             ✓ Microphone input
                         </p>
                     </div>

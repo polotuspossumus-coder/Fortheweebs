@@ -378,7 +378,7 @@ export function BatchPhotoProcessor({ userId }) {
               </button>
               <button
                 onClick={() => { setPhotos([]); setCompleted([]); }}
-                style={{...actionButtonStyle, background: '#f44336'}}
+                style={{ ...actionButtonStyle, background: '#f44336' }}
               >
                 🔄 Start Over
               </button>

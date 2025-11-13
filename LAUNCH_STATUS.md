@@ -1,20 +1,24 @@
 # 🚀 FORTHEWEEBS - PRODUCTION STATUS
+
 **Last Deploy:** November 13, 2025
 **Status:** ✅ LIVE
 
 ## 🌐 ACCESS URLS
 
 ### Production (Use These!)
-- **Normal Access:** https://fortheweebs.netlify.app
-- **Owner Access:** https://fortheweebs.netlify.app/?owner=polotus
-- **Family Access:** https://fortheweebs.netlify.app/?familyCode=YOUR_CODE
+
+- **Normal Access:** <https://fortheweebs.netlify.app>
+- **Owner Access:** <https://fortheweebs.netlify.app/?owner=polotus>
+- **Family Access:** <https://fortheweebs.netlify.app/?familyCode=YOUR_CODE>
 
 ### Local Development
-- http://localhost:3004 (Dev server running)
+
+- <http://localhost:3004> (Dev server running)
 
 ## ✅ WHAT'S WORKING
 
 ### Core Features
+
 - ✅ Site loads successfully
 - ✅ Dashboard accessible
 - ✅ Owner bypass working (?owner=polotus)
@@ -24,6 +28,7 @@
 - ✅ No runtime errors
 
 ### Photo Tools (Main Money Maker!)
+
 - ✅ Avatar Generator - ACTUALLY WORKS NOW (canvas-based)
 - ✅ Banner Generator - ACTUALLY WORKS NOW (canvas-based)
 - ✅ Photo Enhancement Suite - Real canvas manipulation
@@ -31,12 +36,14 @@
 - ✅ Filters, adjustments, layers all coded
 
 ### Payment System
+
 - ✅ Stripe keys configured (test mode)
 - ✅ Payment module loads
 - ✅ Pricing tiers display
 - **Test Card:** 4242 4242 4242 4242
 
 ### Commission System
+
 - ✅ Commission marketplace coded
 - ✅ Listing creation available
 - ✅ Payment integration ready
@@ -44,7 +51,7 @@
 ## 🎯 QUICK TEST CHECKLIST
 
 1. **Dashboard Access Test:**
-   - Go to: https://fortheweebs.netlify.app/?owner=polotus
+   - Go to: <https://fortheweebs.netlify.app/?owner=polotus>
    - Should see: "👑 OWNER" badge in top right
    - Should see: Full dashboard with all tabs
 
@@ -70,14 +77,16 @@
 
 ## 💰 REVENUE FEATURES
 
-### Ready to Make Money:
+### Ready to Make Money
+
 1. **Photo Editing Tools** - Main product
 2. **Commission Marketplace** - Take percentage
 3. **Premium Subscriptions** - Monthly recurring
 4. **Tips/Donations** - One-time payments
 5. **Print on Demand** - Product sales
 
-### Stripe Configuration:
+### Stripe Configuration
+
 - Public Key: pk_test_51RyWwx... ✅
 - Secret Key: sk_test_51RyWwx... ✅
 - Mode: TEST (switch to live when ready)
@@ -98,16 +107,19 @@
 
 ## 🚨 IF SOMETHING ISN'T WORKING
 
-### Hard Refresh:
+### Hard Refresh
+
 - Windows: Ctrl + Shift + R
 - Mac: Cmd + Shift + R
 
-### Clear Cache:
+### Clear Cache
+
 1. Open browser console (F12)
 2. Right-click refresh button
 3. "Empty Cache and Hard Reload"
 
-### Reset Everything:
+### Reset Everything
+
 ```javascript
 // Paste in browser console:
 localStorage.clear();
@@ -151,6 +163,7 @@ start https://fortheweebs.netlify.app
 ---
 
 **The site IS working.** If you're seeing issues, tell me specifically:
+
 1. What URL you're on
 2. What you clicked
 3. What error you see (if any)

@@ -110,7 +110,7 @@ export const CreatorDashboard = ({ userId = "demo_user", ipAddress = "127.0.0.1"
     <Tabs defaultValue="overview" className="dashboard-tabs">
       <TabsList>
         <TabsTrigger value="overview">Overview</TabsTrigger>
-        <TabsTrigger value="bug-fixer">🐛 Report Bug</TabsTrigger>
+        {!isAdmin && <TabsTrigger value="bug-fixer">🐛 Report Bug</TabsTrigger>}
         <TabsTrigger value="profile">👤 My Profile</TabsTrigger>
         <TabsTrigger value="cgi-video">🎬 CGI Video</TabsTrigger>
         <TabsTrigger value="photos">📸 Photo Tools</TabsTrigger>
@@ -121,10 +121,10 @@ export const CreatorDashboard = ({ userId = "demo_user", ipAddress = "127.0.0.1"
         <TabsTrigger value="influencer">👑 Influencer</TabsTrigger>
         <TabsTrigger value="overlays">Overlays</TabsTrigger>
         <TabsTrigger value="shop">📦 Print Shop</TabsTrigger>
-        <TabsTrigger value="tips">☕ Tips</TabsTrigger>
-        <TabsTrigger value="commissions">💼 Commissions</TabsTrigger>
-        <TabsTrigger value="premium">💎 Premium</TabsTrigger>
-        <TabsTrigger value="payments">Payments</TabsTrigger>
+        {!isAdmin && <TabsTrigger value="tips">☕ Tips</TabsTrigger>}
+        {!isAdmin && <TabsTrigger value="commissions">💼 Commissions</TabsTrigger>}
+        {!isAdmin && <TabsTrigger value="premium">💎 Premium</TabsTrigger>}
+        {userBalance > 0 && <TabsTrigger value="payments">Payments</TabsTrigger>}
         <TabsTrigger value="legal">Legal</TabsTrigger>
         {isAdmin && (
           <TabsTrigger value="family-access">🎁 Friends & Family</TabsTrigger>

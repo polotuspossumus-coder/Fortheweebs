@@ -149,7 +149,7 @@ export function ProfileCreator({ userId }) {
         }
 
         const confirmed = confirm('🎨 Generate Avatar\n\nThis will create a stylized avatar from your current photo.\n\nChoose a style:\n• OK = Anime Style (rounded, vibrant)\n• Cancel = Go back');
-        
+
         if (!confirmed) return;
 
         try {
@@ -173,7 +173,7 @@ export function ProfileCreator({ userId }) {
                 const scale = Math.max(400 / img.width, 400 / img.height);
                 const x = (400 / 2) - (img.width / 2) * scale;
                 const y = (400 / 2) - (img.height / 2) * scale;
-                
+
                 ctx.drawImage(img, x, y, img.width * scale, img.height * scale);
                 ctx.restore();
 
@@ -210,7 +210,7 @@ export function ProfileCreator({ userId }) {
         }
 
         const style = confirm('🌌 Generate Banner\n\nThis will create a stylized banner from your current image.\n\nChoose a style:\n• OK = Gradient Overlay (vibrant colors)\n• Cancel = Go back');
-        
+
         if (!style) return;
 
         try {
@@ -227,7 +227,7 @@ export function ProfileCreator({ userId }) {
                 const scale = Math.max(1500 / img.width, 500 / img.height);
                 const x = (1500 / 2) - (img.width / 2) * scale;
                 const y = (500 / 2) - (img.height / 2) * scale;
-                
+
                 ctx.drawImage(img, x, y, img.width * scale, img.height * scale);
 
                 // Add gradient overlay
