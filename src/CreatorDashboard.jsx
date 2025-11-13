@@ -21,7 +21,7 @@ import GraphicDesignSuitePro from "./components/GraphicDesignSuitePro";
 import { PrintOnDemand } from "./components/PrintOnDemand";
 import { TradingCardDesigner } from "./components/TradingCardDesigner";
 import { TipsAndDonations } from "./components/TipsAndDonations";
-import { CommissionMarketplace } from "./components/CommissionMarketplace";
+import CommissionMarketplace from "./components/CommissionMarketplace";
 import { PremiumSubscription } from "./components/PremiumSubscription";
 
 import { ToolLockGate } from "./components/ToolLockGate";

@@ -205,6 +205,62 @@ export function PremiumSubscription({ userId, currentTier }) {
     }
   };
 
+  const handleSubscribe = async (tier) => {
+    if (processing) return;
+
+    setProcessing(true);
+
+    try {
+      // Check if Stripe is configured
+      const stripe = await stripePromise;
+
+      if (!stripe || !import.meta.env.VITE_STRIPE_PUBLIC_KEY) {
+        alert(`💳 Stripe not configured yet.\n\nTo enable subscriptions:\n1. Get Stripe API keys from stripe.com\n2. Add to .env file:\n   VITE_STRIPE_PUBLIC_KEY=pk_test_...\n   STRIPE_SECRET_KEY=sk_test_...\n   STRIPE_PRICE_ADULT=price_...\n   STRIPE_PRICE_UNLIMITED=price_...\n   STRIPE_PRICE_SUPER_ADMIN=price_...`);
+        setProcessing(false);
+        return;
+      }
+
+      // Prompt for email
+      const email = prompt('Enter your email for subscription:');
+      if (!email) {
+        setProcessing(false);
+        return;
+      }
+
+      // Create subscription
+      const response = await fetch('/api/subscriptions/create', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userId, tier, email })
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to create subscription');
+      }
+
+      // Confirm payment with Stripe
+      const { error } = await stripe.confirmCardPayment(data.clientSecret);
+
+      if (error) {
+        alert(`❌ Subscription failed: ${error.message}`);
+        return;
+      }
+
+      alert(`🎉 Subscription activated!\n\nTier: ${tier}\nYou now have full access to ${tier === 'adult' ? 'adult content' : tier === 'unlimited' ? 'unlimited features' : 'super admin perks'}!`);
+      
+      // Reload to show updated tier
+      setTimeout(() => window.location.reload(), 1500);
+
+    } catch (error) {
+      console.error('Subscription error:', error);
+      alert(`❌ Subscription failed: ${error.message}\n\nPlease try again.`);
+    } finally {
+      setProcessing(false);
+    }
+  };
+
   return (
     <div className="premium-subscription">
       <div className="premium-header">
@@ -308,9 +364,10 @@ export function PremiumSubscription({ userId, currentTier }) {
           <button
             className="tier-btn adult-btn"
             style={{ background: `linear-gradient(135deg, ${tiers.adult.color}, #dc2626)` }}
-            onClick={() => handleUnlock('adult_monthly', tiers.adult.price)}
+            onClick={() => handleSubscribe('adult')}
+            disabled={processing}
           >
-            🔞 Get Adult Access
+            {processing ? '⏳ Processing...' : '🔞 Get Adult Access'}
           </button>
         </div>
 
@@ -404,18 +461,19 @@ export function PremiumSubscription({ userId, currentTier }) {
             className="tier-btn super-admin-btn"
             style={{ background: `linear-gradient(135deg, ${tiers.super_admin.color}, #7c3aed)` }}
             onClick={() => handleUnlock('super_admin_powers', tiers.super_admin.price, 'balance')}
-            disabled={userBalance < tiers.super_admin.price}
+            disabled={userBalance < tiers.super_admin.price || processing}
           >
             {userBalance >= tiers.super_admin.price
-              ? `🔥 Pay from Balance ($${tiers.super_admin.price})`
+              ? (processing ? '⏳ Processing...' : `🔥 Pay from Balance ($${tiers.super_admin.price})`)
               : `Need $${(tiers.super_admin.price - userBalance).toFixed(2)} more`}
           </button>
           <button
             className="tier-btn super-admin-btn"
             style={{ background: `linear-gradient(135deg, #ec4899, #db2777)`, marginTop: '0.5rem' }}
-            onClick={() => handleUnlock('super_admin_powers', tiers.super_admin.price, 'card')}
+            onClick={() => handleSubscribe('super_admin')}
+            disabled={processing}
           >
-            💳 Pay with Card ($${tiers.super_admin.price})
+            {processing ? '⏳ Processing...' : `💳 Subscribe ($${tiers.super_admin.price}/month)`}
           </button>
           {userBalance < tiers.super_admin.price && (
             <p className="unlock-tip">

@@ -1,42 +1,17 @@
 // COMMISSION MARKETPLACE - Creators offer custom commissions, platform takes 15%
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { loadStripe } from '@stripe/stripe-js';
 import './CommissionMarketplace.css';
 
-export function CommissionMarketplace({ userId, isCreator }) {
+const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY || 'pk_test_PLACEHOLDER');
+
+function CommissionMarketplace({ userId, isCreator }) {
   const [activeTab, setActiveTab] = useState('browse'); // browse, my-commissions, create
-  const [commissions, setCommissions] = useState([
-    {
-      id: 1,
-      creatorId: 'user123',
-      creatorName: 'ArtisticWeeb',
-      creatorAvatar: 'https://via.placeholder.com/50',
-      title: 'Character Illustration',
-      description: 'Full-body anime character with background',
-      price: 150,
-      turnaroundDays: 7,
-      slots: 3,
-      examples: ['example1.jpg', 'example2.jpg'],
-      rating: 4.9,
-      completedCount: 47,
-      tags: ['anime', 'character', 'fullbody']
-    },
-    {
-      id: 2,
-      creatorId: 'user456',
-      creatorName: 'MangaMaster',
-      creatorAvatar: 'https://via.placeholder.com/50',
-      title: 'Comic Page',
-      description: 'Single manga page with 4-6 panels',
-      price: 200,
-      turnaroundDays: 10,
-      slots: 2,
-      examples: ['example3.jpg'],
-      rating: 5.0,
-      completedCount: 32,
-      tags: ['manga', 'comic', 'blackwhite']
-    }
-  ]);
+  const [commissions, setCommissions] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [processing, setProcessing] = useState(false);
+  const [error, setError] = useState('');
 
   const [newCommission, setNewCommission] = useState({
     title: '',
@@ -47,28 +22,127 @@ export function CommissionMarketplace({ userId, isCreator }) {
     tags: []
   });
 
-  const handleCreateCommission = () => {
-    // In production: POST to /api/commissions/create
-    setCommissions([...commissions, {
-      id: Date.now(),
-      creatorId: userId,
-      creatorName: 'You',
-      ...newCommission,
-      rating: 0,
-      completedCount: 0,
-      examples: []
-    }]);
+  // Fetch commissions on mount
+  useEffect(() => {
+    fetchCommissions();
+  }, []);
 
-    setNewCommission({
-      title: '',
-      description: '',
-      price: '',
-      turnaroundDays: 7,
-      slots: 1,
-      tags: []
-    });
+  const fetchCommissions = async () => {
+    try {
+      setLoading(true);
+      const response = await fetch('/api/commissions/create');
+      const data = await response.json();
+      
+      if (data.success) {
+        setCommissions(data.commissions || []);
+      }
+    } catch (err) {
+      console.error('Failed to fetch commissions:', err);
+      setCommissions([]); // Empty list if fetch fails
+    } finally {
+      setLoading(false);
+    }
+  };
 
-    setActiveTab('my-commissions');
+  const handleCreateCommission = async () => {
+    if (!newCommission.title || !newCommission.price) {
+      setError('Title and price are required');
+      return;
+    }
+
+    setProcessing(true);
+    setError('');
+
+    try {
+      const response = await fetch('/api/commissions/create', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          userId,
+          ...newCommission
+        })
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to create commission');
+      }
+
+      // Add to local list
+      setCommissions(prev => [...prev, data.commission]);
+
+      // Reset form
+      setNewCommission({
+        title: '',
+        description: '',
+        price: '',
+        turnaroundDays: 7,
+        slots: 1,
+        tags: []
+      });
+
+      setActiveTab('my-commissions');
+      alert('✅ Commission listed successfully!');
+
+    } catch (err) {
+      console.error('Commission creation error:', err);
+      setError(err.message || 'Failed to create commission');
+    } finally {
+      setProcessing(false);
+    }
+  };
+
+  const handlePurchaseCommission = async (commission) => {
+    if (!window.confirm(`Purchase "${commission.title}" for $${commission.price}?`)) {
+      return;
+    }
+
+    setProcessing(true);
+    setError('');
+
+    try {
+      // Create payment intent
+      const response = await fetch('/api/commissions/purchase', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          commissionId: commission.id,
+          buyerId: userId,
+          creatorId: commission.creatorId,
+          price: commission.price,
+          title: commission.title
+        })
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to create payment');
+      }
+
+      // Load Stripe and confirm payment
+      const stripe = await stripePromise;
+      
+      if (!stripe) {
+        throw new Error('Stripe failed to load');
+      }
+
+      const { error: stripeError } = await stripe.confirmCardPayment(data.clientSecret);
+
+      if (stripeError) {
+        throw new Error(stripeError.message);
+      }
+
+      // Success!
+      alert(`✅ Commission purchased! The creator will be notified.\n\nYou paid: $${commission.price}\nCreator receives: $${data.creatorAmount}\nPlatform fee: $${data.platformFee}`);
+
+    } catch (err) {
+      console.error('Commission purchase error:', err);
+      setError(err.message || 'Purchase failed. Please try again.');
+    } finally {
+      setProcessing(false);
+    }
   };
 
   return (
@@ -164,8 +238,12 @@ export function CommissionMarketplace({ userId, isCreator }) {
                   ))}
                 </div>
 
-                <button className="btn-primary commission-btn">
-                  💼 Request Commission
+                <button 
+                  className="btn-primary commission-btn"
+                  onClick={() => handlePurchaseCommission(comm)}
+                  disabled={processing}
+                >
+                  {processing ? '⏳ Processing...' : '💼 Request Commission'}
                 </button>
               </div>
             ))}
