@@ -1,18 +1,20 @@
 import React, { useState } from 'react';
+import { analyzeImagesForFaces, enhanceGroupsWithSuggestions } from '../utils/clientFaceDetection';
 
 /**
  * Facial Media Sorter - FREE for everyone!
  *
- * FREE: Analyzes images, groups by detected faces, organizes them with generic names
- * ENHANCED (Secret): AI character identification (anime show + character names)
+ * Uses client-side TensorFlow.js face detection (no API keys needed)
+ * Detects faces, groups by similarity, organizes with smart naming
  *
- * Basic facial sorting: FREE
- * AI Character Recognition: Requires super_admin_powers unlock (secret feature)
+ * FREE: Full facial sorting with AI grouping
+ * ENHANCED (Secret): Advanced character suggestions (requires super_admin_powers)
  */
 
 export const FacialMediaSorter = ({ userId, tier, hasSuperAdminPowers = false }) => {
   const [uploadedImages, setUploadedImages] = useState([]);
   const [analyzing, setAnalyzing] = useState(false);
+  const [analysisProgress, setAnalysisProgress] = useState({ current: 0, total: 0, facesFound: 0 });
   const [groupedFaces, setGroupedFaces] = useState([]);
   const [renamingRules, setRenamingRules] = useState({});
 
@@ -45,96 +47,40 @@ export const FacialMediaSorter = ({ userId, tier, hasSuperAdminPowers = false })
     }
 
     setAnalyzing(true);
+    setAnalysisProgress({ current: 0, total: uploadedImages.length, facesFound: 0 });
 
     try {
-      // Call backend API for face detection and grouping
-      const response = await fetch('/api/analyze-faces', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          images: uploadedImages.map(img => ({
-            url: img.url,
-            name: img.name
-          })),
-          userId: userId,
-          enableAIRecognition: hasSuperAdminPowers // Only $1000 tier gets AI character identification
-        })
-      });
+      // Use client-side face detection (free, no API keys)
+      const result = await analyzeImagesForFaces(
+        uploadedImages,
+        (progress) => {
+          setAnalysisProgress(progress);
+        }
+      );
 
-      const data = await response.json();
-
-      if (response.ok && data.groups) {
-        // Use real face detection results
-        setGroupedFaces(data.groups);
+      if (result.success && result.groups.length > 0) {
+        // Enhance groups with smart suggestions
+        const enhancedGroups = enhanceGroupsWithSuggestions(result.groups);
+        setGroupedFaces(enhancedGroups);
 
         // Initialize renaming rules
         const rules = {};
-        data.groups.forEach(group => {
+        enhancedGroups.forEach(group => {
           rules[group.id] = {
-            characterName: group.suggestedName || group.characterName,
+            characterName: group.suggestedName,
             startNumber: 1
           };
         });
         setRenamingRules(rules);
       } else {
-        // Fallback to mock data if API fails
-        console.warn('Face detection API unavailable, using mock data');
-        generateMockGroups();
+        alert('⚠️ No faces detected in uploaded images. Try different photos.');
       }
     } catch (error) {
       console.error('Face analysis error:', error);
-      // Fallback to mock data on error
-      generateMockGroups();
+      alert(`❌ Face detection failed: ${error.message}\n\nTry refreshing the page.`);
     } finally {
       setAnalyzing(false);
     }
-  };
-
-  const generateMockGroups = () => {
-    // Simulate face grouping results (fallback)
-    const mockGroups = [
-      {
-        id: 'group_1',
-        characterName: 'Character_A',
-        detectedCharacter: 'Analyzing...',
-        faceCount: Math.floor(uploadedImages.length * 0.4),
-        confidence: 0.92,
-        images: uploadedImages.slice(0, Math.floor(uploadedImages.length * 0.4)),
-        suggestedName: 'Character_A'
-      },
-      {
-        id: 'group_2',
-        characterName: 'Character_B',
-        detectedCharacter: 'Analyzing...',
-        faceCount: Math.floor(uploadedImages.length * 0.35),
-        confidence: 0.88,
-        images: uploadedImages.slice(Math.floor(uploadedImages.length * 0.4), Math.floor(uploadedImages.length * 0.75)),
-        suggestedName: 'Character_B'
-      },
-      {
-        id: 'group_3',
-        characterName: 'Character_C',
-        detectedCharacter: 'Analyzing...',
-        faceCount: uploadedImages.length - Math.floor(uploadedImages.length * 0.75),
-        confidence: 0.85,
-        images: uploadedImages.slice(Math.floor(uploadedImages.length * 0.75)),
-        suggestedName: 'Character_C'
-      }
-    ];
-
-    setGroupedFaces(mockGroups);
-
-    // Initialize renaming rules
-    const rules = {};
-    mockGroups.forEach(group => {
-      rules[group.id] = {
-        characterName: group.suggestedName,
-        startNumber: 1
-      };
-    });
-    setRenamingRules(rules);
   };
 
   const handleNameChange = (groupId, newName) => {
@@ -317,20 +263,27 @@ export const FacialMediaSorter = ({ userId, tier, hasSuperAdminPowers = false })
             🧠
           </div>
           <div style={{ fontSize: '1.5rem', fontWeight: '700', marginBottom: '10px' }}>
-            AI Analysis in Progress
+            AI Face Detection in Progress
           </div>
           <div style={{ fontSize: '1rem', opacity: 0.8, marginBottom: '30px' }}>
-            Detecting faces, grouping similar faces, identifying characters...
+            Processing {analysisProgress.current} of {analysisProgress.total} images...
           </div>
           <div style={{
             padding: '15px',
             background: 'rgba(0,0,0,0.3)',
             borderRadius: '10px',
             maxWidth: '600px',
-            margin: '0 auto',
+            margin: '0 auto 20px auto',
             fontSize: '0.9rem'
           }}>
-            <strong>Pipeline:</strong> Face Detection → Feature Extraction → Clustering → Character Recognition
+            <strong>Pipeline:</strong> Face Detection → Feature Extraction → Similarity Clustering
+          </div>
+          <div style={{
+            fontSize: '1.2rem',
+            color: '#00d4ff',
+            fontWeight: '700'
+          }}>
+            {analysisProgress.facesFound} faces detected so far
           </div>
         </div>
       )}

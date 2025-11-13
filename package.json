@@ -38,6 +38,7 @@
     "@react-three/xr": "^6.6.27",
     "@stripe/stripe-js": "^8.4.0",
     "@supabase/supabase-js": "^2.39.0",
+    "@vladmandic/face-api": "^1.7.15",
     "axios": "^1.6.0",
     "concurrently": "^9.1.0",
     "cors": "^2.8.5",
