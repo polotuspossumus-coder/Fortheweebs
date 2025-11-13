@@ -118,17 +118,14 @@ export const CreatorDashboard = ({ userId = "demo_user", ipAddress = "127.0.0.1"
         <TabsTrigger value="design">🎨 Graphic Design</TabsTrigger>
         <TabsTrigger value="planner">📅 Content Planner</TabsTrigger>
         <TabsTrigger value="arvr">🎭 AR/VR Studio</TabsTrigger>
-        <TabsTrigger value="influencer">👑 Influencer</TabsTrigger>
+        {!isAdmin && <TabsTrigger value="influencer">👑 Influencer</TabsTrigger>}
         <TabsTrigger value="overlays">Overlays</TabsTrigger>
         <TabsTrigger value="shop">📦 Print Shop</TabsTrigger>
         {!isAdmin && <TabsTrigger value="tips">☕ Tips</TabsTrigger>}
         {!isAdmin && <TabsTrigger value="commissions">💼 Commissions</TabsTrigger>}
         {!isAdmin && <TabsTrigger value="premium">💎 Premium</TabsTrigger>}
         {userBalance > 0 && <TabsTrigger value="payments">Payments</TabsTrigger>}
-        <TabsTrigger value="legal">Legal</TabsTrigger>
-        {isAdmin && (
-          <TabsTrigger value="family-access">🎁 Friends & Family</TabsTrigger>
-        )}
+        {!isAdmin && <TabsTrigger value="legal">Legal</TabsTrigger>}
         {userId === "owner" && (
           <TabsTrigger value="earnings">Earnings</TabsTrigger>
         )}
