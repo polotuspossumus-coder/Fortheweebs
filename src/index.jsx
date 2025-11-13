@@ -18,12 +18,19 @@ import InteractiveTutorial from "./components/InteractiveTutorial.jsx";
 import HelpButton from "./components/HelpButton.jsx";
 import Invite from "./pages/Invite.jsx";
 import { registerServiceWorker } from "./utils/registerServiceWorker.js";
+import { autoLoginOwner, isDeviceTrusted } from "./utils/deviceAuth.js";
 
 // Register service worker for PWA support
 registerServiceWorker();
 
 function AppFlow() {
   const [step, setStep] = useState(() => {
+    // Check for trusted device auto-login FIRST
+    if (autoLoginOwner()) {
+      console.log('✅ Trusted device auto-login successful');
+      return 3; // Go straight to dashboard
+    }
+    
     // Check URL parameters FIRST
     const params = new URLSearchParams(window.location.search);
 

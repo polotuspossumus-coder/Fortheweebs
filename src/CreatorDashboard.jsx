@@ -33,6 +33,7 @@ import { ProPhotoEditor } from "./components/ProPhotoEditor";
 import { AIBugFixer } from "./components/AIBugFixer";
 import { LanguageSelector } from "./components/LanguageSelector";
 import { t } from "./utils/i18n";
+import DeviceManager from "./components/DeviceManager";
 
 export const CreatorDashboard = ({ userId = "demo_user", ipAddress = "127.0.0.1", tier = "free" }) => {
   const isAdmin = userId === "owner" || userId === "admin";
@@ -128,6 +129,9 @@ export const CreatorDashboard = ({ userId = "demo_user", ipAddress = "127.0.0.1"
         {!isAdmin && <TabsTrigger value="legal">Legal</TabsTrigger>}
         {userId === "owner" && (
           <TabsTrigger value="earnings">Earnings</TabsTrigger>
+        )}
+        {userId === "owner" && (
+          <TabsTrigger value="devices">🔐 Devices</TabsTrigger>
         )}
       </TabsList>
       <TabsContent value="overview">
@@ -251,6 +255,11 @@ export const CreatorDashboard = ({ userId = "demo_user", ipAddress = "127.0.0.1"
       {userId === "owner" && (
         <TabsContent value="earnings">
           <OwnerEarningsPanel />
+        </TabsContent>
+      )}
+      {userId === "owner" && (
+        <TabsContent value="devices">
+          <DeviceManager isOwner={true} />
         </TabsContent>
       )}
     </Tabs>
