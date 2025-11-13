@@ -6,18 +6,25 @@
     <title>Auto Login - ForTheWeebs</title>
 </head>
 <body>
-    <h1>Setting up owner access...</h1>
+    <h1>Verifying access...</h1>
     <script>
-        // Set owner credentials
-        localStorage.setItem('userId', 'owner');
-        localStorage.setItem('userTier', 'owner');
-        localStorage.setItem('tosAccepted', 'true');
-        localStorage.setItem('creatorAgreementAccepted', 'true');
+        // Security: Prompt for password before granting owner access
+        const password = prompt('Enter owner password:');
         
-        // Redirect to main app
-        setTimeout(() => {
+        // Simple password check (replace 'yourpassword' with your actual password)
+        if (password === 'ownerpass2024') {
+            localStorage.setItem('userId', 'owner');
+            localStorage.setItem('userTier', 'owner');
+            localStorage.setItem('tosAccepted', 'true');
+            localStorage.setItem('creatorAgreementAccepted', 'true');
+            
+            setTimeout(() => {
+                window.location.href = '/';
+            }, 500);
+        } else {
+            alert('Access denied. Incorrect password.');
             window.location.href = '/';
-        }, 500);
+        }
     </script>
 </body>
 </html>
