@@ -223,12 +223,6 @@ export function BatchPhotoProcessor({ userId }) {
         <h1 style={{ fontSize: '48px', fontWeight: 'bold', marginBottom: '10px' }}>
           📦 Batch Photo Processor
         </h1>
-        <p style={{ fontSize: '18px', opacity: 0.9 }}>
-          Process hundreds of photos at once • Works offline
-        </p>
-        <p style={{ fontSize: '14px', opacity: 0.7, marginTop: '10px' }}>
-          No monthly fees • No censorship • Professional quality
-        </p>
       </div>
 
       {/* Upload Section */}
@@ -429,39 +423,6 @@ export function BatchPhotoProcessor({ userId }) {
           </div>
         </div>
       )}
-
-      {/* Features */}
-      <div style={{
-        background: 'rgba(255,255,255,0.1)',
-        borderRadius: '15px',
-        padding: '30px',
-        marginTop: '30px'
-      }}>
-        <h3 style={{ fontSize: '24px', marginBottom: '20px' }}>🎯 Features</h3>
-        <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
-          {[
-            'Process hundreds of photos at once',
-            '8 powerful operations: Enhance, Crop, Restore, Resize, Compress & more',
-            'Works 100% offline - no internet required',
-            'Real-time progress tracking',
-            'Download all at once or as ZIP',
-            'No monthly fees - completely free',
-            'No censorship - process anything',
-            'Professional quality results'
-          ].map((feature, i) => (
-            <li key={i} style={{
-              padding: '10px 0',
-              borderTop: i > 0 ? '1px solid rgba(255,255,255,0.1)' : 'none',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '10px'
-            }}>
-              <span style={{ fontSize: '20px' }}>✓</span>
-              <span>{feature}</span>
-            </li>
-          ))}
-        </ul>
-      </div>
     </div>
   );
 }

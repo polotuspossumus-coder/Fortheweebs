@@ -294,12 +294,6 @@ export function PhotoEnhancementSuite({ userId }) {
         <h1 style={{ fontSize: '48px', fontWeight: 'bold', marginBottom: '10px' }}>
           📸 Photo Enhancement Suite
         </h1>
-        <p style={{ fontSize: '18px', opacity: 0.9 }}>
-          Professional photo editing • No monthly fees • No censorship
-        </p>
-        <p style={{ fontSize: '14px', opacity: 0.7, marginTop: '10px' }}>
-          Competes with professional editing software and social media filters
-        </p>
       </div>
 
       {/* Tool Selection */}
@@ -449,39 +443,6 @@ export function PhotoEnhancementSuite({ userId }) {
           {result}
         </div>
       )}
-
-      {/* Features List */}
-      <div style={{
-        background: 'rgba(255,255,255,0.1)',
-        borderRadius: '15px',
-        padding: '30px',
-        marginTop: '30px'
-      }}>
-        <h3 style={{ fontSize: '24px', marginBottom: '20px' }}>🎯 Features</h3>
-        <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
-          {[
-            'Auto-Crop: Intelligent content detection and cropping',
-            'Pixel Restoration: Fix missing or damaged pixels automatically',
-            'Photo Enhancement: Brightness, contrast, saturation, sharpness',
-            'Undo/Redo: Full editing history',
-            'Batch Processing: Edit multiple photos at once',
-            'No Monthly Fees: One-time purchase or free tier',
-            'No Censorship: Your content, your rules',
-            'Professional Quality: Industry-leading tools'
-          ].map((feature, i) => (
-            <li key={i} style={{
-              padding: '10px 0',
-              borderTop: i > 0 ? '1px solid rgba(255,255,255,0.1)' : 'none',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '10px'
-            }}>
-              <span style={{ fontSize: '20px' }}>✓</span>
-              <span>{feature}</span>
-            </li>
-          ))}
-        </ul>
-      </div>
     </div>
   );
 }

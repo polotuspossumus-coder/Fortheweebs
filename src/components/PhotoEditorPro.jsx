@@ -431,18 +431,6 @@ export default function PhotoEditorPro() {
                     </div>
                 </div>
             </div>
-
-            <div className="editor-features">
-                <div className="feature-badge">🖌️ Professional Tools</div>
-                <div className="feature-badge">📑 Layer System</div>
-                <div className="feature-badge">😂 Meme Generator</div>
-                <div className="feature-badge">🎞️ GIF Creator</div>
-                <div className="feature-badge">📦 Batch Processing</div>
-                <div className="feature-badge">🤖 AI Enhancement</div>
-                <div className="feature-badge">🎨 18 Pro Filters</div>
-                <div className="feature-badge">💾 All Export Formats</div>
-                <div className="feature-badge">💰 Way Cheaper Than Adobe</div>
-            </div>
         </div>
     );
 }

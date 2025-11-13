@@ -200,17 +200,6 @@ export default function GraphicDesignSuite() {
                             </div>
                         ))}
                     </div>
-
-                    <div className="gallery-features">
-                        <div className="feature-badge">🎨 10,000+ Templates</div>
-                        <div className="feature-badge">🤖 AI Asset Generation</div>
-                        <div className="feature-badge">✒️ Vector Tools</div>
-                        <div className="feature-badge">📝 Advanced Typography</div>
-                        <div className="feature-badge">💰 No Watermarks</div>
-                        <div className="feature-badge">📡 Works Offline</div>
-                        <div className="feature-badge">💾 All Export Formats</div>
-                        <div className="feature-badge">🚫 Way Cheaper Than Canva</div>
-                    </div>
                 </div>
             ) : (
                 <div className="design-workspace">
