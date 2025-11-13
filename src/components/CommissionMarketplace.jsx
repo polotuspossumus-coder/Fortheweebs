@@ -2,11 +2,14 @@
 
 import React, { useState, useEffect } from 'react';
 import { loadStripe } from '@stripe/stripe-js';
+import { createCommission, getAllCommissions, getUserCommissions } from '../utils/databaseSupabase';
+import { useAuth } from './AuthSupabase';
 import './CommissionMarketplace.css';
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY || 'pk_test_PLACEHOLDER');
 
 function CommissionMarketplace({ userId, isCreator }) {
+  const { user } = useAuth();
   const [activeTab, setActiveTab] = useState('browse'); // browse, my-commissions, create
   const [commissions, setCommissions] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -30,15 +33,11 @@ function CommissionMarketplace({ userId, isCreator }) {
   const fetchCommissions = async () => {
     try {
       setLoading(true);
-      const response = await fetch('/api/commissions/create');
-      const data = await response.json();
-      
-      if (data.success) {
-        setCommissions(data.commissions || []);
-      }
+      const data = await getAllCommissions();
+      setCommissions(data || []);
     } catch (err) {
       console.error('Failed to fetch commissions:', err);
-      setCommissions([]); // Empty list if fetch fails
+      setCommissions([]);
     } finally {
       setLoading(false);
     }
@@ -54,20 +53,10 @@ function CommissionMarketplace({ userId, isCreator }) {
     setError('');
 
     try {
-      const response = await fetch('/api/commissions/create', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          userId,
-          ...newCommission
-        })
+      await createCommission({
+        creatorId: user?.id || userId,
+        ...newCommission
       });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.error || 'Failed to create commission');
-      }
 
       // Add to local list
       setCommissions(prev => [...prev, data.commission]);

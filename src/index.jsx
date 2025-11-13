@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { createRoot } from "react-dom/client";
+import { AuthProvider, useAuth } from "./components/AuthSupabase.jsx";
 import { LegalDocumentsList } from "./components/LegalDocumentsList.jsx";
 import CreatorSignup from "./CreatorSignup.jsx";
 import PaymentModule from "./PaymentModule.jsx";
@@ -172,4 +173,8 @@ function AppFlow() {
 
 const container = document.getElementById("root");
 const root = createRoot(container);
-root.render(<AppFlow />);
+root.render(
+  <AuthProvider>
+    <AppFlow />
+  </AuthProvider>
+);

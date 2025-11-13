@@ -2,11 +2,14 @@
 
 import React, { useState } from 'react';
 import { loadStripe } from '@stripe/stripe-js';
+import { createTip } from '../utils/databaseSupabase';
+import { useAuth } from './AuthSupabase';
 import './TipsAndDonations.css';
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY || 'pk_test_PLACEHOLDER');
 
 export function TipsAndDonations({ creatorId, creatorName }) {
+  const { user } = useAuth();
   const [tipAmount, setTipAmount] = useState(5);
   const [customAmount, setCustomAmount] = useState('');
   const [message, setMessage] = useState('');

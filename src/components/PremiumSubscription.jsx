@@ -4,6 +4,8 @@ import React, { useState, useEffect } from 'react';
 import './PremiumSubscription.css';
 import { unlockTool, getUserBalance, deductBalance, TOOL_PRICES } from '../utils/toolUnlockSystem';
 import { loadStripe } from '@stripe/stripe-js';
+import { createSubscription, getUserSubscription } from '../utils/databaseSupabase';
+import { useAuth } from './AuthSupabase';
 
 // Initialize Stripe (will be null if env var not set)
 const stripePromise = import.meta.env.VITE_STRIPE_PUBLIC_KEY
@@ -11,6 +13,7 @@ const stripePromise = import.meta.env.VITE_STRIPE_PUBLIC_KEY
   : null;
 
 export function PremiumSubscription({ userId, currentTier }) {
+  const { user } = useAuth();
   const [selectedUnlock, setSelectedUnlock] = useState(null);
   const [userBalance, setUserBalance] = useState(0);
   const [processing, setProcessing] = useState(false);
