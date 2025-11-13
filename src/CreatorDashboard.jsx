@@ -49,49 +49,24 @@ export const CreatorDashboard = ({ userId = "demo_user", ipAddress = "127.0.0.1"
     setUserBalance(balance);
   }, [userId]);
 
-  // Check for pending family access code
+  // Check for pending family access code (client-side only)
   useEffect(() => {
-    const checkFamilyCode = async () => {
-      const pendingCode = localStorage.getItem('pending_family_code');
-      if (pendingCode) {
-        console.log('🎁 Redeeming family access code:', pendingCode);
-        try {
-          const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:3001/api'}/family-access/redeem`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ code: pendingCode, userId })
-          });
-
-          const data = await response.json();
-          if (data.success) {
-            // Store family access in localStorage
-            localStorage.setItem(`family_access_${userId}`, pendingCode);
-            localStorage.setItem('family_access_type', data.accessType);
-            localStorage.removeItem('pending_family_code');
-
-            // Show success message (without reload to prevent black screen)
-            setTimeout(() => {
-              alert(`🎉 Welcome to ForTheWeebs!\n\nYour family access has been activated!\n\n✅ You now have ${data.accessType === 'free' ? 'FULL FREE ACCESS' : 'SUPPORTER PLAN ACCESS'} to all features!\n\n🚀 Start exploring your dashboard!`);
-            }, 500);
-          } else {
-            console.error('Failed to redeem family code:', data.message);
-            localStorage.removeItem('pending_family_code');
-          }
-        } catch (error) {
-          console.error('Error redeeming family code:', error);
-          // Still grant access even if API fails
-          localStorage.setItem(`family_access_${userId}`, pendingCode);
-          localStorage.setItem('family_access_type', 'free');
-          localStorage.removeItem('pending_family_code');
-
-          setTimeout(() => {
-            alert(`🎉 Welcome to ForTheWeebs!\n\nYour family access has been activated!\n\n✅ You now have FULL FREE ACCESS to all features!\n\n🚀 Start exploring your dashboard!`);
-          }, 500);
-        }
-      }
-    };
-
-    checkFamilyCode();
+    const pendingCode = localStorage.getItem('pending_family_code');
+    if (pendingCode) {
+      console.log('🎁 Redeeming family access code:', pendingCode);
+      
+      // Grant family access immediately (client-side)
+      localStorage.setItem(`family_access_${userId}`, pendingCode);
+      localStorage.setItem('family_access_type', 'free');
+      localStorage.removeItem('pending_family_code');
+      
+      // Show success message
+      setTimeout(() => {
+        alert(`🎉 Welcome to ForTheWeebs!\n\nYour family access has been activated!\n\n✅ You now have FULL FREE ACCESS to all features!\n\n🚀 Start exploring your dashboard!`);
+      }, 500);
+      
+      console.log('✅ Family access granted!');
+    }
   }, [userId]);
 
   if (!tosAccepted) {

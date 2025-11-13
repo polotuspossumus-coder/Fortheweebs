@@ -3,9 +3,8 @@ import React, { useState, useEffect } from 'react';
 /**
  * FamilyAccessSystem - Special access codes for family/friends
  * - Full access to all features for free
- * - Optional: $20/month contribution toward $1000 tier unlock
- * - Admin can generate access codes
- * - Codes can be set as "full free" or "supporter plan"
+ * - Simple client-side code generation
+ * - Codes work via URL parameters
  */
 
 export function FamilyAccessSystem({ userId, isAdmin }) {
@@ -13,7 +12,7 @@ export function FamilyAccessSystem({ userId, isAdmin }) {
   const [showGenerator, setShowGenerator] = useState(false);
   const [newCode, setNewCode] = useState({
     name: '',
-    type: 'free', // 'free' or 'supporter'
+    type: 'free',
     notes: ''
   });
 
@@ -21,55 +20,67 @@ export function FamilyAccessSystem({ userId, isAdmin }) {
     loadAccessCodes();
   }, []);
 
-  const loadAccessCodes = async () => {
+  const loadAccessCodes = () => {
     try {
-      const response = await fetch('/api/family-access/list');
-      const data = await response.json();
-      setAccessCodes(data.codes || []);
+      const stored = localStorage.getItem('family_access_codes');
+      if (stored) {
+        setAccessCodes(JSON.parse(stored));
+      }
     } catch (err) {
       console.error('Error loading access codes:', err);
     }
   };
 
-  const generateCode = async () => {
+  const generateCode = () => {
     if (!newCode.name) {
       alert('Please enter a name');
       return;
     }
 
-    try {
-      const response = await fetch('/api/family-access/generate', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          adminId: userId,
-          name: newCode.name,
-          type: newCode.type,
-          notes: newCode.notes
-        })
-      });
+    // Generate simple memorable code
+    const codeId = `${newCode.name.toLowerCase().replace(/\s+/g, '')}-${Date.now().toString(36)}`;
+    const fullUrl = `${window.location.origin}/?familyCode=${codeId}`;
 
-      const data = await response.json();
-      if (data.success) {
-        alert(`Access code generated!\n\nCode: ${data.code}\nLink: ${data.link}\n\nShare this link with ${newCode.name}`);
-        loadAccessCodes();
-        setNewCode({ name: '', type: 'free', notes: '' });
-        setShowGenerator(false);
-      }
-    } catch (err) {
-      alert('Error generating code: ' + err.message);
-    }
+    const newAccessCode = {
+      id: codeId,
+      code: codeId,
+      name: newCode.name,
+      type: newCode.type,
+      notes: newCode.notes,
+      createdAt: new Date().toISOString(),
+      usedCount: 0
+    };
+
+    const updated = [...accessCodes, newAccessCode];
+    setAccessCodes(updated);
+    localStorage.setItem('family_access_codes', JSON.stringify(updated));
+
+    // Copy link to clipboard
+    navigator.clipboard.writeText(fullUrl).then(() => {
+      alert(`✅ Access link generated and copied!\n\nName: ${newCode.name}\nLink: ${fullUrl}\n\nShare this link with ${newCode.name}. They'll get full access!`);
+    }).catch(() => {
+      alert(`✅ Access link generated!\n\nName: ${newCode.name}\nLink: ${fullUrl}\n\nShare this link with ${newCode.name}. They'll get full access!`);
+    });
+
+    setNewCode({ name: '', type: 'free', notes: '' });
+    setShowGenerator(false);
   };
 
-  const deleteCode = async (codeId) => {
+  const deleteCode = (codeId) => {
     if (!confirm('Are you sure you want to delete this access code?')) return;
 
-    try {
-      await fetch(`/api/family-access/delete?id=${codeId}`, { method: 'DELETE' });
-      loadAccessCodes();
-    } catch (err) {
-      alert('Error deleting code: ' + err.message);
-    }
+    const updated = accessCodes.filter(code => code.id !== codeId);
+    setAccessCodes(updated);
+    localStorage.setItem('family_access_codes', JSON.stringify(updated));
+  };
+
+  const copyLink = (code) => {
+    const fullUrl = `${window.location.origin}/?familyCode=${code.code}`;
+    navigator.clipboard.writeText(fullUrl).then(() => {
+      alert('✅ Link copied to clipboard!');
+    }).catch(() => {
+      alert(`Link: ${fullUrl}`);
+    });
   };
 
   if (!isAdmin) {
@@ -236,7 +247,7 @@ export function FamilyAccessSystem({ userId, isAdmin }) {
                         <strong>Code:</strong> {code.code}
                       </div>
                       <div style={{ wordBreak: 'break-all' }}>
-                        <strong>Link:</strong> {code.link}
+                        <strong>Link:</strong> {window.location.origin}/?familyCode={code.code}
                       </div>
                     </div>
                     {code.notes && (
@@ -249,20 +260,37 @@ export function FamilyAccessSystem({ userId, isAdmin }) {
                       Used: {code.usedCount || 0} times
                     </div>
                   </div>
-                  <button
-                    onClick={() => deleteCode(code.id)}
-                    style={{
-                      background: '#f44336',
-                      color: 'white',
-                      border: 'none',
-                      padding: '8px 16px',
-                      borderRadius: '5px',
-                      cursor: 'pointer',
-                      fontSize: '14px'
-                    }}
-                  >
-                    🗑️ Delete
-                  </button>
+                  <div style={{ display: 'flex', gap: '10px', flexDirection: 'column' }}>
+                    <button
+                      onClick={() => copyLink(code)}
+                      style={{
+                        background: '#4CAF50',
+                        color: 'white',
+                        border: 'none',
+                        padding: '8px 16px',
+                        borderRadius: '5px',
+                        cursor: 'pointer',
+                        fontSize: '14px',
+                        whiteSpace: 'nowrap'
+                      }}
+                    >
+                      📋 Copy Link
+                    </button>
+                    <button
+                      onClick={() => deleteCode(code.id)}
+                      style={{
+                        background: '#f44336',
+                        color: 'white',
+                        border: 'none',
+                        padding: '8px 16px',
+                        borderRadius: '5px',
+                        cursor: 'pointer',
+                        fontSize: '14px'
+                      }}
+                    >
+                      🗑️ Delete
+                    </button>
+                  </div>
                 </div>
               </div>
             ))}

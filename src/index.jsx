@@ -57,14 +57,10 @@ function AppFlow() {
       console.log('🎁 Family code found:', familyCode);
       // Store the family access code
       localStorage.setItem('pending_family_code', familyCode);
-      // Grant full access immediately for family members
-      localStorage.setItem("legalAccepted", "true");
-      localStorage.setItem("tosAccepted", "true");
-      localStorage.setItem("hasOnboarded", "true");
       localStorage.setItem(`family_access_user`, familyCode);
-      console.log('✅ Family access granted, going to dashboard');
-      // Go straight to dashboard
-      return 3;
+      console.log('✅ Family code stored, will start at legal/TOS');
+      // Family members still need to accept legal docs - start at step 0
+      return 0;
     }
 
     const isOwner = localStorage.getItem("userId") === "owner";
