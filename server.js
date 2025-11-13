@@ -30,9 +30,11 @@ app.get('/health', (req, res) => {
 // API Routes
 const stripeRoutes = require('./api/stripe');
 const aiRoutes = require('./api/ai');
+const familyAccessRoutes = require('./api/family-access');
 
 app.use('/api', stripeRoutes);
 app.use('/api/ai', aiRoutes);
+app.use('/api/family-access', familyAccessRoutes);
 
 // Error handling middleware
 app.use((err, req, res, next) => {
@@ -67,6 +69,11 @@ app.listen(PORT, () => {
 ║   - POST /api/ai/analyze-screenshot                       ║
 ║   - POST /api/ai/generate-fix                             ║
 ║   - POST /api/ai/create-pr                                ║
+║   - GET  /api/family-access/list                          ║
+║   - POST /api/family-access/generate                      ║
+║   - GET  /api/family-access/verify                        ║
+║   - POST /api/family-access/redeem                        ║
+║   - DELETE /api/family-access/delete                      ║
 ║                                                           ║
 ╚═══════════════════════════════════════════════════════════╝
   `);

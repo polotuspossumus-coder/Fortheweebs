@@ -54,6 +54,16 @@ function AppFlow() {
     // Check if this is a referral link
     const refCode = params.get('ref') || params.get('referral') || params.get('invite');
 
+    // Check for family access code
+    const familyCode = params.get('familyCode') || params.get('family') || params.get('code');
+    if (familyCode) {
+      // Store the family access code
+      localStorage.setItem('pending_family_code', familyCode);
+      console.log('🎁 Family access code detected:', familyCode);
+      // Start at signup or dashboard depending on legal acceptance
+      return hasAcceptedLegal ? (hasOnboarded ? 3 : 1) : 0;
+    }
+
     // Check if user wants to skip directly to dashboard
     const skipToApp = params.get('app') === 'true';
     if (skipToApp && hasAcceptedLegal) {

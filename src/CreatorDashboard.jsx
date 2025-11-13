@@ -49,6 +49,45 @@ export const CreatorDashboard = ({ userId = "demo_user", ipAddress = "127.0.0.1"
     setUserBalance(balance);
   }, [userId]);
 
+  // Check for pending family access code
+  useEffect(() => {
+    const checkFamilyCode = async () => {
+      const pendingCode = localStorage.getItem('pending_family_code');
+      if (pendingCode) {
+        console.log('🎁 Redeeming family access code:', pendingCode);
+        try {
+          const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:3001/api'}/family-access/redeem`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ code: pendingCode, userId })
+          });
+
+          const data = await response.json();
+          if (data.success) {
+            // Store family access in localStorage
+            localStorage.setItem(`family_access_${userId}`, pendingCode);
+            localStorage.setItem('family_access_type', data.accessType);
+            localStorage.removeItem('pending_family_code');
+            
+            // Show success message
+            alert(`🎉 Family access activated!\n\nYou now have ${data.accessType === 'free' ? 'full free access' : 'supporter plan access'} to all features!`);
+            
+            // Reload to update UI
+            window.location.reload();
+          } else {
+            console.error('Failed to redeem family code:', data.message);
+            localStorage.removeItem('pending_family_code');
+          }
+        } catch (error) {
+          console.error('Error redeeming family code:', error);
+          localStorage.removeItem('pending_family_code');
+        }
+      }
+    };
+
+    checkFamilyCode();
+  }, [userId]);
+
   if (!tosAccepted) {
     return <TermsOfService onAccept={() => setTosAccepted(true)} />;
   }
