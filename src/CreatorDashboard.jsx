@@ -11,12 +11,12 @@ import { LegalDocumentsList } from "./components/LegalDocumentsList";
 import TierInfo from "./components/TierInfo";
 import UpgradePrompt from "./components/UpgradePrompt";
 import VaultEntryList from "./components/VaultEntryList";
-import { ARVRContentPanelWithPaywall } from "./components/ARVRContentPanelWithPaywall";
+import { ARVRStudioPro } from "./components/ARVRStudioPro";
 import { PhotoToolsHub } from "./components/PhotoToolsHub";
-import { ContentPlanner } from "./components/ContentPlanner";
+import { ContentPlannerPro } from "./components/ContentPlannerPro";
 import { InfluencerVerification } from "./components/InfluencerVerification";
 import { FamilyAccessSystem } from "./components/FamilyAccessSystem";
-import { AudioProductionStudio } from "./components/AudioProductionStudio";
+import { AudioProductionStudioPro } from "./components/AudioProductionStudioPro";
 import GraphicDesignSuitePro from "./components/GraphicDesignSuitePro";
 import { PrintOnDemand } from "./components/PrintOnDemand";
 import { TradingCardDesigner } from "./components/TradingCardDesigner";
@@ -67,7 +67,7 @@ export const CreatorDashboard = ({ userId = "demo_user", ipAddress = "127.0.0.1"
             localStorage.setItem(`family_access_${userId}`, pendingCode);
             localStorage.setItem('family_access_type', data.accessType);
             localStorage.removeItem('pending_family_code');
-            
+
             // Show success message (without reload to prevent black screen)
             setTimeout(() => {
               alert(`🎉 Welcome to ForTheWeebs!\n\nYour family access has been activated!\n\n✅ You now have ${data.accessType === 'free' ? 'FULL FREE ACCESS' : 'SUPPORTER PLAN ACCESS'} to all features!\n\n🚀 Start exploring your dashboard!`);
@@ -82,7 +82,7 @@ export const CreatorDashboard = ({ userId = "demo_user", ipAddress = "127.0.0.1"
           localStorage.setItem(`family_access_${userId}`, pendingCode);
           localStorage.setItem('family_access_type', 'free');
           localStorage.removeItem('pending_family_code');
-          
+
           setTimeout(() => {
             alert(`🎉 Welcome to ForTheWeebs!\n\nYour family access has been activated!\n\n✅ You now have FULL FREE ACCESS to all features!\n\n🚀 Start exploring your dashboard!`);
           }, 500);
@@ -154,7 +154,7 @@ export const CreatorDashboard = ({ userId = "demo_user", ipAddress = "127.0.0.1"
       </TabsContent>
       <TabsContent value="music">
         <ToolLockGate userId={userId} toolId="audio">
-          <AudioProductionStudio userId={userId} />
+          <AudioProductionStudioPro userId={userId} />
         </ToolLockGate>
       </TabsContent>
       <TabsContent value="design">
@@ -209,11 +209,11 @@ export const CreatorDashboard = ({ userId = "demo_user", ipAddress = "127.0.0.1"
         </ToolLockGate>
       </TabsContent>
       <TabsContent value="planner">
-        <ContentPlanner userId={userId} />
+        <ContentPlannerPro userId={userId} />
       </TabsContent>
       <TabsContent value="arvr">
         <ToolLockGate userId={userId} toolId="arvr">
-          <ARVRContentPanelWithPaywall userId={userId} />
+          <ARVRStudioPro userId={userId} />
         </ToolLockGate>
       </TabsContent>
       <TabsContent value="influencer">
