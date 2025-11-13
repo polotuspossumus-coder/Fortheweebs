@@ -4,19 +4,14 @@ import './CollaborationSystem.css';
 /**
  * CollaborationSystem - Real-Time Multi-User Editing
  * 
- * The feature that makes us UNTOUCHABLE:
- * - Google Docs-style collaboration for ALL creative tools
+ * Features:
+ * - Real-time collaboration for ALL creative tools
  * - Live cursors showing where others are working
  * - Real-time presence (who's online, what they're editing)
  * - In-app chat and comments
  * - Conflict resolution (smart merging)
  * - Session recording (see who did what, when)
- * 
- * Why competitors can't do this:
- * - Adobe tried, failed (too expensive)
- * - Canva has limited version (only graphic design)
- * - Unity has it but it's terrible
- * - We have it for EVERYTHING (audio, video, photo, 3D, design)
+ * - Works across audio, video, photo, 3D, and design tools
  */
 
 export default function CollaborationSystem({ projectId, userId, userName, toolType }) {

@@ -1,6 +1,6 @@
 // TemplateLibrary.jsx
 // 50+ free templates - no more blank canvas syndrome
-// Adobe charges $10-30 per template. Canva has templates but limited. We have EVERYTHING FREE.
+// Professional templates available at no extra cost
 
 import React, { useState } from 'react';
 import './TemplateLibrary.css';

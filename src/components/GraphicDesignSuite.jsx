@@ -2,16 +2,16 @@ import React, { useState, useRef } from 'react';
 import './GraphicDesignSuite.css';
 
 /**
- * GraphicDesignSuite - Destroys Canva + Adobe Illustrator
+ * GraphicDesignSuite - Professional graphic design platform
  * 
- * Better than Canva + Illustrator because:
- * - 10,000+ templates (Canva Pro has ~600K but most suck)
- * - Vector tools as good as Illustrator but EASIER
- * - AI asset generation built-in (Canva charges extra)
+ * Features:
+ * - 10,000+ templates
+ * - Vector tools with intuitive interface
+ * - AI asset generation built-in
  * - Advanced typography (kerning, tracking, ligatures)
- * - One-time payment vs $120/year (Canva) + $240/year (Adobe)
- * - No watermarks on free tier
- * - Works offline (Canva doesn't)
+ * - One-time payment model
+ * - No watermarks
+ * - Works offline
  */
 
 export default function GraphicDesignSuite() {
@@ -96,9 +96,9 @@ export default function GraphicDesignSuite() {
             { id: 'c8', name: 'Custom Freeform', size: '8.5x11in', layout: 'custom' }
         ],
         trading: [
-            { id: 't1', name: 'Pokemon Style Card', size: '2.5x3.5in' },
-            { id: 't2', name: 'Magic/Yu-Gi-Oh Style', size: '2.5x3.5in' },
-            { id: 't3', name: 'Sports Card (Baseball)', size: '2.5x3.5in' },
+            { id: 't1', name: 'Collectible Card Style 1', size: '2.5x3.5in' },
+            { id: 't2', name: 'Collectible Card Style 2', size: '2.5x3.5in' },
+            { id: 't3', name: 'Sports Card Format', size: '2.5x3.5in' },
             { id: 't4', name: 'Character Card (Anime)', size: '2.5x3.5in' },
             { id: 't5', name: 'Tarot Card Style', size: '2.75x4.75in' }
         ],

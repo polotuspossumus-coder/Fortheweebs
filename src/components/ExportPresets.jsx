@@ -1,6 +1,5 @@
 // ExportPresets.jsx
-// One-click export presets for all tools - no more researching settings
-// Adobe makes you figure it out. Canva has limited presets. We have EVERYTHING.
+// One-click export presets for all tools - intelligent settings optimization
 
 import React, { useState } from 'react';
 import './ExportPresets.css';

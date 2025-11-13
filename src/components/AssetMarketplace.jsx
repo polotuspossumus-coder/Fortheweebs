@@ -1,6 +1,9 @@
 // AssetMarketplace.jsx
 // The feature that turns users into revenue (10-20% cut from every sale)
-// Adobe Stock exists but it's separate ($30/mo). Canva has templates (but no user marketplace).
+/**
+ * Creator Asset Marketplace - Buy/sell templates, graphics, fonts, presets
+ * Users can monetize their creations
+ */
 // Unity Asset Store exists (but for games, not creative content).
 // We have EVERYTHING: templates, plugins, 3D models, audio, video, fonts, presets - ALL IN ONE PLACE.
 

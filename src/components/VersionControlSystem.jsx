@@ -1,7 +1,6 @@
 // VersionControlSystem.jsx
-// The feature that makes creative work non-destructive forever
-// Adobe has limited "history" (20-50 steps). Canva has "version history" (but it's terrible).
-// We have FULL GIT-STYLE VERSION CONTROL for creatives with branching, merging, diffing.
+// Full git-style version control for creative work
+// Complete history with branching, merging, and diffing capabilities
 
 import React, { useState, useEffect, useRef } from 'react';
 import './VersionControlSystem.css';

@@ -4,7 +4,7 @@ import './AIAgentAssistant.css';
 /**
  * AIAgentAssistant - Context-Aware AI Helper for ALL Tools
  * 
- * The feature that makes competitors obsolete:
+ * Features:
  * - Understands what you're working on (audio, video, photo, 3D, design)
  * - Natural language commands: "make this more cinematic"
  * - Learns your style and suggests improvements
@@ -18,11 +18,7 @@ import './AIAgentAssistant.css';
  * Design: "make this logo more modern" → suggests colors, fonts
  * 3D: "add realistic lighting" → places lights, adjusts shadows
  * 
- * Why competitors can't do this:
- * - Adobe Sensei is tool-specific, not cross-tool
- * - Canva AI is template-based, not context-aware
- * - Unity AI doesn't exist
- * - We have ONE agent that knows EVERYTHING
+ * Unified AI agent that works across all creative tools
  */
 
 export default function AIAgentAssistant({ toolType, projectData, onApplySuggestion }) {

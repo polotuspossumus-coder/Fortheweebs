@@ -189,7 +189,7 @@ export default function VideoEditorPro() {
                         <div className="feature-badge">⚡ Fast Rendering</div>
                         <div className="feature-badge">🤖 AI Auto-Edit</div>
                         <div className="feature-badge">💰 No Subscription</div>
-                        <div className="feature-badge">🚫 Way Cheaper Than Adobe</div>
+                        <div className="feature-badge">� Affordable Pricing</div>
                     </div>
                 </div>
             ) : (
