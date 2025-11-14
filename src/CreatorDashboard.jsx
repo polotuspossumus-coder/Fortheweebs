@@ -34,14 +34,29 @@ import { AIBugFixer } from "./components/AIBugFixer";
 import { LanguageSelector } from "./components/LanguageSelector";
 import { t } from "./utils/i18n";
 import DeviceManager from "./components/DeviceManager";
+import { isOwner } from "./utils/ownerAuth";
 
 export const CreatorDashboard = ({ userId = "demo_user", ipAddress = "127.0.0.1", tier = "free" }) => {
-  const isAdmin = userId === "owner" || userId === "admin";
-  const [tosAccepted, setTosAccepted] = useState(isAdmin ? true : false); // Owner bypasses TOS
-  const [creatorAgreementAccepted, setCreatorAgreementAccepted] = useState(isAdmin ? true : false); // Owner bypasses agreement
+  const [isAdmin, setIsAdmin] = useState(userId === "owner" || userId === "admin");
+  const [tosAccepted, setTosAccepted] = useState(isAdmin ? true : false);
+  const [creatorAgreementAccepted, setCreatorAgreementAccepted] = useState(isAdmin ? true : false);
   const [currentTier] = useState(tier || 'General Access');
   const [userBalance, setUserBalance] = useState(0);
   const version = "2025.10";
+
+  // Check if user is verified owner
+  useEffect(() => {
+    const checkOwner = async () => {
+      const ownerStatus = await isOwner();
+      setIsAdmin(ownerStatus || userId === "owner" || userId === "admin");
+      if (ownerStatus) {
+        setTosAccepted(true);
+        setCreatorAgreementAccepted(true);
+        console.log('👑 Owner dashboard access granted');
+      }
+    };
+    checkOwner();
+  }, [userId]);
 
   // Load user balance on mount
   useEffect(() => {

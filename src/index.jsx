@@ -20,6 +20,7 @@ import HelpButton from "./components/HelpButton.jsx";
 import Invite from "./pages/Invite.jsx";
 import { registerServiceWorker } from "./utils/registerServiceWorker.js";
 import { autoLoginOwner, isDeviceTrusted } from "./utils/deviceAuth.js";
+import { requireOwner, isOwner } from "./utils/ownerAuth.js";
 
 // Register service worker for PWA support
 registerServiceWorker();
@@ -42,15 +43,8 @@ function AppFlow() {
       owner: params.get('owner')
     });
 
-    // Simple owner bypass - just use ?owner=polotus in URL
-    if (params.get('owner') === 'polotus') {
-      localStorage.setItem("userId", "owner");
-      localStorage.setItem("adminAuthenticated", "true");
-      localStorage.setItem("legalAccepted", "true");
-      localStorage.setItem("tosAccepted", "true");
-      localStorage.setItem("hasOnboarded", "true");
-      return 3; // Go straight to dashboard
-    }
+    // SECURE: Owner access now requires Supabase authentication
+    // No more public URL bypasses - must be logged in with owner email
 
     // Check for family access code FIRST (before anything else)
     const familyCode = params.get('familyCode') || params.get('family') || params.get('code');
