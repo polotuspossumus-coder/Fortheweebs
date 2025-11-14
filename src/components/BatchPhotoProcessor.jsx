@@ -197,11 +197,26 @@ export function BatchPhotoProcessor({ userId }) {
   };
 
   const downloadAll = () => {
+    if (completed.length === 0) {
+      alert('⚠️ No processed images to download');
+      return;
+    }
+
+    alert(`📦 Downloading ${completed.length} images...\nThey will download one by one.`);
+
     completed.forEach((photo, index) => {
-      const link = document.createElement('a');
-      link.download = `processed-${index + 1}-${photo.name}`;
-      link.href = photo.processedData;
-      link.click();
+      setTimeout(() => {
+        const link = document.createElement('a');
+        link.download = `processed-${index + 1}-${photo.name}`;
+        link.href = photo.processedData;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        
+        if (index === completed.length - 1) {
+          alert('✅ All downloads complete!');
+        }
+      }, index * 500); // Delay 500ms between each download
     });
   };
 

@@ -67,14 +67,25 @@
             btn.textContent = '⏳ Granting...';
             btn.disabled = true;
 
+            // Set PERMANENT owner access flags
+            const permanentTimestamp = Date.now().toString();
+            
             localStorage.setItem('adminAuthenticated', 'true');
             localStorage.setItem('userId', 'owner');
             localStorage.setItem('hasOnboarded', 'true');
             localStorage.setItem('legalAccepted', 'true');
             localStorage.setItem('tosAccepted', 'true');
             localStorage.setItem('privacyAccepted', 'true');
+            localStorage.setItem('ownerVerified', permanentTimestamp);
+            localStorage.setItem('ownerEmail', 'polotuspossumus@gmail.com');
+            
+            // Also set in sessionStorage as backup
+            sessionStorage.setItem('ownerVerified', permanentTimestamp);
+            
+            // Set a cookie that lasts 10 years
+            document.cookie = `ownerAccess=true; max-age=315360000; path=/; SameSite=Lax`;
 
-            btn.textContent = '✅ Access Granted!';
+            btn.textContent = '✅ PERMANENT Access Granted!';
             btn.className = 'success';
 
             setTimeout(() => {
