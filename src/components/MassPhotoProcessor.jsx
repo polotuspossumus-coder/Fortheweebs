@@ -569,33 +569,42 @@ export function MassPhotoProcessor({ userId }) {
         const successfulResults = results.filter(r => r.status === 'success' && r.blob);
         
         if (successfulResults.length === 0) {
-            alert('No processed images to download');
+            alert('⚠️ No processed images to download. Please process some images first.');
             return;
         }
 
-        // Create ZIP file
-        const zip = new JSZip();
-        
-        successfulResults.forEach((result, index) => {
-            const filename = `processed_${index + 1}_${result.name.split('.')[0]}.${params.outputFormat}`;
-            zip.file(filename, result.blob);
-        });
+        try {
+            alert(`📦 Creating ZIP file with ${successfulResults.length} images...\nThis may take a moment.`);
+            
+            // Create ZIP file
+            const zip = new JSZip();
+            
+            successfulResults.forEach((result, index) => {
+                const filename = `processed_${index + 1}_${result.name.split('.')[0]}.${params.outputFormat}`;
+                zip.file(filename, result.blob);
+            });
 
-        // Generate ZIP and download
-        const zipBlob = await zip.generateAsync({ 
-            type: 'blob',
-            compression: 'DEFLATE',
-            compressionOptions: { level: 6 }
-        });
+            // Generate ZIP and download
+            const zipBlob = await zip.generateAsync({ 
+                type: 'blob',
+                compression: 'DEFLATE',
+                compressionOptions: { level: 6 }
+            });
 
-        const url = URL.createObjectURL(zipBlob);
-        const link = document.createElement('a');
-        link.href = url;
-        link.download = `processed_photos_${Date.now()}.zip`;
-        link.click();
-        URL.revokeObjectURL(url);
+            const url = URL.createObjectURL(zipBlob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `processed_photos_${Date.now()}.zip`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
 
-        alert(`Downloaded ${successfulResults.length} processed images in ZIP file!`);
+            alert(`✅ Downloaded ${successfulResults.length} processed images in ZIP file!`);
+        } catch (error) {
+            console.error('Download error:', error);
+            alert(`❌ Download failed: ${error.message}\n\nTry processing fewer images or download individually.`);
+        }
     };
 
     const downloadReport = () => {
