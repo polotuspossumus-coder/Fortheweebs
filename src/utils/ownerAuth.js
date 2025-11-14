@@ -4,7 +4,7 @@
 import { supabase } from '../lib/supabase';
 
 // Your owner email - ONLY this email gets admin access
-const OWNER_EMAIL = 'polotuspossumus@gmail.com'; // Replace with your actual email
+const OWNER_EMAIL = 'polotuspossumus@gmail.com';
 
 /**
  * Check if current user is the verified owner
