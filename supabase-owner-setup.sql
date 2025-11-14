@@ -11,7 +11,7 @@ ADD COLUMN IF NOT EXISTS is_admin BOOLEAN DEFAULT false;
 CREATE INDEX IF NOT EXISTS idx_users_role ON users(role);
 CREATE INDEX IF NOT EXISTS idx_users_is_admin ON users(is_admin);
 
--- Set YOUR email as owner (CHANGE THIS TO YOUR ACTUAL EMAIL!)
+-- Set YOUR email as owner
 UPDATE users 
 SET role = 'owner', is_admin = true 
 WHERE email = 'polotuspossumus@gmail.com';
