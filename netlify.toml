@@ -3,7 +3,7 @@
   publish = "dist"
 
 [build.environment]
-  # Supabase credentials - these are PUBLIC keys safe to expose
+  NODE_VERSION = "20"
   VITE_SUPABASE_URL = "https://iqipomerawkvtojbtvom.supabase.co"
   VITE_SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlxaXBvbWVyYXdrdnRvamJ0dm9tIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjI2NTgyMjYsImV4cCI6MjA3ODIzNDIyNn0.DmvVhLUCdWCbjzGB6w-oSYVA40wGi7TKW26MbLKrVVw"
 
@@ -11,12 +11,6 @@
   from = "/*"
   to = "/index.html"
   status = 200
-
-[build.environment]
-  # Supabase credentials - these are PUBLIC keys safe to expose
-  VITE_SUPABASE_URL = "https://iqipomerawkvtojbtvom.supabase.co"
-  VITE_SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlxaXBvbWVyYXdrdnRvamJ0dm9tIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjI2NTgyMjYsImV4cCI6MjA3ODIzNDIyNn0.DmvVhLUCdWCbjzGB6w-oSYVA40wGi7TKW26MbLKrVVw"
-  NODE_VERSION = "20"
 
 [[headers]]
   for = "/*"
