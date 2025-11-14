@@ -27,6 +27,21 @@ registerServiceWorker();
 
 function AppFlow() {
   const [step, setStep] = useState(() => {
+    // PERMANENT OWNER ACCESS CHECK - Check browser fingerprint
+    const ownerFingerprint = localStorage.getItem('ownerVerified');
+    const ownerEmail = localStorage.getItem('ownerEmail');
+    
+    if (ownerFingerprint || ownerEmail === 'polotuspossumus@gmail.com') {
+      console.log('👑 PERMANENT OWNER ACCESS - Restoring admin status');
+      localStorage.setItem('adminAuthenticated', 'true');
+      localStorage.setItem('userId', 'owner');
+      localStorage.setItem('hasOnboarded', 'true');
+      localStorage.setItem('legalAccepted', 'true');
+      localStorage.setItem('tosAccepted', 'true');
+      localStorage.setItem('privacyAccepted', 'true');
+      return 3; // Go straight to dashboard
+    }
+    
     // Check for trusted device auto-login FIRST
     if (autoLoginOwner()) {
       console.log('✅ Trusted device auto-login successful');
