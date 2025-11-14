@@ -7,7 +7,7 @@
     "dev": "vite",
     "dev:server": "nodemon server.js",
     "dev:all": "concurrently \"npm run dev\" \"npm run dev:server\"",
-    "build": "vite build",
+    "build": "node scripts/inject-env.js && vite build",
     "preview": "vite preview",
     "server": "node server.js",
     "lint": "eslint . --ext .js,.ts,.jsx,.tsx",
