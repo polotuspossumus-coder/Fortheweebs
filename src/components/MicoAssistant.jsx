@@ -3,17 +3,19 @@ import React, { useState } from 'react';
 export default function MicoAssistant() {
     const [isOpen, setIsOpen] = useState(false);
     const [messages, setMessages] = useState([
-        { role: 'assistant', content: "Hi! I'm Mico 🧠, your free AI assistant. I can help you with features, answer questions, or log bugs for me to fix!" }
+        { role: 'assistant', content: "Hi! I'm Mico 🧠, powered by Microsoft Copilot. I can help you with features, answer questions, or log bugs!" }
     ]);
     const [input, setInput] = useState('');
     const [isMinimized, setIsMinimized] = useState(false);
+    const [isThinking, setIsThinking] = useState(false);
 
     const handleSend = async () => {
-        if (!input.trim()) return;
+        if (!input.trim() || isThinking) return;
 
         const userMessage = input.trim();
         setMessages(prev => [...prev, { role: 'user', content: userMessage }]);
         setInput('');
+        setIsThinking(true);
 
         // Check if it's a bug report
         const isBugReport = userMessage.toLowerCase().includes('bug') ||
@@ -21,14 +23,9 @@ export default function MicoAssistant() {
             userMessage.toLowerCase().includes('broken') ||
             userMessage.toLowerCase().includes('not working');
 
-        let response;
         if (isBugReport) {
-            // Log to dev panel for Mico to fix
+            // Log bug to dev panel
             try {
-                // TODO: Send to backend API that logs to MicoDevPanel
-                response = "🔧 I've logged this issue to my dev panel. I'll investigate and fix it ASAP! You can continue using the platform - I'll work on it in the background.";
-
-                // Store in localStorage for now (will be replaced with API)
                 const existingIssues = JSON.parse(localStorage.getItem('mico_issues') || '[]');
                 existingIssues.push({
                     timestamp: new Date().toISOString(),
@@ -38,24 +35,62 @@ export default function MicoAssistant() {
                 });
                 localStorage.setItem('mico_issues', JSON.stringify(existingIssues));
             } catch (err) {
-                response = "I heard you! Let me look into that issue.";
-            }
-        } else {
-            // General help
-            if (userMessage.toLowerCase().includes('how') || userMessage.toLowerCase().includes('help')) {
-                response = "I'm here to help! You can ask me about any feature, get creative tips, or report bugs. What would you like to know?";
-            } else if (userMessage.toLowerCase().includes('payment') || userMessage.toLowerCase().includes('tier')) {
-                response = "We have Free, Pro, and VIP tiers. Free gets you started, Pro unlocks advanced tools, and VIP gives you everything! Check the Premium tab to upgrade.";
-            } else if (userMessage.toLowerCase().includes('upload') || userMessage.toLowerCase().includes('content')) {
-                response = "You can upload images, videos, and more through the various tool tabs. Each tool has an upload button - just look for the 📁 icon!";
-            } else {
-                response = "I'm still learning! For now, I can help with basic questions or log bugs for me to fix. What else can I help with?";
+                console.error('Failed to log issue:', err);
             }
         }
 
-        setTimeout(() => {
-            setMessages(prev => [...prev, { role: 'assistant', content: response }]);
-        }, 500);
+        try {
+            // Call GitHub Models API (Microsoft Copilot backend)
+            const response = await fetch('https://models.inference.ai.azure.com/chat/completions', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${import.meta.env.VITE_GITHUB_TOKEN}`
+                },
+                body: JSON.stringify({
+                    messages: [
+                        {
+                            role: 'system',
+                            content: `You are Mico, Microsoft Copilot assistant for ForTheWeebs platform. Be helpful, friendly, and concise. Help users with:
+- Platform features (content upload, tiers, tools)
+- Answering questions about functionality
+- Logging bugs (acknowledge and reassure)
+Keep responses under 3 sentences unless explaining complex topics.`
+                        },
+                        ...messages.slice(0, -1), // Previous conversation
+                        { role: 'user', content: userMessage }
+                    ],
+                    model: 'gpt-4o',
+                    temperature: 0.7,
+                    max_tokens: 200
+                })
+            });
+
+            const data = await response.json();
+            let aiResponse = data.choices?.[0]?.message?.content || "I'm having trouble connecting right now. Please try again!";
+
+            if (isBugReport) {
+                aiResponse += "\n\n🔧 I've logged this issue to my dev panel for investigation!";
+            }
+
+            setMessages(prev => [...prev, { role: 'assistant', content: aiResponse }]);
+        } catch (error) {
+            console.error('AI Error:', error);
+            
+            // Fallback response
+            let fallback = "I'm having connection issues. ";
+            if (isBugReport) {
+                fallback = "🔧 I've logged your issue! I'm having trouble with my AI connection right now, but your bug report is saved.";
+            } else if (userMessage.toLowerCase().includes('help')) {
+                fallback += "Try asking about platform features, tiers, or tools!";
+            } else {
+                fallback += "I'm still here to help - try asking about ForTheWeebs features!";
+            }
+            
+            setMessages(prev => [...prev, { role: 'assistant', content: fallback }]);
+        } finally {
+            setIsThinking(false);
+        }
     };
 
     if (!isOpen) {

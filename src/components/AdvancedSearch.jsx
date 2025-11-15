@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { supabase } from '../lib/supabase';
 
 export default function AdvancedSearch() {
   const [query, setQuery] = useState('');
@@ -8,15 +9,87 @@ export default function AdvancedSearch() {
     category: 'all'
   });
   const [results, setResults] = useState([]);
+  const [isSearching, setIsSearching] = useState(false);
 
-  const handleSearch = () => {
-    // TODO: Connect to actual search API
-    console.log('Searching for:', query, 'with filters:', filters);
-    setResults([
-      { id: 1, title: 'Sample Result 1', type: 'content', date: '2025-11-15' },
-      { id: 2, title: 'Sample Result 2', type: 'user', date: '2025-11-14' },
-      { id: 3, title: 'Sample Result 3', type: 'content', date: '2025-11-13' }
-    ]);
+  const handleSearch = async () => {
+    if (!query.trim()) return;
+
+    setIsSearching(true);
+    try {
+      let searchResults = [];
+
+      // Search users if type is 'all' or 'user'
+      if (filters.type === 'all' || filters.type === 'user') {
+        const { data: users } = await supabase
+          .from('users')
+          .select('id, username, email, created_at')
+          .or(`username.ilike.%${query}%,email.ilike.%${query}%`)
+          .limit(20);
+        
+        if (users) {
+          searchResults = [...searchResults, ...users.map(u => ({
+            id: `user-${u.id}`,
+            title: u.username || u.email,
+            type: 'user',
+            date: u.created_at?.split('T')[0],
+            data: u
+          }))];
+        }
+      }
+
+      // Search content/posts if type is 'all' or 'content'
+      if (filters.type === 'all' || filters.type === 'content') {
+        // Note: This assumes you have a posts/content table
+        // Modify based on your actual schema
+        const { data: content } = await supabase
+          .from('posts')
+          .select('id, title, description, created_at, type')
+          .or(`title.ilike.%${query}%,description.ilike.%${query}%`)
+          .limit(20);
+        
+        if (content) {
+          searchResults = [...searchResults, ...content.map(c => ({
+            id: `content-${c.id}`,
+            title: c.title || 'Untitled',
+            type: 'content',
+            date: c.created_at?.split('T')[0],
+            data: c
+          }))];
+        }
+      }
+
+      // Apply date range filter
+      if (filters.dateRange !== 'all') {
+        const now = new Date();
+        const cutoffDate = new Date();
+        
+        switch (filters.dateRange) {
+          case 'today':
+            cutoffDate.setHours(0, 0, 0, 0);
+            break;
+          case 'week':
+            cutoffDate.setDate(now.getDate() - 7);
+            break;
+          case 'month':
+            cutoffDate.setMonth(now.getMonth() - 1);
+            break;
+          case 'year':
+            cutoffDate.setFullYear(now.getFullYear() - 1);
+            break;
+        }
+        
+        searchResults = searchResults.filter(r => 
+          new Date(r.date) >= cutoffDate
+        );
+      }
+
+      setResults(searchResults);
+    } catch (error) {
+      console.error('Search error:', error);
+      setResults([]);
+    } finally {
+      setIsSearching(false);
+    }
   };
 
   return (
