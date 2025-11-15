@@ -28,7 +28,7 @@ export default function ModerationDashboard() {
 
   const handleAction = (reportId, action) => {
     console.log(`Action ${action} on report ${reportId}`);
-    setReports(reports.map(r => 
+    setReports(reports.map(r =>
       r.id === reportId ? { ...r, status: action === 'approve' ? 'resolved' : 'dismissed' } : r
     ));
   };
@@ -119,10 +119,10 @@ export default function ModerationDashboard() {
                   borderRadius: '12px',
                   fontSize: '0.75rem',
                   fontWeight: '600',
-                  background: report.type === 'spam' ? '#fee2e2' : 
-                             report.type === 'abuse' ? '#fecaca' : '#dbeafe',
-                  color: report.type === 'spam' ? '#991b1b' : 
-                         report.type === 'abuse' ? '#7f1d1d' : '#1e40af'
+                  background: report.type === 'spam' ? '#fee2e2' :
+                    report.type === 'abuse' ? '#fecaca' : '#dbeafe',
+                  color: report.type === 'spam' ? '#991b1b' :
+                    report.type === 'abuse' ? '#7f1d1d' : '#1e40af'
                 }}>
                   {report.type}
                 </span>

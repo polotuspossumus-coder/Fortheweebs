@@ -8,7 +8,7 @@ export function NotificationProvider({ children }) {
   const addNotification = useCallback((message, type = 'info') => {
     const id = Date.now();
     setNotifications(prev => [...prev, { id, message, type, timestamp: new Date() }]);
-    
+
     // Auto-remove after 5 seconds
     setTimeout(() => {
       setNotifications(prev => prev.filter(n => n.id !== id));
@@ -24,12 +24,12 @@ export function NotificationProvider({ children }) {
   }, []);
 
   return (
-    <NotificationContext.Provider value={{ 
-      notifications, 
-      addNotification, 
-      removeNotification, 
+    <NotificationContext.Provider value={{
+      notifications,
+      addNotification,
+      removeNotification,
       clearAll,
-      unreadCount: notifications.length 
+      unreadCount: notifications.length
     }}>
       {children}
     </NotificationContext.Provider>

@@ -20,6 +20,7 @@ import HelpButton from "./components/HelpButton.jsx";
 import Invite from "./pages/Invite.jsx";
 import { NotificationProvider } from "./notifications/NotificationProvider.jsx";
 import EngagementTracker from "./components/EngagementTracker.jsx";
+import MicoAssistant from "./components/MicoAssistant.jsx";
 import { registerServiceWorker } from "./utils/registerServiceWorker.js";
 import { autoLoginOwner, isDeviceTrusted } from "./utils/deviceAuth.js";
 import { requireOwner, isOwner } from "./utils/ownerAuth.js";
@@ -176,6 +177,7 @@ function AppFlow() {
           {step === 3 && <CreatorDashboard userId={userId} tier={userTier} />}
           <BugReporter />
           <CookieConsent />
+          <MicoAssistant />
         </React.StrictMode>
       </ThemeProvider>
     </ErrorBoundary>

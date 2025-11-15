@@ -102,8 +102,8 @@ export default function NotificationBadge() {
                     display: 'flex',
                     justifyContent: 'space-between',
                     alignItems: 'flex-start',
-                    background: notif.type === 'error' ? '#fff5f5' : 
-                               notif.type === 'success' ? '#f0fff4' : 'white'
+                    background: notif.type === 'error' ? '#fff5f5' :
+                      notif.type === 'success' ? '#f0fff4' : 'white'
                   }}
                 >
                   <div style={{ flex: 1 }}>

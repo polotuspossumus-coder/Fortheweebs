@@ -17,7 +17,7 @@ export default function EngagementTracker({ children }) {
 
     // Track clicks
     document.addEventListener('click', trackEvent);
-    
+
     // Track session duration
     const sessionInterval = setInterval(() => {
       const duration = Math.floor((Date.now() - sessionStart) / 1000);
@@ -37,11 +37,11 @@ export default function EngagementTracker({ children }) {
       document.removeEventListener('click', trackEvent);
       document.removeEventListener('visibilitychange', handleVisibilityChange);
       clearInterval(sessionInterval);
-      
+
       // Send analytics on unmount
       const finalDuration = Math.floor((Date.now() - sessionStart) / 1000);
-      console.log('Session ended', { 
-        duration: finalDuration, 
+      console.log('Session ended', {
+        duration: finalDuration,
         totalEvents: events.length,
         events: events.slice(-10) // Last 10 events
       });
