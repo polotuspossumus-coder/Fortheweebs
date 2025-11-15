@@ -23,6 +23,12 @@ import { TradingCardDesigner } from "./components/TradingCardDesigner";
 import { TipsAndDonations } from "./components/TipsAndDonations";
 import CommissionMarketplace from "./components/CommissionMarketplace";
 import { PremiumSubscription } from "./components/PremiumSubscription";
+import NotificationBadge from "./notifications/NotificationBadge";
+import MessageBadge from "./messaging/MessageBadge";
+import MessagingSystem from "./messaging/MessagingSystem";
+import AdvancedSearch from "./components/AdvancedSearch";
+import ModerationDashboard from "./components/ModerationDashboard";
+import AnalyticsDashboard from "./components/AnalyticsDashboard";
 
 import { ToolLockGate } from "./components/ToolLockGate";
 import { DevBalanceManager } from "./components/DevBalanceManager";
@@ -42,6 +48,7 @@ export const CreatorDashboard = ({ userId = "demo_user", ipAddress = "127.0.0.1"
   const [creatorAgreementAccepted, setCreatorAgreementAccepted] = useState(isAdmin ? true : false);
   const [currentTier] = useState(tier || 'General Access');
   const [userBalance, setUserBalance] = useState(0);
+  const [showMessages, setShowMessages] = useState(false);
   const version = "2025.10";
 
   // Check if user is verified owner
@@ -69,17 +76,17 @@ export const CreatorDashboard = ({ userId = "demo_user", ipAddress = "127.0.0.1"
     const pendingCode = localStorage.getItem('pending_family_code');
     if (pendingCode) {
       console.log('🎁 Redeeming family access code:', pendingCode);
-      
+
       // Grant family access immediately (client-side)
       localStorage.setItem(`family_access_${userId}`, pendingCode);
       localStorage.setItem('family_access_type', 'free');
       localStorage.removeItem('pending_family_code');
-      
+
       // Show success message
       setTimeout(() => {
         alert(`🎉 Welcome to ForTheWeebs!\n\nYour family access has been activated!\n\n✅ You now have FULL FREE ACCESS to all features!\n\n🚀 Start exploring your dashboard!`);
       }, 500);
-      
+
       console.log('✅ Family access granted!');
     }
   }, [userId]);
@@ -123,8 +130,17 @@ export const CreatorDashboard = ({ userId = "demo_user", ipAddress = "127.0.0.1"
         {userId === "owner" && (
           <TabsTrigger value="devices">🔐 Devices</TabsTrigger>
         )}
+        {userId === "owner" && (
+          <TabsTrigger value="moderation">🛡️ Moderation</TabsTrigger>
+        )}
+        {userId === "owner" && (
+          <TabsTrigger value="analytics">📊 Analytics</TabsTrigger>
+        )}
       </TabsList>
       <TabsContent value="overview">
+        <div style={{ marginBottom: '24px' }}>
+          <AdvancedSearch />
+        </div>
         <OverviewPanel userId={userId} />
       </TabsContent>
       <TabsContent value="bug-fixer">
@@ -252,6 +268,16 @@ export const CreatorDashboard = ({ userId = "demo_user", ipAddress = "127.0.0.1"
           <DeviceManager isOwner={true} />
         </TabsContent>
       )}
+      {userId === "owner" && (
+        <TabsContent value="moderation">
+          <ModerationDashboard />
+        </TabsContent>
+      )}
+      {userId === "owner" && (
+        <TabsContent value="analytics">
+          <AnalyticsDashboard />
+        </TabsContent>
+      )}
     </Tabs>
   );
 };
@@ -305,6 +331,51 @@ export const OverviewPanel = ({ userId }) => {
 
   return (
     <div style={{ padding: '24px' }}>
+      {/* Messages Modal */}
+      {showMessages && (
+        <div style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          background: 'rgba(0,0,0,0.5)',
+          zIndex: 9999,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          padding: '20px'
+        }}>
+          <div style={{
+            background: 'white',
+            borderRadius: '12px',
+            maxWidth: '1200px',
+            width: '100%',
+            maxHeight: '90vh',
+            overflow: 'auto',
+            position: 'relative'
+          }}>
+            <button
+              onClick={() => setShowMessages(false)}
+              style={{
+                position: 'absolute',
+                top: '16px',
+                right: '16px',
+                background: 'transparent',
+                border: 'none',
+                fontSize: '2rem',
+                cursor: 'pointer',
+                color: '#666',
+                zIndex: 10000
+              }}
+            >
+              ×
+            </button>
+            <MessagingSystem />
+          </div>
+        </div>
+      )}
+
       {/* Clean Welcome Header */}
       <div style={{
         padding: '20px',
@@ -312,13 +383,22 @@ export const OverviewPanel = ({ userId }) => {
         borderRadius: '12px',
         color: '#fff',
         marginBottom: '20px',
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
       }}>
-        <h2 style={{ fontSize: '1.5rem', fontWeight: '700', marginBottom: '8px' }}>
-          Welcome Back! 👋
-        </h2>
-        <p style={{ opacity: 0.9, fontSize: '14px' }}>
-          All your creative tools are ready to use
-        </p>
+        <div>
+          <h2 style={{ fontSize: '1.5rem', fontWeight: '700', marginBottom: '8px' }}>
+            Welcome Back! 👋
+          </h2>
+          <p style={{ opacity: 0.9, fontSize: '14px' }}>
+            All your creative tools are ready to use
+          </p>
+        </div>
+        <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
+          <MessageBadge onClick={() => setShowMessages(true)} />
+          <NotificationBadge />
+        </div>
       </div>
 
       {/* Optional Tutorial (dismissable) */}

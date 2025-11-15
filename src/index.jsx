@@ -18,6 +18,8 @@ import AchievementSystem from "./components/AchievementSystem.jsx";
 import InteractiveTutorial from "./components/InteractiveTutorial.jsx";
 import HelpButton from "./components/HelpButton.jsx";
 import Invite from "./pages/Invite.jsx";
+import { NotificationProvider } from "./notifications/NotificationProvider.jsx";
+import EngagementTracker from "./components/EngagementTracker.jsx";
 import { registerServiceWorker } from "./utils/registerServiceWorker.js";
 import { autoLoginOwner, isDeviceTrusted } from "./utils/deviceAuth.js";
 import { requireOwner, isOwner } from "./utils/ownerAuth.js";
@@ -30,7 +32,7 @@ function AppFlow() {
     // PERMANENT OWNER ACCESS CHECK - Check browser fingerprint
     const ownerFingerprint = localStorage.getItem('ownerVerified');
     const ownerEmail = localStorage.getItem('ownerEmail');
-    
+
     if (ownerFingerprint || ownerEmail === 'polotuspossumus@gmail.com') {
       console.log('👑 PERMANENT OWNER ACCESS - Restoring admin status');
       localStorage.setItem('adminAuthenticated', 'true');
@@ -41,13 +43,13 @@ function AppFlow() {
       localStorage.setItem('privacyAccepted', 'true');
       return 3; // Go straight to dashboard
     }
-    
+
     // Check for trusted device auto-login FIRST
     if (autoLoginOwner()) {
       console.log('✅ Trusted device auto-login successful');
       return 3; // Go straight to dashboard
     }
-    
+
     // Check URL parameters FIRST
     const params = new URLSearchParams(window.location.search);
 
@@ -184,6 +186,10 @@ const container = document.getElementById("root");
 const root = createRoot(container);
 root.render(
   <AuthProvider>
-    <AppFlow />
+    <NotificationProvider>
+      <EngagementTracker>
+        <AppFlow />
+      </EngagementTracker>
+    </NotificationProvider>
   </AuthProvider>
 );

@@ -2,9 +2,13 @@
 
 // This script uses ONLY Netlify's environment variables
 // No hardcoded credentials - reads from process.env only
+// For local dev, loads from .env file
 
 const fs = require('fs');
 const path = require('path');
+
+// Load .env file for local development
+require('dotenv').config({ path: path.join(__dirname, '..', '.env') });
 
 const envVars = {
   VITE_SUPABASE_URL: process.env.VITE_SUPABASE_URL,
@@ -14,7 +18,7 @@ const envVars = {
 // Check if variables exist
 if (!envVars.VITE_SUPABASE_URL || !envVars.VITE_SUPABASE_ANON_KEY) {
   console.error('❌ ERROR: Supabase environment variables not found!');
-  console.error('Please set VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY in Netlify dashboard');
+  console.error('Please set VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY in Netlify dashboard or .env file');
   process.exit(1);
 }
 
