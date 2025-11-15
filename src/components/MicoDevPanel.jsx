@@ -1,17 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import { isOwner } from '../utils/ownerAuth';
 
+const API_URL = 'http://localhost:3001/api/mico';
+
 export default function MicoDevPanel() {
     const [isOwnerUser, setIsOwnerUser] = useState(false);
     const [activeTab, setActiveTab] = useState('chat');
     const [messages, setMessages] = useState([
-        { role: 'system', content: '🧠 Mico online and ready. What should I build?' }
+        { role: 'system', content: '🧠 Connecting to Mico backend...' }
     ]);
     const [input, setInput] = useState('');
     const [logs, setLogs] = useState([
-        { timestamp: new Date().toISOString(), action: 'System initialized', status: 'success' }
+        { timestamp: new Date().toISOString(), action: 'System initializing', status: 'pending' }
     ]);
     const [userIssues, setUserIssues] = useState([]);
+    const [micoStatus, setMicoStatus] = useState(null);
+    const [isProcessing, setIsProcessing] = useState(false);
 
     useEffect(() => {
         const checkOwner = async () => {
@@ -22,6 +26,9 @@ export default function MicoDevPanel() {
             if (ownerStatus) {
                 const issues = JSON.parse(localStorage.getItem('mico_issues') || '[]');
                 setUserIssues(issues);
+                
+                // Check Mico backend status
+                checkMicoStatus();
             }
         };
         checkOwner();
@@ -35,21 +42,91 @@ export default function MicoDevPanel() {
         return () => clearInterval(interval);
     }, []);
 
-    const handleSendMessage = () => {
-        if (!input.trim()) return;
+    const checkMicoStatus = async () => {
+        try {
+            const response = await fetch(`${API_URL}/status`);
+            const data = await response.json();
+            setMicoStatus(data);
+            
+            setMessages([{ 
+                role: 'system', 
+                content: `✅ ${data.message}\n\nTools available: ${data.tools.join(', ')}`
+            }]);
+            
+            setLogs(prev => [...prev, {
+                timestamp: new Date().toISOString(),
+                action: 'Connected to Mico backend',
+                status: 'success'
+            }]);
+        } catch (error) {
+            setMessages([{ 
+                role: 'system', 
+                content: `⚠️ Backend connection failed. Make sure to run: npm run server\n\nError: ${error.message}`
+            }]);
+            
+            setLogs(prev => [...prev, {
+                timestamp: new Date().toISOString(),
+                action: `Backend connection failed: ${error.message}`,
+                status: 'error'
+            }]);
+        }
+    };
 
-        setMessages([...messages,
-        { role: 'user', content: input },
-        { role: 'assistant', content: '🧠 Processing your request...' }
-        ]);
+    const handleSendMessage = async () => {
+        if (!input.trim() || isProcessing) return;
 
-        setLogs([...logs, {
+        const userMessage = input.trim();
+        setInput('');
+        setIsProcessing(true);
+
+        // Add user message
+        setMessages(prev => [...prev, { role: 'user', content: userMessage }]);
+
+        // Log the request
+        setLogs(prev => [...prev, {
             timestamp: new Date().toISOString(),
-            action: `User request: ${input.substring(0, 50)}...`,
+            action: `Request: ${userMessage.substring(0, 100)}`,
             status: 'pending'
         }]);
 
-        setInput('');
+        try {
+            // Send to Mico backend
+            const response = await fetch(`${API_URL}/chat`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    message: userMessage,
+                    conversationHistory: messages
+                })
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+                setMessages(prev => [...prev, data.response]);
+                
+                setLogs(prev => [...prev, {
+                    timestamp: new Date().toISOString(),
+                    action: 'Response generated',
+                    status: 'success'
+                }]);
+            } else {
+                throw new Error(data.error || 'Unknown error');
+            }
+        } catch (error) {
+            setMessages(prev => [...prev, {
+                role: 'assistant',
+                content: `❌ Error: ${error.message}\n\nMake sure the backend server is running: npm run server`
+            }]);
+            
+            setLogs(prev => [...prev, {
+                timestamp: new Date().toISOString(),
+                action: `Error: ${error.message}`,
+                status: 'error'
+            }]);
+        } finally {
+            setIsProcessing(false);
+        }
     };
 
     if (!isOwnerUser) {

@@ -31,10 +31,12 @@ app.get('/health', (req, res) => {
 const stripeRoutes = require('./api/stripe');
 const aiRoutes = require('./api/ai');
 const familyAccessRoutes = require('./api/family-access');
+const micoRoutes = require('./api/mico');
 
 app.use('/api', stripeRoutes);
 app.use('/api/ai', aiRoutes);
 app.use('/api/family-access', familyAccessRoutes);
+app.use('/api/mico', micoRoutes);
 
 // Error handling middleware
 app.use((err, req, res, next) => {
@@ -74,6 +76,9 @@ app.listen(PORT, () => {
 ║   - GET  /api/family-access/verify                        ║
 ║   - POST /api/family-access/redeem                        ║
 ║   - DELETE /api/family-access/delete                      ║
+║   - GET  /api/mico/status                🧠               ║
+║   - POST /api/mico/chat                  🧠               ║
+║   - POST /api/mico/tool/*                🧠               ║
 ║                                                           ║
 ╚═══════════════════════════════════════════════════════════╝
   `);
