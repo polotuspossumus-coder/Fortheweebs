@@ -24,18 +24,37 @@ export default function MicoAssistant() {
             userMessage.toLowerCase().includes('not working');
 
         if (isBugReport) {
-            // Log bug to dev panel
+            // Log bug to database instead of localStorage
             try {
-                const existingIssues = JSON.parse(localStorage.getItem('mico_issues') || '[]');
-                existingIssues.push({
-                    timestamp: new Date().toISOString(),
-                    userId: localStorage.getItem('userId') || 'anonymous',
-                    issue: userMessage,
-                    status: 'pending'
+                await fetch('http://localhost:3001/api/issues', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        userId: localStorage.getItem('userId') || 'anonymous',
+                        issueType: 'bug',
+                        description: userMessage,
+                        context: {
+                            url: window.location.href,
+                            timestamp: new Date().toISOString(),
+                            userAgent: navigator.userAgent
+                        }
+                    })
                 });
-                localStorage.setItem('mico_issues', JSON.stringify(existingIssues));
             } catch (err) {
                 console.error('Failed to log issue:', err);
+                // Fallback to localStorage
+                try {
+                    const existingIssues = JSON.parse(localStorage.getItem('mico_issues') || '[]');
+                    existingIssues.push({
+                        timestamp: new Date().toISOString(),
+                        userId: localStorage.getItem('userId') || 'anonymous',
+                        issue: userMessage,
+                        status: 'pending'
+                    });
+                    localStorage.setItem('mico_issues', JSON.stringify(existingIssues));
+                } catch (localErr) {
+                    console.error('Fallback failed:', localErr);
+                }
             }
         }
 

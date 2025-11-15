@@ -30,11 +30,19 @@ app.get('/health', (req, res) => {
 // API Routes
 const stripeRoutes = require('./api/stripe');
 const aiRoutes = require('./api/ai');
+const aiContentRoutes = require('./api/ai-content');
+const userTierRoutes = require('./api/user-tier');
+const uploadRoutes = require('./api/upload');
+const issuesRoutes = require('./api/issues');
 const familyAccessRoutes = require('./api/family-access');
 const micoRoutes = require('./api/mico');
 
 app.use('/api', stripeRoutes);
 app.use('/api/ai', aiRoutes);
+app.use('/api/ai-content', aiContentRoutes);
+app.use('/api', userTierRoutes);
+app.use('/api/upload', uploadRoutes);
+app.use('/api/issues', issuesRoutes);
 app.use('/api/family-access', familyAccessRoutes);
 app.use('/api/mico', micoRoutes);
 
@@ -53,7 +61,11 @@ app.use((req, res) => {
 });
 
 // Start server
-app.listen(PORT, () => {
+const server = app.listen(PORT, (err) => {
+    if (err) {
+        console.error('Failed to start server:', err);
+        process.exit(1);
+    }
     console.log(`
 ╔═══════════════════════════════════════════════════════════╗
 ║                                                           ║
@@ -82,6 +94,26 @@ app.listen(PORT, () => {
 ║                                                           ║
 ╚═══════════════════════════════════════════════════════════╝
   `);
+});
+
+// Handle unhandled promise rejections
+process.on('unhandledRejection', (reason, promise) => {
+    console.error('Unhandled Rejection at:', promise, 'reason:', reason);
+});
+
+// Handle uncaught exceptions
+process.on('uncaughtException', (error) => {
+    console.error('Uncaught Exception:', error);
+    process.exit(1);
+});
+
+// Graceful shutdown
+process.on('SIGTERM', () => {
+    console.log('SIGTERM signal received: closing HTTP server');
+    server.close(() => {
+        console.log('HTTP server closed');
+        process.exit(0);
+    });
 });
 
 module.exports = app;

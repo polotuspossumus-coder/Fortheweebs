@@ -6,10 +6,15 @@
  */
 
 const express = require('express');
+const { createClient } = require('@supabase/supabase-js');
+
 const router = express.Router();
 
-// Mock database for family access codes (in production, use Supabase)
-const accessCodes = new Map();
+// Initialize Supabase
+const supabase = createClient(
+    process.env.VITE_SUPABASE_URL,
+    process.env.VITE_SUPABASE_ANON_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY
+);
 
 /**
  * List all access codes (admin only)
@@ -17,8 +22,16 @@ const accessCodes = new Map();
  */
 router.get('/list', async (req, res) => {
   try {
-    const codes = Array.from(accessCodes.values());
-    return res.status(200).json({ codes });
+    const { data, error } = await supabase
+        .from('family_access_codes')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+    if (error) {
+        throw error;
+    }
+
+    return res.status(200).json({ codes: data || [] });
   } catch (error) {
     console.error('Error listing access codes:', error);
     return res.status(500).json({ error: 'Internal server error' });
@@ -31,7 +44,7 @@ router.get('/list', async (req, res) => {
  */
 router.post('/generate', async (req, res) => {
   try {
-    const { adminId, name, type, notes } = req.body;
+    const { adminId, name, type, notes, maxUses = 5, expiresInDays = 365 } = req.body;
 
     if (!adminId || !name || !type) {
       return res.status(400).json({ error: 'Missing required fields' });
@@ -40,32 +53,38 @@ router.post('/generate', async (req, res) => {
     // Generate unique code
     const code = `FAMILY-${name.toUpperCase().replace(/\s+/g, '-')}-${Date.now().toString(36).toUpperCase()}`;
 
+    const expiresAt = new Date();
+    expiresAt.setDate(expiresAt.getDate() + expiresInDays);
+
+    // Determine tier based on type
+    const tier = type === 'free' ? 'CREATOR' : 'SUPPORTER';
+
+    const { data, error } = await supabase
+        .from('family_access_codes')
+        .insert({
+            code: code,
+            creator_id: adminId,
+            tier: tier,
+            max_uses: maxUses,
+            uses_count: 0,
+            expires_at: expiresAt.toISOString(),
+            created_at: new Date().toISOString()
+        })
+        .select()
+        .single();
+
+    if (error) {
+        throw error;
+    }
+
     const baseUrl = process.env.VITE_APP_URL || 'http://localhost:3002';
     const link = `${baseUrl}?familyCode=${code}`;
 
-    const accessCode = {
-      id: `fac_${Date.now()}`,
-      code,
-      name,
-      type, // 'free' or 'supporter'
-      notes,
-      link,
-      createdBy: adminId,
-      createdAt: new Date().toISOString(),
-      usedCount: 0,
-      active: true
-    };
-
-    // Store in memory (in production, save to Supabase)
-    accessCodes.set(code, accessCode);
-
     return res.status(200).json({
-      success: true,
-      code: accessCode.code,
-      link: accessCode.link,
-      accessCode
+      code: data,
+      link: link,
+      message: 'Access code created successfully'
     });
-
   } catch (error) {
     console.error('Error generating access code:', error);
     return res.status(500).json({ error: 'Internal server error' });
@@ -84,19 +103,41 @@ router.get('/verify', async (req, res) => {
       return res.status(400).json({ error: 'Code required' });
     }
 
-    const accessCode = accessCodes.get(code);
+    const { data, error } = await supabase
+        .from('family_access_codes')
+        .select('*')
+        .eq('code', code)
+        .single();
 
-    if (!accessCode || !accessCode.active) {
-      return res.status(200).json({ valid: false, message: 'Invalid or expired code' });
+    if (error || !data) {
+      return res.status(404).json({
+        valid: false,
+        error: 'Invalid or expired code'
+      });
+    }
+
+    // Check if expired
+    if (new Date(data.expires_at) < new Date()) {
+      return res.status(400).json({
+        valid: false,
+        error: 'Code has expired'
+      });
+    }
+
+    // Check if max uses reached
+    if (data.uses_count >= data.max_uses) {
+      return res.status(400).json({
+        valid: false,
+        error: 'Code has reached maximum uses'
+      });
     }
 
     // Return code info
     return res.status(200).json({
       valid: true,
-      name: accessCode.name,
-      type: accessCode.type,
-      code: accessCode.code,
-      notes: accessCode.notes
+      tier: data.tier,
+      code: data.code,
+      usesRemaining: data.max_uses - data.uses_count
     });
 
   } catch (error) {
@@ -113,31 +154,79 @@ router.post('/redeem', async (req, res) => {
   try {
     const { code, userId } = req.body;
 
-    if (!code) {
-      return res.status(400).json({ error: 'Code required' });
+    if (!code || !userId) {
+      return res.status(400).json({ error: 'Code and userId required' });
     }
 
-    const accessCode = accessCodes.get(code);
+    // Get the code
+    const { data: accessCode, error: getError } = await supabase
+        .from('family_access_codes')
+        .select('*')
+        .eq('code', code)
+        .single();
 
-    if (!accessCode || !accessCode.active) {
-      return res.status(400).json({ success: false, message: 'Invalid or expired code' });
+    if (getError || !accessCode) {
+      return res.status(400).json({ success: false, message: 'Invalid code' });
     }
 
-    // Increment used count
-    accessCode.usedCount = (accessCode.usedCount || 0) + 1;
-    accessCode.lastUsedAt = new Date().toISOString();
-    accessCodes.set(code, accessCode);
+    // Validate code
+    if (new Date(accessCode.expires_at) < new Date()) {
+      return res.status(400).json({ success: false, message: 'Code expired' });
+    }
 
-    // Store in localStorage on client side
-    const storageKey = `family_access_${userId || 'user'}`;
+    if (accessCode.uses_count >= accessCode.max_uses) {
+      return res.status(400).json({ success: false, message: 'Code max uses reached' });
+    }
 
+    // Check if user already redeemed
+    const { data: existing } = await supabase
+        .from('family_access_redemptions')
+        .select('*')
+        .eq('code_id', accessCode.id)
+        .eq('user_id', userId)
+        .single();
+
+    if (existing) {
+      return res.status(400).json({ success: false, message: 'Code already redeemed by this user' });
+    }
+
+    // Record redemption
+    await supabase
+        .from('family_access_redemptions')
+        .insert({
+            code_id: accessCode.id,
+            user_id: userId,
+            redeemed_at: new Date().toISOString()
+        });
+
+    // Increment use count
+    await supabase
+        .from('family_access_codes')
+        .update({
+            uses_count: accessCode.uses_count + 1,
+            updated_at: new Date().toISOString()
+        })
+        .eq('id', accessCode.id);
+
+    // Update user tier
+    await supabase
+        .from('users')
+        .upsert({
+            id: userId,
+            payment_tier: accessCode.tier,
+            tier_updated_at: new Date().toISOString(),
+            payment_status: 'family_access',
+            updated_at: new Date().toISOString()
+        }, {
+            onConflict: 'id'
+        });
+
+    return res.status(200).json({
     return res.status(200).json({
       success: true,
       message: 'Access code redeemed successfully',
-      tier: accessCode.type === 'free' ? 'SUPER_ADMIN' : 'CREATOR',
-      accessType: accessCode.type,
-      storageKey,
-      code
+      tier: accessCode.tier,
+      code: code
     });
 
   } catch (error) {
@@ -158,13 +247,13 @@ router.delete('/delete', async (req, res) => {
       return res.status(400).json({ error: 'Code ID required' });
     }
 
-    // Find and deactivate the code
-    for (const [code, accessCode] of accessCodes.entries()) {
-      if (accessCode.id === id) {
-        accessCode.active = false;
-        accessCodes.set(code, accessCode);
-        break;
-      }
+    const { error } = await supabase
+        .from('family_access_codes')
+        .delete()
+        .eq('id', id);
+
+    if (error) {
+        throw error;
     }
 
     return res.status(200).json({ success: true });

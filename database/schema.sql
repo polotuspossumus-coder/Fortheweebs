@@ -104,6 +104,51 @@ CREATE TABLE IF NOT EXISTS user_preferences (
   UNIQUE(user_id)
 );
 
+-- User issues (from Mico Assistant)
+CREATE TABLE IF NOT EXISTS user_issues (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  user_id TEXT REFERENCES users(id),
+  issue_type TEXT NOT NULL,
+  description TEXT NOT NULL,
+  context JSONB,
+  status TEXT DEFAULT 'open',
+  resolved_at TIMESTAMPTZ,
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- VR Content uploads
+CREATE TABLE IF NOT EXISTS vr_content (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  user_id TEXT REFERENCES users(id),
+  filename TEXT NOT NULL,
+  blob_url TEXT NOT NULL,
+  content_type TEXT,
+  size_bytes BIGINT,
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Family access codes
+CREATE TABLE IF NOT EXISTS family_access_codes (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  code TEXT UNIQUE NOT NULL,
+  creator_id TEXT REFERENCES users(id),
+  tier TEXT NOT NULL,
+  max_uses INTEGER DEFAULT 5,
+  uses_count INTEGER DEFAULT 0,
+  expires_at TIMESTAMPTZ,
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Family access redemptions
+CREATE TABLE IF NOT EXISTS family_access_redemptions (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  code_id UUID REFERENCES family_access_codes(id),
+  user_id TEXT REFERENCES users(id),
+  redeemed_at TIMESTAMPTZ DEFAULT NOW()
+);
+
 -- Indexes for performance
 CREATE INDEX idx_users_payment_tier ON users(payment_tier);
 CREATE INDEX idx_users_email ON users(email);
@@ -113,6 +158,12 @@ CREATE INDEX idx_bug_reports_user_id ON bug_reports(user_id);
 CREATE INDEX idx_bug_reports_status ON bug_reports(status);
 CREATE INDEX idx_bug_fixes_bug_report_id ON bug_fixes(bug_report_id);
 CREATE INDEX idx_user_preferences_user_id ON user_preferences(user_id);
+CREATE INDEX idx_user_issues_user_id ON user_issues(user_id);
+CREATE INDEX idx_user_issues_status ON user_issues(status);
+CREATE INDEX idx_vr_content_user_id ON vr_content(user_id);
+CREATE INDEX idx_family_access_codes_code ON family_access_codes(code);
+CREATE INDEX idx_family_access_codes_creator_id ON family_access_codes(creator_id);
+CREATE INDEX idx_family_access_redemptions_user_id ON family_access_redemptions(user_id);
 
 -- Row Level Security (RLS) Policies
 ALTER TABLE users ENABLE ROW LEVEL SECURITY;
@@ -121,6 +172,10 @@ ALTER TABLE bug_reports ENABLE ROW LEVEL SECURITY;
 ALTER TABLE bug_analyses ENABLE ROW LEVEL SECURITY;
 ALTER TABLE bug_fixes ENABLE ROW LEVEL SECURITY;
 ALTER TABLE user_preferences ENABLE ROW LEVEL SECURITY;
+ALTER TABLE user_issues ENABLE ROW LEVEL SECURITY;
+ALTER TABLE vr_content ENABLE ROW LEVEL SECURITY;
+ALTER TABLE family_access_codes ENABLE ROW LEVEL SECURITY;
+ALTER TABLE family_access_redemptions ENABLE ROW LEVEL SECURITY;
 
 -- Users can read their own data
 CREATE POLICY users_select_own ON users
@@ -155,6 +210,41 @@ CREATE POLICY user_preferences_select_own ON user_preferences
 -- Users can update their own preferences
 CREATE POLICY user_preferences_update_own ON user_preferences
   FOR UPDATE
+  USING (user_id = current_setting('request.jwt.claims', true)::json->>'sub');
+
+-- Users can read their own issues
+CREATE POLICY user_issues_select_own ON user_issues
+  FOR SELECT
+  USING (user_id = current_setting('request.jwt.claims', true)::json->>'sub');
+
+-- Users can create issues
+CREATE POLICY user_issues_insert_own ON user_issues
+  FOR INSERT
+  WITH CHECK (user_id = current_setting('request.jwt.claims', true)::json->>'sub');
+
+-- Users can read their own VR content
+CREATE POLICY vr_content_select_own ON vr_content
+  FOR SELECT
+  USING (user_id = current_setting('request.jwt.claims', true)::json->>'sub');
+
+-- Users can upload VR content
+CREATE POLICY vr_content_insert_own ON vr_content
+  FOR INSERT
+  WITH CHECK (user_id = current_setting('request.jwt.claims', true)::json->>'sub');
+
+-- Anyone can read family access codes (to verify)
+CREATE POLICY family_access_codes_select_all ON family_access_codes
+  FOR SELECT
+  USING (true);
+
+-- Users can create family access codes if they paid
+CREATE POLICY family_access_codes_insert_paid ON family_access_codes
+  FOR INSERT
+  WITH CHECK (creator_id = current_setting('request.jwt.claims', true)::json->>'sub');
+
+-- Users can see their own redemptions
+CREATE POLICY family_access_redemptions_select_own ON family_access_redemptions
+  FOR SELECT
   USING (user_id = current_setting('request.jwt.claims', true)::json->>'sub');
 
 -- Service role can do everything (for API)
@@ -202,6 +292,16 @@ CREATE TRIGGER update_bug_fixes_updated_at
 
 CREATE TRIGGER update_user_preferences_updated_at
   BEFORE UPDATE ON user_preferences
+  FOR EACH ROW
+  EXECUTE FUNCTION update_updated_at_column();
+
+CREATE TRIGGER update_user_issues_updated_at
+  BEFORE UPDATE ON user_issues
+  FOR EACH ROW
+  EXECUTE FUNCTION update_updated_at_column();
+
+CREATE TRIGGER update_family_access_codes_updated_at
+  BEFORE UPDATE ON family_access_codes
   FOR EACH ROW
   EXECUTE FUNCTION update_updated_at_column();
 
