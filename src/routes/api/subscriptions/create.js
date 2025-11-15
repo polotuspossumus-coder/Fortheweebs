@@ -65,7 +65,7 @@ export async function POST(request) {
 
     // Create subscription
     const priceId = STRIPE_PRICE_IDS[tier];
-    
+
     const subscription = await stripe.subscriptions.create({
       customer: customer.id,
       items: [{ price: priceId }],

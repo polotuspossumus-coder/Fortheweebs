@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -14,22 +15,26 @@
             align-items: center;
             justify-content: center;
         }
+
         .box {
             background: white;
             padding: 60px;
             border-radius: 20px;
             text-align: center;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
             max-width: 400px;
         }
+
         h1 {
             font-size: 3rem;
             margin-bottom: 20px;
         }
+
         h2 {
             color: #667eea;
             margin-bottom: 30px;
         }
+
         button {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
@@ -42,18 +47,22 @@
             box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
             transition: all 0.3s;
         }
+
         button:hover {
             transform: translateY(-2px);
             box-shadow: 0 6px 25px rgba(102, 126, 234, 0.6);
         }
+
         button:active {
             transform: translateY(0);
         }
+
         .success {
             background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
         }
     </style>
 </head>
+
 <body>
     <div class="box">
         <h1>👑</h1>
@@ -69,7 +78,7 @@
 
             // Set PERMANENT owner access flags
             const permanentTimestamp = Date.now().toString();
-            
+
             localStorage.setItem('adminAuthenticated', 'true');
             localStorage.setItem('userId', 'owner');
             localStorage.setItem('hasOnboarded', 'true');
@@ -78,10 +87,10 @@
             localStorage.setItem('privacyAccepted', 'true');
             localStorage.setItem('ownerVerified', permanentTimestamp);
             localStorage.setItem('ownerEmail', 'polotuspossumus@gmail.com');
-            
+
             // Also set in sessionStorage as backup
             sessionStorage.setItem('ownerVerified', permanentTimestamp);
-            
+
             // Set a cookie that lasts 10 years
             document.cookie = `ownerAccess=true; max-age=315360000; path=/; SameSite=Lax`;
 
@@ -94,4 +103,5 @@
         }
     </script>
 </body>
+
 </html>

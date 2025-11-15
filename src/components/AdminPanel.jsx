@@ -195,25 +195,25 @@ function AdminPanel() {
 
       {/* Tabs */}
       <div className="admin-tabs">
-        <button 
+        <button
           className={activeTab === 'moderation' ? 'active' : ''}
           onClick={() => setActiveTab('moderation')}
         >
           Moderation Queue ({moderationQueue.length})
         </button>
-        <button 
+        <button
           className={activeTab === 'reports' ? 'active' : ''}
           onClick={() => setActiveTab('reports')}
         >
           Reported Content ({reportedContent.length})
         </button>
-        <button 
+        <button
           className={activeTab === 'users' ? 'active' : ''}
           onClick={() => setActiveTab('users')}
         >
           User Management
         </button>
-        <button 
+        <button
           className={activeTab === 'analytics' ? 'active' : ''}
           onClick={() => setActiveTab('analytics')}
         >
@@ -263,19 +263,19 @@ function AdminPanel() {
                       <p><strong>Date:</strong> {report.reportedAt.toLocaleDateString()}</p>
                     </div>
                     <div className="report-actions">
-                      <button 
+                      <button
                         className="view-content-button"
                         onClick={() => window.location.href = `/${report.contentType}/${report.contentId}`}
                       >
                         View Content
                       </button>
-                      <button 
+                      <button
                         className="dismiss-button"
                         onClick={() => handleReportedContent(report.id, 'dismissed')}
                       >
                         Dismiss Report
                       </button>
-                      <button 
+                      <button
                         className="remove-button"
                         onClick={() => handleReportedContent(report.id, 'removed')}
                       >
@@ -342,14 +342,14 @@ function AdminPanel() {
                       <td>
                         <div className="user-actions">
                           {!user.banned ? (
-                            <button 
+                            <button
                               className="ban-button"
                               onClick={() => handleUserAction(user.id, 'ban')}
                             >
                               Ban
                             </button>
                           ) : (
-                            <button 
+                            <button
                               className="unban-button"
                               onClick={() => handleUserAction(user.id, 'unban')}
                             >
@@ -357,7 +357,7 @@ function AdminPanel() {
                             </button>
                           )}
                           {!user.verified && (
-                            <button 
+                            <button
                               className="verify-button"
                               onClick={() => handleUserAction(user.id, 'verify')}
                             >

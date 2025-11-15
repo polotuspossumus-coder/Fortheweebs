@@ -29,7 +29,7 @@ export function CreatorProfile({ creatorId, isOwner = false }) {
     try {
       // In production: Fetch from Firestore
       // const doc = await getDoc(doc(db, 'users', creatorId));
-      
+
       // Mock data for now
       setProfile({
         id: creatorId,
@@ -61,7 +61,7 @@ export function CreatorProfile({ creatorId, isOwner = false }) {
     try {
       // In production: Fetch from Firestore
       // const q = query(collection(db, 'artworks'), where('userId', '==', creatorId));
-      
+
       // Mock data
       setArtworks([
         // Empty for now - will be populated from gallery uploads

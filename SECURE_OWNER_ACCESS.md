@@ -39,13 +39,14 @@ WHERE email = 'polotuspossumus@gmail.com'; -- ← Change to YOUR real email
 
 ### Step 2: Run Database Setup
 
-1. Open **Supabase Dashboard**: https://supabase.com/dashboard
+1. Open **Supabase Dashboard**: <https://supabase.com/dashboard>
 2. Go to **SQL Editor**
 3. Copy contents of `supabase-owner-setup.sql`
 4. Paste and click **RUN**
 5. Wait for success message
 
 This will:
+
 - Add `role` and `is_admin` columns to your `users` table
 - Set YOUR email as owner in database
 - Enable Row Level Security (RLS) policies
@@ -57,19 +58,19 @@ This will:
 
 **Option A: If you DON'T have a Supabase account yet:**
 
-1. Go to https://fortheweebs.netlify.app
+1. Go to <https://fortheweebs.netlify.app>
 2. Click **Sign Up**
 3. Use YOUR OWNER EMAIL (the one you set above)
 4. Create password
 5. Verify email
-6. Go to: https://fortheweebs.netlify.app/owner-access.html
+6. Go to: <https://fortheweebs.netlify.app/owner-access.html>
 7. Click "Grant Me Owner Access"
 8. ✅ Done! You're the owner
 
 **Option B: If you ALREADY have a Supabase account:**
 
 1. Make sure you're logged in with YOUR OWNER EMAIL
-2. Go to: https://fortheweebs.netlify.app/owner-access.html
+2. Go to: <https://fortheweebs.netlify.app/owner-access.html>
 3. Click "Grant Me Owner Access"
 4. ✅ Done! You're the owner
 
@@ -123,7 +124,7 @@ https://fortheweebs.netlify.app/owner-access.html
 
 ## 🛡️ CAN ANYONE ELSE GET ADMIN ACCESS?
 
-### ❌ NO - Here's Why:
+### ❌ NO - Here's Why
 
 1. **They'd need your Supabase email login** - They can't fake this
 2. **They'd need to be whitelisted in the code** - Email must match `OWNER_EMAIL`
@@ -131,7 +132,7 @@ https://fortheweebs.netlify.app/owner-access.html
 4. **localStorage alone doesn't work** - System checks Supabase auth
 5. **URL parameters removed** - No more public bypasses
 
-### The Only Ways Someone Could Hack It:
+### The Only Ways Someone Could Hack It
 
 1. ❌ Steal your Supabase email password → Use 2FA!
 2. ❌ Access your GitHub and change `OWNER_EMAIL` → Use 2FA!
@@ -144,7 +145,7 @@ https://fortheweebs.netlify.app/owner-access.html
 ### Test 1: Verify Owner Access Works
 
 1. Login with YOUR owner email
-2. Visit https://fortheweebs.netlify.app/owner-access.html
+2. Visit <https://fortheweebs.netlify.app/owner-access.html>
 3. Should see "✅ Owner Verified"
 4. Click "Grant Me Owner Access"
 5. Dashboard should load with admin features
@@ -155,17 +156,20 @@ https://fortheweebs.netlify.app/owner-access.html
 2. Try visiting `/owner-access.html` while logged out
 3. Should see "❌ Not Logged In"
 4. Try pasting this in console:
+
    ```javascript
    localStorage.setItem('adminAuthenticated', 'true');
    localStorage.setItem('userId', 'owner');
    location.reload();
    ```
+
 5. System should still block you (no Supabase auth)
 
 ### Test 3: Verify Database Security
 
 1. Login with a NON-owner email
 2. Try this in console:
+
    ```javascript
    // Try to query all users (should fail if RLS working)
    const { data, error } = await supabase.from('users').select('*');
@@ -179,6 +183,7 @@ https://fortheweebs.netlify.app/owner-access.html
 ### Problem: "Not Owner" even with correct email
 
 **Solution:**
+
 ```javascript
 // Run in browser console while logged in:
 const { data: { user } } = await supabase.auth.getUser();
@@ -190,6 +195,7 @@ console.log('Owner email in code:', 'polotuspossumus@gmail.com');
 ### Problem: Database role not set
 
 **Solution:**
+
 ```sql
 -- Run in Supabase SQL Editor:
 UPDATE users 
@@ -200,6 +206,7 @@ WHERE email = 'YOUR_EMAIL_HERE';
 ### Problem: RLS blocking everything
 
 **Solution:**
+
 ```sql
 -- Temporarily disable RLS for testing:
 ALTER TABLE users DISABLE ROW LEVEL SECURITY;
@@ -210,19 +217,21 @@ ALTER TABLE users DISABLE ROW LEVEL SECURITY;
 
 ## 📋 FILES I CREATED/MODIFIED
 
-### Created:
+### Created
+
 - ✅ `src/utils/ownerAuth.js` - Main authentication logic
 - ✅ `public/owner-access.html` - Secure admin portal
 - ✅ `supabase-owner-setup.sql` - Database security setup
 - ✅ `SECURE_OWNER_ACCESS.md` - This guide
 
-### Modified:
+### Modified
+
 - ✅ `src/index.jsx` - Removed `?owner=polotus` bypass, added owner check
 - ✅ `src/CreatorDashboard.jsx` - Added `isOwner()` verification
 
 ---
 
-## 🎉 YOU'RE ALL SET!
+## 🎉 YOU'RE ALL SET
 
 Your platform now has **enterprise-grade owner authentication**:
 
@@ -234,6 +243,7 @@ Your platform now has **enterprise-grade owner authentication**:
 6. 🚫 Public bypasses removed
 
 **To get started:**
+
 1. Change the 3 owner emails to YOUR email
 2. Run the SQL setup in Supabase
 3. Visit `/owner-access.html` and grant yourself access
@@ -244,6 +254,7 @@ Your platform now has **enterprise-grade owner authentication**:
 ## 📞 NEED HELP?
 
 If anything doesn't work:
+
 1. Check browser console for errors (F12)
 2. Verify you're logged in with correct email
 3. Confirm SQL script ran successfully
@@ -255,6 +266,7 @@ If anything doesn't work:
 **Security Status: 🔒 LOCKED DOWN**
 
 No one can access admin features without:
+
 - Your Supabase email login
 - Being whitelisted in the code
 - Having owner role in database

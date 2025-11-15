@@ -7,14 +7,14 @@ const BUCKET_NAME = 'artworks';
 // Initialize storage bucket (call this once during app setup)
 export async function initializeStorage() {
   const { data, error } = await supabase.storage.getBucket(BUCKET_NAME);
-  
+
   if (error && error.message.includes('not found')) {
     // Create bucket if it doesn't exist
     const { error: createError } = await supabase.storage.createBucket(BUCKET_NAME, {
       public: true,
       fileSizeLimit: 10485760 // 10MB
     });
-    
+
     if (createError) console.error('Error creating storage bucket:', createError);
   }
 }
@@ -48,7 +48,7 @@ export async function uploadFiles(files, userId) {
     const randomId = Math.random().toString(36).substring(7);
     const fileExtension = file.name.split('.').pop();
     const filePath = `${userId}/${timestamp}-${randomId}.${fileExtension}`;
-    
+
     return uploadFile(file, filePath);
   });
 

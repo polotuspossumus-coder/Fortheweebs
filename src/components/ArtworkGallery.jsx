@@ -84,8 +84,8 @@ export function ArtworkGallery({ userId, artworks = [], onEdit, onDelete, isOwne
             {filter === 'nsfw'
               ? 'No NSFW content found'
               : filter === 'sfw'
-              ? 'No SFW content found'
-              : 'Upload some artwork to get started!'}
+                ? 'No SFW content found'
+                : 'Upload some artwork to get started!'}
           </p>
         </div>
       ) : (
@@ -190,7 +190,7 @@ export function ArtworkGallery({ userId, artworks = [], onEdit, onDelete, isOwne
 
             <div className="lightbox-info">
               <h2>{selectedArtwork.title || 'Untitled'}</h2>
-              
+
               {selectedArtwork.description && (
                 <p className="lightbox-description">{selectedArtwork.description}</p>
               )}

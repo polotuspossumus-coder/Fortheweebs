@@ -33,7 +33,7 @@ export function ARVRStudioPro({ userId }) {
           <h2 style={{ margin: 0, fontSize: '16px', fontWeight: 600, color: '#cccccc' }}>
             🎭 AR/VR Studio
           </h2>
-          
+
           {/* Mode Selector Dropdown */}
           <select
             value={activeMode}
@@ -464,7 +464,7 @@ export function ARVRStudioPro({ userId }) {
               }}>
                 Transform
               </h4>
-              
+
               {['Position', 'Rotation', 'Scale'].map((prop) => (
                 <div key={prop} style={{ marginBottom: '12px' }}>
                   <label style={{
@@ -522,7 +522,7 @@ export function ARVRStudioPro({ userId }) {
               }}>
                 Material
               </h4>
-              
+
               <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
                 <div>
                   <label style={{

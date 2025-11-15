@@ -326,7 +326,7 @@ export async function createTip(tipData) {
 
 export async function getUserTips(userId, type = 'received') {
   const field = type === 'sent' ? 'sender_id' : 'creator_id';
-  
+
   const { data, error } = await supabase
     .from('tips')
     .select('*')
@@ -380,8 +380,8 @@ export async function createComment(commentData) {
 
   // Increment artwork comment count
   const artwork = await getArtwork(commentData.artwork_id);
-  await updateArtwork(commentData.artwork_id, { 
-    comments_count: (artwork.comments_count || 0) + 1 
+  await updateArtwork(commentData.artwork_id, {
+    comments_count: (artwork.comments_count || 0) + 1
   });
 
   return data;
@@ -455,7 +455,7 @@ export async function getCreatorAnalytics(creatorId) {
 
   // Get artworks
   const artworks = await getUserArtworks(creatorId);
-  
+
   // Calculate total likes and views
   const totalLikes = artworks.reduce((sum, art) => sum + (art.likes || 0), 0);
   const totalViews = artworks.reduce((sum, art) => sum + (art.views || 0), 0);
@@ -474,7 +474,7 @@ export default {
   getUser,
   updateUser,
   updateUserBalance,
-  
+
   // Artworks
   createArtwork,
   getArtwork,
@@ -484,42 +484,42 @@ export default {
   incrementArtworkViews,
   likeArtwork,
   unlikeArtwork,
-  
+
   // Commissions
   createCommission,
   getCommission,
   updateCommission,
   getAllCommissions,
   getUserCommissions,
-  
+
   // Commission Orders
   createCommissionOrder,
   updateCommissionOrder,
-  
+
   // Subscriptions
   createSubscription,
   getUserSubscription,
   updateSubscription,
   cancelSubscription,
-  
+
   // Tips
   createTip,
   getUserTips,
-  
+
   // Transactions
   createTransaction,
   getUserTransactions,
-  
+
   // Comments
   createComment,
   getArtworkComments,
-  
+
   // Follows
   followUser,
   unfollowUser,
   getUserFollowers,
   getUserFollowing,
-  
+
   // Analytics
   getCreatorAnalytics
 };

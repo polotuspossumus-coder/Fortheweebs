@@ -17,7 +17,7 @@ const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET || 'whsec_PLACEHOLDER';
 
 export async function POST(request) {
   const sig = request.headers.get('stripe-signature');
-  
+
   let event;
 
   try {

@@ -51,7 +51,7 @@ export function TipsAndDonations({ creatorId, creatorName }) {
 
       // Load Stripe and confirm payment
       const stripe = await stripePromise;
-      
+
       if (!stripe) {
         throw new Error('Stripe failed to load');
       }
@@ -142,8 +142,8 @@ export function TipsAndDonations({ creatorId, creatorName }) {
         </div>
       </div>
 
-      <button 
-        className="btn-primary send-tip-btn" 
+      <button
+        className="btn-primary send-tip-btn"
         onClick={handleSendTip}
         disabled={processing}
       >

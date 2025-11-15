@@ -29,6 +29,7 @@ import MessagingSystem from "./messaging/MessagingSystem";
 import AdvancedSearch from "./components/AdvancedSearch";
 import ModerationDashboard from "./components/ModerationDashboard";
 import AnalyticsDashboard from "./components/AnalyticsDashboard";
+import MicoDevPanel from "./components/MicoDevPanel";
 
 import { ToolLockGate } from "./components/ToolLockGate";
 import { DevBalanceManager } from "./components/DevBalanceManager";
@@ -135,6 +136,9 @@ export const CreatorDashboard = ({ userId = "demo_user", ipAddress = "127.0.0.1"
         )}
         {userId === "owner" && (
           <TabsTrigger value="analytics">📊 Analytics</TabsTrigger>
+        )}
+        {userId === "owner" && (
+          <TabsTrigger value="mico">🧠 Mico</TabsTrigger>
         )}
       </TabsList>
       <TabsContent value="overview">
@@ -276,6 +280,11 @@ export const CreatorDashboard = ({ userId = "demo_user", ipAddress = "127.0.0.1"
       {userId === "owner" && (
         <TabsContent value="analytics">
           <AnalyticsDashboard />
+        </TabsContent>
+      )}
+      {userId === "owner" && (
+        <TabsContent value="mico">
+          <MicoDevPanel />
         </TabsContent>
       )}
     </Tabs>

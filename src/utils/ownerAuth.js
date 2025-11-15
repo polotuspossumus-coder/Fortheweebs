@@ -14,7 +14,7 @@ export async function isOwner() {
   try {
     // Get current authenticated user from Supabase
     const { data: { user }, error } = await supabase.auth.getUser();
-    
+
     if (error || !user) {
       console.log('❌ No authenticated user');
       return false;
@@ -52,7 +52,7 @@ export async function isOwner() {
  */
 export async function requireOwner() {
   const isOwnerUser = await isOwner();
-  
+
   if (!isOwnerUser) {
     console.log('🚫 Unauthorized access attempt - redirecting to login');
     // Clear any fake admin flags
@@ -68,7 +68,7 @@ export async function requireOwner() {
   localStorage.setItem('hasOnboarded', 'true');
   localStorage.setItem('legalAccepted', 'true');
   localStorage.setItem('tosAccepted', 'true');
-  
+
   return true;
 }
 
@@ -79,9 +79,9 @@ export async function requireOwner() {
 export async function getUserRole() {
   try {
     const { data: { user } } = await supabase.auth.getUser();
-    
+
     if (!user) return 'guest';
-    
+
     if (user.email?.toLowerCase() === OWNER_EMAIL.toLowerCase()) {
       return 'owner';
     }
@@ -104,7 +104,7 @@ export async function getUserRole() {
 export async function setupOwnerInDatabase() {
   try {
     const { data: { user } } = await supabase.auth.getUser();
-    
+
     if (!user || user.email?.toLowerCase() !== OWNER_EMAIL.toLowerCase()) {
       console.error('❌ Not owner email');
       return false;

@@ -111,7 +111,7 @@ export function MassPhotoProcessor({ userId }) {
                 const dirReader = item.createReader();
                 const readAllEntries = async () => {
                     const allEntries = [];
-                    
+
                     // readEntries only returns 100 at a time, so we need to call it repeatedly
                     const readBatch = () => {
                         return new Promise((resolveBatch) => {
@@ -127,11 +127,11 @@ export function MassPhotoProcessor({ userId }) {
                             });
                         });
                     };
-                    
+
                     await readBatch();
                     return allEntries;
                 };
-                
+
                 readAllEntries().then(async (allEntries) => {
                     for (const entry of allEntries) {
                         await traverseFileTree(entry, filesList);
@@ -214,7 +214,7 @@ export function MassPhotoProcessor({ userId }) {
 
                         // Split into cells
                         const cells = splitGrid(canvas, ctx, rows, cols);
-                        
+
                         // Process each cell
                         const cellBlobs = [];
                         let processed = 0;
@@ -566,30 +566,43 @@ export function MassPhotoProcessor({ userId }) {
     };
 
     const downloadAll = async () => {
+        console.log('🔍 Download All clicked');
+        console.log('Total results:', results.length);
+
         const successfulResults = results.filter(r => r.status === 'success' && r.blob);
-        
+        console.log('Successful results with blobs:', successfulResults.length);
+
         if (successfulResults.length === 0) {
-            alert('⚠️ No processed images to download. Please process some images first.');
+            alert('⚠️ No processed images to download.\n\nPlease process some images first, then try downloading.');
             return;
         }
 
+        // Ask user to confirm
+        const confirmed = confirm(`📦 Download ${successfulResults.length} processed images as ZIP file?\n\nThis may take a moment for large batches.`);
+        if (!confirmed) return;
+
         try {
-            alert(`📦 Creating ZIP file with ${successfulResults.length} images...\nThis may take a moment.`);
-            
+            console.log('Creating ZIP...');
+
             // Create ZIP file
             const zip = new JSZip();
-            
+
             successfulResults.forEach((result, index) => {
                 const filename = `processed_${index + 1}_${result.name.split('.')[0]}.${params.outputFormat}`;
+                console.log(`Adding to ZIP: ${filename}`);
                 zip.file(filename, result.blob);
             });
 
+            console.log('Generating ZIP blob...');
             // Generate ZIP and download
-            const zipBlob = await zip.generateAsync({ 
+            const zipBlob = await zip.generateAsync({
                 type: 'blob',
                 compression: 'DEFLATE',
                 compressionOptions: { level: 6 }
             });
+
+            console.log('ZIP size:', zipBlob.size, 'bytes');
+            console.log('Creating download link...');
 
             const url = URL.createObjectURL(zipBlob);
             const link = document.createElement('a');
@@ -597,13 +610,35 @@ export function MassPhotoProcessor({ userId }) {
             link.download = `processed_photos_${Date.now()}.zip`;
             document.body.appendChild(link);
             link.click();
-            document.body.removeChild(link);
-            URL.revokeObjectURL(url);
+
+            setTimeout(() => {
+                document.body.removeChild(link);
+                URL.revokeObjectURL(url);
+            }, 100);
 
             alert(`✅ Downloaded ${successfulResults.length} processed images in ZIP file!`);
         } catch (error) {
-            console.error('Download error:', error);
-            alert(`❌ Download failed: ${error.message}\n\nTry processing fewer images or download individually.`);
+            console.error('❌ Download error:', error);
+
+            // Fallback: download individually
+            const fallback = confirm(`❌ ZIP download failed: ${error.message}\n\nWould you like to download images individually instead?`);
+
+            if (fallback) {
+                successfulResults.forEach((result, index) => {
+                    setTimeout(() => {
+                        const url = URL.createObjectURL(result.blob);
+                        const link = document.createElement('a');
+                        link.href = url;
+                        link.download = `processed_${index + 1}_${result.name}`;
+                        document.body.appendChild(link);
+                        link.click();
+                        document.body.removeChild(link);
+                        URL.revokeObjectURL(url);
+                    }, index * 300);
+                });
+
+                alert(`📥 Downloading ${successfulResults.length} images individually...`);
+            }
         }
     };
 
@@ -1205,9 +1240,9 @@ export function MassPhotoProcessor({ userId }) {
                                                 borderRadius: '8px',
                                                 marginBottom: '8px',
                                                 borderLeft: `4px solid ${result.status === 'success' ? '#4CAF50' :
-                                                        result.status === 'duplicate' ? '#FFC107' :
-                                                            result.status === 'deleted' ? '#ff4444' :
-                                                                '#999'
+                                                    result.status === 'duplicate' ? '#FFC107' :
+                                                        result.status === 'deleted' ? '#ff4444' :
+                                                            '#999'
                                                     }`
                                             }}
                                         >

@@ -108,7 +108,7 @@ function ImageUploaderSupabase({ onUploadComplete }) {
       setFiles([]);
       setPreviews([]);
       setUploadProgress({});
-      
+
       alert(`✅ Successfully uploaded ${uploadedFiles.length} file(s)!`);
     } catch (error) {
       console.error('Upload error:', error);
@@ -147,7 +147,7 @@ function ImageUploaderSupabase({ onUploadComplete }) {
           disabled={uploading || files.length >= MAX_FILES}
           style={{ display: 'none' }}
         />
-        
+
         <label htmlFor="file-input" className={`upload-label ${uploading ? 'disabled' : ''}`}>
           <div className="upload-icon">🎨</div>
           <div className="upload-text">
@@ -175,7 +175,7 @@ function ImageUploaderSupabase({ onUploadComplete }) {
               </div>
               {uploading && uploadProgress[files[index].name] !== undefined && (
                 <div className="upload-progress">
-                  <div 
+                  <div
                     className="progress-bar"
                     style={{ width: `${uploadProgress[files[index].name]}%` }}
                   />
@@ -198,7 +198,7 @@ function ImageUploaderSupabase({ onUploadComplete }) {
           >
             {uploading ? '⏳ Uploading...' : `📤 Upload ${files.length} File(s)`}
           </button>
-          
+
           <button
             onClick={() => {
               setFiles([]);

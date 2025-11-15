@@ -3,6 +3,7 @@
 ## Social Media Posts
 
 ### Twitter/X Post
+
 ```
 🎉 LAUNCHING TODAY! 🎉
 
@@ -22,6 +23,7 @@ Built by creators, for creators.
 ```
 
 ### Instagram Caption
+
 ```
 🎌✨ WE'RE LIVE! ✨🎌
 
@@ -47,6 +49,7 @@ Your all-in-one creator platform for anime content is HERE.
 ```
 
 ### Reddit r/anime or r/AnimeArt Post
+
 ```
 Title: [OC] Launched ForTheWeebs - A Professional Creator Platform for Anime Content
 
@@ -91,6 +94,7 @@ Would love your feedback! This is v1.0 and I'm actively working on improvements.
 ```
 
 ### Discord Server Announcement
+
 ```
 @everyone 🎉 **MAJOR ANNOUNCEMENT** 🎉
 
@@ -121,6 +125,7 @@ Drop your questions below! I'll be here to help with setup and answer anything. 
 ```
 
 ### Email Newsletter (if applicable)
+
 ```
 Subject: 🎉 We're LIVE! Welcome to ForTheWeebs
 
@@ -179,6 +184,7 @@ P.S. Early adopters get priority feature requests - let me know what tools YOU n
 ## Launch Day Checklist
 
 ### Pre-Launch (Complete ✅)
+
 - [x] All features tested
 - [x] Security headers enabled
 - [x] Performance optimized
@@ -187,6 +193,7 @@ P.S. Early adopters get priority feature requests - let me know what tools YOU n
 - [x] Build deployed to production
 
 ### Launch Day
+
 - [ ] Post on Twitter/X
 - [ ] Post on Instagram
 - [ ] Post on Reddit (r/anime, r/AnimeArt, r/ContentCreation)
@@ -198,6 +205,7 @@ P.S. Early adopters get priority feature requests - let me know what tools YOU n
 - [ ] YouTube community post
 
 ### Post-Launch (Week 1)
+
 - [ ] Monitor analytics
 - [ ] Respond to user feedback
 - [ ] Fix any critical bugs
@@ -209,13 +217,13 @@ P.S. Early adopters get priority feature requests - let me know what tools YOU n
 
 ## Quick Links for Sharing
 
-**Main URL:** https://fortheweebs.netlify.app
+**Main URL:** <https://fortheweebs.netlify.app>
 
 **Quick Pitch:**
 "Professional creator tools for anime content - all in one platform. Photo editing, audio production, graphic design, AR/VR studio, monetization features & more. Built by creators, for creators. 🎌✨"
 
 **Hashtags:**
-#ForTheWeebs #AnimeCreators #CreatorPlatform #AnimeArt #ContentCreation #DigitalArt #AnimeCommunity #CreatorTools #CreatorEconomy
+# ForTheWeebs #AnimeCreators #CreatorPlatform #AnimeArt #ContentCreation #DigitalArt #AnimeCommunity #CreatorTools #CreatorEconomy
 
 ---
 

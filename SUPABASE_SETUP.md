@@ -15,7 +15,7 @@ Your platform has been **fully converted from Firebase to Supabase**! All your c
 
 ### Step 1: Create Database Tables
 
-1. Go to your Supabase Dashboard: https://app.supabase.com
+1. Go to your Supabase Dashboard: <https://app.supabase.com>
 2. Select your project: `iqipomerawkvtobjtvom`
 3. Click **SQL Editor** in left sidebar
 4. Click **New query**
@@ -25,6 +25,7 @@ Your platform has been **fully converted from Firebase to Supabase**! All your c
 8. Wait for "Success. No rows returned" message
 
 **What this creates:**
+
 - 11 database tables (users, artworks, commissions, tips, etc.)
 - All necessary indexes for performance
 - Row Level Security policies for data protection
@@ -40,6 +41,7 @@ Your platform has been **fully converted from Firebase to Supabase**! All your c
 6. Click **Create bucket**
 
 **Then set up storage policies:**
+
 1. Click on the `artworks` bucket you just created
 2. Click **Policies** tab
 3. Add policy: "Allow authenticated users to upload"
@@ -55,7 +57,7 @@ Your platform has been **fully converted from Firebase to Supabase**! All your c
 
 ### Step 3: Set Up Stripe Webhooks
 
-1. Go to Stripe Dashboard: https://dashboard.stripe.com
+1. Go to Stripe Dashboard: <https://dashboard.stripe.com>
 2. Click **Developers** → **Webhooks**
 3. Click **Add endpoint**
 4. Endpoint URL: `https://your-domain.com/api/webhooks/stripe`
@@ -71,6 +73,7 @@ Your platform has been **fully converted from Firebase to Supabase**! All your c
 6. Click **Add endpoint**
 7. Copy the **Signing secret** (starts with `whsec_`)
 8. Add to `.env`:
+
    ```
    STRIPE_WEBHOOK_SECRET=whsec_your_secret_here
    ```
@@ -79,12 +82,14 @@ Your platform has been **fully converted from Firebase to Supabase**! All your c
 
 1. In Supabase Dashboard, go to **Authentication** → **Providers**
 2. Enable **Google** provider
-3. Go to Google Cloud Console: https://console.cloud.google.com
+3. Go to Google Cloud Console: <https://console.cloud.google.com>
 4. Create OAuth 2.0 credentials
 5. Add authorized redirect URI:
+
    ```
    https://iqipomerawkvtobjtvom.supabase.co/auth/v1/callback
    ```
+
 6. Copy Client ID and Client Secret
 7. Paste into Supabase Google provider settings
 8. Click **Save**
@@ -100,6 +105,7 @@ npm run dev
 ```
 
 **Test these features:**
+
 1. ✅ Sign up / Login (creates user in Supabase)
 2. ✅ Upload artwork (saves to Supabase Storage)
 3. ✅ Create commission listing
@@ -116,6 +122,7 @@ git push origin main
 ```
 
 **If using Netlify:**
+
 - Auto-deploys from GitHub
 - Make sure environment variables are set in Netlify Dashboard:
   - `VITE_SUPABASE_URL`
@@ -172,26 +179,31 @@ VITE_ADMIN_PASSWORD=Scorpio#96
 ## 🚨 Troubleshooting
 
 ### "Cannot read properties of null (reading 'user')"
+
 - Make sure you're logged in
 - Check that Supabase auth session is active
 - Try clearing browser cookies and logging in again
 
 ### "Failed to fetch" or "Network error"
+
 - Check that Supabase URL and Anon Key are correct in `.env`
 - Make sure `npm run dev` is running
 - Check browser console for CORS errors
 
 ### "Stripe webhook signature verification failed"
+
 - Make sure `STRIPE_WEBHOOK_SECRET` matches your Stripe dashboard
 - Check that webhook endpoint URL is correct
 - Verify webhook is receiving events in Stripe dashboard
 
 ### "Storage bucket not found"
+
 - Make sure you created the `artworks` bucket in Supabase Storage
 - Check that bucket is set to **Public**
 - Verify storage policies are configured
 
 ### Database errors
+
 - Re-run the `supabase-schema.sql` file
 - Check Supabase Dashboard > Table Editor to verify tables exist
 - Look at Database > Functions for any errors
@@ -199,6 +211,7 @@ VITE_ADMIN_PASSWORD=Scorpio#96
 ## 📱 Testing Payments
 
 **Test Card Numbers (Stripe Test Mode):**
+
 ```
 Success: 4242 4242 4242 4242
 Decline: 4000 0000 0000 0002
@@ -209,14 +222,16 @@ Any 3-digit CVC
 Any postal code
 ```
 
-## 🎉 You're All Set!
+## 🎉 You're All Set
 
 Your platform is now running on:
+
 - ✅ **Supabase** - Database + Storage + Authentication
 - ✅ **Stripe** - Real payment processing
 - ✅ **Netlify/Vercel** - Hosting (when deployed)
 
 **Features Ready:**
+
 - User authentication (email + Google OAuth)
 - Creator profiles and dashboards
 - Artwork upload and discovery
@@ -229,6 +244,7 @@ Your platform is now running on:
 - Search and filtering
 
 Need help? Check the logs:
+
 - Browser DevTools Console (frontend errors)
 - Supabase Dashboard > Logs (database queries)
 - Stripe Dashboard > Webhooks (payment events)

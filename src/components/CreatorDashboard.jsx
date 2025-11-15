@@ -54,11 +54,11 @@ function CreatorDashboard({ userId }) {
     // Mock data for now
 
     // Earnings chart data
-    const labels = timeRange === 'week' 
+    const labels = timeRange === 'week'
       ? ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
       : timeRange === 'month'
-      ? Array.from({ length: 30 }, (_, i) => `Day ${i + 1}`)
-      : ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+        ? Array.from({ length: 30 }, (_, i) => `Day ${i + 1}`)
+        : ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
     const data = labels.map(() => Math.floor(Math.random() * 500));
 
@@ -98,9 +98,9 @@ function CreatorDashboard({ userId }) {
 
     // Mock commission requests
     setCommissionRequests([
-      { 
-        id: '1', 
-        buyer: 'AnimeFan42', 
+      {
+        id: '1',
+        buyer: 'AnimeFan42',
         title: 'Custom Character Art',
         type: 'Full Body Illustration',
         price: 250.00,
@@ -108,9 +108,9 @@ function CreatorDashboard({ userId }) {
         status: 'pending',
         description: 'Need a full body character illustration in anime style...'
       },
-      { 
-        id: '2', 
-        buyer: 'MangaLover', 
+      {
+        id: '2',
+        buyer: 'MangaLover',
         title: 'OC Portrait',
         type: 'Portrait',
         price: 150.00,
@@ -249,19 +249,19 @@ function CreatorDashboard({ userId }) {
         <div className="chart-header">
           <h2>Earnings Overview</h2>
           <div className="time-range-selector">
-            <button 
+            <button
               className={timeRange === 'week' ? 'active' : ''}
               onClick={() => setTimeRange('week')}
             >
               Week
             </button>
-            <button 
+            <button
               className={timeRange === 'month' ? 'active' : ''}
               onClick={() => setTimeRange('month')}
             >
               Month
             </button>
-            <button 
+            <button
               className={timeRange === 'year' ? 'active' : ''}
               onClick={() => setTimeRange('year')}
             >
@@ -276,25 +276,25 @@ function CreatorDashboard({ userId }) {
 
       {/* Tabs */}
       <div className="dashboard-tabs">
-        <button 
+        <button
           className={activeTab === 'overview' ? 'active' : ''}
           onClick={() => setActiveTab('overview')}
         >
           Overview
         </button>
-        <button 
+        <button
           className={activeTab === 'transactions' ? 'active' : ''}
           onClick={() => setActiveTab('transactions')}
         >
           Transactions
         </button>
-        <button 
+        <button
           className={activeTab === 'commissions' ? 'active' : ''}
           onClick={() => setActiveTab('commissions')}
         >
           Commissions ({stats.commissionsPending})
         </button>
-        <button 
+        <button
           className={activeTab === 'subscribers' ? 'active' : ''}
           onClick={() => setActiveTab('subscribers')}
         >
@@ -376,13 +376,13 @@ function CreatorDashboard({ userId }) {
                   <div className="commission-actions">
                     {commission.status === 'pending' && (
                       <>
-                        <button 
+                        <button
                           className="accept-button"
                           onClick={() => handleCommissionAction(commission.id, 'accept')}
                         >
                           ✓ Accept
                         </button>
-                        <button 
+                        <button
                           className="reject-button"
                           onClick={() => handleCommissionAction(commission.id, 'reject')}
                         >
@@ -391,7 +391,7 @@ function CreatorDashboard({ userId }) {
                       </>
                     )}
                     {commission.status === 'in_progress' && (
-                      <button 
+                      <button
                         className="complete-button"
                         onClick={() => handleCommissionAction(commission.id, 'complete')}
                       >

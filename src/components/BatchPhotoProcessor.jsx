@@ -212,7 +212,7 @@ export function BatchPhotoProcessor({ userId }) {
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
-        
+
         if (index === completed.length - 1) {
           alert('✅ All downloads complete!');
         }

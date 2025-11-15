@@ -112,7 +112,7 @@ function CommissionMarketplace({ userId, isCreator }) {
 
       // Load Stripe and confirm payment
       const stripe = await stripePromise;
-      
+
       if (!stripe) {
         throw new Error('Stripe failed to load');
       }
@@ -227,7 +227,7 @@ function CommissionMarketplace({ userId, isCreator }) {
                   ))}
                 </div>
 
-                <button 
+                <button
                   className="btn-primary commission-btn"
                   onClick={() => handlePurchaseCommission(comm)}
                   disabled={processing}

@@ -66,8 +66,8 @@ export function CommentSection({ artworkId, comments: initialComments = [] }) {
         />
         <div className="comment-form-footer">
           <span className="char-count">{newComment.length}/500</span>
-          <button 
-            type="submit" 
+          <button
+            type="submit"
             className="submit-comment-button"
             disabled={!newComment.trim() || isSubmitting}
           >
@@ -104,7 +104,7 @@ export function CommentSection({ artworkId, comments: initialComments = [] }) {
                     ❤️ {comment.likes > 0 && comment.likes}
                   </button>
                   <button className="comment-reply-button">Reply</button>
-                  <button 
+                  <button
                     className="comment-delete-button"
                     onClick={() => handleDeleteComment(comment.id)}
                   >
@@ -121,12 +121,12 @@ export function CommentSection({ artworkId, comments: initialComments = [] }) {
 }
 
 // Social Actions Component (Like, Share buttons)
-export function SocialActions({ 
-  artworkId, 
-  initialLikes = 0, 
+export function SocialActions({
+  artworkId,
+  initialLikes = 0,
   initialLiked = false,
   onLike,
-  onShare 
+  onShare
 }) {
   const [likes, setLikes] = useState(initialLikes);
   const [isLiked, setIsLiked] = useState(initialLiked);
@@ -168,7 +168,7 @@ export function SocialActions({
 
   return (
     <div className="social-actions">
-      <button 
+      <button
         className={`social-button like-button ${isLiked ? 'liked' : ''}`}
         onClick={handleLike}
       >
@@ -176,7 +176,7 @@ export function SocialActions({
       </button>
 
       <div className="share-dropdown">
-        <button 
+        <button
           className="social-button share-button"
           onClick={() => setShowShareMenu(!showShareMenu)}
         >
@@ -250,7 +250,7 @@ export function NotificationBell() {
   }, []);
 
   const markAsRead = (notificationId) => {
-    setNotifications(prev => 
+    setNotifications(prev =>
       prev.map(n => n.id === notificationId ? { ...n, read: true } : n)
     );
     setUnreadCount(prev => Math.max(0, prev - 1));
@@ -289,7 +289,7 @@ export function NotificationBell() {
 
   return (
     <div className="notification-bell">
-      <button 
+      <button
         className="bell-button"
         onClick={() => setShowDropdown(!showDropdown)}
       >
@@ -315,8 +315,8 @@ export function NotificationBell() {
               <p className="no-notifications">No notifications</p>
             ) : (
               notifications.map(notification => (
-                <div 
-                  key={notification.id} 
+                <div
+                  key={notification.id}
                   className={`notification-item ${notification.read ? 'read' : 'unread'}`}
                   onClick={() => {
                     markAsRead(notification.id);
@@ -373,7 +373,7 @@ export function FollowButton({ userId, initialFollowing = false, onFollowChange 
   };
 
   return (
-    <button 
+    <button
       className={`follow-button ${isFollowing ? 'following' : ''}`}
       onClick={handleFollow}
       disabled={isLoading}

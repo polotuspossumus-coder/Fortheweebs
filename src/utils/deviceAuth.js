@@ -12,7 +12,7 @@ export const generateDeviceFingerprint = () => {
     ctx.textBaseline = 'top';
     ctx.font = '14px Arial';
     ctx.fillText('ForTheWeebs', 2, 2);
-    
+
     const fingerprint = {
         canvas: canvas.toDataURL(),
         userAgent: navigator.userAgent,
@@ -22,7 +22,7 @@ export const generateDeviceFingerprint = () => {
         timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
         timestamp: Date.now()
     };
-    
+
     // Create hash of fingerprint
     const fingerprintString = JSON.stringify(fingerprint);
     let hash = 0;
@@ -31,7 +31,7 @@ export const generateDeviceFingerprint = () => {
         hash = ((hash << 5) - hash) + char;
         hash = hash & hash;
     }
-    
+
     return `device_${Math.abs(hash).toString(36)}`;
 };
 
@@ -46,18 +46,18 @@ export const registerOwnerDevice = (deviceType = 'desktop') => {
         userAgent: navigator.userAgent,
         verified: true
     };
-    
+
     // Store device info
     localStorage.setItem('owner_device_id', deviceId);
     localStorage.setItem('owner_device_info', JSON.stringify(deviceInfo));
-    
+
     // Add to trusted devices list
     const trustedDevices = getTrustedDevices();
     if (!trustedDevices.find(d => d.id === deviceId)) {
         trustedDevices.push(deviceInfo);
         localStorage.setItem('trusted_devices', JSON.stringify(trustedDevices));
     }
-    
+
     console.log('✅ Device registered as owner device:', deviceId);
     return deviceId;
 };
@@ -67,12 +67,12 @@ export const isDeviceTrusted = () => {
     const currentDeviceId = generateDeviceFingerprint();
     const trustedDevices = getTrustedDevices();
     const isTrusted = trustedDevices.some(d => d.id === currentDeviceId);
-    
+
     if (isTrusted) {
         // Update last access
         updateDeviceAccess(currentDeviceId);
     }
-    
+
     return isTrusted;
 };
 
@@ -100,11 +100,11 @@ const updateDeviceAccess = (deviceId) => {
 export const generateRecoveryPassphrase = () => {
     // Use fixed passphrase: "mico code pineapple"
     const passphraseString = 'mico code pineapple';
-    
+
     // Store encrypted hash of passphrase
     const hash = btoa(passphraseString); // Simple encoding (you could use crypto.subtle for real encryption)
     localStorage.setItem('recovery_passphrase_hash', hash);
-    
+
     return passphraseString;
 };
 
@@ -112,7 +112,7 @@ export const generateRecoveryPassphrase = () => {
 export const verifyRecoveryPassphrase = (inputPassphrase) => {
     const storedHash = localStorage.getItem('recovery_passphrase_hash');
     if (!storedHash) return false;
-    
+
     const inputHash = btoa(inputPassphrase.trim().toLowerCase());
     return inputHash === storedHash;
 };
@@ -122,9 +122,9 @@ export const linkDeviceWithPassphrase = (passphrase, deviceType = 'mobile') => {
     if (!verifyRecoveryPassphrase(passphrase)) {
         return { success: false, error: 'Invalid recovery passphrase' };
     }
-    
+
     const deviceId = registerOwnerDevice(deviceType);
-    
+
     return {
         success: true,
         deviceId: deviceId,
@@ -161,7 +161,7 @@ export const getCurrentDeviceInfo = () => {
     const isTrusted = isDeviceTrusted();
     const trustedDevices = getTrustedDevices();
     const deviceInfo = trustedDevices.find(d => d.id === deviceId);
-    
+
     return {
         deviceId,
         isTrusted,

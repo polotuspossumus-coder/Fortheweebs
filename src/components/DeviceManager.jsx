@@ -102,7 +102,7 @@ export default function DeviceManager({ isOwner }) {
                     <div><strong>Status:</strong> {currentDevice?.isTrusted ? '✅ Trusted (Auto-login enabled)' : '❌ Not trusted'}</div>
                     <div><strong>Type:</strong> {/Mobile|Android|iPhone|iPad/i.test(navigator.userAgent) ? '📱 Mobile' : '💻 Desktop'}</div>
                 </div>
-                
+
                 {!currentDevice?.isTrusted && (
                     <button
                         onClick={handleRegisterDevice}
@@ -234,7 +234,7 @@ export default function DeviceManager({ isOwner }) {
                             <option value="mobile">📱 Mobile Device</option>
                             <option value="desktop">💻 Desktop/Laptop</option>
                         </select>
-                        
+
                         <input
                             type="text"
                             placeholder="Enter recovery passphrase..."
@@ -251,7 +251,7 @@ export default function DeviceManager({ isOwner }) {
                                 fontSize: '14px'
                             }}
                         />
-                        
+
                         <div style={{ display: 'flex', gap: '10px' }}>
                             <button
                                 onClick={handleLinkDevice}

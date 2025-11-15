@@ -89,7 +89,7 @@ export function NSFWContent({ children, isNSFW }) {
   const [verified, setVerified] = useState(() => {
     const stored = localStorage.getItem('ageVerified');
     const verifiedAt = localStorage.getItem('ageVerifiedAt');
-    
+
     // Verification expires after 24 hours
     if (stored && verifiedAt) {
       const hoursSince = (Date.now() - parseInt(verifiedAt)) / 1000 / 60 / 60;
@@ -177,25 +177,25 @@ export function NSFWBlur({ src, alt, isNSFW, onClick }) {
 // Content Analysis Utilities
 export const analyzeContent = (title = '', description = '', tags = []) => {
   const text = `${title} ${description} ${tags.join(' ')}`.toLowerCase();
-  
+
   const hasNSFWKeywords = NSFW_KEYWORDS.some(keyword => text.includes(keyword));
   const hasViolenceKeywords = VIOLENCE_KEYWORDS.some(keyword => text.includes(keyword));
-  
+
   let contentRating = 'safe';
   let flags = [];
-  
+
   if (hasNSFWKeywords) {
     contentRating = 'nsfw';
     flags.push('adult_content');
   }
-  
+
   if (hasViolenceKeywords) {
     flags.push('violence');
     if (contentRating === 'safe') {
       contentRating = 'mature';
     }
   }
-  
+
   return {
     isNSFW: contentRating === 'nsfw',
     isMature: contentRating === 'mature' || contentRating === 'nsfw',
@@ -227,7 +227,7 @@ export function ModerationQueueItem({ artwork, onApprove, onReject, onFlag }) {
       <div className="moderation-details">
         <h3>{artwork.title || 'Untitled'}</h3>
         <p>{artwork.description}</p>
-        
+
         <div className="moderation-tags">
           {artwork.tags?.map((tag, idx) => (
             <span key={idx} className="tag">#{tag}</span>

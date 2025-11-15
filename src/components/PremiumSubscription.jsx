@@ -252,7 +252,7 @@ export function PremiumSubscription({ userId, currentTier }) {
       }
 
       alert(`🎉 Subscription activated!\n\nTier: ${tier}\nYou now have full access to ${tier === 'adult' ? 'adult content' : tier === 'unlimited' ? 'unlimited features' : 'super admin perks'}!`);
-      
+
       // Reload to show updated tier
       setTimeout(() => window.location.reload(), 1500);
 

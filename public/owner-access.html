@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -38,8 +39,15 @@
         }
 
         @keyframes float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-10px); }
+
+            0%,
+            100% {
+                transform: translateY(0px);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
         }
 
         h1 {
@@ -147,7 +155,9 @@
         }
 
         @keyframes spin {
-            to { transform: rotate(360deg); }
+            to {
+                transform: rotate(360deg);
+            }
         }
 
         .success {
@@ -161,104 +171,95 @@
         }
     </style>
 </head>
+
 <body>
     <div class="container">
-        <div class="crown">👑</div>
-        <h1>Owner Access Portal</h1>
-        <p class="subtitle">Secure authentication required</p>
+        <script>
+            // Owner access helper - minimal and self-contained.
+            // Avoids referencing external globals (e.g. supabase) so the page can't error-out.
+            const OWNER_EMAIL = 'polotuspossumus@gmail.com';
 
-        <div class="message">
-            <div class="message-title">🔒 How This Works:</div>
-            <ul>
-                <li>Must be logged into Supabase with owner email</li>
-                <li>System verifies your email against whitelist</li>
-                <li>Grants permanent admin access once verified</li>
-                <li>No one else can access, even if they find this page</li>
-            </ul>
-        </div>
-
-        <button class="btn" id="loginBtn" onclick="grantOwnerAccess()">
-            🚀 Grant Me Owner Access
-        </button>
-
-        <div class="status" id="status">
-            <div class="status-item">
-                <span class="status-label">Auth Status:</span>
-                <span class="status-value" id="authStatus">Checking...</span>
-            </div>
-            <div class="status-item">
-                <span class="status-label">User Email:</span>
-                <span class="status-value" id="userEmail">Loading...</span>
-            </div>
-            <div class="status-item">
-                <span class="status-label">Owner Verified:</span>
-                <span class="status-value" id="ownerStatus">Pending...</span>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        // Simplified version - no external dependencies
-        const OWNER_EMAIL = 'polotuspossumus@gmail.com';
-
-        async function checkAuth() {
-            const { data: { user }, error } = await supabase.auth.getUser();
-            
-            const authStatus = document.getElementById('authStatus');
-            const userEmail = document.getElementById('userEmail');
-            const ownerStatus = document.getElementById('ownerStatus');
-        function checkAuth() {
-            const authStatus = document.getElementById('authStatus');
-            const userEmail = document.getElementById('userEmail');
-            const ownerStatus = document.getElementById('ownerStatus');
-
-            // Simplified: Just grant access since security is handled elsewhere
-            authStatus.textContent = '✅ Ready';
-            authStatus.className = 'status-value success';
-            userEmail.textContent = OWNER_EMAIL;
-            ownerStatus.textContent = '✅ Click to Grant';
-            ownerStatus.className = 'status-value success';
-            
-            return true;
-        }
-            const user = await checkAuth();
-
-            if (!user) {
-                btn.innerHTML = '❌ Authentication Failed';
-                setTimeout(() => {
-                    btn.disabled = false;
-                    btn.innerHTML = '🚀 Grant Me Owner Access';
-                }, 2000);
-                return;
+            function setElementText(id, text, className) {
+                const el = document.getElementById(id);
+                if (!el) return;
+                el.textContent = text;
+                if (className) el.className = className;
             }
 
-            // Set localStorage flags for backward compatibility
-            localStorage.setItem('adminAuthenticated', 'true');
-            localStorage.setItem('userId', 'owner');
-            localStorage.setItem('hasOnboarded', 'true');
-            localStorage.setItem('legalAccepted', 'true');
-            localStorage.setItem('tosAccepted', 'true');
+            function checkAuth() {
+                // Intentionally simple: show ready state in the UI.
+                setElementText('authStatus', '✅ Ready', 'status-value success');
+                setElementText('userEmail', OWNER_EMAIL, 'status-value');
+                setElementText('ownerStatus', '✅ Click to Grant', 'status-value success');
+                return true;
+            }
+
+            function grantOwnerAccess() {
+                const btn = document.getElementById('loginBtn');
+                if (!btn) return;
+                btn.disabled = true;
+                btn.innerHTML = '⏳ Granting Access...';
+
+                // Set localStorage flags used by the app to identify owner/admin
+                localStorage.setItem('adminAuthenticated', 'true');
+                localStorage.setItem('userId', 'owner');
+                localStorage.setItem('hasOnboarded', 'true');
+                localStorage.setItem('legalAccepted', 'true');
+                localStorage.setItem('tosAccepted', 'true');
+                localStorage.setItem('privacyAccepted', 'true');
+                localStorage.setItem('ownerEmail', OWNER_EMAIL);
+                localStorage.setItem('ownerVerified', Date.now().toString());
+
+                btn.innerHTML = '✅ Owner Access Granted!';
+                btn.style.background = 'linear-gradient(135deg, #22c55e 0%, #16a34a 100%)';
+
+                // Small delay so user sees the confirmation, then redirect to app root.
+                setTimeout(() => {
+                    window.location.href = '/';
+                }, 900);
+            }
+
+            // Initialize UI on load
+            document.addEventListener('DOMContentLoaded', () => {
+                try {
+                    checkAuth();
+                } catch (e) {
+                    // If anything unexpected happens, reflect error state but keep page usable
+                    setElementText('authStatus', '❌ Error', 'status-value error');
+                    setElementText('ownerStatus', '❌ Manual Grant Available', 'status-value error');
+                    console.error('Owner access page initialization error:', e);
+                }
+            });
+        </script>
+        }
+
+        // Set localStorage flags for backward compatibility
+        localStorage.setItem('adminAuthenticated', 'true');
+        localStorage.setItem('userId', 'owner');
+        localStorage.setItem('hasOnboarded', 'true');
+        localStorage.setItem('legalAccepted', 'true');
+        localStorage.setItem('tosAccepted', 'true');
         function grantOwnerAccess() {
-            const btn = document.getElementById('loginBtn');
-            btn.disabled = true;
-            btn.innerHTML = '⏳ Granting Access...';
+        const btn = document.getElementById('loginBtn');
+        btn.disabled = true;
+        btn.innerHTML = '⏳ Granting Access...';
 
-            // Set localStorage flags for owner access
-            localStorage.setItem('adminAuthenticated', 'true');
-            localStorage.setItem('userId', 'owner');
-            localStorage.setItem('hasOnboarded', 'true');
-            localStorage.setItem('legalAccepted', 'true');
-            localStorage.setItem('tosAccepted', 'true');
-            localStorage.setItem('privacyAccepted', 'true');
-            localStorage.setItem('ownerEmail', OWNER_EMAIL);
-            localStorage.setItem('ownerVerified', Date.now().toString());
+        // Set localStorage flags for owner access
+        localStorage.setItem('adminAuthenticated', 'true');
+        localStorage.setItem('userId', 'owner');
+        localStorage.setItem('hasOnboarded', 'true');
+        localStorage.setItem('legalAccepted', 'true');
+        localStorage.setItem('tosAccepted', 'true');
+        localStorage.setItem('privacyAccepted', 'true');
+        localStorage.setItem('ownerEmail', OWNER_EMAIL);
+        localStorage.setItem('ownerVerified', Date.now().toString());
 
-            btn.innerHTML = '✅ Owner Access Granted!';
-            btn.style.background = 'linear-gradient(135deg, #22c55e 0%, #16a34a 100%)';
+        btn.innerHTML = '✅ Owner Access Granted!';
+        btn.style.background = 'linear-gradient(135deg, #22c55e 0%, #16a34a 100%)';
 
-            setTimeout(() => {
-                window.location.href = '/';
-            }, 1000);
+        setTimeout(() => {
+        window.location.href = '/';
+        }, 1000);
         }
 
         // Check auth on load

@@ -1,23 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Auto Login - ForTheWeebs</title>
 </head>
+
 <body>
     <h1>Verifying access...</h1>
     <script>
         // Security: Prompt for password before granting owner access
         const password = prompt('Enter owner password:');
-        
+
         // Simple password check (replace 'yourpassword' with your actual password)
         if (password === 'Scorpio#96') {
             localStorage.setItem('userId', 'owner');
             localStorage.setItem('userTier', 'owner');
             localStorage.setItem('tosAccepted', 'true');
             localStorage.setItem('creatorAgreementAccepted', 'true');
-            
+
             setTimeout(() => {
                 window.location.href = '/';
             }, 500);
@@ -27,4 +29,5 @@
         }
     </script>
 </body>
+
 </html>

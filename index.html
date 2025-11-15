@@ -84,7 +84,9 @@
     }
 
     @keyframes spin {
-      to { transform: rotate(360deg); }
+      to {
+        transform: rotate(360deg);
+      }
     }
 
     #landing-page {
@@ -973,7 +975,7 @@
       // Show loader briefly for smooth transition
       const loader = document.getElementById('app-loader');
       if (loader) loader.classList.add('active');
-      
+
       const landingPage = document.getElementById('landing-page');
       if (landingPage) {
         landingPage.classList.add('hidden');
@@ -984,7 +986,7 @@
         rootEl.style.minHeight = '100vh';
       }
       document.body.style.background = '#1a1a2e';
-      
+
       // Hide loader after React mounts
       setTimeout(() => {
         if (loader) loader.classList.remove('active');
@@ -993,7 +995,7 @@
       const rootEl = document.getElementById('root');
       if (rootEl) rootEl.style.display = 'none';
     }
-    
+
     // Backup: Re-check after a short delay in case React hasn't mounted yet
     setTimeout(() => {
       const params2 = new URLSearchParams(window.location.search);

@@ -17,7 +17,7 @@ export async function loadFaceModels() {
 
   try {
     console.log('Loading face detection models...');
-    
+
     await Promise.all([
       faceapi.nets.ssdMobilenetv1.loadFromUri(MODEL_URL),
       faceapi.nets.faceLandmark68Net.loadFromUri(MODEL_URL),
@@ -120,13 +120,13 @@ export async function analyzeImagesForFaces(images, progressCallback) {
   }
 
   const allFaces = [];
-  
+
   for (let i = 0; i < images.length; i++) {
     try {
       // Create image element
       const img = document.createElement('img');
       img.src = images[i].url;
-      
+
       await new Promise((resolve, reject) => {
         img.onload = resolve;
         img.onerror = reject;
@@ -179,9 +179,9 @@ export function enhanceGroupsWithSuggestions(groups) {
   return groups.map((group, index) => {
     // Analyze face characteristics for better naming
     const avgConfidence = group.averageConfidence || 0.85;
-    
+
     let suggestedName = `Character_${String.fromCharCode(65 + index)}`;
-    
+
     // If high confidence and many images, suggest more specific naming
     if (group.faceCount > 10 && avgConfidence > 0.9) {
       suggestedName = `MainCharacter_${index + 1}`;

@@ -59,7 +59,7 @@ export function AuthProvider({ children }) {
   };
 
   const login = async (email, password) => {
-    const { data, error} = await supabase.auth.signInWithPassword({
+    const { data, error } = await supabase.auth.signInWithPassword({
       email,
       password
     });
@@ -150,7 +150,7 @@ export function LoginForm({ onSuccess, onSwitchToSignup }) {
     <div className="auth-form">
       <h2>Welcome Back!</h2>
       {error && <div className="auth-error">{error}</div>}
-      
+
       <form onSubmit={handleSubmit}>
         <div className="form-group">
           <label>Email</label>
@@ -183,8 +183,8 @@ export function LoginForm({ onSuccess, onSwitchToSignup }) {
         <span>OR</span>
       </div>
 
-      <button 
-        className="google-auth-button" 
+      <button
+        className="google-auth-button"
         onClick={handleGoogleLogin}
         disabled={loading}
       >
@@ -258,7 +258,7 @@ export function SignupForm({ onSuccess, onSwitchToLogin }) {
     <div className="auth-form">
       <h2>Create Account</h2>
       {error && <div className="auth-error">{error}</div>}
-      
+
       <form onSubmit={handleSubmit}>
         <div className="form-group">
           <label>Display Name</label>
@@ -314,8 +314,8 @@ export function SignupForm({ onSuccess, onSwitchToLogin }) {
         <span>OR</span>
       </div>
 
-      <button 
-        className="google-auth-button" 
+      <button
+        className="google-auth-button"
         onClick={handleGoogleSignup}
         disabled={loading}
       >
@@ -386,7 +386,7 @@ export function ProtectedRoute({ children }) {
       <div className="auth-gate">
         <h2>🔒 Login Required</h2>
         <p>You need to be logged in to access this page.</p>
-        <AuthModal isOpen={true} onClose={() => {}} defaultView="login" />
+        <AuthModal isOpen={true} onClose={() => { }} defaultView="login" />
       </div>
     );
   }

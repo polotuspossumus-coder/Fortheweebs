@@ -4,7 +4,7 @@
 
 1. Open this file: `supabase-schema.sql`
 2. Copy EVERYTHING (Ctrl+A, Ctrl+C)
-3. Go to: https://app.supabase.com/project/iqipomerawkvtobjtvom/sql/new
+3. Go to: <https://app.supabase.com/project/iqipomerawkvtobjtvom/sql/new>
 4. Paste the SQL
 5. Click "RUN" (or press F5)
 6. Wait for "Success. No rows returned"
@@ -15,13 +15,14 @@
 
 ## Step 2: Create Storage Bucket (1 minute)
 
-1. Go to: https://app.supabase.com/project/iqipomerawkvtobjtvom/storage/buckets
+1. Go to: <https://app.supabase.com/project/iqipomerawkvtobjtvom/storage/buckets>
 2. Click "Create a new bucket"
 3. Name: `artworks`
 4. Make it **Public** ✓
 5. Click "Create bucket"
 
 Then add policies:
+
 1. Click the `artworks` bucket
 2. Click "Policies"
 3. Click "New Policy" → "For full customization"
@@ -40,9 +41,10 @@ Then add policies:
 npm run dev
 ```
 
-Open: http://localhost:5173
+Open: <http://localhost:5173>
 
 **Try these:**
+
 1. ✅ Sign up with email/password
 2. ✅ Upload an image
 3. ✅ Create a commission listing
@@ -56,7 +58,7 @@ Open: http://localhost:5173
 
 When you deploy to production:
 
-1. Go to: https://dashboard.stripe.com/test/webhooks
+1. Go to: <https://dashboard.stripe.com/test/webhooks>
 2. Add endpoint: `https://yourdomain.com/api/webhooks/stripe`
 3. Select events:
    - payment_intent.succeeded
@@ -84,13 +86,16 @@ When you deploy to production:
 ## If Something Breaks
 
 **"Cannot read properties of null"**
+
 - You're not logged in, sign up first
 
 **"Network error"**
+
 - Check you ran the SQL schema
 - Check storage bucket exists
 
 **"Upload failed"**
+
 - Check storage bucket is Public
 - Check policies allow INSERT
 

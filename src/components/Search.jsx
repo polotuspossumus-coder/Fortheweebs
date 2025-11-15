@@ -90,26 +90,26 @@ function Search({ onSearch }) {
     ];
 
     // Filter by search query
-    const filteredCreators = mockCreators.filter(c => 
+    const filteredCreators = mockCreators.filter(c =>
       c.username.toLowerCase().includes(searchQuery.toLowerCase()) ||
       c.displayName.toLowerCase().includes(searchQuery.toLowerCase())
     );
 
-    const filteredArtworks = mockArtworks.filter(a => 
+    const filteredArtworks = mockArtworks.filter(a =>
       a.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
       a.tags.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase()))
     );
 
-    const filteredTags = mockTags.filter(t => 
+    const filteredTags = mockTags.filter(t =>
       t.name.toLowerCase().includes(searchQuery.toLowerCase())
     );
 
     // Apply NSFW filter
-    const nsfwFilteredArtworks = filters.nsfw === 'all' 
+    const nsfwFilteredArtworks = filters.nsfw === 'all'
       ? filteredArtworks
-      : filteredArtworks.filter(a => 
-          filters.nsfw === 'nsfw' ? a.nsfw : !a.nsfw
-        );
+      : filteredArtworks.filter(a =>
+        filters.nsfw === 'nsfw' ? a.nsfw : !a.nsfw
+      );
 
     // Apply category filter
     const categoryFilteredArtworks = filters.category === 'all'
@@ -181,25 +181,25 @@ function Search({ onSearch }) {
         </div>
 
         <div className="search-type-selector">
-          <button 
+          <button
             className={searchType === 'all' ? 'active' : ''}
             onClick={() => setSearchType('all')}
           >
             All
           </button>
-          <button 
+          <button
             className={searchType === 'creators' ? 'active' : ''}
             onClick={() => setSearchType('creators')}
           >
             Creators ({results.creators.length})
           </button>
-          <button 
+          <button
             className={searchType === 'artworks' ? 'active' : ''}
             onClick={() => setSearchType('artworks')}
           >
             Artworks ({results.artworks.length})
           </button>
-          <button 
+          <button
             className={searchType === 'tags' ? 'active' : ''}
             onClick={() => setSearchType('tags')}
           >
@@ -211,7 +211,7 @@ function Search({ onSearch }) {
       <div className="search-filters">
         <div className="filter-group">
           <label>Content:</label>
-          <select 
+          <select
             value={filters.nsfw}
             onChange={(e) => handleFilterChange('nsfw', e.target.value)}
           >
@@ -223,7 +223,7 @@ function Search({ onSearch }) {
 
         <div className="filter-group">
           <label>Category:</label>
-          <select 
+          <select
             value={filters.category}
             onChange={(e) => handleFilterChange('category', e.target.value)}
           >
@@ -238,7 +238,7 @@ function Search({ onSearch }) {
 
         <div className="filter-group">
           <label>Sort By:</label>
-          <select 
+          <select
             value={filters.sortBy}
             onChange={(e) => handleFilterChange('sortBy', e.target.value)}
           >
@@ -260,7 +260,7 @@ function Search({ onSearch }) {
         <div className="search-results">
           <div className="results-header">
             <h2>
-              {totalResults} result{totalResults !== 1 ? 's' : ''} 
+              {totalResults} result{totalResults !== 1 ? 's' : ''}
               {searchQuery && ` for "${searchQuery}"`}
             </h2>
           </div>
