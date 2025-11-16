@@ -22,6 +22,7 @@ import { NotificationProvider } from "./notifications/NotificationProvider.jsx";
 import EngagementTracker from "./components/EngagementTracker.jsx";
 import MicoAssistant from "./components/MicoAssistant.jsx";
 import MicoDevPanel from "./components/MicoDevPanel.jsx";
+import QuickAccessWidget from "./components/QuickAccessWidget.jsx";
 import { registerServiceWorker } from "./utils/registerServiceWorker.js";
 import { autoLoginOwner, isDeviceTrusted } from "./utils/deviceAuth.js";
 import { requireOwner, isOwner } from "./utils/ownerAuth.js";
@@ -206,6 +207,7 @@ function AppFlow() {
               <BugReporter />
               <CookieConsent />
               <MicoAssistant />
+              <QuickAccessWidget />
             </>
           )}
         </React.StrictMode>
