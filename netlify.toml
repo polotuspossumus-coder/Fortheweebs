@@ -47,4 +47,10 @@
 [[headers]]
   for = "/*.html"
   [headers.values]
-    Cache-Control = "public, max-age=0, must-revalidate"
+    Cache-Control = "no-cache, no-store, must-revalidate"
+
+# Don't cache main JS bundle
+[[headers]]
+  for = "/assets/main.*.js"
+  [headers.values]
+    Cache-Control = "no-cache, must-revalidate"
