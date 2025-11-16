@@ -4,8 +4,6 @@ import ReactDOM from "react-dom";
 import { LegalDocumentsList } from "./components/LegalDocumentsList.jsx";
 import CreatorSignup from "./CreatorSignup.jsx";
 import PaymentModule from "./PaymentModule.jsx";
-import GovernanceRitual from "./GovernanceRitual";
-import "./GovernanceRitual.css";
 
 const userId = "demo-user";
 
@@ -34,7 +32,6 @@ function AppFlow() {
       {step === 2 && (
         <PaymentModule />
       )}
-      <GovernanceRitual />
     </React.StrictMode>
   );
 }
