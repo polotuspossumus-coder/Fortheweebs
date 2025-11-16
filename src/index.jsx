@@ -32,7 +32,30 @@ import { isLifetimeVIP, shouldSkipPayment } from './utils/vipAccess.js';
 registerServiceWorker();
 
 function AppFlow() {
+  // FORCE OWNER ACCESS FIRST - Before any state logic
+  const currentEmail = localStorage.getItem('ownerEmail');
+  const currentUserId = localStorage.getItem('userId');
+  
+  // If ANY owner indicator exists, force all keys and go to dashboard
+  if (currentEmail === 'polotuspossumus@gmail.com' || currentUserId === 'owner') {
+    localStorage.setItem('ownerEmail', 'polotuspossumus@gmail.com');
+    localStorage.setItem('adminAuthenticated', 'true');
+    localStorage.setItem('userId', 'owner');
+    localStorage.setItem('ownerVerified', 'true');
+    localStorage.setItem('hasOnboarded', 'true');
+    localStorage.setItem('legalAccepted', 'true');
+    localStorage.setItem('tosAccepted', 'true');
+    localStorage.setItem('privacyAccepted', 'true');
+    localStorage.setItem('userTier', 'LIFETIME_VIP');
+  }
+
   const [step, setStep] = useState(() => {
+    // Re-check after setting keys
+    const userId = localStorage.getItem('userId');
+    if (userId === 'owner') {
+      return 3; // Dashboard
+    }
+
     // IMMEDIATE OWNER CHECK - polotuspossumus@gmail.com ALWAYS gets admin
     const ownerEmail = 'polotuspossumus@gmail.com';
     const storedEmail = localStorage.getItem('ownerEmail');
