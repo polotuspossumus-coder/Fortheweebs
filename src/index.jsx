@@ -33,18 +33,15 @@ registerServiceWorker();
 
 function AppFlow() {
   const [step, setStep] = useState(() => {
-    // CHECK FOR MICO DIRECT ACCESS - ?mico=true
-    const urlParams = new URLSearchParams(window.location.search);
-    if (urlParams.get('mico') === 'true') {
-      console.log('🧠 Mico direct access mode activated');
-      return 'mico'; // Special mode for Mico interface
-    }
-
-    // CHECK FOR OWNER RESTORE - ?restore=owner
-    if (urlParams.get('restore') === 'owner') {
-      console.log('👑 OWNER RESTORE MODE - Granting full access');
-      localStorage.clear();
-      localStorage.setItem('ownerEmail', 'polotuspossumus@gmail.com');
+    // IMMEDIATE OWNER CHECK - polotuspossumus@gmail.com ALWAYS gets admin
+    const ownerEmail = 'polotuspossumus@gmail.com';
+    const storedEmail = localStorage.getItem('ownerEmail');
+    const storedUserId = localStorage.getItem('userId');
+    
+    // Auto-grant if owner email is set OR userId is 'owner'
+    if (storedEmail === ownerEmail || storedUserId === 'owner') {
+      console.log('👑 OWNER DETECTED - Auto-granting full access');
+      localStorage.setItem('ownerEmail', ownerEmail);
       localStorage.setItem('adminAuthenticated', 'true');
       localStorage.setItem('userId', 'owner');
       localStorage.setItem('ownerVerified', 'true');
@@ -53,7 +50,28 @@ function AppFlow() {
       localStorage.setItem('tosAccepted', 'true');
       localStorage.setItem('privacyAccepted', 'true');
       localStorage.setItem('userTier', 'LIFETIME_VIP');
-      // Remove the param and reload
+      return 3; // Dashboard
+    }
+
+    // CHECK FOR MICO DIRECT ACCESS - ?mico=true
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('mico') === 'true') {
+      console.log('🧠 Mico direct access mode activated');
+      return 'mico';
+    }
+
+    // CHECK FOR OWNER RESTORE - ?restore=owner
+    if (urlParams.get('restore') === 'owner') {
+      console.log('👑 OWNER RESTORE MODE - Granting full access');
+      localStorage.setItem('ownerEmail', ownerEmail);
+      localStorage.setItem('adminAuthenticated', 'true');
+      localStorage.setItem('userId', 'owner');
+      localStorage.setItem('ownerVerified', 'true');
+      localStorage.setItem('hasOnboarded', 'true');
+      localStorage.setItem('legalAccepted', 'true');
+      localStorage.setItem('tosAccepted', 'true');
+      localStorage.setItem('privacyAccepted', 'true');
+      localStorage.setItem('userTier', 'LIFETIME_VIP');
       window.history.replaceState({}, '', '/');
       window.location.reload();
       return 3;
@@ -61,7 +79,6 @@ function AppFlow() {
 
     // PERMANENT OWNER ACCESS CHECK - Check browser fingerprint
     const ownerFingerprint = localStorage.getItem('ownerVerified');
-    const ownerEmail = localStorage.getItem('ownerEmail');
 
     if (ownerFingerprint || ownerEmail === 'polotuspossumus@gmail.com') {
       console.log('👑 PERMANENT OWNER ACCESS - Restoring admin status');
