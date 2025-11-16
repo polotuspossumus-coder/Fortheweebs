@@ -13,7 +13,7 @@ const supabase = createClient(
 const LIFETIME_VIP_EMAILS = [
     'polotuspossumus@gmail.com', // Owner
     'chesed04@aol.com',          // VIP Slot 1
-    'vip2@example.com',          // VIP Slot 2 - Replace with real email
+    'Colbyg123f@gmail.com',      // VIP Slot 2
     'vip3@example.com',          // VIP Slot 3 - Replace with real email
     'vip4@example.com',          // VIP Slot 4 - Replace with real email
     'vip5@example.com',          // VIP Slot 5 - Replace with real email
