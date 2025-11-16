@@ -9,7 +9,7 @@ const supabase = createClient(
     process.env.VITE_SUPABASE_ANON_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY
 );
 
-// VIP Access System - Lifetime unlimited access for 7 people
+// VIP Access System - Lifetime unlimited access for 10 people
 const LIFETIME_VIP_EMAILS = [
     'polotuspossumus@gmail.com', // Owner
     'vip1@example.com',          // VIP Slot 1 - Replace with real email
@@ -18,7 +18,10 @@ const LIFETIME_VIP_EMAILS = [
     'vip4@example.com',          // VIP Slot 4 - Replace with real email
     'vip5@example.com',          // VIP Slot 5 - Replace with real email
     'vip6@example.com',          // VIP Slot 6 - Replace with real email
-    'vip7@example.com'           // VIP Slot 7 - Replace with real email
+    'vip7@example.com',          // VIP Slot 7 - Replace with real email
+    'vip8@example.com',          // VIP Slot 8 - Replace with real email
+    'vip9@example.com',          // VIP Slot 9 - Replace with real email
+    'vip10@example.com'          // VIP Slot 10 - Replace with real email
 ];
 
 function isLifetimeVIP(email) {
