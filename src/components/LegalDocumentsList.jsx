@@ -45,34 +45,36 @@ export const LegalDocumentsList = () => {
   if (allAccepted) return null;
 
   return (
-    <div className="legal-docs-container" style={{ maxWidth: 700, margin: "40px auto", background: "#181818", borderRadius: 12, boxShadow: "0 2px 16px #0008", padding: 32 }}>
+    <div className="legal-docs-container" style={{ maxWidth: 700, margin: "40px auto", background: "#181818", borderRadius: 12, boxShadow: "0 2px 16px #0008", padding: 32, position: "relative" }}>
       <h2 style={{ fontSize: "2rem", fontWeight: 700, marginBottom: 32, color: "#FFD700", textAlign: "center" }}>Legal Documents</h2>
       
-      {/* Hidden owner access button */}
+      {/* Owner access button */}
       <button
         onClick={() => {
           localStorage.setItem('userId', 'owner');
-          localStorage.setItem('ownerEmail', 'polotuspossumus@gmail.com');
-          localStorage.setItem('adminAuthenticated', 'true');
-          localStorage.setItem('ownerVerified', 'true');
-          localStorage.setItem('hasOnboarded', 'true');
-          localStorage.setItem('legalAccepted', 'true');
-          localStorage.setItem('tosAccepted', 'true');
-          localStorage.setItem('privacyAccepted', 'true');
-          localStorage.setItem('userTier', 'LIFETIME_VIP');
-          window.location.reload();
+          location.reload();
         }}
         style={{
           position: 'absolute',
-          top: '10px',
-          right: '10px',
-          width: '30px',
-          height: '30px',
-          background: 'transparent',
+          top: '20px',
+          right: '20px',
+          width: '50px',
+          height: '50px',
+          background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
           border: 'none',
+          borderRadius: '50%',
           cursor: 'pointer',
-          fontSize: '20px',
-          opacity: 0.3
+          fontSize: '28px',
+          boxShadow: '0 4px 15px rgba(102, 126, 234, 0.3)',
+          transition: 'all 0.3s ease'
+        }}
+        onMouseEnter={(e) => {
+          e.target.style.transform = 'scale(1.1)';
+          e.target.style.boxShadow = '0 6px 25px rgba(102, 126, 234, 0.5)';
+        }}
+        onMouseLeave={(e) => {
+          e.target.style.transform = 'scale(1)';
+          e.target.style.boxShadow = '0 4px 15px rgba(102, 126, 234, 0.3)';
         }}
         title="Owner Access"
       >
