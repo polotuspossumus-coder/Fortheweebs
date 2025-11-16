@@ -100,7 +100,6 @@
             const userId = localStorage.getItem('userId');
             const adminAuth = localStorage.getItem('adminAuthenticated');
             const deviceId = localStorage.getItem('adminDeviceId');
-            const phoneNumber = localStorage.getItem('adminPhoneNumber');
             const devices = localStorage.getItem('authorized_devices');
 
             // User ID
@@ -130,15 +129,6 @@
                 </div>
             </div>`;
 
-            // Phone Number
-            html += `<div class="status-item ${phoneNumber === '+12813819498' ? 'good' : 'bad'}">
-                <div class="label">Phone Number:</div>
-                <div class="value">${phoneNumber || 'NOT SET ❌'}</div>
-                <div style="color: #aaa; font-size: 0.9rem; margin-top: 5px;">
-                    ${phoneNumber === '+12813819498' ? '✅ Owner phone verified' : '❌ Should be +12813819498'}
-                </div>
-            </div>`;
-
             // Authorized Devices
             html += `<div class="status-item ${devices ? 'good' : 'bad'}">
                 <div class="label">Authorized Devices:</div>
@@ -149,7 +139,7 @@
             </div>`;
 
             // Overall Status
-            const allGood = userId === 'owner' && adminAuth === 'true' && deviceId && phoneNumber === '+12813819498' && devices;
+            const allGood = userId === 'owner' && adminAuth === 'true' && deviceId && devices;
 
             html = `<div class="status-item ${allGood ? 'good' : 'bad'}" style="margin-bottom: 20px; font-size: 1.2rem;">
                 <div class="label">Overall Status:</div>
@@ -166,7 +156,6 @@
             localStorage.setItem('userId', 'owner');
             localStorage.setItem('adminAuthenticated', 'true');
             localStorage.setItem('adminDeviceId', 'owner_permanent_device');
-            localStorage.setItem('adminPhoneNumber', '+12813819498');
             localStorage.setItem('authorized_devices', JSON.stringify([{
                 deviceId: 'owner_permanent_device',
                 deviceType: 'desktop',

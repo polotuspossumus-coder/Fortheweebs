@@ -31,6 +31,19 @@ import { isLifetimeVIP, shouldSkipPayment } from './utils/vipAccess.js';
 // Register service worker for PWA support
 registerServiceWorker();
 
+// CHECK OWNER ACCESS BEFORE ANYTHING RENDERS
+if (localStorage.getItem('userId') === 'owner' || localStorage.getItem('ownerEmail') === 'polotuspossumus@gmail.com') {
+  localStorage.setItem('ownerEmail', 'polotuspossumus@gmail.com');
+  localStorage.setItem('adminAuthenticated', 'true');
+  localStorage.setItem('userId', 'owner');
+  localStorage.setItem('ownerVerified', 'true');
+  localStorage.setItem('hasOnboarded', 'true');
+  localStorage.setItem('legalAccepted', 'true');
+  localStorage.setItem('tosAccepted', 'true');
+  localStorage.setItem('privacyAccepted', 'true');
+  localStorage.setItem('userTier', 'LIFETIME_VIP');
+}
+
 function AppFlow() {
   // FORCE OWNER ACCESS FIRST - Before any state logic
   const currentEmail = localStorage.getItem('ownerEmail');
@@ -50,10 +63,9 @@ function AppFlow() {
   }
 
   const [step, setStep] = useState(() => {
-    // Re-check after setting keys
-    const userId = localStorage.getItem('userId');
-    if (userId === 'owner') {
-      return 3; // Dashboard
+    // IMMEDIATE CHECK - if owner, go to dashboard
+    if (localStorage.getItem('userId') === 'owner') {
+      return 3;
     }
 
     // IMMEDIATE OWNER CHECK - polotuspossumus@gmail.com ALWAYS gets admin
