@@ -73,8 +73,7 @@ function AppFlow() {
       localStorage.setItem('privacyAccepted', 'true');
       localStorage.setItem('userTier', 'LIFETIME_VIP');
       window.history.replaceState({}, '', '/');
-      window.location.reload();
-      return 3;
+      return 3; // Go directly to dashboard, don't reload
     }
 
     // PERMANENT OWNER ACCESS CHECK - Check browser fingerprint
