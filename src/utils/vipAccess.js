@@ -9,7 +9,7 @@
 
 export const LIFETIME_VIP_EMAILS = [
   'polotuspossumus@gmail.com', // Owner - always VIP
-  'vip1@example.com',          // VIP Slot 1 - Replace with real email
+  'chesed04@aol.com',          // VIP Slot 1
   'vip2@example.com',          // VIP Slot 2 - Replace with real email
   'vip3@example.com',          // VIP Slot 3 - Replace with real email
   'vip4@example.com',          // VIP Slot 4 - Replace with real email
