@@ -25,6 +25,7 @@ import MicoDevPanel from "./components/MicoDevPanel.jsx";
 import { registerServiceWorker } from "./utils/registerServiceWorker.js";
 import { autoLoginOwner, isDeviceTrusted } from "./utils/deviceAuth.js";
 import { requireOwner, isOwner } from "./utils/ownerAuth.js";
+import { isLifetimeVIP, shouldSkipPayment } from './utils/vipAccess.js';
 
 // Register service worker for PWA support
 registerServiceWorker();
@@ -166,6 +167,20 @@ function AppFlow() {
     localStorage.setItem("hasOnboarded", "true");
     setStep(3);
   };
+
+  // Check if user is VIP and auto-grant access
+  useEffect(() => {
+    if (step === 2) {
+      const userEmail = localStorage.getItem('ownerEmail') || localStorage.getItem('userEmail');
+      if (userEmail && shouldSkipPayment(userEmail)) {
+        console.log('🌟 LIFETIME VIP DETECTED - Skipping payment, granting full access');
+        localStorage.setItem('userTier', 'LIFETIME_VIP');
+        localStorage.setItem("hasOnboarded", "true");
+        setUserTier('LIFETIME_VIP');
+        setStep(3);
+      }
+    }
+  }, [step]);
 
   return (
     <ErrorBoundary>

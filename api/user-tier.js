@@ -9,6 +9,22 @@ const supabase = createClient(
     process.env.VITE_SUPABASE_ANON_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY
 );
 
+// VIP Access System - Lifetime unlimited access for 3 people
+const LIFETIME_VIP_EMAILS = [
+    'polotuspossumus@gmail.com', // Owner
+    'vip1@example.com',          // VIP Slot 1 - Replace with real email
+    'vip2@example.com',          // VIP Slot 2 - Replace with real email
+    'vip3@example.com'           // VIP Slot 3 - Replace with real email
+];
+
+function isLifetimeVIP(email) {
+    if (!email) return false;
+    const normalizedEmail = email.toLowerCase().trim();
+    return LIFETIME_VIP_EMAILS.some(vipEmail => 
+        vipEmail.toLowerCase().trim() === normalizedEmail
+    );
+}
+
 /**
  * Get User Tier
  * GET /api/user-tier/:userId
@@ -21,20 +37,32 @@ router.get('/user/:userId/tier', async (req, res) => {
         if (userId === 'owner') {
             return res.json({
                 success: true,
-                tier: 'SUPER_ADMIN',
-                userId
+                tier: 'LIFETIME_VIP',
+                userId,
+                isVIP: true
             });
         }
 
-        // Query Supabase for user tier
-        const { data: user, error } = await supabase
+        // Check if user is a lifetime VIP by email
+        const { data: userData, error: userError } = await supabase
             .from('users')
-            .select('payment_tier, paid_at')
+            .select('email, payment_tier, paid_at')
             .eq('id', userId)
             .single();
 
-        if (error) {
-            console.error('Supabase error:', error);
+        if (!userError && userData && isLifetimeVIP(userData.email)) {
+            return res.json({
+                success: true,
+                tier: 'LIFETIME_VIP',
+                userId,
+                isVIP: true,
+                vipEmail: userData.email
+            });
+        }
+
+        // Return regular tier if not VIP
+        if (userError) {
+            console.error('Supabase error:', userError);
             return res.json({
                 success: true,
                 tier: 'FREE',
@@ -44,8 +72,8 @@ router.get('/user/:userId/tier', async (req, res) => {
 
         res.json({
             success: true,
-            tier: user?.payment_tier || 'FREE',
-            paidAt: user?.paid_at,
+            tier: userData?.payment_tier || 'FREE',
+            paidAt: userData?.paid_at,
             userId
         });
     } catch (error) {
