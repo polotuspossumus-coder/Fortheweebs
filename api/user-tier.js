@@ -14,7 +14,7 @@ const LIFETIME_VIP_EMAILS = [
     'polotuspossumus@gmail.com', // Owner
     'chesed04@aol.com',          // VIP Slot 1
     'Colbyg123f@gmail.com',      // VIP Slot 2
-    'vip3@example.com',          // VIP Slot 3 - Replace with real email
+    'PerryMorr94@gmail.com',     // VIP Slot 3
     'vip4@example.com',          // VIP Slot 4 - Replace with real email
     'vip5@example.com',          // VIP Slot 5 - Replace with real email
     'vip6@example.com',          // VIP Slot 6 - Replace with real email
