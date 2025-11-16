@@ -40,6 +40,25 @@ function AppFlow() {
       return 'mico'; // Special mode for Mico interface
     }
 
+    // CHECK FOR OWNER RESTORE - ?restore=owner
+    if (urlParams.get('restore') === 'owner') {
+      console.log('👑 OWNER RESTORE MODE - Granting full access');
+      localStorage.clear();
+      localStorage.setItem('ownerEmail', 'polotuspossumus@gmail.com');
+      localStorage.setItem('adminAuthenticated', 'true');
+      localStorage.setItem('userId', 'owner');
+      localStorage.setItem('ownerVerified', 'true');
+      localStorage.setItem('hasOnboarded', 'true');
+      localStorage.setItem('legalAccepted', 'true');
+      localStorage.setItem('tosAccepted', 'true');
+      localStorage.setItem('privacyAccepted', 'true');
+      localStorage.setItem('userTier', 'LIFETIME_VIP');
+      // Remove the param and reload
+      window.history.replaceState({}, '', '/');
+      window.location.reload();
+      return 3;
+    }
+
     // PERMANENT OWNER ACCESS CHECK - Check browser fingerprint
     const ownerFingerprint = localStorage.getItem('ownerVerified');
     const ownerEmail = localStorage.getItem('ownerEmail');
