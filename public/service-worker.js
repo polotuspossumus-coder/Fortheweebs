@@ -7,9 +7,7 @@ const CACHE_NAME = 'fortheweebs-v1';
 const OFFLINE_ASSETS = [
   '/',
   '/index.html',
-  '/manifest.json',
-  '/static/js/main.js',
-  '/static/css/main.css'
+  '/manifest.json'
 ];
 
 // Install event - cache offline assets
