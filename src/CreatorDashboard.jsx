@@ -50,7 +50,7 @@ export const CreatorDashboard = ({ userId = "demo_user", ipAddress = "127.0.0.1"
   const [currentTier] = useState(tier || 'General Access');
   const [userBalance, setUserBalance] = useState(0);
   const [showMessages, setShowMessages] = useState(false);
-  const version = "2025.10";
+  const version = "2025.11"; // Cache bust
 
   // Check if user is verified owner
   useEffect(() => {
