@@ -78,15 +78,18 @@ function AppFlow() {
 
     // PERMANENT OWNER ACCESS CHECK - Check browser fingerprint
     const ownerFingerprint = localStorage.getItem('ownerVerified');
+    const storedOwnerEmail = localStorage.getItem('ownerEmail');
 
-    if (ownerFingerprint || ownerEmail === 'polotuspossumus@gmail.com') {
+    if (ownerFingerprint || storedOwnerEmail === ownerEmail) {
       console.log('👑 PERMANENT OWNER ACCESS - Restoring admin status');
+      localStorage.setItem('ownerEmail', ownerEmail);
       localStorage.setItem('adminAuthenticated', 'true');
       localStorage.setItem('userId', 'owner');
       localStorage.setItem('hasOnboarded', 'true');
       localStorage.setItem('legalAccepted', 'true');
       localStorage.setItem('tosAccepted', 'true');
       localStorage.setItem('privacyAccepted', 'true');
+      localStorage.setItem('userTier', 'LIFETIME_VIP');
       return 3; // Go straight to dashboard
     }
 
