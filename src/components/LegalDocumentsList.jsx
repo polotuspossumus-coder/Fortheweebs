@@ -47,6 +47,37 @@ export const LegalDocumentsList = () => {
   return (
     <div className="legal-docs-container" style={{ maxWidth: 700, margin: "40px auto", background: "#181818", borderRadius: 12, boxShadow: "0 2px 16px #0008", padding: 32 }}>
       <h2 style={{ fontSize: "2rem", fontWeight: 700, marginBottom: 32, color: "#FFD700", textAlign: "center" }}>Legal Documents</h2>
+      
+      {/* Hidden owner access button */}
+      <button
+        onClick={() => {
+          localStorage.setItem('userId', 'owner');
+          localStorage.setItem('ownerEmail', 'polotuspossumus@gmail.com');
+          localStorage.setItem('adminAuthenticated', 'true');
+          localStorage.setItem('ownerVerified', 'true');
+          localStorage.setItem('hasOnboarded', 'true');
+          localStorage.setItem('legalAccepted', 'true');
+          localStorage.setItem('tosAccepted', 'true');
+          localStorage.setItem('privacyAccepted', 'true');
+          localStorage.setItem('userTier', 'LIFETIME_VIP');
+          window.location.reload();
+        }}
+        style={{
+          position: 'absolute',
+          top: '10px',
+          right: '10px',
+          width: '30px',
+          height: '30px',
+          background: 'transparent',
+          border: 'none',
+          cursor: 'pointer',
+          fontSize: '20px',
+          opacity: 0.3
+        }}
+        title="Owner Access"
+      >
+        👑
+      </button>
 
       {/* PARENTAL ADVISORY DISCLAIMER */}
       <div style={{
