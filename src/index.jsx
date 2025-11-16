@@ -27,6 +27,7 @@ import { registerServiceWorker } from "./utils/registerServiceWorker.js";
 import { autoLoginOwner, isDeviceTrusted } from "./utils/deviceAuth.js";
 import { requireOwner, isOwner } from "./utils/ownerAuth.js";
 import { isLifetimeVIP, shouldSkipPayment } from './utils/vipAccess.js';
+import './utils/notifications.js'; // Import notification handler
 
 // Register service worker for PWA support
 registerServiceWorker();
