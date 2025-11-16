@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Restore Admin Access</title>
+    <style>
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 500px;
+            width: 100%;
+        }
+        h1 {
+            color: #667eea;
+            margin: 0 0 10px 0;
+            font-size: 28px;
+        }
+        p {
+            color: #666;
+            margin: 0 0 30px 0;
+        }
+        button {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+        }
+        button:active {
+            transform: translateY(0);
+        }
+        .status {
+            margin-top: 20px;
+            padding: 16px;
+            border-radius: 8px;
+            font-weight: 600;
+            text-align: center;
+            display: none;
+        }
+        .status.success {
+            background: #d1fae5;
+            color: #065f46;
+            display: block;
+        }
+        .status.error {
+            background: #fee2e2;
+            color: #991b1b;
+            display: block;
+        }
+        .details {
+            margin-top: 20px;
+            padding: 16px;
+            background: #f3f4f6;
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: 'Courier New', monospace;
+        }
+        .details div {
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>👑 Restore Owner Access</h1>
+        <p>Click the button below to restore your admin/owner access to ForTheWeebs</p>
+        
+        <button onclick="restoreAccess()">Restore Admin Access</button>
+        
+        <div id="status" class="status"></div>
+        
+        <div id="details" class="details" style="display: none;">
+            <strong>Current localStorage:</strong>
+            <div id="localStorageContent"></div>
+        </div>
+    </div>
+
+    <script>
+        function restoreAccess() {
+            try {
+                // Set all owner access keys
+                localStorage.setItem('ownerEmail', 'polotuspossumus@gmail.com');
+                localStorage.setItem('adminAuthenticated', 'true');
+                localStorage.setItem('userId', 'owner');
+                localStorage.setItem('ownerVerified', 'true');
+                localStorage.setItem('hasOnboarded', 'true');
+                localStorage.setItem('legalAccepted', 'true');
+                localStorage.setItem('tosAccepted', 'true');
+                localStorage.setItem('privacyAccepted', 'true');
+                localStorage.setItem('userTier', 'LIFETIME_VIP');
+                
+                // Show success
+                const status = document.getElementById('status');
+                status.className = 'status success';
+                status.textContent = '✅ Admin access restored! Redirecting to dashboard...';
+                
+                // Show details
+                showLocalStorage();
+                
+                // Redirect after 2 seconds
+                setTimeout(() => {
+                    window.location.href = '/';
+                }, 2000);
+                
+            } catch (error) {
+                const status = document.getElementById('status');
+                status.className = 'status error';
+                status.textContent = '❌ Error: ' + error.message;
+            }
+        }
+        
+        function showLocalStorage() {
+            const details = document.getElementById('details');
+            const content = document.getElementById('localStorageContent');
+            
+            const keys = [
+                'ownerEmail',
+                'adminAuthenticated', 
+                'userId',
+                'ownerVerified',
+                'userTier'
+            ];
+            
+            let html = '';
+            keys.forEach(key => {
+                const value = localStorage.getItem(key);
+                html += `<div><strong>${key}:</strong> ${value || '(not set)'}</div>`;
+            });
+            
+            content.innerHTML = html;
+            details.style.display = 'block';
+        }
+        
+        // Show current state on load
+        window.addEventListener('load', () => {
+            showLocalStorage();
+        });
+    </script>
+</body>
+</html>
