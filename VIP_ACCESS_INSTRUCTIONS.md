@@ -2,7 +2,7 @@
 
 ## How to Grant Someone VIP Access
 
-You can grant **3 people** lifetime unlimited access (beyond yourself as owner).
+You can grant **7 people** lifetime unlimited access (beyond yourself as owner, for a total of 10 VIP accounts).
 
 ### Step 1: Add Their Email
 
@@ -71,6 +71,10 @@ Netlify will automatically deploy the update.
 2. vip1@example.com (Available)
 3. vip2@example.com (Available)
 4. vip3@example.com (Available)
+5. vip4@example.com (Available)
+6. vip5@example.com (Available)
+7. vip6@example.com (Available)
+8. vip7@example.com (Available)
 
 ## Important Notes
 
