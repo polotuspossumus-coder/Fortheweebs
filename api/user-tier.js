@@ -17,7 +17,7 @@ const LIFETIME_VIP_EMAILS = [
     'PerryMorr94@gmail.com',     // VIP Slot 3
     'remyvogt@gmail.com',        // VIP Slot 4
     'kh@savantenergy.com',       // VIP Slot 5
-    'vip6@example.com',          // VIP Slot 6 - Replace with real email
+    'Bleska@mindspring.com',     // VIP Slot 6
     'vip7@example.com',          // VIP Slot 7 - Replace with real email
     'vip8@example.com',          // VIP Slot 8 - Replace with real email
     'vip9@example.com',          // VIP Slot 9 - Replace with real email
