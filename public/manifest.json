@@ -1,6 +1,7 @@
 {
   "name": "ForTheWeebs - Creator Platform",
   "short_name": "ForTheWeebs",
+  "version": "2.0.0",
   "description": "The ultimate creator platform for anime culture",
   "start_url": "/",
   "display": "standalone",
