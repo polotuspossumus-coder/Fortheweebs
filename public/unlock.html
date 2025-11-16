@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Owner Unlock - ForTheWeebs</title>
+    <style>
+        body {
+            font-family: system-ui;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .box {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            padding: 40px;
+            border-radius: 20px;
+            text-align: center;
+            max-width: 400px;
+        }
+        button {
+            background: #f43f5e;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 18px;
+            border-radius: 10px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+        button:hover {
+            background: #e11d48;
+        }
+        .status {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="box">
+        <h1>👑 Owner Access Unlock</h1>
+        <p>Click below to grant yourself admin access</p>
+        <button onclick="unlock()">UNLOCK ADMIN ACCESS</button>
+        <div class="status" id="status"></div>
+    </div>
+
+    <script>
+        function unlock() {
+            // Set all owner flags
+            localStorage.setItem('ownerEmail', 'polotuspossumus@gmail.com');
+            localStorage.setItem('userId', 'owner');
+            localStorage.setItem('adminAuthenticated', 'true');
+            localStorage.setItem('ownerVerified', 'true');
+            localStorage.setItem('hasOnboarded', 'true');
+            localStorage.setItem('legalAccepted', 'true');
+            localStorage.setItem('tosAccepted', 'true');
+            localStorage.setItem('privacyAccepted', 'true');
+            localStorage.setItem('userTier', 'LIFETIME_VIP');
+
+            document.getElementById('status').innerHTML = '✅ Admin access granted!<br>Redirecting...';
+
+            // Clear all caches
+            if ('caches' in window) {
+                caches.keys().then(names => {
+                    names.forEach(name => caches.delete(name));
+                });
+            }
+
+            // Redirect to main app
+            setTimeout(() => {
+                window.location.href = '/';
+            }, 1000);
+        }
+    </script>
+</body>
+</html>
