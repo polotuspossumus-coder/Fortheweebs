@@ -17,13 +17,45 @@ export function AuthProvider({ children }) {
   useEffect(() => {
     // Get initial session
     supabase.auth.getSession().then(({ data: { session } }) => {
-      setUser(session?.user ?? null);
+      const user = session?.user ?? null;
+      setUser(user);
+
+      // Check if owner email on session restore
+      if (user && user.email.toLowerCase() === 'polotuspossumus@gmail.com') {
+        localStorage.setItem('ownerEmail', 'polotuspossumus@gmail.com');
+        localStorage.setItem('userId', 'owner');
+        localStorage.setItem('adminAuthenticated', 'true');
+        localStorage.setItem('ownerVerified', 'true');
+        localStorage.setItem('hasOnboarded', 'true');
+        localStorage.setItem('legalAccepted', 'true');
+        localStorage.setItem('tosAccepted', 'true');
+        localStorage.setItem('privacyAccepted', 'true');
+        localStorage.setItem('userTier', 'LIFETIME_VIP');
+        console.log('👑 Owner session restored - Admin access granted');
+      }
+
       setLoading(false);
     });
 
     // Listen for auth changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      setUser(session?.user ?? null);
+      const user = session?.user ?? null;
+      setUser(user);
+
+      // Check if owner email on auth change
+      if (user && user.email.toLowerCase() === 'polotuspossumus@gmail.com') {
+        localStorage.setItem('ownerEmail', 'polotuspossumus@gmail.com');
+        localStorage.setItem('userId', 'owner');
+        localStorage.setItem('adminAuthenticated', 'true');
+        localStorage.setItem('ownerVerified', 'true');
+        localStorage.setItem('hasOnboarded', 'true');
+        localStorage.setItem('legalAccepted', 'true');
+        localStorage.setItem('tosAccepted', 'true');
+        localStorage.setItem('privacyAccepted', 'true');
+        localStorage.setItem('userTier', 'LIFETIME_VIP');
+        console.log('👑 Owner auth state changed - Admin access granted');
+      }
+
       setLoading(false);
     });
 
@@ -65,6 +97,21 @@ export function AuthProvider({ children }) {
     });
 
     if (error) throw error;
+
+    // Check if owner email and grant admin access
+    if (data.user && data.user.email.toLowerCase() === 'polotuspossumus@gmail.com') {
+      localStorage.setItem('ownerEmail', 'polotuspossumus@gmail.com');
+      localStorage.setItem('userId', 'owner');
+      localStorage.setItem('adminAuthenticated', 'true');
+      localStorage.setItem('ownerVerified', 'true');
+      localStorage.setItem('hasOnboarded', 'true');
+      localStorage.setItem('legalAccepted', 'true');
+      localStorage.setItem('tosAccepted', 'true');
+      localStorage.setItem('privacyAccepted', 'true');
+      localStorage.setItem('userTier', 'LIFETIME_VIP');
+      console.log('👑 Owner logged in - Admin access granted');
+    }
+
     return data;
   };
 
@@ -77,6 +124,21 @@ export function AuthProvider({ children }) {
     });
 
     if (error) throw error;
+
+    // Check if owner email after OAuth (will be checked on callback)
+    if (data.user && data.user.email.toLowerCase() === 'polotuspossumus@gmail.com') {
+      localStorage.setItem('ownerEmail', 'polotuspossumus@gmail.com');
+      localStorage.setItem('userId', 'owner');
+      localStorage.setItem('adminAuthenticated', 'true');
+      localStorage.setItem('ownerVerified', 'true');
+      localStorage.setItem('hasOnboarded', 'true');
+      localStorage.setItem('legalAccepted', 'true');
+      localStorage.setItem('tosAccepted', 'true');
+      localStorage.setItem('privacyAccepted', 'true');
+      localStorage.setItem('userTier', 'LIFETIME_VIP');
+      console.log('👑 Owner logged in via Google - Admin access granted');
+    }
+
     return data;
   };
 
