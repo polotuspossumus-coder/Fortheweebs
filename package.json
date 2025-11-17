@@ -30,6 +30,7 @@
     "vitest": "^4.0.8"
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.32.1",
     "@octokit/rest": "^21.0.2",
     "@radix-ui/react-switch": "^1.2.6",
     "@radix-ui/react-tabs": "^1.1.13",
