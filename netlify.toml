@@ -15,10 +15,12 @@
   to = "/.netlify/functions/:splat"
   status = 200
 
+# Exclude assets and static files from SPA redirect
 [[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
+  force = false
 
 [[headers]]
   for = "/*"
