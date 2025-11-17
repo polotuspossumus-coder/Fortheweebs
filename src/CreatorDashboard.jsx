@@ -342,7 +342,9 @@ export const OverviewPanel = ({ userId }) => {
     <div style={{ padding: '24px' }}>
       {/* Messages Modal */}
       {showMessages && (
-        <div style={{
+        <div 
+          onClick={() => setShowMessages(false)}
+          style={{
           position: 'fixed',
           top: 0,
           left: 0,
@@ -355,7 +357,9 @@ export const OverviewPanel = ({ userId }) => {
           justifyContent: 'center',
           padding: '20px'
         }}>
-          <div style={{
+          <div 
+            onClick={(e) => e.stopPropagation()}
+            style={{
             background: 'white',
             borderRadius: '12px',
             maxWidth: '1200px',
@@ -370,12 +374,18 @@ export const OverviewPanel = ({ userId }) => {
                 position: 'absolute',
                 top: '16px',
                 right: '16px',
-                background: 'transparent',
+                background: '#ff4444',
                 border: 'none',
                 fontSize: '2rem',
                 cursor: 'pointer',
-                color: '#666',
-                zIndex: 10000
+                color: 'white',
+                zIndex: 10000,
+                width: '40px',
+                height: '40px',
+                borderRadius: '50%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center'
               }}
             >
               ×
