@@ -49,7 +49,6 @@ export const CreatorDashboard = ({ userId = "demo_user", ipAddress = "127.0.0.1"
   const [creatorAgreementAccepted, setCreatorAgreementAccepted] = useState(isAdmin ? true : false);
   const [currentTier] = useState(tier || 'General Access');
   const [userBalance, setUserBalance] = useState(0);
-  const [showMessages, setShowMessages] = useState(false);
   const version = "2025.11"; // Cache bust
 
   // Check if user is verified owner
@@ -340,61 +339,6 @@ export const OverviewPanel = ({ userId }) => {
 
   return (
     <div style={{ padding: '24px' }}>
-      {/* Messages Modal */}
-      {showMessages && (
-        <div 
-          onClick={() => setShowMessages(false)}
-          style={{
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          background: 'rgba(0,0,0,0.5)',
-          zIndex: 9999,
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          padding: '20px'
-        }}>
-          <div 
-            onClick={(e) => e.stopPropagation()}
-            style={{
-            background: 'white',
-            borderRadius: '12px',
-            maxWidth: '1200px',
-            width: '100%',
-            maxHeight: '90vh',
-            overflow: 'auto',
-            position: 'relative'
-          }}>
-            <button
-              onClick={() => setShowMessages(false)}
-              style={{
-                position: 'absolute',
-                top: '16px',
-                right: '16px',
-                background: '#ff4444',
-                border: 'none',
-                fontSize: '2rem',
-                cursor: 'pointer',
-                color: 'white',
-                zIndex: 10000,
-                width: '40px',
-                height: '40px',
-                borderRadius: '50%',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center'
-              }}
-            >
-              ×
-            </button>
-            <MessagingSystem />
-          </div>
-        </div>
-      )}
-
       {/* Clean Welcome Header */}
       <div style={{
         padding: '20px',
@@ -415,7 +359,6 @@ export const OverviewPanel = ({ userId }) => {
           </p>
         </div>
         <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
-          <MessageBadge onClick={() => setShowMessages(true)} />
           <NotificationBadge />
         </div>
       </div>
