@@ -1,4 +1,6 @@
 import Anthropic from '@anthropic-ai/sdk';
+import fs from 'fs/promises';
+import path from 'path';
 
 /**
  * Mico Orchestrator - Autonomous code execution agent
@@ -75,9 +77,9 @@ Return ONLY the JSON array, no other text.`;
       });
     }
 
-    // Step 2: Execute each tool call
+    // Step 2: Execute tools directly (no function calls)
     const executionLog = [];
-    const baseUrl = process.env.URL || 'http://localhost:8888';
+    const projectRoot = process.cwd();
 
     for (const call of toolCalls) {
       const { tool, params, reason } = call;
@@ -93,19 +95,16 @@ Return ONLY the JSON array, no other text.`;
         
         switch (tool) {
           case 'read-file':
-            result = await fetch(`${baseUrl}/.netlify/functions/mico/read-file`, {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify(params),
-            }).then(r => r.json());
+            const filePath = path.resolve(projectRoot, params.filePath);
+            const content = await fs.readFile(filePath, 'utf-8');
+            result = { success: true, content, lines: content.split('\n').length };
             break;
             
           case 'write-file':
-            result = await fetch(`${baseUrl}/.netlify/functions/mico/write-file`, {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify(params),
-            }).then(r => r.json());
+            const writeFilePath = path.resolve(projectRoot, params.filePath);
+            await fs.mkdir(path.dirname(writeFilePath), { recursive: true });
+            await fs.writeFile(writeFilePath, params.content, 'utf-8');
+            result = { success: true, bytesWritten: Buffer.byteLength(params.content) };
             break;
             
           default:
