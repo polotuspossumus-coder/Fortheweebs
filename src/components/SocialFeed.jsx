@@ -35,53 +35,94 @@ export const SocialFeed = ({ userId, userTier }) => {
     setSubscriptions(JSON.parse(localStorage.getItem('userSubscriptions') || '[]'));
   }, []);
 
-  const createPost = () => {
+  const createPost = async () => {
     if (!newPostContent.trim()) return;
 
-    const newPost = {
-      id: Date.now(),
-      userId: userId,
-      userName: localStorage.getItem('displayName') || localStorage.getItem('currentUserName') || 'Anonymous',
-      avatar: localStorage.getItem('userAvatar') || '👤',
-      content: newPostContent,
-      timestamp: new Date().toISOString(),
-      likes: 0,
-      comments: [],
-      hasCGI: false,
-      visibility: contentVisibility, // Who can see this post
-      isPaidContent: contentVisibility === 'subscribers'
-    };
+    try {
+      setLoading(true);
+      const newPost = await api.posts.create({
+        body: newPostContent,
+        visibility: contentVisibility,
+        isPaid: isPaidContent,
+        priceCents: isPaidContent ? priceCents : undefined,
+        hasCGI: isPremium && showCGITools,
+      });
 
-    const updatedPosts = [newPost, ...posts];
-    setPosts(updatedPosts);
-    localStorage.setItem('socialPosts', JSON.stringify(updatedPosts));
-    setNewPostContent('');
+      setPosts([newPost, ...posts]);
+      setNewPostContent('');
+      setError(null);
+    } catch (err) {
+      console.error('Failed to create post:', err);
+      setError('Failed to create post. Please try again.');
+      
+      // Fallback to localStorage
+      const newPost = {
+        id: Date.now(),
+        authorId: userId,
+        author: {
+          username: localStorage.getItem('currentUserName') || 'Anonymous',
+          displayName: localStorage.getItem('displayName') || 'Anonymous',
+          avatar: localStorage.getItem('userAvatar') || '👤',
+        },
+        body: newPostContent,
+        createdAt: new Date().toISOString(),
+        likesCount: 0,
+        commentsCount: 0,
+        visibility: contentVisibility,
+        isPaid: isPaidContent,
+        hasCGI: false,
+      };
+
+      const updatedPosts = [newPost, ...posts];
+      setPosts(updatedPosts);
+      localStorage.setItem('socialPosts', JSON.stringify(updatedPosts));
+      setNewPostContent('');
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const addFriend = (friendId, friendName) => {
-    const newFriend = { id: friendId, name: friendName, addedAt: new Date().toISOString() };
-    const updatedFriends = [...friends, newFriend];
-    setFriends(updatedFriends);
-    localStorage.setItem('userFriends', JSON.stringify(updatedFriends));
+  const handleFollow = async (targetUserId) => {
+    try {
+      await api.relationships.follow(targetUserId);
+      await loadStats(); // Refresh counters
+    } catch (err) {
+      console.error('Follow failed:', err);
+    }
   };
 
-  const followUser = (targetUserId, targetUserName) => {
-    const newFollow = { id: targetUserId, name: targetUserName, followedAt: new Date().toISOString() };
-    const updatedFollowers = [...followers, newFollow];
-    setFollowers(updatedFollowers);
-    localStorage.setItem('userFollowers', JSON.stringify(updatedFollowers));
+  const handleAddFriend = async (targetUserId) => {
+    try {
+      await api.relationships.sendFriendRequest(targetUserId);
+      alert('Friend request sent!');
+    } catch (err) {
+      console.error('Friend request failed:', err);
+      alert(err.message || 'Failed to send friend request');
+    }
   };
 
-  const subscribeToUser = (targetUserId, targetUserName, tier = 'basic') => {
-    const newSub = { 
-      id: targetUserId, 
-      name: targetUserName, 
-      tier: tier, // basic, premium, vip
-      subscribedAt: new Date().toISOString() 
-    };
-    const updatedSubs = [...subscriptions, newSub];
-    setSubscriptions(updatedSubs);
-    localStorage.setItem('userSubscriptions', JSON.stringify(updatedSubs));
+  const handleSubscribe = async (creatorId) => {
+    try {
+      setLoading(true);
+      const { sessionUrl } = await api.subscriptions.createCheckout(creatorId, 'PREMIUM_1000', 100000);
+      window.location.href = sessionUrl; // Redirect to Stripe
+    } catch (err) {
+      console.error('Subscription failed:', err);
+      alert('Failed to start subscription. Please try again.');
+      setLoading(false);
+    }
+  };
+
+  const handleLike = async (postId) => {
+    try {
+      await api.posts.like(postId);
+      // Update local state
+      setPosts(posts.map(p => 
+        p.id === postId ? { ...p, likesCount: p.likesCount + 1 } : p
+      ));
+    } catch (err) {
+      console.error('Like failed:', err);
+    }
   };
 
   const likePost = (postId) => {
@@ -137,18 +178,43 @@ export const SocialFeed = ({ userId, userTier }) => {
               value={newPostContent}
               onChange={(e) => setNewPostContent(e.target.value)}
               rows={3}
+              disabled={loading}
             />
             
             {/* Content Visibility Selector */}
             <div className="visibility-selector">
               <label>👁️ Who can see this:</label>
               <select value={contentVisibility} onChange={(e) => setContentVisibility(e.target.value)}>
-                <option value="public">🌍 Public (Everyone)</option>
-                <option value="friends">👥 Friends Only</option>
-                <option value="subscribers">💎 Subscribers Only (Paid)</option>
-                <option value="custom">⚙️ Custom List</option>
+                <option value="PUBLIC">🌍 Public (Everyone)</option>
+                <option value="FRIENDS">👥 Friends Only</option>
+                <option value="SUBSCRIBERS">💎 Subscribers Only</option>
+                <option value="CUSTOM">⚙️ Custom List</option>
               </select>
             </div>
+
+            {/* Paid Content Toggle */}
+            <div className="paid-toggle">
+              <label>
+                <input
+                  type="checkbox"
+                  checked={isPaidContent}
+                  onChange={(e) => setIsPaidContent(e.target.checked)}
+                />
+                💰 Paid Content (${(priceCents / 100).toFixed(2)})
+              </label>
+              {isPaidContent && (
+                <input
+                  type="number"
+                  value={priceCents / 100}
+                  onChange={(e) => setPriceCents(Math.round(parseFloat(e.target.value) * 100))}
+                  min="1"
+                  step="0.01"
+                  placeholder="Price"
+                />
+              )}
+            </div>
+
+            {error && <div className="error-message">{error}</div>}
 
             <div className="post-creator-actions">
               <div className="post-options">
