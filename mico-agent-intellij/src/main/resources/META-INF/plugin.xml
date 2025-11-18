@@ -1,0 +1,26 @@
+<idea-plugin>
+    <id>mico-agent-intellij</id>
+    <name>Mico Sovereign Agent</name>
+    <description>
+        Sovereign coding agent snap-in. Handles slab drops, build/test/deploy, and instant pivots.
+    </description>
+    <vendor email="jacob@fortheweebs.dev" url="https://fortheweebs.dev">Polotus</vendor>
+
+    <depends>com.intellij.modules.platform</depends>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <toolWindow id="Mico Agent"
+                    factoryClass="dev.fortheweebs.mico.SlabToolWindowFactory"
+                    anchor="bottom"
+                    icon="AllIcons.Toolwindows.ToolWindowRun"/>
+    </extensions>
+
+    <actions>
+        <action id="mico.runSlab"
+                class="dev.fortheweebs.mico.RunSlabAction"
+                text="Run Slab"
+                description="Drop and execute a sovereign slab">
+            <keyboard-shortcut keymap="$default" first-keystroke="ctrl ENTER"/>
+        </action>
+    </actions>
+</idea-plugin>
