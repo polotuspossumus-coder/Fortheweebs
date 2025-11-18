@@ -4,8 +4,7 @@ import {
   BrightnessEffect,
   ColorFilterEffect,
   NeonGlowEffect,
-  VintageEffect,
-  PixelateEffect
+  VintageEffect
 } from '../effects/CGIEffect';
 import {
   BackgroundBlurEffect,
@@ -28,10 +27,19 @@ import {
   AdvancedBackgroundSegmentationEffect,
   FaceBeautifyEffect
 } from '../effects/FaceDetectionEffects';
+import CustomEffectEditor from './CustomEffectEditor';
+import {
+  MirrorEffect,
+  EdgeDetectionEffect,
+  PixelateEffect,
+  GlitchEffect,
+  RGBSplitEffect
+} from '../effects/AdvancedEffects';
 
-export default function CGIControls({ videoProcessorRef }) {
+export default function CGIControls({ cgiProcessor }) {
   const [activeEffects, setActiveEffects] = useState([]);
   const [selectedEffect, setSelectedEffect] = useState(null);
+  const [showCustomEditor, setShowCustomEditor] = useState(false);
 
   const availableEffects = [
     // Basic Effects
@@ -74,14 +82,6 @@ export default function CGIControls({ videoProcessorRef }) {
       description: 'Retro film look',
       category: 'basic',
       create: () => new VintageEffect({ intensity: 0.8 })
-    },
-    {
-      id: 'pixelate',
-      name: 'Pixelate',
-      icon: '🎮',
-      description: '8-bit retro effect',
-      category: 'basic',
-      create: () => new PixelateEffect({ params: { pixelSize: 8 }, intensity: 1.0 })
     },
     // Background Effects
     {
@@ -217,31 +217,84 @@ export default function CGIControls({ videoProcessorRef }) {
           personExpansion: 1.5
         }
       })
+    },
+    // Advanced Effects
+    {
+      id: 'mirror',
+      name: 'Mirror',
+      icon: '🪞',
+      description: 'Flip horizontal/vertical',
+      category: 'advanced',
+      create: () => new MirrorEffect()
+    },
+    {
+      id: 'edgedetect',
+      name: 'Edge Detection',
+      icon: '🔲',
+      description: 'Outline edges',
+      category: 'advanced',
+      create: () => new EdgeDetectionEffect()
+    },
+    {
+      id: 'pixelate_advanced',
+      name: 'Pixelate Pro',
+      icon: '🎮',
+      description: 'Advanced pixelation',
+      category: 'advanced',
+      create: () => new PixelateEffect()
+    },
+    {
+      id: 'glitch',
+      name: 'Glitch',
+      icon: '📺',
+      description: 'Digital glitch effect',
+      category: 'advanced',
+      create: () => new GlitchEffect()
+    },
+    {
+      id: 'rgbsplit',
+      name: 'RGB Split',
+      icon: '🌈',
+      description: 'Chromatic aberration',
+      category: 'advanced',
+      create: () => new RGBSplitEffect()
     }
   ];
 
   const addEffect = (effectDef) => {
     const effect = effectDef.create();
 
-    if (videoProcessorRef?.current?.addEffect) {
-      videoProcessorRef.current.addEffect(effect);
+    if (cgiProcessor?.addEffect) {
+      cgiProcessor.addEffect(effect);
       setActiveEffects([...activeEffects, { id: effectDef.id, name: effectDef.name, effect }]);
     }
   };
 
   const removeEffect = (effectId) => {
-    if (videoProcessorRef?.current?.removeEffect) {
-      videoProcessorRef.current.removeEffect(effectId);
+    if (cgiProcessor?.removeEffect) {
+      cgiProcessor.removeEffect(effectId);
       setActiveEffects(activeEffects.filter(e => e.id !== effectId));
     }
   };
 
   const clearAll = () => {
-    if (videoProcessorRef?.current?.clearEffects) {
-      videoProcessorRef.current.clearEffects();
+    if (cgiProcessor?.clearEffects) {
+      cgiProcessor.clearEffects();
       setActiveEffects([]);
     }
   };
+
+  const categories = [
+    { id: 'basic', name: 'Basic', icon: '🎨' },
+    { id: 'background', name: 'Background', icon: '🌫️' },
+    { id: 'text', name: 'Text', icon: '💬' },
+    { id: '3d', name: '3D', icon: '🎲' },
+    { id: 'face', name: 'Face/AR', icon: '😊' },
+    { id: 'advanced', name: 'Advanced', icon: '⚡' }
+  ];
+
+  const [activeCategory, setActiveCategory] = useState('basic');
+  const filteredEffects = availableEffects.filter(e => e.category === activeCategory);
 
   return (
     <div style={{
@@ -258,12 +311,12 @@ export default function CGIControls({ videoProcessorRef }) {
         marginBottom: '20px'
       }}>
         <h2 style={{ margin: 0, fontSize: '1.5rem' }}>🎬 CGI Effects</h2>
-        {activeEffects.length > 0 && (
+        <div style={{ display: 'flex', gap: '10px' }}>
           <button
-            onClick={clearAll}
+            onClick={() => setShowCustomEditor(!showCustomEditor)}
             style={{
               padding: '8px 16px',
-              background: '#dc3545',
+              background: showCustomEditor ? '#667eea' : '#6c757d',
               color: '#fff',
               border: 'none',
               borderRadius: '6px',
@@ -272,133 +325,188 @@ export default function CGIControls({ videoProcessorRef }) {
               fontWeight: '600'
             }}
           >
-            Clear All
+            {showCustomEditor ? '🎬 Effects' : '🎨 Custom'}
           </button>
-        )}
-      </div>
-
-      {/* Active Effects */}
-      {activeEffects.length > 0 && (
-        <div style={{
-          marginBottom: '20px',
-          padding: '16px',
-          background: '#fff',
-          borderRadius: '8px',
-          border: '2px solid #667eea'
-        }}>
-          <div style={{ fontSize: '14px', fontWeight: '600', marginBottom: '12px', color: '#667eea' }}>
-            Active Effects ({activeEffects.length})
-          </div>
-          <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
-            {activeEffects.map(({ id, name }) => (
-              <div
-                key={id}
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '8px',
-                  padding: '6px 12px',
-                  background: '#667eea',
-                  color: '#fff',
-                  borderRadius: '20px',
-                  fontSize: '13px',
-                  fontWeight: '500'
-                }}
-              >
-                {name}
-                <button
-                  onClick={() => removeEffect(id)}
-                  style={{
-                    background: 'rgba(255,255,255,0.3)',
-                    border: 'none',
-                    color: '#fff',
-                    width: '20px',
-                    height: '20px',
-                    borderRadius: '50%',
-                    cursor: 'pointer',
-                    fontSize: '12px',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center'
-                  }}
-                >
-                  ×
-                </button>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {/* Available Effects Grid */}
-      <div style={{
-        display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fill, minmax(150px, 1fr))',
-        gap: '12px'
-      }}>
-        {availableEffects.map((effect) => {
-          const isActive = activeEffects.some(e => e.id === effect.id);
-
-          return (
+          {activeEffects.length > 0 && (
             <button
-              key={effect.id}
-              onClick={() => addEffect(effect)}
-              disabled={isActive}
+              onClick={clearAll}
               style={{
-                padding: '16px',
-                background: isActive ? '#e9ecef' : '#fff',
-                border: isActive ? '2px solid #6c757d' : '2px solid #dee2e6',
-                borderRadius: '12px',
-                cursor: isActive ? 'not-allowed' : 'pointer',
-                transition: 'all 0.2s',
-                opacity: isActive ? 0.6 : 1,
-                textAlign: 'center'
-              }}
-              onMouseEnter={(e) => {
-                if (!isActive) {
-                  e.currentTarget.style.borderColor = '#667eea';
-                  e.currentTarget.style.transform = 'translateY(-2px)';
-                  e.currentTarget.style.boxShadow = '0 4px 12px rgba(102,126,234,0.2)';
-                }
-              }}
-              onMouseLeave={(e) => {
-                if (!isActive) {
-                  e.currentTarget.style.borderColor = '#dee2e6';
-                  e.currentTarget.style.transform = 'translateY(0)';
-                  e.currentTarget.style.boxShadow = 'none';
-                }
+                padding: '8px 16px',
+                background: '#dc3545',
+                color: '#fff',
+                border: 'none',
+                borderRadius: '6px',
+                cursor: 'pointer',
+                fontSize: '14px',
+                fontWeight: '600'
               }}
             >
-              <div style={{ fontSize: '2rem', marginBottom: '8px' }}>{effect.icon}</div>
-              <div style={{ fontWeight: '600', fontSize: '14px', marginBottom: '4px', color: '#212529' }}>
-                {effect.name}
-              </div>
-              <div style={{ fontSize: '11px', color: '#6c757d', lineHeight: '1.3' }}>
-                {effect.description}
-              </div>
-              {isActive && (
-                <div style={{ marginTop: '8px', fontSize: '12px', color: '#667eea', fontWeight: '600' }}>
-                  ✓ Active
-                </div>
-              )}
+              Clear All
             </button>
-          );
-        })}
+          )}
+        </div>
       </div>
 
-      {/* Info */}
-      <div style={{
-        marginTop: '20px',
-        padding: '12px',
-        background: '#e7f3ff',
-        borderRadius: '8px',
-        border: '1px solid #b3d9ff',
-        fontSize: '13px',
-        color: '#004085'
-      }}>
-        💡 <strong>Tip:</strong> Click effects to add them. Multiple effects can be stacked.
-        Effects are applied in the order they're added.
-      </div>
+      {/* Custom Effect Editor */}
+      {showCustomEditor && (
+        <CustomEffectEditor cgiProcessor={cgiProcessor} />
+      )}
+
+      {/* Standard Effects */}
+      {!showCustomEditor && (
+        <>
+          {/* Active Effects */}
+          {activeEffects.length > 0 && (
+            <div style={{
+              marginBottom: '20px',
+              padding: '16px',
+              background: '#fff',
+              borderRadius: '8px',
+              border: '2px solid #667eea'
+            }}>
+              <div style={{ fontSize: '14px', fontWeight: '600', marginBottom: '12px', color: '#667eea' }}>
+                Active Effects ({activeEffects.length})
+              </div>
+              <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+                {activeEffects.map(({ id, name }) => (
+                  <div
+                    key={id}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '8px',
+                      padding: '6px 12px',
+                      background: '#667eea',
+                      color: '#fff',
+                      borderRadius: '20px',
+                      fontSize: '13px',
+                      fontWeight: '500'
+                    }}
+                  >
+                    {name}
+                    <button
+                      onClick={() => removeEffect(id)}
+                      style={{
+                        background: 'rgba(255,255,255,0.3)',
+                        border: 'none',
+                        color: '#fff',
+                        width: '20px',
+                        height: '20px',
+                        borderRadius: '50%',
+                        cursor: 'pointer',
+                        fontSize: '12px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center'
+                      }}
+                    >
+                      ×
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Category Tabs */}
+          <div style={{
+            display: 'flex',
+            gap: '8px',
+            marginBottom: '16px',
+            flexWrap: 'wrap'
+          }}>
+            {categories.map(cat => (
+              <button
+                key={cat.id}
+                onClick={() => setActiveCategory(cat.id)}
+                style={{
+                  padding: '8px 16px',
+                  background: activeCategory === cat.id ? '#667eea' : '#fff',
+                  color: activeCategory === cat.id ? '#fff' : '#212529',
+                  border: `2px solid ${activeCategory === cat.id ? '#667eea' : '#dee2e6'}`,
+                  borderRadius: '20px',
+                  cursor: 'pointer',
+                  fontSize: '14px',
+                  fontWeight: '600',
+                  transition: 'all 0.2s'
+                }}
+              >
+                {cat.icon} {cat.name}
+              </button>
+            ))}
+          </div>
+
+          {/* Available Effects Grid */}
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fill, minmax(150px, 1fr))',
+            gap: '12px'
+          }}>
+            {filteredEffects.map((effect) => {
+              const isActive = activeEffects.some(e => e.id === effect.id);
+
+              return (
+                <button
+                  key={effect.id}
+                  onClick={() => addEffect(effect)}
+                  disabled={isActive}
+                  style={{
+                    padding: '16px',
+                    background: isActive ? '#e9ecef' : '#fff',
+                    border: isActive ? '2px solid #6c757d' : '2px solid #dee2e6',
+                    borderRadius: '12px',
+                    cursor: isActive ? 'not-allowed' : 'pointer',
+                    transition: 'all 0.2s',
+                    opacity: isActive ? 0.6 : 1,
+                    textAlign: 'center'
+                  }}
+                  onMouseEnter={(e) => {
+                    if (!isActive) {
+                      e.currentTarget.style.borderColor = '#667eea';
+                      e.currentTarget.style.transform = 'translateY(-2px)';
+                      e.currentTarget.style.boxShadow = '0 4px 12px rgba(102,126,234,0.2)';
+                    }
+                  }}
+                  onMouseLeave={(e) => {
+                    if (!isActive) {
+                      e.currentTarget.style.borderColor = '#dee2e6';
+                      e.currentTarget.style.transform = 'translateY(0)';
+                      e.currentTarget.style.boxShadow = 'none';
+                    }
+                  }}
+                >
+                  <div style={{ fontSize: '2rem', marginBottom: '8px' }}>{effect.icon}</div>
+                  <div style={{ fontWeight: '600', fontSize: '14px', marginBottom: '4px', color: '#212529' }}>
+                    {effect.name}
+                  </div>
+                  <div style={{ fontSize: '11px', color: '#6c757d', lineHeight: '1.3' }}>
+                    {effect.description}
+                  </div>
+                  {isActive && (
+                    <div style={{ marginTop: '8px', fontSize: '12px', color: '#667eea', fontWeight: '600' }}>
+                      ✓ Active
+                    </div>
+                  )}
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Info */}
+          <div style={{
+            marginTop: '20px',
+            padding: '12px',
+            background: '#e7f3ff',
+            borderRadius: '8px',
+            border: '1px solid #b3d9ff',
+            fontSize: '13px',
+            color: '#004085'
+          }}>
+            💡 <strong>Tip:</strong> Click effects to add them. Multiple effects can be stacked.
+            Effects are applied in the order they're added.
+          </div>
+        </>
+      )}
     </div>
   );
 }
