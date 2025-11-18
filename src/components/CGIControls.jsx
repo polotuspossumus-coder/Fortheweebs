@@ -35,6 +35,18 @@ import {
   GlitchEffect,
   RGBSplitEffect
 } from '../effects/AdvancedEffects';
+import {
+  AudioVisualizerEffect,
+  BassReactiveEffect,
+  VoiceReactiveEffect
+} from '../effects/AudioReactiveEffects';
+import {
+  SnowEffect,
+  RainEffect,
+  ConfettiEffect,
+  FirefliesEffect,
+  SparklesEffect
+} from '../effects/ParticleEffects';
 
 export default function CGIControls({ cgiProcessor }) {
   const [activeEffects, setActiveEffects] = useState([]);
@@ -258,6 +270,72 @@ export default function CGIControls({ cgiProcessor }) {
       description: 'Chromatic aberration',
       category: 'advanced',
       create: () => new RGBSplitEffect()
+    },
+    // Audio Reactive Effects
+    {
+      id: 'audiovisualizer',
+      name: 'Audio Visualizer',
+      icon: '🎵',
+      description: 'Music reactive bars',
+      category: 'audio',
+      create: () => new AudioVisualizerEffect()
+    },
+    {
+      id: 'bassreactive',
+      name: 'Bass Reactive',
+      icon: '🔊',
+      description: 'Pulses with bass',
+      category: 'audio',
+      create: () => new BassReactiveEffect()
+    },
+    {
+      id: 'voicereactive',
+      name: 'Voice Glow',
+      icon: '🎤',
+      description: 'Lights up when speaking',
+      category: 'audio',
+      create: () => new VoiceReactiveEffect()
+    },
+    // Particle Effects
+    {
+      id: 'snow',
+      name: 'Snow',
+      icon: '❄️',
+      description: 'Falling snowflakes',
+      category: 'particles',
+      create: () => new SnowEffect()
+    },
+    {
+      id: 'rain',
+      name: 'Rain',
+      icon: '🌧️',
+      description: 'Rainy weather',
+      category: 'particles',
+      create: () => new RainEffect()
+    },
+    {
+      id: 'confetti',
+      name: 'Confetti',
+      icon: '🎉',
+      description: 'Celebration particles',
+      category: 'particles',
+      create: () => new ConfettiEffect()
+    },
+    {
+      id: 'fireflies',
+      name: 'Fireflies',
+      icon: '✨',
+      description: 'Glowing bugs',
+      category: 'particles',
+      create: () => new FirefliesEffect()
+    },
+    {
+      id: 'sparkles',
+      name: 'Sparkles',
+      icon: '⭐',
+      description: 'Twinkling stars',
+      category: 'particles',
+      create: () => new SparklesEffect()
     }
   ];
 
@@ -290,7 +368,9 @@ export default function CGIControls({ cgiProcessor }) {
     { id: 'text', name: 'Text', icon: '💬' },
     { id: '3d', name: '3D', icon: '🎲' },
     { id: 'face', name: 'Face/AR', icon: '😊' },
-    { id: 'advanced', name: 'Advanced', icon: '⚡' }
+    { id: 'advanced', name: 'Advanced', icon: '⚡' },
+    { id: 'audio', name: 'Audio', icon: '🎵' },
+    { id: 'particles', name: 'Particles', icon: '❄️' }
   ];
 
   const [activeCategory, setActiveCategory] = useState('basic');
