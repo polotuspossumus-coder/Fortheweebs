@@ -36,10 +36,10 @@ export const checkTierAccess = (userId, userTier, userEmail) => {
     isOwner,
     isVIP,
     
-    // Admin powers - Owner, VIPs, and $1000 tier only
-    hasAdminPowers: isOwner || isVIP || userTier === TIERS.PREMIUM_1000,
+    // Admin powers - OWNER ONLY (not VIPs)
+    hasAdminPowers: isOwner,
     
-    // Free content access - Owner and VIPs only
+    // Free content access - Owner and VIPs get everything free
     hasFreeContentAccess: isOwner || isVIP,
     
     // CGI Features
