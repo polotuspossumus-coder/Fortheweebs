@@ -1,0 +1,144 @@
+// Prisma schema for friend/follow/subscribe system
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String   @id @default(cuid())
+  email         String   @unique
+  username      String   @unique
+  displayName   String?
+  avatar        String?
+  passwordHash  String
+  tier          String   @default("FREE") // FREE, PREMIUM_1000, LIFETIME_VIP
+  isOwner       Boolean  @default(false)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  // Relationships
+  sentFriendRequests     Friendship[] @relation("RequestSender")
+  receivedFriendRequests Friendship[] @relation("RequestReceiver")
+  following              Follow[]     @relation("Follower")
+  followers              Follow[]     @relation("Followee")
+  
+  // Content
+  posts                  Post[]
+  customLists            CustomList[]
+  
+  // Subscriptions
+  subscriptionsGiven     Subscription[] @relation("Subscriber")
+  subscriptionsReceived  Subscription[] @relation("Creator")
+  
+  @@index([email])
+  @@index([username])
+}
+
+model Friendship {
+  id         String   @id @default(cuid())
+  senderId   String
+  receiverId String
+  status     String   @default("PENDING") // PENDING, ACCEPTED, DECLINED, BLOCKED
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  sender     User @relation("RequestSender", fields: [senderId], references: [id], onDelete: Cascade)
+  receiver   User @relation("RequestReceiver", fields: [receiverId], references: [id], onDelete: Cascade)
+
+  @@unique([senderId, receiverId])
+  @@index([senderId, status])
+  @@index([receiverId, status])
+}
+
+model Follow {
+  id         String   @id @default(cuid())
+  followerId String
+  followeeId String
+  createdAt  DateTime @default(now())
+
+  follower   User @relation("Follower", fields: [followerId], references: [id], onDelete: Cascade)
+  followee   User @relation("Followee", fields: [followeeId], references: [id], onDelete: Cascade)
+
+  @@unique([followerId, followeeId])
+  @@index([followerId])
+  @@index([followeeId])
+}
+
+model Subscription {
+  id              String    @id @default(cuid())
+  subscriberId    String
+  creatorId       String
+  tier            String    @default("BASIC") // BASIC, PREMIUM, VIP
+  status          String    @default("ACTIVE") // ACTIVE, CANCELED, EXPIRED
+  stripeSessionId String?   @unique
+  stripeSubId     String?   @unique
+  priceCents      Int
+  expiresAt       DateTime?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  subscriber User @relation("Subscriber", fields: [subscriberId], references: [id], onDelete: Cascade)
+  creator    User @relation("Creator", fields: [creatorId], references: [id], onDelete: Cascade)
+
+  @@unique([subscriberId, creatorId])
+  @@index([subscriberId, status])
+  @@index([creatorId, status])
+  @@index([stripeSubId])
+}
+
+model CustomList {
+  id        String   @id @default(cuid())
+  userId    String
+  name      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user    User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  members ListMember[]
+  posts   Post[]
+
+  @@unique([userId, name])
+  @@index([userId])
+}
+
+model ListMember {
+  id           String   @id @default(cuid())
+  listId       String
+  memberUserId String
+  createdAt    DateTime @default(now())
+
+  list CustomList @relation(fields: [listId], references: [id], onDelete: Cascade)
+
+  @@unique([listId, memberUserId])
+  @@index([listId])
+}
+
+model Post {
+  id             String   @id @default(cuid())
+  authorId       String
+  title          String?
+  body           String
+  visibility     String   @default("PUBLIC") // PUBLIC, FRIENDS, SUBSCRIBERS, CUSTOM
+  isPaid         Boolean  @default(false)
+  priceCents     Int?
+  customListId   String?
+  hasCGI         Boolean  @default(false)
+  cgiData        Json?
+  likesCount     Int      @default(0)
+  commentsCount  Int      @default(0)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  author     User        @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  customList CustomList? @relation(fields: [customListId], references: [id], onDelete: SetNull)
+
+  @@index([authorId])
+  @@index([visibility])
+  @@index([createdAt])
+  @@index([customListId])
+}
