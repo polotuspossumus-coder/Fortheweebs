@@ -9,27 +9,14 @@ export class HealthController {
   @Public()
   @Get()
   async check() {
-    try {
-      // Check database connection
-      await this.prisma.$queryRaw`SELECT 1`;
-      
-      return {
-        status: 'ok',
-        timestamp: new Date().toISOString(),
-        service: 'fortheweebs-api',
-        version: process.env.npm_package_version || '1.0.0',
-        uptime: process.uptime(),
-        database: 'connected',
-      };
-    } catch (error) {
-      return {
-        status: 'error',
-        timestamp: new Date().toISOString(),
-        service: 'fortheweebs-api',
-        database: 'disconnected',
-        error: error.message,
-      };
-    }
+    // Simple health check without database dependency
+    return {
+      status: 'ok',
+      timestamp: new Date().toISOString(),
+      service: 'fortheweebs-api',
+      version: process.env.npm_package_version || '1.0.0',
+      uptime: process.uptime(),
+    };
   }
 
   @Public()
