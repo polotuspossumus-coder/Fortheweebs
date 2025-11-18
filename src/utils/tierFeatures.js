@@ -1,6 +1,8 @@
 /**
  * Tier Features - Define what each tier can access
  * Used for feature gates throughout the app
+ *
+ * NOTE: Mico AI is FREE for EVERYONE - we don't monetize Microsoft Copilot's work
  */
 
 export const TIER_FEATURES = {
@@ -15,10 +17,11 @@ export const TIER_FEATURES = {
     recording: true,
     screen_sharing: true,
 
-    // AI Features
+    // AI Features (FREE for all tiers!)
     mico_ai: true,
     mico_commands: 'unlimited',
     mico_file_ops: true,
+    mico_cgi_control: true, // Only Sovereign can control CGI via Mico
 
     // Premium Features
     priority_support: true,
@@ -52,7 +55,7 @@ export const TIER_FEATURES = {
 
     // AI Features
     mico_ai: true,
-    mico_commands: 1000,
+    mico_commands: 'unlimited',
     mico_file_ops: true,
 
     // Premium Features
@@ -113,7 +116,7 @@ export const TIER_FEATURES = {
 
     // AI Features
     mico_ai: true,
-    mico_commands: 500,
+    mico_commands: 'unlimited',
     mico_file_ops: false,
 
     // Premium Features
@@ -144,7 +147,7 @@ export const TIER_FEATURES = {
 
     // AI Features
     mico_ai: true,
-    mico_commands: 200,
+    mico_commands: 'unlimited',
     mico_file_ops: false,
 
     // Premium Features
@@ -173,8 +176,8 @@ export const TIER_FEATURES = {
     screen_sharing: false,
 
     // AI Features
-    mico_ai: false,
-    mico_commands: 0,
+    mico_ai: true,
+    mico_commands: 'unlimited',
 
     // Limits
     max_video_length: 10, // minutes
@@ -199,7 +202,7 @@ export const TIER_FEATURES = {
     screen_sharing: false,
 
     // AI Features
-    mico_ai: false,
+    mico_ai: true,
 
     // Limits
     max_video_length: 5, // minutes
@@ -224,7 +227,7 @@ export const TIER_FEATURES = {
     screen_sharing: false,
 
     // AI Features
-    mico_ai: false,
+    mico_ai: true,
 
     // Limits
     max_video_length: 0,
