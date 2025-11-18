@@ -7,12 +7,14 @@ import { PostsModule } from './posts/posts.module';
 import { StatsModule } from './stats/stats.module';
 import { EventsModule } from './events/events.module';
 import { PrismaModule } from './prisma/prisma.module';
+import { HealthModule } from './health/health.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
     PrismaModule,
     EventsModule,
+    HealthModule,
     AuthModule,
     RelationshipsModule,
     SubscriptionsModule,
