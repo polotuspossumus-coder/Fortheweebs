@@ -3,12 +3,14 @@ console.log('Node version:', process.version);
 console.log('Environment:', process.env.NODE_ENV);
 
 const express = require('express');
+const http = require('http');
 const cors = require('cors');
 require('dotenv').config();
 
 console.log('✅ Express and dotenv loaded');
 
 const app = express();
+const server = http.createServer(app);
 const PORT = process.env.PORT || 3001;
 
 console.log('📡 Port:', PORT);
@@ -34,6 +36,27 @@ app.get('/health', (req, res) => {
         environment: process.env.NODE_ENV || 'development'
     });
 });
+
+// Socket.io setup for WebRTC signaling
+let io;
+try {
+    const { Server } = require('socket.io');
+    const { router: signalingRouter, setupSignaling } = require('./api/signaling');
+
+    io = new Server(server, {
+        cors: {
+            origin: process.env.VITE_APP_URL || 'http://localhost:3002',
+            methods: ['GET', 'POST'],
+            credentials: true
+        }
+    });
+
+    setupSignaling(io);
+    app.use('/api/calls', signalingRouter);
+    console.log('✅ WebRTC signaling server initialized');
+} catch (error) {
+    console.warn('⚠️ Socket.io not available (install with: npm install socket.io)');
+}
 
 // API Routes
 try {
@@ -77,7 +100,7 @@ app.use((req, res) => {
 // Start server
 console.log('🎯 Attempting to start server on port', PORT);
 
-const server = app.listen(PORT, '0.0.0.0', (err) => {
+server.listen(PORT, '0.0.0.0', (err) => {
     if (err) {
         console.error('❌ Failed to start server:', err);
         process.exit(1);

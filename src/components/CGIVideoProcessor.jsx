@@ -140,6 +140,126 @@ export default function CGIVideoProcessor({ onStreamReady, enableEffects = true 
     setActiveEffects([]);
   }, []);
 
+  // Helper methods for Mico integration
+  const addEffectById = useCallback((effectId, params = {}) => {
+    // Import and create effect instance
+    import(`../effects/${getEffectModule(effectId)}`).then(module => {
+      const EffectClass = module[getEffectClass(effectId)];
+      if (EffectClass) {
+        const effect = new EffectClass({ params });
+        addEffect(effect);
+      }
+    }).catch(err => {
+      console.error(`Failed to load effect ${effectId}:`, err);
+    });
+  }, [addEffect]);
+
+  const removeEffectById = useCallback((effectId) => {
+    removeEffect(effectId);
+  }, [removeEffect]);
+
+  const toggleEffectById = useCallback((effectId) => {
+    const hasEffect = activeEffects.some(e => e.name === effectId);
+    if (hasEffect) {
+      removeEffect(effectId);
+    } else {
+      addEffectById(effectId);
+    }
+  }, [activeEffects, addEffectById, removeEffect]);
+
+  const adjustEffectIntensity = useCallback((effectId, intensity) => {
+    setActiveEffects(prev =>
+      prev.map(e => {
+        if (e.name === effectId) {
+          e.setIntensity(intensity);
+        }
+        return e;
+      })
+    );
+  }, []);
+
+  const clearAllEffects = useCallback(() => {
+    clearEffects();
+  }, [clearEffects]);
+
+  const applyPreset = useCallback((presetName) => {
+    import('../utils/cgiPresets').then(module => {
+      module.applyPreset({ current: { addEffectById, clearAllEffects } }, presetName);
+    });
+  }, [addEffectById, clearAllEffects]);
+
+  // Expose methods via ref
+  React.useImperativeHandle(React.forwardRef(() => {}), () => ({
+    addEffect,
+    removeEffect,
+    clearEffects,
+    addEffectById,
+    removeEffectById,
+    toggleEffectById,
+    adjustEffectIntensity,
+    clearAllEffects,
+    applyPreset,
+    canvasRef,
+    stream: canvasRef.current?.captureStream(60)
+  }));
+
+  // Helper function to get effect module path
+  const getEffectModule = (effectId) => {
+    const moduleMap = {
+      'grayscale': 'CGIEffect',
+      'brightness': 'CGIEffect',
+      'colortint': 'CGIEffect',
+      'neonglow': 'CGIEffect',
+      'vintage': 'CGIEffect',
+      'pixelate': 'CGIEffect',
+      'blur': 'BackgroundEffects',
+      'vignette': 'BackgroundEffects',
+      'textoverlay': 'TextOverlayEffect',
+      'lowerthird': 'TextOverlayEffect',
+      'emojireaction': 'TextOverlayEffect',
+      'floatingcube': 'ThreeDEffects',
+      'particleexplosion': 'ThreeDEffects',
+      'glowingring': 'ThreeDEffects',
+      'floatinghearts': 'ThreeDEffects',
+      'spinningstars': 'ThreeDEffects',
+      'arglasses': 'FaceDetectionEffects',
+      'armustache': 'FaceDetectionEffects',
+      'arhat': 'FaceDetectionEffects',
+      'animeeyes': 'FaceDetectionEffects',
+      'facebeautify': 'FaceDetectionEffects',
+      'smartblur': 'FaceDetectionEffects'
+    };
+    return moduleMap[effectId] || 'CGIEffect';
+  };
+
+  const getEffectClass = (effectId) => {
+    const classMap = {
+      'grayscale': 'GrayscaleEffect',
+      'brightness': 'BrightnessEffect',
+      'colortint': 'ColorTintEffect',
+      'neonglow': 'NeonGlowEffect',
+      'vintage': 'VintageEffect',
+      'pixelate': 'PixelateEffect',
+      'blur': 'BackgroundBlurEffect',
+      'vignette': 'VignetteEffect',
+      'textoverlay': 'TextOverlayEffect',
+      'lowerthird': 'LowerThirdEffect',
+      'emojireaction': 'EmojiReactionEffect',
+      'floatingcube': 'FloatingCubeEffect',
+      'particleexplosion': 'ParticleExplosionEffect',
+      'glowingring': 'GlowingRingEffect',
+      'floatinghearts': 'FloatingHeartsEffect',
+      'spinningstars': 'SpinningStarsEffect',
+      'arglasses': 'ARMaskEffect',
+      'armustache': 'ARMaskEffect',
+      'arhat': 'ARMaskEffect',
+      'animeeyes': 'ARMaskEffect',
+      'facebeautify': 'FaceBeautifyEffect',
+      'smartblur': 'AdvancedBackgroundSegmentationEffect'
+    };
+    return classMap[effectId] || 'CGIEffect';
+  };
+
   if (error) {
     return (
       <div style={{
