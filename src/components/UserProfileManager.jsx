@@ -61,6 +61,13 @@ export const UserProfileManager = () => {
       avatar: newProfile.avatar,
       isCreator: true, // Mark as creator account
       tier: 'creator', // Creator tier
+      // Revenue Settings - All payments route to main owner account
+      revenueSettings: {
+        primaryAccount: 'polotuspossumus@gmail.com', // Main owner account receives all revenue
+        stripeConnectedAccount: null, // Uses owner's Stripe account
+        payoutEmail: 'polotuspossumus@gmail.com',
+        consolidatedPayments: true // All profiles pay to same account
+      },
       createdAt: new Date().toISOString(),
       preferences: {
         theme: newProfile.style === 'minimal' ? 'light' : 'dark',
@@ -312,6 +319,7 @@ export const UserProfileManager = () => {
           <li>✅ Each profile appears as a <strong>separate creator</strong> to users</li>
           <li>✅ Monetize content independently on each profile</li>
           <li>✅ Switch instantly between all 4 profiles</li>
+          <li>💰 <strong>All revenue from all 3 creator profiles routes to polotuspossumus@gmail.com</strong></li>
           <li>💡 Perfect for showcasing different content styles and monetization examples</li>
         </ul>
       </div>
