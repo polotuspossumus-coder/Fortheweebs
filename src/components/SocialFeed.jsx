@@ -1,12 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import './SocialFeed.css';
 import { isLifetimeVIP } from '../utils/vipAccess';
+import { checkTierAccess } from '../utils/tierAccess';
 import api from '../utils/backendApi';
 
 /**
  * Social Feed - Main content feed for all users
- * Free features: Posts, comments, likes, basic messaging
- * $1000/VIP features: CGI messages, video calls, live streaming with effects
+ * 
+ * Tier Structure:
+ * - Owner + VIPs: FREE everything, admin powers, all features
+ * - $1000: Admin powers, all features, pay creator fees
+ * - $500: All features except admin, pay creator fees
+ * - $250: No VR/AR, pay creator fees
+ * - $100: Basic features
+ * - $50: Minimal features
+ * - $15+$5: Adult content only
+ * - FREE: Family friendly only
  */
 export const SocialFeed = ({ userId, userTier }) => {
   const [posts, setPosts] = useState([]);
@@ -23,17 +32,9 @@ export const SocialFeed = ({ userId, userTier }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  // Check if user has premium CGI features ($1000 tier)
+  // Get user's tier access
   const userEmail = localStorage.getItem('ownerEmail') || localStorage.getItem('userEmail');
-  const isPremium = userTier === 'PREMIUM_1000' || 
-                    userTier === 'LIFETIME_VIP' || 
-                    userId === 'owner' ||
-                    isLifetimeVIP(userEmail);
-
-  // Check if user has FREE ACCESS to all content (Owner + VIPs only)
-  const hasFreeAccess = userId === 'owner' || 
-                        userTier === 'LIFETIME_VIP' || 
-                        isLifetimeVIP(userEmail);
+  const access = checkTierAccess(userId, userTier, userEmail);
 
   useEffect(() => {
     // Load posts from localStorage or API
@@ -56,7 +57,7 @@ export const SocialFeed = ({ userId, userTier }) => {
         visibility: contentVisibility,
         isPaid: isPaidContent,
         priceCents: isPaidContent ? priceCents : undefined,
-        hasCGI: isPremium && showCGITools,
+        hasCGI: access.hasCGI.full && showCGITools,
       });
 
       setPosts([newPost, ...posts]);
@@ -209,7 +210,7 @@ export const SocialFeed = ({ userId, userTier }) => {
               <div className="post-options">
                 <button className="post-option">📷 Photo</button>
                 <button className="post-option">🎥 Video</button>
-                {isPremium && (
+                {access.hasCGI.basic && (
                   <button 
                     className="post-option premium"
                     onClick={() => setShowCGITools(!showCGITools)}
@@ -290,7 +291,7 @@ export const SocialFeed = ({ userId, userTier }) => {
               </div>
             )}
 
-            {showCGITools && isPremium && (
+            {showCGITools && access.hasCGI.basic && (
               <div className="cgi-tools-panel">
                 <h4>🎨 CGI Tools ($1000/VIP Only)</h4>
                 <div className="cgi-options">
@@ -314,7 +315,7 @@ export const SocialFeed = ({ userId, userTier }) => {
             {posts.map(post => {
               // Check if user can view this paid content
               const canViewPaidContent = !post.isPaidContent || 
-                                        hasFreeAccess || 
+                                        access.hasFreeContentAccess || 
                                         post.userId === userId ||
                                         subscriptions.some(sub => sub.creatorId === post.userId);
               
@@ -477,7 +478,7 @@ export const SocialFeed = ({ userId, userTier }) => {
       )}
 
       {/* Premium Upsell for Non-Premium Users */}
-      {!isPremium && (
+      {!access.hasCGI.full && (
         <div className="premium-upsell">
           <h3>💎 Upgrade to $1,000 Tier</h3>
           <p>Unlock CGI messages, video effects, and live streaming tools!</p>
