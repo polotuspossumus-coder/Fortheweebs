@@ -4,8 +4,8 @@ FROM node:20-alpine AS builder
 
 WORKDIR /app
 
-# Install OpenSSL 1.1 compatibility
-RUN apk add --no-cache openssl1.1-compat
+# Install OpenSSL (Alpine 3.19+ uses OpenSSL 3 by default, no separate compat package needed)
+RUN apk add --no-cache openssl
 
 # Copy package files
 COPY package*.json ./
@@ -28,8 +28,8 @@ FROM node:20-alpine
 
 WORKDIR /app
 
-# Install OpenSSL 1.1 compatibility and dumb-init
-RUN apk add --no-cache openssl1.1-compat dumb-init
+# Install OpenSSL and dumb-init
+RUN apk add --no-cache openssl dumb-init
 
 # Copy package files
 COPY package*.json ./
