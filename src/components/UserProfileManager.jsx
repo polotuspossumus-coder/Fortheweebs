@@ -81,12 +81,19 @@ export const UserProfileManager = () => {
       document.body.classList.remove('light-theme');
     }
 
-    // Update user context
+    // Update user context BUT KEEP ADMIN ACCESS
     localStorage.setItem('currentUserEmail', profile.email);
     localStorage.setItem('currentUserName', profile.name);
     localStorage.setItem('userStyle', profile.style);
+    localStorage.setItem('displayUserId', profile.id); // For display purposes
+    
+    // PRESERVE ADMIN ACCESS - Never remove these
+    localStorage.setItem('userId', 'owner');
+    localStorage.setItem('ownerEmail', 'polotuspossumus@gmail.com');
+    localStorage.setItem('adminAuthenticated', 'true');
+    localStorage.setItem('ownerVerified', 'true');
 
-    alert(`Switched to ${profile.name}'s profile! Refreshing...`);
+    alert(`Switched to ${profile.name}'s profile! You still have admin access. Refreshing...`);
     setTimeout(() => window.location.reload(), 500);
   };
 
