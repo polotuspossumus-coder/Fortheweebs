@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import CGIVideoProcessor from './CGIVideoProcessor';
 import CGIControls from './CGIControls';
+import { checkTierAccess } from '../utils/tierAccess';
 
 export default function CGIVideoCall() {
   const [processedStream, setProcessedStream] = useState(null);
@@ -9,9 +10,14 @@ export default function CGIVideoCall() {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // For now, allow access for testing
-    // TODO: Re-enable tier check when payment system is live
-    setHasAccess(true);
+    // Check tier access for CGI video calls
+    const userId = localStorage.getItem('userId');
+    const userTier = localStorage.getItem('userTier');
+    const userEmail = localStorage.getItem('userEmail');
+    const access = checkTierAccess(userId, userTier, userEmail);
+    
+    // Require at least advanced CGI tier for video effects
+    setHasAccess(access.hasCGI.advanced);
     setIsLoading(false);
     
     /* Original tier check code:

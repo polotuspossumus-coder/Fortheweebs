@@ -410,7 +410,7 @@ export const SocialFeed = ({ userId, userTier }) => {
           <div className="messages-placeholder">
             <h3>Direct Messaging System</h3>
             <p>Text messaging available for all users</p>
-            {isPremium && (
+            {access.hasCGI.full && (
               <div className="premium-features">
                 <h4>💎 Your Premium Features:</h4>
                 <ul>
@@ -434,7 +434,7 @@ export const SocialFeed = ({ userId, userTier }) => {
           <div className="calls-placeholder">
             <h3>Real-Time Communication</h3>
             <p>Voice and video calling for all users</p>
-            {isPremium && (
+            {access.hasCGI.full && (
               <div className="premium-features">
                 <h4>💎 Your Premium Features:</h4>
                 <ul>
@@ -459,7 +459,7 @@ export const SocialFeed = ({ userId, userTier }) => {
           <div className="streams-placeholder">
             <h3>Broadcast Live</h3>
             <p>Stream live content to your audience</p>
-            {isPremium && (
+            {access.features.liveStreaming && (
               <div className="premium-features">
                 <h4>💎 Your Premium Features:</h4>
                 <ul>
