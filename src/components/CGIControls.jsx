@@ -372,7 +372,9 @@ export default function CGIControls({ cgiProcessor }) {
       description: 'Analog film texture',
       category: 'streamer',
       create: () => new FilmGrainEffect()
-    },
+    }
+  ];
+
   const categories = [
     { id: 'basic', name: 'Basic', icon: '🎨' },
     { id: 'background', name: 'Background', icon: '🌫️' },
