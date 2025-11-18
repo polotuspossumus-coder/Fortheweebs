@@ -19,7 +19,7 @@ export const SocialFeed = ({ userId, userTier }) => {
   const [subscriptions, setSubscriptions] = useState([]);
   const [contentVisibility, setContentVisibility] = useState('PUBLIC'); // PUBLIC, FRIENDS, SUBSCRIBERS, CUSTOM
   const [isPaidContent, setIsPaidContent] = useState(false);
-  const [priceCents, setPriceCents] = useState(100000);
+  const [priceCents, setPriceCents] = useState(500); // Default $5.00
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
@@ -257,7 +257,7 @@ export const SocialFeed = ({ userId, userTier }) => {
                     />
                     <div>
                       <strong>💰 Monetized Content</strong>
-                      <small>Charge subscribers to view</small>
+                      <small>Charge subscribers to view (VIPs see for free)</small>
                     </div>
                   </label>
 
