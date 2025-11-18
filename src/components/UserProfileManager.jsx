@@ -2,8 +2,9 @@ import React, { useState, useEffect } from 'react';
 import './UserProfileManager.css';
 
 /**
- * User Profile Manager - Allows owner to create and switch between multiple user profiles
- * Only accessible by polotuspossumus@gmail.com
+ * User Profile Manager - Allows owner to create and switch between multiple creator profiles
+ * Owner maintains admin access across all profiles
+ * All profiles appear as creator accounts to users
  */
 export const UserProfileManager = () => {
   const [profiles, setProfiles] = useState([]);
@@ -13,7 +14,9 @@ export const UserProfileManager = () => {
     name: '',
     email: '',
     style: 'casual',
-    avatar: '👤'
+    avatar: '👤',
+    displayName: '',
+    bio: ''
   });
 
   const avatarOptions = ['👤', '🎨', '🎮', '🎭', '🎪', '🎯', '🎸', '🎬', '📸', '✨', '🌟', '💫', '🎵', '🎹', '🎺', '🎻'];
@@ -44,7 +47,7 @@ export const UserProfileManager = () => {
     }
 
     if (profiles.length >= 3) {
-      alert('Maximum 3 profiles allowed');
+      alert('Maximum 3 creator profiles allowed');
       return;
     }
 
@@ -52,20 +55,25 @@ export const UserProfileManager = () => {
       id: `profile_${Date.now()}`,
       name: newProfile.name,
       email: newProfile.email,
+      displayName: newProfile.displayName || newProfile.name,
+      bio: newProfile.bio || `${newProfile.style.charAt(0).toUpperCase() + newProfile.style.slice(1)} content creator`,
       style: newProfile.style,
       avatar: newProfile.avatar,
+      isCreator: true, // Mark as creator account
+      tier: 'creator', // Creator tier
       createdAt: new Date().toISOString(),
       preferences: {
         theme: newProfile.style === 'minimal' ? 'light' : 'dark',
         notifications: true,
-        autoSave: true
+        autoSave: true,
+        publicProfile: true
       }
     };
 
     const updatedProfiles = [...profiles, profile];
     saveProfiles(updatedProfiles);
     setShowCreateForm(false);
-    setNewProfile({ name: '', email: '', style: 'casual', avatar: '👤' });
+    setNewProfile({ name: '', email: '', style: 'casual', avatar: '👤', displayName: '', bio: '' });
   };
 
   // Switch to a profile
@@ -110,14 +118,25 @@ export const UserProfileManager = () => {
     }
   };
 
-  // Return to owner admin
+  // Return to main admin profile
   const returnToAdmin = () => {
     localStorage.removeItem('activeProfile');
     localStorage.removeItem('currentUserEmail');
     localStorage.removeItem('currentUserName');
+    localStorage.removeItem('displayName');
+    localStorage.removeItem('userBio');
     localStorage.removeItem('userStyle');
+    localStorage.removeItem('isCreatorAccount');
+    
+    // Ensure admin access is preserved
+    localStorage.setItem('userId', 'owner');
+    localStorage.setItem('ownerEmail', 'polotuspossumus@gmail.com');
+    localStorage.setItem('adminAuthenticated', 'true');
+    localStorage.setItem('ownerVerified', 'true');
+    localStorage.setItem('userTier', 'LIFETIME_VIP');
+    
     setCurrentProfile(null);
-    alert('Returned to admin mode! Refreshing...');
+    alert('Returned to main admin profile! Refreshing...');
     setTimeout(() => window.location.reload(), 500);
   };
 
@@ -191,7 +210,7 @@ export const UserProfileManager = () => {
           <h3>Create New Profile</h3>
           
           <div className="form-group">
-            <label>Name</label>
+            <label>Profile Name (Internal)</label>
             <input
               type="text"
               value={newProfile.name}
@@ -202,12 +221,43 @@ export const UserProfileManager = () => {
           </div>
 
           <div className="form-group">
+            <label>Display Name (Public)</label>
+            <input
+              type="text"
+              value={newProfile.displayName}
+              onChange={(e) => setNewProfile({...newProfile, displayName: e.target.value})}
+              placeholder="How users will see you (e.g., ArtistPro)"
+              maxLength={30}
+            />
+          </div>
+
+          <div className="form-group">
             <label>Email</label>
             <input
               type="email"
               value={newProfile.email}
               onChange={(e) => setNewProfile({...newProfile, email: e.target.value})}
-              placeholder="e.g., creative@example.com"
+              placeholder="e.g., creative@fortheweebs.com"
+            />
+          </div>
+
+          <div className="form-group">
+            <label>Creator Bio</label>
+            <textarea
+              value={newProfile.bio}
+              onChange={(e) => setNewProfile({...newProfile, bio: e.target.value})}
+              placeholder="Tell users about this creator profile..."
+              maxLength={200}
+              rows={3}
+              style={{
+                width: '100%',
+                padding: '12px',
+                border: '2px solid #e1e8ed',
+                borderRadius: '8px',
+                fontSize: '15px',
+                fontFamily: 'inherit',
+                resize: 'vertical'
+              }}
             />
           </div>
 
@@ -254,13 +304,15 @@ export const UserProfileManager = () => {
 
       {/* Info Panel */}
       <div className="info-panel">
-        <h4>ℹ️ About User Profiles</h4>
+        <h4>ℹ️ About Creator Profiles</h4>
         <ul>
-          <li>Create up to 3 test profiles for different use cases</li>
-          <li>Each profile has its own preferences and style</li>
-          <li>Switch between profiles without logging out</li>
-          <li>Admin access (👑) is always preserved for you</li>
-          <li>Profiles are local to this browser</li>
+          <li><strong>Main Profile:</strong> Your personal admin account (polotuspossumus@gmail.com)</li>
+          <li><strong>Creator Profiles (3 max):</strong> Public-facing monetizable creator accounts</li>
+          <li>✅ You keep <strong>full admin access</strong> on all profiles</li>
+          <li>✅ Each profile appears as a <strong>separate creator</strong> to users</li>
+          <li>✅ Monetize content independently on each profile</li>
+          <li>✅ Switch instantly between all 4 profiles</li>
+          <li>💡 Perfect for showcasing different content styles and monetization examples</li>
         </ul>
       </div>
     </div>
