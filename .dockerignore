@@ -1,0 +1,15 @@
+node_modules/
+npm-debug.log
+.env
+.env.local
+dist/
+build/
+.git/
+.vscode/
+.idea/
+*.log
+coverage/
+server_OLD_NESTJS_BACKUP/
+mico-backend/
+mico-agent-intellij/
+SovereignForgePlugin/
