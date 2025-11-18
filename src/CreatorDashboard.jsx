@@ -43,6 +43,7 @@ import { t } from "./utils/i18n";
 import DeviceManager from "./components/DeviceManager";
 import { isOwner } from "./utils/ownerAuth";
 import UserProfileManager from "./components/UserProfileManager";
+import SocialFeed from "./components/SocialFeed";
 
 export const CreatorDashboard = ({ userId = "demo_user", ipAddress = "127.0.0.1", tier = "free" }) => {
   // STRICT ADMIN CHECK - Only polotuspossumus@gmail.com
@@ -153,10 +154,7 @@ export const CreatorDashboard = ({ userId = "demo_user", ipAddress = "127.0.0.1"
         )}
       </TabsList>
       <TabsContent value="overview">
-        <div style={{ marginBottom: '24px' }}>
-          <AdvancedSearch />
-        </div>
-        <OverviewPanel userId={userId} />
+        <SocialFeed userId={userId} userTier={currentTier} />
       </TabsContent>
       <TabsContent value="bug-fixer">
         <AIBugFixer userId={userId} />
