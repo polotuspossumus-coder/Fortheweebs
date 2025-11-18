@@ -1,10 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import './UserProfileManager.css';
+import { isLifetimeVIP, LIFETIME_VIP_EMAILS } from '../utils/vipAccess';
 
 /**
  * User Profile Manager - Allows owner to create and switch between multiple creator profiles
  * Owner maintains admin access across all profiles
  * All profiles appear as creator accounts to users
+ * 
+ * Feature Access:
+ * - Owner (polotuspossumus@gmail.com): 4 profiles (1 main + 3 creator)
+ * - VIP List: 4 profiles (1 main + 3 creator)
+ * - $1000 Tier: 4 profiles (1 main + 3 creator)
+ * - All earnings consolidated to main account
  */
 export const UserProfileManager = () => {
   const [profiles, setProfiles] = useState([]);
@@ -21,6 +28,33 @@ export const UserProfileManager = () => {
 
   const avatarOptions = ['👤', '🎨', '🎮', '🎭', '🎪', '🎯', '🎸', '🎬', '📸', '✨', '🌟', '💫', '🎵', '🎹', '🎺', '🎻'];
   const styleOptions = ['casual', 'professional', 'creative', 'minimal', 'vibrant'];
+
+  // Check if user has access to multi-profile feature
+  const checkMultiProfileAccess = () => {
+    const ownerEmail = localStorage.getItem('ownerEmail');
+    const userEmail = localStorage.getItem('userEmail') || ownerEmail;
+    const userTier = localStorage.getItem('userTier');
+    const userId = localStorage.getItem('userId');
+
+    // Owner always has access
+    if (userId === 'owner' || ownerEmail === 'polotuspossumus@gmail.com') {
+      return { hasAccess: true, reason: 'owner', maxProfiles: 3 };
+    }
+
+    // VIP list members have access
+    if (userEmail && isLifetimeVIP(userEmail)) {
+      return { hasAccess: true, reason: 'vip', maxProfiles: 3 };
+    }
+
+    // $1000 tier has access
+    if (userTier === 'PREMIUM_1000' || userTier === 'LIFETIME_VIP') {
+      return { hasAccess: true, reason: 'premium', maxProfiles: 3 };
+    }
+
+    return { hasAccess: false, reason: 'none', maxProfiles: 0 };
+  };
+
+  const [accessStatus] = useState(checkMultiProfileAccess());
 
   // Load profiles from localStorage
   useEffect(() => {
@@ -41,13 +75,18 @@ export const UserProfileManager = () => {
 
   // Create new profile
   const handleCreateProfile = () => {
+    if (!accessStatus.hasAccess) {
+      alert('🔒 Multi-Profile Feature requires VIP access or $1000 tier');
+      return;
+    }
+
     if (!newProfile.name || !newProfile.email) {
       alert('Please enter a name and email');
       return;
     }
 
-    if (profiles.length >= 3) {
-      alert('Maximum 3 creator profiles allowed');
+    if (profiles.length >= accessStatus.maxProfiles) {
+      alert(`Maximum ${accessStatus.maxProfiles} creator profiles allowed`);
       return;
     }
 
@@ -61,11 +100,11 @@ export const UserProfileManager = () => {
       avatar: newProfile.avatar,
       isCreator: true, // Mark as creator account
       tier: 'creator', // Creator tier
-      // Revenue Settings - All payments route to main owner account
+      // Revenue Settings - All payments route to main user's account
       revenueSettings: {
-        primaryAccount: 'polotuspossumus@gmail.com', // Main owner account receives all revenue
-        stripeConnectedAccount: null, // Uses owner's Stripe account
-        payoutEmail: 'polotuspossumus@gmail.com',
+        primaryAccount: localStorage.getItem('ownerEmail') || localStorage.getItem('userEmail'),
+        stripeConnectedAccount: null, // Uses main user's Stripe account
+        payoutEmail: localStorage.getItem('ownerEmail') || localStorage.getItem('userEmail'),
         consolidatedPayments: true // All profiles pay to same account
       },
       createdAt: new Date().toISOString(),
@@ -127,6 +166,11 @@ export const UserProfileManager = () => {
 
   // Return to main admin profile
   const returnToAdmin = () => {
+    const mainEmail = localStorage.getItem('ownerEmail') || localStorage.getItem('userEmail');
+    const isOwnerOrVIP = localStorage.getItem('userId') === 'owner' || 
+                         mainEmail === 'polotuspossumus@gmail.com' || 
+                         isLifetimeVIP(mainEmail);
+
     localStorage.removeItem('activeProfile');
     localStorage.removeItem('currentUserEmail');
     localStorage.removeItem('currentUserName');
@@ -135,12 +179,14 @@ export const UserProfileManager = () => {
     localStorage.removeItem('userStyle');
     localStorage.removeItem('isCreatorAccount');
     
-    // Ensure admin access is preserved
-    localStorage.setItem('userId', 'owner');
-    localStorage.setItem('ownerEmail', 'polotuspossumus@gmail.com');
-    localStorage.setItem('adminAuthenticated', 'true');
-    localStorage.setItem('ownerVerified', 'true');
-    localStorage.setItem('userTier', 'LIFETIME_VIP');
+    // Ensure admin access is preserved for owner/VIPs
+    if (isOwnerOrVIP) {
+      localStorage.setItem('userId', 'owner');
+      localStorage.setItem('ownerEmail', mainEmail);
+      localStorage.setItem('adminAuthenticated', 'true');
+      localStorage.setItem('ownerVerified', 'true');
+      localStorage.setItem('userTier', 'LIFETIME_VIP');
+    }
     
     setCurrentProfile(null);
     alert('Returned to main admin profile! Refreshing...');
@@ -202,11 +248,11 @@ export const UserProfileManager = () => {
         ))}
 
         {/* Add Profile Card */}
-        {profiles.length < 3 && !showCreateForm && (
+        {profiles.length < accessStatus.maxProfiles && !showCreateForm && (
           <div className="profile-card add-card" onClick={() => setShowCreateForm(true)}>
             <div className="add-icon">+</div>
             <p>Add New Profile</p>
-            <span className="slots-remaining">{3 - profiles.length} slot{3 - profiles.length !== 1 ? 's' : ''} remaining</span>
+            <span className="slots-remaining">{accessStatus.maxProfiles - profiles.length} slot{accessStatus.maxProfiles - profiles.length !== 1 ? 's' : ''} remaining</span>
           </div>
         )}
       </div>
@@ -313,16 +359,18 @@ export const UserProfileManager = () => {
       <div className="info-panel">
         <h4>ℹ️ About Creator Profiles</h4>
         <ul>
-          <li><strong>Main Profile:</strong> Your personal admin account (polotuspossumus@gmail.com)</li>
-          <li><strong>Creator Profiles (3 max):</strong> Public-facing monetizable creator accounts</li>
-          <li>✅ You keep <strong>full admin access</strong> on all profiles</li>
+          <li><strong>Main Profile:</strong> Your personal admin account</li>
+          <li><strong>Creator Profiles ({accessStatus.maxProfiles} max):</strong> Public-facing monetizable creator accounts</li>
+          <li>✅ VIP & Premium users keep <strong>full admin access</strong> on all profiles</li>
           <li>✅ Each profile appears as a <strong>separate creator</strong> to users</li>
           <li>✅ Monetize content independently on each profile</li>
-          <li>✅ Switch instantly between all 4 profiles</li>
-          <li>💰 <strong>All revenue from all 3 creator profiles routes to polotuspossumus@gmail.com</strong></li>
+          <li>✅ Switch instantly between all profiles</li>
+          <li>💰 <strong>All revenue from all creator profiles routes to your main account</strong></li>
           <li>💡 Perfect for showcasing different content styles and monetization examples</li>
         </ul>
       </div>
+        </>
+      )}
     </div>
   );
 };
