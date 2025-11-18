@@ -23,12 +23,17 @@ export const SocialFeed = ({ userId, userTier }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  // Check if user has premium features
+  // Check if user has premium CGI features ($1000 tier)
   const userEmail = localStorage.getItem('ownerEmail') || localStorage.getItem('userEmail');
   const isPremium = userTier === 'PREMIUM_1000' || 
                     userTier === 'LIFETIME_VIP' || 
                     userId === 'owner' ||
                     isLifetimeVIP(userEmail);
+
+  // Check if user has FREE ACCESS to all content (Owner + VIPs only)
+  const hasFreeAccess = userId === 'owner' || 
+                        userTier === 'LIFETIME_VIP' || 
+                        isLifetimeVIP(userEmail);
 
   useEffect(() => {
     // Load posts from localStorage or API
@@ -306,7 +311,14 @@ export const SocialFeed = ({ userId, userTier }) => {
                 <p>Be the first to post something awesome</p>
               </div>
             )}
-            {posts.map(post => (
+            {posts.map(post => {
+              // Check if user can view this paid content
+              const canViewPaidContent = !post.isPaidContent || 
+                                        hasFreeAccess || 
+                                        post.userId === userId ||
+                                        subscriptions.some(sub => sub.creatorId === post.userId);
+              
+              return (
               <div key={post.id} className="post-card">
                 <div className="post-header">
                   <span className="post-avatar">{post.avatar}</span>
@@ -322,6 +334,11 @@ export const SocialFeed = ({ userId, userTier }) => {
                         {post.visibility === 'custom' && '⚙️ Custom'}
                       </span>
                     )}
+                    {post.isPaidContent && (
+                      <span className="paid-badge">
+                        💰 ${(post.priceCents / 100).toFixed(2)}
+                      </span>
+                    )}
                   </div>
                   <div className="post-actions-menu">
                     <button className="follow-btn" onClick={() => followUser(post.userId, post.userName)}>
@@ -330,14 +347,29 @@ export const SocialFeed = ({ userId, userTier }) => {
                     <button className="friend-btn" onClick={() => addFriend(post.userId, post.userName)}>
                       👥 Add Friend
                     </button>
-                    {post.isPaidContent && (
+                    {post.isPaidContent && !canViewPaidContent && (
                       <button className="subscribe-btn" onClick={() => subscribeToUser(post.userId, post.userName)}>
-                        💎 Subscribe
+                        💎 Subscribe for ${(post.priceCents / 100).toFixed(2)}
                       </button>
                     )}
                   </div>
                 </div>
-                <div className="post-content">{post.content}</div>
+                
+                {/* Show content if user has access, otherwise show lock */}
+                {canViewPaidContent ? (
+                  <div className="post-content">{post.content}</div>
+                ) : (
+                  <div className="post-content locked">
+                    <div className="locked-overlay">
+                      🔒 
+                      <p>Subscribe to view this content</p>
+                      <button onClick={() => subscribeToUser(post.userId, post.userName)}>
+                        Subscribe for ${(post.priceCents / 100).toFixed(2)}
+                      </button>
+                    </div>
+                  </div>
+                )}
+                
                 <div className="post-actions">
                   <button onClick={() => likePost(post.id)}>
                     ❤️ {post.likes}
@@ -346,7 +378,8 @@ export const SocialFeed = ({ userId, userTier }) => {
                   <button>🔁 Share</button>
                 </div>
               </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       )}
