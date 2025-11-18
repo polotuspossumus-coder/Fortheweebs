@@ -54,16 +54,16 @@ export class GithubController {
 
   /**
    * List recent GitHub issues
-   * Admin only
+   * OWNER ONLY - polotuspossumus@gmail.com
    */
   @Get('issues')
   async listIssues(@Request() req) {
-    // Check if user is admin/owner
+    // STRICT: Only owner can list issues
+    const userEmail = req.user?.email?.toLowerCase();
     const userId = req.user?.id || req.user?.sub;
-    const userTier = req.user?.tier;
     
-    if (userId !== 'owner' && userTier !== 'OWNER' && userTier !== 'VIP') {
-      throw new Error('Admin access required');
+    if (userEmail !== 'polotuspossumus@gmail.com' && userId !== 'owner') {
+      throw new Error('Access denied: Owner only');
     }
 
     return this.githubService.listIssues();
