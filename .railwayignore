@@ -8,4 +8,4 @@ dist/
 mico-backend/
 mico-agent-intellij/
 SovereignForgePlugin/
-server/
+server_OLD_NESTJS_BACKUP/

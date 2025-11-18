@@ -16,3 +16,4 @@ Fortheweebs is a sovereign creator-first platform built on top of Vanguard, desi
 npm install
 npm run dev
 ```
+# Force rebuild
