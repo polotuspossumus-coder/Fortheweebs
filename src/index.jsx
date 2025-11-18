@@ -162,11 +162,11 @@ function AppFlow() {
 
     const isOwner = localStorage.getItem("userId") === "owner";
     const isAdmin = localStorage.getItem("adminAuthenticated") === "true";
-    const ownerEmail = localStorage.getItem("ownerEmail");
-    const userEmail = localStorage.getItem("userEmail");
+    const currentOwnerEmail = localStorage.getItem("ownerEmail");
+    const currentUserEmail = localStorage.getItem("userEmail");
 
     // Owner/Admin ALWAYS bypass everything and go straight to dashboard
-    if (isOwner || isAdmin || ownerEmail === 'polotuspossumus@gmail.com' || userEmail === 'polotuspossumus@gmail.com') {
+    if (isOwner || isAdmin || currentOwnerEmail === 'polotuspossumus@gmail.com' || currentUserEmail === 'polotuspossumus@gmail.com') {
       localStorage.setItem("hasOnboarded", "true");
       localStorage.setItem("legalAccepted", "true");
       localStorage.setItem("tosAccepted", "true");
