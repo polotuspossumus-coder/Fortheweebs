@@ -47,6 +47,13 @@ import {
   FirefliesEffect,
   SparklesEffect
 } from '../effects/ParticleEffects';
+import {
+  ChromaKeyEffect,
+  MotionBlurEffect,
+  FilmGrainEffect,
+  OutlineEffect,
+  KaleidoscopeEffect
+} from '../effects/StreamerEffects';
 
 export default function CGIControls({ cgiProcessor }) {
   const [activeEffects, setActiveEffects] = useState([]);
@@ -336,6 +343,48 @@ export default function CGIControls({ cgiProcessor }) {
       description: 'Twinkling stars',
       category: 'particles',
       create: () => new SparklesEffect()
+    },
+    // Streamer/Professional Effects
+    {
+      id: 'chromakey',
+      name: 'Green Screen',
+      icon: '🎬',
+      description: 'Chroma key removal',
+      category: 'streamer',
+      create: () => new ChromaKeyEffect()
+    },
+    {
+      id: 'motionblur',
+      name: 'Motion Blur',
+      icon: '💨',
+      description: 'Cinematic blur',
+      category: 'streamer',
+      create: () => new MotionBlurEffect()
+    },
+    {
+      id: 'filmgrain',
+      name: 'Film Grain',
+      icon: '📹',
+      description: 'Analog film texture',
+      category: 'streamer',
+      create: () => new FilmGrainEffect()
+    },
+  const categories = [
+    { id: 'basic', name: 'Basic', icon: '🎨' },
+    { id: 'background', name: 'Background', icon: '🌫️' },
+    { id: 'text', name: 'Text', icon: '💬' },
+    { id: '3d', name: '3D', icon: '🎲' },
+    { id: 'face', name: 'Face/AR', icon: '😊' },
+    { id: 'advanced', name: 'Advanced', icon: '⚡' },
+    { id: 'audio', name: 'Audio', icon: '🎵' },
+    { id: 'particles', name: 'Particles', icon: '❄️' },
+    { id: 'streamer', name: 'Streamer', icon: '🎬' }
+  ];  id: 'kaleidoscope',
+      name: 'Kaleidoscope',
+      icon: '🔮',
+      description: 'Mirror segments',
+      category: 'streamer',
+      create: () => new KaleidoscopeEffect()
     }
   ];
 
