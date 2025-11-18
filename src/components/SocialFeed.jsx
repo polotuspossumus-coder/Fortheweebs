@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './SocialFeed.css';
 import { isLifetimeVIP } from '../utils/vipAccess';
-import api from '../utils/api';
+import api from '../utils/backendApi';
 
 /**
  * Social Feed - Main content feed for all users
