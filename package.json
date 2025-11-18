@@ -10,8 +10,8 @@
     "build": "node scripts/inject-env.js && vite build",
     "preview": "vite preview",
     "server": "node server.js",
-    "setup": "node scripts/download-face-models.js",
-    "postinstall": "npm run setup",
+    "setup": "echo 'Skipping face models for now'",
+    "postinstall": "echo 'Skipping postinstall'",
     "lint": "eslint . --ext .js,.ts,.jsx,.tsx",
     "test": "vitest",
     "analyze": "node scripts/analyze-bundle.js"
