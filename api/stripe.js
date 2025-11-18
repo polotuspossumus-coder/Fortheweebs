@@ -9,23 +9,165 @@ const router = express.Router();
 const supabase = createClient(
     process.env.VITE_SUPABASE_URL,
     process.env.VITE_SUPABASE_ANON_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY || 'dummy-key'
-);/**
- * Create Stripe Checkout Session
+);
+
+// STRIPE PRICE IDs - Replace with your actual IDs from Stripe Dashboard
+const PRICE_IDS = {
+    sovereign: process.env.STRIPE_PRICE_SOVEREIGN || 'price_sovereign_placeholder',
+    full_monthly: process.env.STRIPE_PRICE_FULL_MONTHLY || 'price_full_monthly_placeholder',
+    full_lifetime: process.env.STRIPE_PRICE_FULL_LIFETIME || 'price_full_lifetime_placeholder',
+    half: process.env.STRIPE_PRICE_HALF || 'price_half_placeholder',
+    advanced: process.env.STRIPE_PRICE_ADVANCED || 'price_advanced_placeholder',
+    basic: process.env.STRIPE_PRICE_BASIC || 'price_basic_placeholder',
+    starter: process.env.STRIPE_PRICE_STARTER || 'price_starter_placeholder'
+};
+
+/**
+ * Check Sovereign Tier Availability
+ * GET /api/check-sovereign-availability
+ */
+router.get('/check-sovereign-availability', async (req, res) => {
+    try {
+        const { data: sovereignUsers, error } = await supabase
+            .from('users')
+            .select('id')
+            .eq('tier', 'sovereign')
+            .eq('subscription_status', 'active');
+
+        if (error) throw error;
+
+        const currentCount = sovereignUsers?.length || 0;
+        const maxCount = 1000;
+        const available = currentCount < maxCount;
+
+        res.json({
+            available,
+            currentCount,
+            maxCount,
+            spotsRemaining: maxCount - currentCount
+        });
+    } catch (error) {
+        console.error('Sovereign availability check error:', error);
+        res.status(500).json({ error: error.message });
+    }
+});
+
+/**
+ * Create Stripe Checkout Session - NEW 6-TIER SYSTEM
  * POST /api/create-checkout-session
- * 
+ *
  * Body:
  * {
- *   tier: 'CREATOR' | 'SUPER_ADMIN',
- *   price: 500 | 1000,
- *   priceUSD: 500 | 1000,
- *   displayCurrency: 'EUR' | 'GBP' | etc,
- *   displayPrice: converted amount,
+ *   tier: 'sovereign' | 'full_monthly' | 'full_lifetime' | 'half' | 'advanced' | 'basic' | 'starter',
  *   userId: string,
- *   successUrl: string,
- *   cancelUrl: string
+ *   email: string,
+ *   oneTime: boolean (for full_lifetime)
  * }
  */
 router.post('/create-checkout-session', async (req, res) => {
+    try {
+        const { tier, userId, email, oneTime = false } = req.body;
+
+        // Validate tier
+        const validTiers = ['sovereign', 'full_monthly', 'full_lifetime', 'half', 'advanced', 'basic', 'starter'];
+        if (!validTiers.includes(tier)) {
+            return res.status(400).json({ error: 'Invalid tier' });
+        }
+
+        // Check Sovereign availability
+        if (tier === 'sovereign') {
+            const { data: sovereignUsers } = await supabase
+                .from('users')
+                .select('id')
+                .eq('tier', 'sovereign')
+                .eq('subscription_status', 'active');
+
+            if (sovereignUsers && sovereignUsers.length >= 1000) {
+                return res.status(400).json({
+                    error: 'Sovereign tier is full',
+                    message: 'All 1000 Sovereign spots are taken. Please select Full Unlock instead.',
+                    spotsRemaining: 0
+                });
+            }
+        }
+
+        // Determine price ID and mode
+        let priceId;
+        let mode;
+
+        if (tier === 'full_lifetime' || oneTime) {
+            priceId = PRICE_IDS.full_lifetime;
+            mode = 'payment';
+        } else {
+            priceId = PRICE_IDS[tier];
+            mode = 'subscription';
+        }
+
+        if (!priceId || priceId.includes('placeholder')) {
+            return res.status(500).json({
+                error: 'Stripe not configured',
+                message: 'Please add Stripe price IDs to environment variables. See STRIPE_PRICING_SETUP.md'
+            });
+        }
+
+        // Build session config
+        const sessionConfig = {
+            payment_method_types: ['card'],
+            line_items: [
+                {
+                    price: priceId,
+                    quantity: 1,
+                },
+            ],
+            mode: mode,
+            success_url: `${process.env.VITE_APP_URL}/success?session_id={CHECKOUT_SESSION_ID}`,
+            cancel_url: `${process.env.VITE_APP_URL}/pricing`,
+            client_reference_id: userId,
+            customer_email: email,
+            metadata: {
+                userId,
+                tier,
+                oneTime: oneTime.toString(),
+                platform: 'ForTheWeebs'
+            }
+        };
+
+        // Add setup fee for Starter tier
+        if (tier === 'starter') {
+            sessionConfig.line_items.push({
+                price_data: {
+                    currency: 'usd',
+                    product_data: {
+                        name: 'Setup Fee',
+                        description: 'One-time setup fee for Starter tier'
+                    },
+                    unit_amount: 1500, // $15.00 in cents
+                },
+                quantity: 1,
+            });
+        }
+
+        const session = await stripe.checkout.sessions.create(sessionConfig);
+
+        // Log checkout attempt
+        console.log(`✅ Checkout session created: ${tier} for user ${userId}`);
+
+        res.json({
+            sessionId: session.id,
+            url: session.url
+        });
+
+    } catch (error) {
+        console.error('Checkout error:', error);
+        res.status(500).json({ error: error.message });
+    }
+});
+
+/**
+ * LEGACY ENDPOINT - Keep for backwards compatibility
+ * Will be deprecated in future versions
+ */
+router.post('/create-checkout-session-legacy', async (req, res) => {
     try {
         const {
             tier,
@@ -67,9 +209,9 @@ router.post('/create-checkout-session', async (req, res) => {
                             description: tier === 'CREATOR'
                                 ? '100% profit + AR/VR tools + Cloud upload'
                                 : 'All features + AI superpowers + Super Admin access',
-                            images: ['https://fortheweebs.com/logo.png'], // Add your logo URL
+                            images: ['https://fortheweebs.com/logo.png'],
                         },
-                        unit_amount: Math.round(displayPrice * 100), // Stripe uses cents
+                        unit_amount: Math.round(displayPrice * 100),
                     },
                     quantity: 1,
                 },
@@ -136,9 +278,9 @@ router.post('/stripe-webhook', express.raw({ type: 'application/json' }), async 
 
     // Handle the event
     switch (event.type) {
-        case 'checkout.session.completed':
+        case 'checkout.session.completed': {
             const session = event.data.object;
-            const { tier, userId, priceUSD } = session.metadata;
+            const { tier, userId, oneTime } = session.metadata;
 
             console.log(`✅ Payment successful for user ${userId}, tier: ${tier}`);
 
@@ -146,49 +288,93 @@ router.post('/stripe-webhook', express.raw({ type: 'application/json' }), async 
                 // Update user tier in database
                 const { data, error } = await supabase
                     .from('users')
-                    .upsert({
-                        id: userId,
-                        payment_tier: tier,
+                    .update({
+                        tier: tier,
+                        subscription_status: 'active',
+                        subscription_id: session.subscription || session.id,
+                        subscription_type: oneTime === 'true' ? 'lifetime' : 'recurring',
                         tier_updated_at: new Date().toISOString(),
-                        payment_status: 'paid',
-                        stripe_session_id: session.id,
-                        amount_paid: priceUSD,
                         updated_at: new Date().toISOString()
-                    }, {
-                        onConflict: 'id'
-                    });
+                    })
+                    .eq('id', userId);
 
                 if (error) {
                     console.error('Database update error:', error);
-                    // Log failed update for manual review
-                    await supabase
-                        .from('failed_tier_updates')
-                        .insert({
-                            user_id: userId,
-                            tier: tier,
-                            session_id: session.id,
-                            error: error.message,
-                            created_at: new Date().toISOString()
-                        });
                 } else {
                     console.log(`✅ Successfully updated tier for user ${userId} to ${tier}`);
 
-                    // Update payment session status
-                    await supabase
-                        .from('payment_sessions')
-                        .update({
-                            status: 'completed',
-                            completed_at: new Date().toISOString()
-                        })
-                        .eq('session_id', session.id);
+                    // Check if Sovereign tier is full
+                    if (tier === 'sovereign') {
+                        const { data: sovereignUsers } = await supabase
+                            .from('users')
+                            .select('id')
+                            .eq('tier', 'sovereign')
+                            .eq('subscription_status', 'active');
 
-                    // Send confirmation email (optional)
-                    // await sendTierUpgradeEmail(userId, tier);
+                        if (sovereignUsers && sovereignUsers.length >= 1000) {
+                            console.log('🚨 SOVEREIGN TIER FULL (1000/1000) - No more spots available');
+                        } else {
+                            console.log(`📊 Sovereign count: ${sovereignUsers?.length}/1000`);
+                        }
+                    }
                 }
             } catch (dbError) {
                 console.error('Database error:', dbError);
             }
             break;
+        }
+
+        case 'customer.subscription.deleted': {
+            const subscription = event.data.object;
+
+            // Find user by subscription ID
+            const { data: user } = await supabase
+                .from('users')
+                .select('id, tier')
+                .eq('subscription_id', subscription.id)
+                .single();
+
+            if (user) {
+                await supabase
+                    .from('users')
+                    .update({
+                        tier: 'free',
+                        subscription_status: 'cancelled',
+                        updated_at: new Date().toISOString()
+                    })
+                    .eq('id', user.id);
+
+                console.log(`❌ User ${user.id} downgraded from ${user.tier} to free`);
+            }
+
+            break;
+        }
+
+        case 'customer.subscription.updated': {
+            const subscription = event.data.object;
+
+            // Handle subscription changes (e.g., tier upgrade/downgrade)
+            const { data: user } = await supabase
+                .from('users')
+                .select('id')
+                .eq('subscription_id', subscription.id)
+                .single();
+
+            if (user) {
+                // Update subscription status
+                await supabase
+                    .from('users')
+                    .update({
+                        subscription_status: subscription.status,
+                        updated_at: new Date().toISOString()
+                    })
+                    .eq('id', user.id);
+
+                console.log(`🔄 Subscription updated for user ${user.id}: ${subscription.status}`);
+            }
+
+            break;
+        }
 
         case 'checkout.session.expired':
             const expiredSession = event.data.object;
