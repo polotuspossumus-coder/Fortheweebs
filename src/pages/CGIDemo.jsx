@@ -2,6 +2,7 @@ import React, { useRef, useState } from 'react';
 import CGIVideoProcessor from '../components/CGIVideoProcessor';
 import CGIControls from '../components/CGIControls';
 import CGIRecorder from '../components/CGIRecorder';
+import CGIPresets from '../components/CGIPresets';
 
 export default function CGIDemo() {
   const videoProcessorRef = useRef(null);
@@ -46,6 +47,17 @@ export default function CGIDemo() {
             onStreamReady={handleStreamReady}
             enableEffects={true}
           />
+        </div>
+
+        {/* Presets */}
+        <div style={{
+          background: '#fff',
+          borderRadius: '16px',
+          boxShadow: '0 10px 40px rgba(0,0,0,0.2)',
+          marginBottom: '24px',
+          overflow: 'hidden'
+        }}>
+          <CGIPresets videoProcessorRef={videoProcessorRef} />
         </div>
 
         {/* Controls */}

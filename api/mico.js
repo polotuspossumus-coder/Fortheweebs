@@ -10,6 +10,7 @@ const listDirHandler = require('./mico/list-directory.js');
 const searchHandler = require('./mico/search-files.js');
 const executeHandler = require('./mico/execute-command.js');
 const executeToolHandler = require('./mico/execute-tool.js');
+const cgiCommandHandler = require('./mico/cgi-command.js');
 
 // Define routes
 router.get('/status', (req, res) => statusHandler.default(req, res));
@@ -20,5 +21,6 @@ router.post('/list-directory', (req, res) => listDirHandler.default(req, res));
 router.post('/search-files', (req, res) => searchHandler.default(req, res));
 router.post('/execute-command', (req, res) => executeHandler.default(req, res));
 router.post('/execute-tool', (req, res) => executeToolHandler.default(req, res));
+router.post('/cgi-command', cgiCommandHandler);
 
 module.exports = router;
