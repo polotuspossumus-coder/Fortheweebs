@@ -11,9 +11,7 @@ export class SubscriptionsService {
     private prisma: PrismaService,
     private events: EventsService,
   ) {
-    this.stripe = new Stripe(process.env.STRIPE_SECRET_KEY || '', {
-      apiVersion: '2023-10-16',
-    });
+    this.stripe = new Stripe(process.env.STRIPE_SECRET_KEY || '');
   }
 
   async createCheckoutSession(
