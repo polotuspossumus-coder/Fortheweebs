@@ -5,3 +5,6 @@ dist/
 *.log
 .vscode/
 .idea/
+mico-backend/
+mico-agent-intellij/
+SovereignForgePlugin/
