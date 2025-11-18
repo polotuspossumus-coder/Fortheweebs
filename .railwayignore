@@ -8,3 +8,4 @@ dist/
 mico-backend/
 mico-agent-intellij/
 SovereignForgePlugin/
+server/
