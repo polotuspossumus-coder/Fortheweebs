@@ -5,6 +5,12 @@ import { PrismaService } from '../prisma/prisma.service';
 export class StatsService {
   constructor(private prisma: PrismaService) {}
 
+  async getUser(userId: string) {
+    return this.prisma.user.findUnique({
+      where: { id: userId },
+    });
+  }
+
   async getUserStats(userId: string) {
     const [friendsCount, followersCount, followingCount, subscribersCount, subscriptionsCount, postsCount] = await Promise.all([
       // Friends count (accepted friendships where user is involved)

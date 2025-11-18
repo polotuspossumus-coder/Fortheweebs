@@ -204,7 +204,19 @@ export class SubscriptionsService {
     return !!subscription;
   }
 
-  async handleStripeWebhook(event: Stripe.Event) {
+  async handleStripeWebhook(rawBody: Buffer, signature: string) {
+    let event: Stripe.Event;
+
+    try {
+      event = this.stripe.webhooks.constructEvent(
+        rawBody,
+        signature,
+        process.env.STRIPE_WEBHOOK_SECRET || '',
+      );
+    } catch (err) {
+      throw new Error(`Webhook signature verification failed: ${err.message}`);
+    }
+
     switch (event.type) {
       case 'checkout.session.completed': {
         const session = event.data.object as Stripe.Checkout.Session;
@@ -214,15 +226,15 @@ export class SubscriptionsService {
           subscriberId,
           creatorId,
           session.id,
-          tier,
-          session.amount_total,
+          tier || 'PREMIUM_1000',
+          session.amount_total || 100000,
         );
         break;
       }
       
       case 'customer.subscription.deleted': {
         const subscription = event.data.object as Stripe.Subscription;
-        // Handle subscription cancellation from Stripe
+        // Handle subscription cancellation from Stripe if needed
         break;
       }
     }
