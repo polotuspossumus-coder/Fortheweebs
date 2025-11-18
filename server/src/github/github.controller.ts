@@ -23,12 +23,33 @@ export class GithubController {
   /**
    * Create GitHub Issue from bug report
    * Public endpoint - anyone can report bugs
+   * Rate limited and validated
    */
   @Public()
   @Post('issues')
   async createIssue(@Request() req, @Body() body: any) {
     const { title, body: description, labels } = body;
-    return this.githubService.createIssue(title, description, labels);
+
+    // Input validation
+    if (!title || typeof title !== 'string' || title.length > 200) {
+      throw new Error('Invalid title: must be 1-200 characters');
+    }
+
+    if (!description || typeof description !== 'string' || description.length > 10000) {
+      throw new Error('Invalid description: must be 1-10000 characters');
+    }
+
+    // Sanitize title and description
+    const sanitizedTitle = title.replace(/<[^>]*>/g, '').slice(0, 200);
+    const sanitizedDescription = description.replace(/<script[^>]*>.*?<\/script>/gi, '').slice(0, 10000);
+
+    // Validate labels
+    const allowedLabels = ['bug', 'bug-backend', 'severity:low', 'severity:medium', 'severity:high', 'severity:critical', 'priority:urgent'];
+    const validLabels = Array.isArray(labels) 
+      ? labels.filter(l => allowedLabels.includes(l))
+      : ['bug'];
+
+    return this.githubService.createIssue(sanitizedTitle, sanitizedDescription, validLabels);
   }
 
   /**

@@ -1,5 +1,34 @@
 import Anthropic from '@anthropic-ai/sdk';
 
+// Rate limiting: simple in-memory store
+const rateLimitStore = new Map();
+const RATE_LIMIT = 10; // requests per minute
+const RATE_WINDOW = 60000; // 1 minute
+
+function checkRateLimit(ip) {
+  const now = Date.now();
+  const userRequests = rateLimitStore.get(ip) || [];
+  const recentRequests = userRequests.filter(time => now - time < RATE_WINDOW);
+  
+  if (recentRequests.length >= RATE_LIMIT) {
+    return false;
+  }
+  
+  recentRequests.push(now);
+  rateLimitStore.set(ip, recentRequests);
+  return true;
+}
+
+function sanitizeInput(text) {
+  if (!text || typeof text !== 'string') return '';
+  // Remove potential injection attempts
+  return text
+    .replace(/<script[^>]*>.*?<\/script>/gi, '')
+    .replace(/javascript:/gi, '')
+    .replace(/on\w+\s*=/gi, '')
+    .slice(0, 10000); // Max 10k chars
+}
+
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
@@ -13,11 +42,23 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
+  // Rate limiting
+  const ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+  if (!checkRateLimit(ip)) {
+    return res.status(429).json({ error: 'Too many requests. Try again later.' });
+  }
+
   try {
     const { message, conversationHistory = [] } = req.body;
 
     if (!message) {
       return res.status(400).json({ error: 'message is required' });
+    }
+
+    // Sanitize inputs
+    const sanitizedMessage = sanitizeInput(message);
+    if (!sanitizedMessage) {
+      return res.status(400).json({ error: 'Invalid message content' });
     }
 
     const anthropic = new Anthropic({
