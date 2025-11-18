@@ -12,6 +12,10 @@ export const SocialFeed = ({ userId, userTier }) => {
   const [newPostContent, setNewPostContent] = useState('');
   const [activeTab, setActiveTab] = useState('feed'); // feed, messages, calls, streams
   const [showCGITools, setShowCGITools] = useState(false);
+  const [friends, setFriends] = useState([]);
+  const [followers, setFollowers] = useState([]);
+  const [subscriptions, setSubscriptions] = useState([]);
+  const [contentVisibility, setContentVisibility] = useState('public'); // public, friends, subscribers, custom
 
   // Check if user has premium features
   const userEmail = localStorage.getItem('ownerEmail') || localStorage.getItem('userEmail');
@@ -24,6 +28,11 @@ export const SocialFeed = ({ userId, userTier }) => {
     // Load posts from localStorage or API
     const savedPosts = JSON.parse(localStorage.getItem('socialPosts') || '[]');
     setPosts(savedPosts);
+    
+    // Load friends, followers, subscriptions
+    setFriends(JSON.parse(localStorage.getItem('userFriends') || '[]'));
+    setFollowers(JSON.parse(localStorage.getItem('userFollowers') || '[]'));
+    setSubscriptions(JSON.parse(localStorage.getItem('userSubscriptions') || '[]'));
   }, []);
 
   const createPost = () => {
@@ -38,13 +47,41 @@ export const SocialFeed = ({ userId, userTier }) => {
       timestamp: new Date().toISOString(),
       likes: 0,
       comments: [],
-      hasCGI: false
+      hasCGI: false,
+      visibility: contentVisibility, // Who can see this post
+      isPaidContent: contentVisibility === 'subscribers'
     };
 
     const updatedPosts = [newPost, ...posts];
     setPosts(updatedPosts);
     localStorage.setItem('socialPosts', JSON.stringify(updatedPosts));
     setNewPostContent('');
+  };
+
+  const addFriend = (friendId, friendName) => {
+    const newFriend = { id: friendId, name: friendName, addedAt: new Date().toISOString() };
+    const updatedFriends = [...friends, newFriend];
+    setFriends(updatedFriends);
+    localStorage.setItem('userFriends', JSON.stringify(updatedFriends));
+  };
+
+  const followUser = (targetUserId, targetUserName) => {
+    const newFollow = { id: targetUserId, name: targetUserName, followedAt: new Date().toISOString() };
+    const updatedFollowers = [...followers, newFollow];
+    setFollowers(updatedFollowers);
+    localStorage.setItem('userFollowers', JSON.stringify(updatedFollowers));
+  };
+
+  const subscribeToUser = (targetUserId, targetUserName, tier = 'basic') => {
+    const newSub = { 
+      id: targetUserId, 
+      name: targetUserName, 
+      tier: tier, // basic, premium, vip
+      subscribedAt: new Date().toISOString() 
+    };
+    const updatedSubs = [...subscriptions, newSub];
+    setSubscriptions(updatedSubs);
+    localStorage.setItem('userSubscriptions', JSON.stringify(updatedSubs));
   };
 
   const likePost = (postId) => {
@@ -101,6 +138,18 @@ export const SocialFeed = ({ userId, userTier }) => {
               onChange={(e) => setNewPostContent(e.target.value)}
               rows={3}
             />
+            
+            {/* Content Visibility Selector */}
+            <div className="visibility-selector">
+              <label>👁️ Who can see this:</label>
+              <select value={contentVisibility} onChange={(e) => setContentVisibility(e.target.value)}>
+                <option value="public">🌍 Public (Everyone)</option>
+                <option value="friends">👥 Friends Only</option>
+                <option value="subscribers">💎 Subscribers Only (Paid)</option>
+                <option value="custom">⚙️ Custom List</option>
+              </select>
+            </div>
+
             <div className="post-creator-actions">
               <div className="post-options">
                 <button className="post-option">📷 Photo</button>
@@ -148,6 +197,26 @@ export const SocialFeed = ({ userId, userTier }) => {
                     <span className="post-time">
                       {new Date(post.timestamp).toLocaleString()}
                     </span>
+                    {post.visibility !== 'public' && (
+                      <span className="visibility-badge">
+                        {post.visibility === 'friends' && '👥 Friends'}
+                        {post.visibility === 'subscribers' && '💎 Subscribers'}
+                        {post.visibility === 'custom' && '⚙️ Custom'}
+                      </span>
+                    )}
+                  </div>
+                  <div className="post-actions-menu">
+                    <button className="follow-btn" onClick={() => followUser(post.userId, post.userName)}>
+                      ➕ Follow
+                    </button>
+                    <button className="friend-btn" onClick={() => addFriend(post.userId, post.userName)}>
+                      👥 Add Friend
+                    </button>
+                    {post.isPaidContent && (
+                      <button className="subscribe-btn" onClick={() => subscribeToUser(post.userId, post.userName)}>
+                        💎 Subscribe
+                      </button>
+                    )}
                   </div>
                 </div>
                 <div className="post-content">{post.content}</div>
@@ -169,6 +238,23 @@ export const SocialFeed = ({ userId, userTier }) => {
         <div className="messages-content">
           <h2>💬 Messages</h2>
           <p className="feature-status">✅ Free for all users</p>
+          
+          {/* Friends & Followers Stats */}
+          <div className="social-stats">
+            <div className="stat-card">
+              <h3>👥 Friends</h3>
+              <p className="stat-number">{friends.length}</p>
+            </div>
+            <div className="stat-card">
+              <h3>👁️ Followers</h3>
+              <p className="stat-number">{followers.length}</p>
+            </div>
+            <div className="stat-card">
+              <h3>💎 Subscriptions</h3>
+              <p className="stat-number">{subscriptions.length}</p>
+            </div>
+          </div>
+
           <div className="messages-placeholder">
             <h3>Direct Messaging System</h3>
             <p>Text messaging available for all users</p>
