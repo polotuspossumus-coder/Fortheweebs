@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { reportBug, getBugReportContext } from '../utils/githubBugReporter';
 
 /**
  * BugReporter - Always-accessible bug reporting button
@@ -10,8 +11,11 @@ const BugReporter = () => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [steps, setSteps] = useState('');
+  const [severity, setSeverity] = useState('medium');
+  const [category, setCategory] = useState('frontend');
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [issueUrl, setIssueUrl] = useState('');
 
   const handleSubmit = async () => {
     if (!title || !description) {
@@ -22,58 +26,32 @@ const BugReporter = () => {
     setSubmitting(true);
 
     try {
-      // Capture error context
-      const errorContext = {
-        url: window.location.href,
-        userAgent: navigator.userAgent,
-        timestamp: new Date().toISOString(),
-        localStorage: Object.keys(localStorage).reduce((acc, key) => {
-          acc[key] = localStorage.getItem(key);
-          return acc;
-        }, {}),
-      };
-
-      const issueBody = `
-## Bug Description
-${description}
-
-## Steps to Reproduce
-${steps || 'Not provided'}
-
-## Context
-- **URL:** ${errorContext.url}
-- **Browser:** ${errorContext.userAgent}
-- **Time:** ${errorContext.timestamp}
-
-## User Settings
-\`\`\`json
-${JSON.stringify(errorContext.localStorage, null, 2)}
-\`\`\`
-
----
-*Reported by user via in-app bug reporter*
-`;
-
-      // Submit to your API endpoint that creates GitHub issue
-      const response = await fetch('/api/report-bug', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          title,
-          body: issueBody,
-          labels: ['bug', 'user-reported'],
-        }),
+      // Use new GitHub bug reporter
+      const result = await reportBug({
+        title,
+        description,
+        severity,
+        category,
+        stepsToReproduce: steps,
+        context: getBugReportContext(),
       });
 
-      if (response.ok) {
+      if (result.success) {
         setSubmitted(true);
+        if (result.github?.issueUrl) {
+          setIssueUrl(result.github.issueUrl);
+        }
+        
         setTimeout(() => {
           setIsOpen(false);
           setSubmitted(false);
           setTitle('');
           setDescription('');
           setSteps('');
-        }, 3000);
+          setSeverity('medium');
+          setCategory('frontend');
+          setIssueUrl('');
+        }, 5000);
       } else {
         alert('Failed to submit bug report. Please try again.');
       }
@@ -213,6 +191,52 @@ ${JSON.stringify(errorContext.localStorage, null, 2)}
                   />
                 </div>
 
+                <div style={{ marginBottom: '20px', display: 'flex', gap: '15px' }}>
+                  <div style={{ flex: 1 }}>
+                    <label style={{ display: 'block', fontWeight: '600', marginBottom: '8px', color: '#333' }}>
+                      Severity
+                    </label>
+                    <select
+                      value={severity}
+                      onChange={(e) => setSeverity(e.target.value)}
+                      style={{
+                        width: '100%',
+                        padding: '12px',
+                        border: '2px solid #ddd',
+                        borderRadius: '8px',
+                        fontSize: '1rem',
+                      }}
+                    >
+                      <option value="low">Low</option>
+                      <option value="medium">Medium</option>
+                      <option value="high">High</option>
+                      <option value="critical">Critical</option>
+                    </select>
+                  </div>
+                  
+                  <div style={{ flex: 1 }}>
+                    <label style={{ display: 'block', fontWeight: '600', marginBottom: '8px', color: '#333' }}>
+                      Category
+                    </label>
+                    <select
+                      value={category}
+                      onChange={(e) => setCategory(e.target.value)}
+                      style={{
+                        width: '100%',
+                        padding: '12px',
+                        border: '2px solid #ddd',
+                        borderRadius: '8px',
+                        fontSize: '1rem',
+                      }}
+                    >
+                      <option value="frontend">Frontend/UI</option>
+                      <option value="backend">Backend/API</option>
+                      <option value="performance">Performance</option>
+                      <option value="ui">Design/UX</option>
+                    </select>
+                  </div>
+                </div>
+
                 <button
                   onClick={handleSubmit}
                   disabled={submitting}
@@ -235,9 +259,24 @@ ${JSON.stringify(errorContext.localStorage, null, 2)}
               <div style={{ textAlign: 'center', padding: '40px 0' }}>
                 <div style={{ fontSize: '4rem', marginBottom: '20px' }}>✅</div>
                 <h3 style={{ color: '#28a745', marginBottom: '10px' }}>Report Submitted!</h3>
-                <p style={{ color: '#666' }}>
-                  Our AI will analyze and attempt to fix this bug automatically.
-                  You'll be notified when it's resolved!
+                <p style={{ color: '#666', marginBottom: '20px' }}>
+                  Bug report created as GitHub Issue.
+                  {issueUrl && (
+                    <>
+                      <br />
+                      <a 
+                        href={issueUrl} 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        style={{ color: '#ff6b6b', textDecoration: 'underline' }}
+                      >
+                        View Issue on GitHub
+                      </a>
+                    </>
+                  )}
+                </p>
+                <p style={{ color: '#999', fontSize: '0.9rem' }}>
+                  Our team will review and fix this ASAP!
                 </p>
               </div>
             )}
