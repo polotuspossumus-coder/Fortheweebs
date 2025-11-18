@@ -29,9 +29,13 @@ async function bootstrap() {
   const port = process.env.PORT || 3001;
   await app.listen(port, '0.0.0.0');
   
-  console.log(`🚀 Server running on port ${port}`);
-  console.log(`📊 Health check available at: http://0.0.0.0:${port}/v1/health`);
-  console.log(`🔥 Environment: ${process.env.NODE_ENV || 'development'}`);
+  console.log(`========================================`);
+  console.log(`🚀 Server started successfully!`);
+  console.log(`🔧 Environment: ${process.env.NODE_ENV || 'development'}`);
+  console.log(`🌐 Listening on: 0.0.0.0:${port}`);
+  console.log(`📊 Health check: http://0.0.0.0:${port}/v1/health`);
+  console.log(`📡 API base: http://0.0.0.0:${port}/v1`);
+  console.log(`========================================`);
 }
 
 bootstrap();
