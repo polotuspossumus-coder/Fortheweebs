@@ -28,23 +28,29 @@ app.get('/health', (req, res) => {
 });
 
 // API Routes
-const stripeRoutes = require('./api/stripe');
-const aiRoutes = require('./api/ai');
-const aiContentRoutes = require('./api/ai-content');
-const userTierRoutes = require('./api/user-tier');
-const uploadRoutes = require('./api/upload');
-const issuesRoutes = require('./api/issues');
-const familyAccessRoutes = require('./api/family-access');
-const micoRoutes = require('./api/mico');
+try {
+    const stripeRoutes = require('./api/stripe');
+    const aiRoutes = require('./api/ai');
+    const aiContentRoutes = require('./api/ai-content');
+    const userTierRoutes = require('./api/user-tier');
+    const uploadRoutes = require('./api/upload');
+    const issuesRoutes = require('./api/issues');
+    const familyAccessRoutes = require('./api/family-access');
+    const micoRoutes = require('./api/mico');
 
-app.use('/api', stripeRoutes);
-app.use('/api/ai', aiRoutes);
-app.use('/api/ai-content', aiContentRoutes);
-app.use('/api', userTierRoutes);
-app.use('/api/upload', uploadRoutes);
-app.use('/api/issues', issuesRoutes);
-app.use('/api/family-access', familyAccessRoutes);
-app.use('/api/mico', micoRoutes);
+    app.use('/api', stripeRoutes);
+    app.use('/api/ai', aiRoutes);
+    app.use('/api/ai-content', aiContentRoutes);
+    app.use('/api', userTierRoutes);
+    app.use('/api/upload', uploadRoutes);
+    app.use('/api/issues', issuesRoutes);
+    app.use('/api/family-access', familyAccessRoutes);
+    app.use('/api/mico', micoRoutes);
+} catch (error) {
+    console.error('Failed to load API routes:', error);
+    console.error('Server will start without some routes');
+}
+
 
 // Error handling middleware
 app.use((err, req, res, next) => {
