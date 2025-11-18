@@ -411,18 +411,6 @@ export default function CGIControls({ cgiProcessor }) {
     }
   };
 
-  const categories = [
-    { id: 'basic', name: 'Basic', icon: '🎨' },
-    { id: 'background', name: 'Background', icon: '🌫️' },
-    { id: 'text', name: 'Text', icon: '💬' },
-    { id: '3d', name: '3D', icon: '🎲' },
-    { id: 'face', name: 'Face/AR', icon: '😊' },
-    { id: 'advanced', name: 'Advanced', icon: '⚡' },
-    { id: 'audio', name: 'Audio', icon: '🎵' },
-    { id: 'particles', name: 'Particles', icon: '❄️' },
-    { id: 'streamer', name: 'Streamer', icon: '🎬' }
-  ];
-
   const [activeCategory, setActiveCategory] = useState('basic');
   const filteredEffects = availableEffects.filter(e => e.category === activeCategory);
 
