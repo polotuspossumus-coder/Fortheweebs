@@ -23,6 +23,11 @@ import {
   FloatingHeartsEffect,
   SpinningStarsEffect
 } from '../effects/ThreeDEffects';
+import {
+  ARMaskEffect,
+  AdvancedBackgroundSegmentationEffect,
+  FaceBeautifyEffect
+} from '../effects/FaceDetectionEffects';
 
 export default function CGIControls({ videoProcessorRef }) {
   const [activeEffects, setActiveEffects] = useState([]);
@@ -157,6 +162,61 @@ export default function CGIControls({ videoProcessorRef }) {
       description: 'Orbiting stars',
       category: '3d',
       create: () => new SpinningStarsEffect()
+    },
+    // Face Detection / AR Effects
+    {
+      id: 'arglasses',
+      name: 'AR Glasses',
+      icon: '🕶️',
+      description: 'Face-tracked glasses',
+      category: 'face',
+      create: () => new ARMaskEffect({ params: { maskType: 'glasses', color: '#000000' } })
+    },
+    {
+      id: 'armustache',
+      name: 'AR Mustache',
+      icon: '👨',
+      description: 'Face-tracked mustache',
+      category: 'face',
+      create: () => new ARMaskEffect({ params: { maskType: 'mustache' } })
+    },
+    {
+      id: 'arhat',
+      name: 'AR Hat',
+      icon: '🎩',
+      description: 'Face-tracked hat',
+      category: 'face',
+      create: () => new ARMaskEffect({ params: { maskType: 'hat', color: '#8B4513' } })
+    },
+    {
+      id: 'animeeyes',
+      name: 'Anime Eyes',
+      icon: '👁️',
+      description: 'Kawaii anime eyes',
+      category: 'face',
+      create: () => new ARMaskEffect({ params: { maskType: 'anime-eyes', color: '#667eea' } })
+    },
+    {
+      id: 'facebeautify',
+      name: 'Face Beautify',
+      icon: '✨',
+      description: 'Smooth and enhance',
+      category: 'face',
+      create: () => new FaceBeautifyEffect({ params: { smoothing: 0.5, brighten: 0.2, eyeEnhance: 0.3 } })
+    },
+    {
+      id: 'smartblur',
+      name: 'Smart Blur',
+      icon: '🎯',
+      description: 'AI background blur',
+      category: 'face',
+      create: () => new AdvancedBackgroundSegmentationEffect({
+        params: {
+          backgroundUrl: 'https://images.unsplash.com/photo-1557683316-973673baf926?w=1920',
+          featherEdge: 15,
+          personExpansion: 1.5
+        }
+      })
     }
   ];
 
