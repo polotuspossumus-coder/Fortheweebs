@@ -195,10 +195,54 @@ export const UserProfileManager = () => {
 
   return (
     <div className="user-profile-manager">
-      <div className="profile-manager-header">
-        <h2>👥 User Profile Manager</h2>
-        <p className="subtitle">Create up to 3 test profiles with different styles</p>
-      </div>
+      {!accessStatus.hasAccess && (
+        <div className="access-denied-banner">
+          <h3>🔒 Multi-Profile Feature Locked</h3>
+          <p>This premium feature requires:</p>
+          <ul>
+            <li>✨ <strong>VIP Access</strong> (Lifetime unlimited - invitation only), OR</li>
+            <li>💎 <strong>$1,000 Premium Tier</strong> (One-time payment)</li>
+          </ul>
+          <p style={{ marginTop: '16px', fontSize: '16px' }}>
+            <strong>Unlock the ability to create 3 additional creator profiles with consolidated revenue!</strong>
+          </p>
+          <button 
+            onClick={() => {
+              // Navigate to premium subscription tab
+              const urlParams = new URLSearchParams(window.location.search);
+              urlParams.set('tab', 'premium');
+              window.location.search = urlParams.toString();
+            }}
+            style={{
+              background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+              color: 'white',
+              border: 'none',
+              padding: '16px 32px',
+              borderRadius: '8px',
+              fontSize: '18px',
+              fontWeight: '600',
+              cursor: 'pointer',
+              marginTop: '20px',
+              boxShadow: '0 4px 12px rgba(102, 126, 234, 0.3)',
+              transition: 'transform 0.2s ease'
+            }}
+            onMouseOver={(e) => e.target.style.transform = 'translateY(-2px)'}
+            onMouseOut={(e) => e.target.style.transform = 'translateY(0)'}
+          >
+            💎 Unlock $1,000 Tier Now
+          </button>
+        </div>
+      )}
+
+      {accessStatus.hasAccess && (
+        <>
+          <div className="profile-manager-header">
+            <h2>👥 Creator Profile Manager</h2>
+            <p className="subtitle">
+              Create up to {accessStatus.maxProfiles} creator profiles for content monetization 
+              ({accessStatus.reason === 'owner' ? '👑 Owner' : accessStatus.reason === 'vip' ? '✨ VIP' : '💎 Premium $1,000'} Access)
+            </p>
+          </div>
 
       {/* Current Profile Display */}
       {currentProfile && (
