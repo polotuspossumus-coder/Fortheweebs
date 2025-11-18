@@ -6,6 +6,7 @@ import { unlockTool, getUserBalance, deductBalance, TOOL_PRICES } from '../utils
 import { loadStripe } from '@stripe/stripe-js';
 import { createSubscription, getUserSubscription } from '../utils/databaseSupabase';
 import { useAuth } from './AuthSupabase';
+import { getSuperAdminSlots, purchaseSuperAdminSlot } from '../utils/superAdminSlots';
 
 // Initialize Stripe (will be null if env var not set)
 const stripePromise = import.meta.env.VITE_STRIPE_PUBLIC_KEY
@@ -17,10 +18,14 @@ export function PremiumSubscription({ userId, currentTier }) {
   const [selectedUnlock, setSelectedUnlock] = useState(null);
   const [userBalance, setUserBalance] = useState(0);
   const [processing, setProcessing] = useState(false);
+  const [slotInfo, setSlotInfo] = useState(() => getSuperAdminSlots());
 
   useEffect(() => {
     const balance = getUserBalance(userId);
     setUserBalance(balance);
+    
+    // Refresh slot info
+    setSlotInfo(getSuperAdminSlots());
   }, [userId]);
 
   const toolUnlocks = [
@@ -84,6 +89,9 @@ export function PremiumSubscription({ userId, currentTier }) {
       price: 1000,
       color: '#8b5cf6',
       tagline: 'You won\'t be disappointed... Trust me.',
+      limitedSlots: true,
+      slotsRemaining: slotInfo.remaining,
+      totalSlots: slotInfo.limit,
       features: [
         '✅ Everything in Full Platform',
         '💸 ZERO platform fees (0% instead of 15-25%)',

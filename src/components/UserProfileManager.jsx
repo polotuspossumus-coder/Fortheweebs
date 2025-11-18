@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './UserProfileManager.css';
 import { isLifetimeVIP, LIFETIME_VIP_EMAILS } from '../utils/vipAccess';
+import { getSuperAdminSlots } from '../utils/superAdminSlots';
 
 /**
  * User Profile Manager - Allows owner to create and switch between multiple creator profiles
@@ -28,6 +29,9 @@ export const UserProfileManager = () => {
 
   const avatarOptions = ['👤', '🎨', '🎮', '🎭', '🎪', '🎯', '🎸', '🎬', '📸', '✨', '🌟', '💫', '🎵', '🎹', '🎺', '🎻'];
   const styleOptions = ['casual', 'professional', 'creative', 'minimal', 'vibrant'];
+
+  // Get super admin slot availability
+  const [slotInfo] = useState(() => getSuperAdminSlots());
 
   // Check if user has access to multi-profile feature
   const checkMultiProfileAccess = () => {
@@ -198,39 +202,70 @@ export const UserProfileManager = () => {
       {!accessStatus.hasAccess && (
         <div className="access-denied-banner">
           <h3>🔒 Multi-Profile Feature Locked</h3>
+          
+          <div style={{ 
+            background: slotInfo.remaining > 0 ? 'rgba(102, 126, 234, 0.1)' : 'rgba(239, 68, 68, 0.1)',
+            border: `2px solid ${slotInfo.remaining > 0 ? '#667eea' : '#ef4444'}`,
+            padding: '12px',
+            borderRadius: '8px',
+            marginBottom: '16px'
+          }}>
+            <strong style={{ fontSize: '18px' }}>
+              {slotInfo.remaining > 0 ? (
+                <>🎯 {slotInfo.remaining} / 100 Super Admin Slots Remaining</>
+              ) : (
+                <>❌ SOLD OUT - All 100 Slots Claimed!</>
+              )}
+            </strong>
+          </div>
+
           <p>This premium feature requires:</p>
           <ul>
             <li>✨ <strong>VIP Access</strong> (Lifetime unlimited - invitation only), OR</li>
-            <li>💎 <strong>$1,000 Premium Tier</strong> (One-time payment)</li>
+            <li>💎 <strong>$1,000 Premium Tier</strong> (One-time payment - Limited to 100 slots)</li>
           </ul>
           <p style={{ marginTop: '16px', fontSize: '16px' }}>
             <strong>Unlock the ability to create 3 additional creator profiles with consolidated revenue!</strong>
           </p>
-          <button 
-            onClick={() => {
-              // Navigate to premium subscription tab
-              const urlParams = new URLSearchParams(window.location.search);
-              urlParams.set('tab', 'premium');
-              window.location.search = urlParams.toString();
-            }}
-            style={{
-              background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-              color: 'white',
-              border: 'none',
-              padding: '16px 32px',
+          
+          {slotInfo.remaining > 0 ? (
+            <button 
+              onClick={() => {
+                // Navigate to premium subscription tab
+                const urlParams = new URLSearchParams(window.location.search);
+                urlParams.set('tab', 'premium');
+                window.location.search = urlParams.toString();
+              }}
+              style={{
+                background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                color: 'white',
+                border: 'none',
+                padding: '16px 32px',
+                borderRadius: '8px',
+                fontSize: '18px',
+                fontWeight: '600',
+                cursor: 'pointer',
+                marginTop: '20px',
+                boxShadow: '0 4px 12px rgba(102, 126, 234, 0.3)',
+                transition: 'transform 0.2s ease'
+              }}
+              onMouseOver={(e) => e.target.style.transform = 'translateY(-2px)'}
+              onMouseOut={(e) => e.target.style.transform = 'translateY(0)'}
+            >
+              💎 Unlock $1,000 Tier Now ({slotInfo.remaining} left!)
+            </button>
+          ) : (
+            <div style={{
+              background: '#fee',
+              color: '#c33',
+              padding: '16px',
               borderRadius: '8px',
-              fontSize: '18px',
-              fontWeight: '600',
-              cursor: 'pointer',
               marginTop: '20px',
-              boxShadow: '0 4px 12px rgba(102, 126, 234, 0.3)',
-              transition: 'transform 0.2s ease'
-            }}
-            onMouseOver={(e) => e.target.style.transform = 'translateY(-2px)'}
-            onMouseOut={(e) => e.target.style.transform = 'translateY(0)'}
-          >
-            💎 Unlock $1,000 Tier Now
-          </button>
+              fontWeight: '600'
+            }}>
+              ⚠️ All 100 Super Admin slots have been sold. This tier is no longer available.
+            </div>
+          )}
         </div>
       )}
 
