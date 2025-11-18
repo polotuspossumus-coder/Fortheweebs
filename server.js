@@ -1,9 +1,17 @@
+console.log('🚀 Starting ForTheWeebs API Server...');
+console.log('Node version:', process.version);
+console.log('Environment:', process.env.NODE_ENV);
+
 const express = require('express');
 const cors = require('cors');
 require('dotenv').config();
 
+console.log('✅ Express and dotenv loaded');
+
 const app = express();
 const PORT = process.env.PORT || 3001;
+
+console.log('📡 Port:', PORT);
 
 // Middleware
 app.use(cors({
@@ -67,11 +75,14 @@ app.use((req, res) => {
 });
 
 // Start server
-const server = app.listen(PORT, (err) => {
+console.log('🎯 Attempting to start server on port', PORT);
+
+const server = app.listen(PORT, '0.0.0.0', (err) => {
     if (err) {
-        console.error('Failed to start server:', err);
+        console.error('❌ Failed to start server:', err);
         process.exit(1);
     }
+    console.log(`✅ Server started successfully!`);
     console.log(`
 ╔═══════════════════════════════════════════════════════════╗
 ║                                                           ║
