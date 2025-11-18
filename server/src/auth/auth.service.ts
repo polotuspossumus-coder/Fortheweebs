@@ -17,7 +17,7 @@ export class AuthService {
       data: {
         email: data.email,
         username: data.username,
-        password: hashedPassword,
+        passwordHash: hashedPassword,
         displayName: data.displayName || data.username,
       },
     });
@@ -44,7 +44,7 @@ export class AuthService {
       throw new UnauthorizedException('Invalid credentials');
     }
 
-    const isPasswordValid = await bcrypt.compare(password, user.password);
+    const isPasswordValid = await bcrypt.compare(password, user.passwordHash);
     if (!isPasswordValid) {
       throw new UnauthorizedException('Invalid credentials');
     }

@@ -9,7 +9,7 @@ export class RelationshipsService {
     const existingFollow = await this.prisma.follow.findFirst({
       where: {
         followerId,
-        followingId: userId,
+        followeeId: userId,
       },
     });
 
@@ -23,7 +23,7 @@ export class RelationshipsService {
     await this.prisma.follow.create({
       data: {
         followerId,
-        followingId: userId,
+        followeeId: userId,
       },
     });
 
@@ -32,79 +32,52 @@ export class RelationshipsService {
 
   async getFollowers(userId: string, limit = 50, offset = 0) {
     const followers = await this.prisma.follow.findMany({
-      where: { followingId: userId },
-      include: {
-        follower: {
-          select: {
-            id: true,
-            username: true,
-            displayName: true,
-            avatarUrl: true,
-          },
-        },
-      },
+      where: { followeeId: userId },
       take: limit,
       skip: offset,
     });
 
-    return followers.map(f => f.follower);
+    return followers;
   }
 
   async getFollowing(userId: string, limit = 50, offset = 0) {
     const following = await this.prisma.follow.findMany({
       where: { followerId: userId },
-      include: {
-        following: {
-          select: {
-            id: true,
-            username: true,
-            displayName: true,
-            avatarUrl: true,
-          },
-        },
-      },
       take: limit,
       skip: offset,
     });
 
-    return following.map(f => f.following);
+    return following;
   }
 
   async getFriends(userId: string, limit = 50, offset = 0) {
     const friendships = await this.prisma.friendship.findMany({
-      where: { userId },
-      include: {
-        friend: {
-          select: {
-            id: true,
-            username: true,
-            displayName: true,
-            avatarUrl: true,
-          },
-        },
-      },
+      where: { senderId: userId, status: 'accepted' },
       take: limit,
       skip: offset,
     });
 
-    return friendships.map(f => f.friend);
+    return friendships;
+  }
+
+  async areFriends(userId1: string, userId2: string) {
+    const friendship = await this.prisma.friendship.findFirst({
+      where: {
+        OR: [
+          { senderId: userId1, receiverId: userId2, status: 'accepted' },
+          { senderId: userId2, receiverId: userId1, status: 'accepted' },
+        ],
+      },
+    });
+
+    return !!friendship;
   }
 
   async getPendingRequests(userId: string) {
-    const requests = await this.prisma.friendRequest.findMany({
+    const requests = await this.prisma.friendship.findMany({
       where: {
-        toUserId: userId,
+        receiverId: userId,
         status: 'pending',
-      },
-      include: {
-        fromUser: {
-          select: {
-            id: true,
-            username: true,
-            displayName: true,
-            avatarUrl: true,
-          },
-        },
       },
     });
 
@@ -112,10 +85,10 @@ export class RelationshipsService {
   }
 
   async sendFriendRequest(fromUserId: string, toUserId: string) {
-    const friendRequest = await this.prisma.friendRequest.create({
+    const friendRequest = await this.prisma.friendship.create({
       data: {
-        fromUserId,
-        toUserId,
+        senderId: fromUserId,
+        receiverId: toUserId,
         status: 'pending',
       },
     });
@@ -124,40 +97,32 @@ export class RelationshipsService {
   }
 
   async acceptFriendRequest(requestId: string, userId: string) {
-    const request = await this.prisma.friendRequest.findUnique({
+    const request = await this.prisma.friendship.findUnique({
       where: { id: requestId },
     });
 
-    if (!request || request.toUserId !== userId) {
+    if (!request || request.receiverId !== userId) {
       throw new Error('Friend request not found');
     }
 
-    await this.prisma.friendRequest.update({
+    await this.prisma.friendship.update({
       where: { id: requestId },
       data: { status: 'accepted' },
-    });
-
-    // Create bidirectional friendship
-    await this.prisma.friendship.createMany({
-      data: [
-        { userId: request.fromUserId, friendId: request.toUserId },
-        { userId: request.toUserId, friendId: request.fromUserId },
-      ],
     });
 
     return { accepted: true };
   }
 
   async declineFriendRequest(requestId: string, userId: string) {
-    const request = await this.prisma.friendRequest.findUnique({
+    const request = await this.prisma.friendship.findUnique({
       where: { id: requestId },
     });
 
-    if (!request || request.toUserId !== userId) {
+    if (!request || request.receiverId !== userId) {
       throw new Error('Friend request not found');
     }
 
-    await this.prisma.friendRequest.update({
+    await this.prisma.friendship.update({
       where: { id: requestId },
       data: { status: 'declined' },
     });
