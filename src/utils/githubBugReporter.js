@@ -18,20 +18,6 @@ const REPO_NAME = 'Fortheweebs';
  */
 export async function createGitHubIssue(bugData) {
   try {
-    // Get GitHub token from backend (to keep it secure)
-    const tokenResponse = await fetch('/api/github/token', {
-      headers: {
-        'Authorization': `Bearer ${localStorage.getItem('token')}`
-      }
-    });
-    
-    if (!tokenResponse.ok) {
-      console.error('Failed to get GitHub token');
-      return { success: false, error: 'Authentication failed' };
-    }
-
-    const { token } = await tokenResponse.json();
-
     // Build issue body with context
     const issueBody = `
 ## 🐛 Bug Report
@@ -86,12 +72,10 @@ ${bugData.actualBehavior || '_See description above_'}
       labels.push('priority:urgent');
     }
 
-    // Create GitHub Issue
-    const response = await fetch(`${GITHUB_API}/repos/${REPO_OWNER}/${REPO_NAME}/issues`, {
+    // Create GitHub Issue via backend API (handles token securely)
+    const response = await fetch(`/api/github/issues`, {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${token}`,
-        'Accept': 'application/vnd.github.v3+json',
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
@@ -106,14 +90,14 @@ ${bugData.actualBehavior || '_See description above_'}
       throw new Error(error.message || 'Failed to create issue');
     }
 
-    const issue = await response.json();
+    const result = await response.json();
 
-    console.log('✅ GitHub Issue created:', issue.html_url);
+    console.log('✅ GitHub Issue created:', result.issueUrl);
 
     return {
       success: true,
-      issueNumber: issue.number,
-      issueUrl: issue.html_url
+      issueNumber: result.issueNumber,
+      issueUrl: result.issueUrl
     };
 
   } catch (error) {

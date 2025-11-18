@@ -22,10 +22,12 @@ export class GithubController {
 
   /**
    * Create GitHub Issue from bug report
+   * Public endpoint - anyone can report bugs
    */
+  @Public()
   @Post('issues')
   async createIssue(@Request() req, @Body() body: any) {
-    const { title, description, labels } = body;
+    const { title, body: description, labels } = body;
     return this.githubService.createIssue(title, description, labels);
   }
 
