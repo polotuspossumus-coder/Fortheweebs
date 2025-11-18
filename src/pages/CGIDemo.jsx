@@ -1,6 +1,7 @@
 import React, { useRef, useState } from 'react';
 import CGIVideoProcessor from '../components/CGIVideoProcessor';
 import CGIControls from '../components/CGIControls';
+import CGIRecorder from '../components/CGIRecorder';
 
 export default function CGIDemo() {
   const videoProcessorRef = useRef(null);
@@ -55,6 +56,25 @@ export default function CGIDemo() {
           overflow: 'hidden'
         }}>
           <CGIControls videoProcessorRef={videoProcessorRef} />
+
+          {/* Recording Controls */}
+          <div style={{
+            padding: '24px',
+            borderTop: '1px solid #e5e7eb',
+            background: '#f9fafb'
+          }}>
+            <h3 style={{ margin: '0 0 12px 0', fontSize: '1.1rem' }}>
+              🎬 Recording
+            </h3>
+            <CGIRecorder videoProcessorRef={videoProcessorRef} />
+            <p style={{
+              margin: '12px 0 0 0',
+              fontSize: '13px',
+              color: '#6c757d'
+            }}>
+              Record your CGI effects in high quality WebM format (5 Mbps)
+            </p>
+          </div>
         </div>
 
         {/* Info Cards */}
@@ -117,7 +137,7 @@ export default function CGIDemo() {
           </div>
         </div>
 
-        {/* Coming Soon */}
+        {/* Feature Showcase */}
         <div style={{
           marginTop: '40px',
           background: 'rgba(255,255,255,0.95)',
@@ -126,7 +146,7 @@ export default function CGIDemo() {
           textAlign: 'center',
           boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
         }}>
-          <h3 style={{ margin: '0 0 16px 0', fontSize: '1.5rem' }}>🚀 Coming Soon</h3>
+          <h3 style={{ margin: '0 0 16px 0', fontSize: '1.5rem' }}>✨ All Features Available Now</h3>
           <div style={{
             display: 'grid',
             gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
@@ -134,21 +154,39 @@ export default function CGIDemo() {
             textAlign: 'left'
           }}>
             <div>
-              <div style={{ fontWeight: '600', marginBottom: '4px' }}>🎭 Face Filters</div>
-              <div style={{ fontSize: '13px', color: '#6c757d' }}>AR masks, glasses, hats</div>
+              <div style={{ fontWeight: '600', marginBottom: '4px' }}>🎭 Face Detection AR</div>
+              <div style={{ fontSize: '13px', color: '#6c757d' }}>6 effects: glasses, mustache, hat, anime eyes, beautify, smart blur</div>
             </div>
             <div>
-              <div style={{ fontWeight: '600', marginBottom: '4px' }}>🏞️ Background Replacement</div>
-              <div style={{ fontSize: '13px', color: '#6c757d' }}>Custom backgrounds & green screen</div>
+              <div style={{ fontWeight: '600', marginBottom: '4px' }}>🏞️ Background Effects</div>
+              <div style={{ fontSize: '13px', color: '#6c757d' }}>Blur, vignette, chroma key, AI segmentation</div>
             </div>
             <div>
               <div style={{ fontWeight: '600', marginBottom: '4px' }}>🎪 3D Objects</div>
-              <div style={{ fontSize: '13px', color: '#6c757d' }}>Floating 3D overlays with Three.js</div>
+              <div style={{ fontSize: '13px', color: '#6c757d' }}>5 effects: cube, particles, ring, hearts, stars</div>
             </div>
             <div>
-              <div style={{ fontWeight: '600', marginBottom: '4px' }}>💬 Text Overlays</div>
-              <div style={{ fontSize: '13px', color: '#6c757d' }}>Animated text & subtitles</div>
+              <div style={{ fontWeight: '600', marginBottom: '4px' }}>💬 Text & Emoji</div>
+              <div style={{ fontSize: '13px', color: '#6c757d' }}>Overlay, lower thirds, subtitles, emoji rain</div>
             </div>
+            <div>
+              <div style={{ fontWeight: '600', marginBottom: '4px' }}>🎬 Recording</div>
+              <div style={{ fontSize: '13px', color: '#6c757d' }}>High quality WebM recording with effects</div>
+            </div>
+            <div>
+              <div style={{ fontWeight: '600', marginBottom: '4px' }}>📞 Video Calls</div>
+              <div style={{ fontSize: '13px', color: '#6c757d' }}>WebRTC integration with screen sharing</div>
+            </div>
+          </div>
+          <div style={{
+            marginTop: '24px',
+            padding: '16px',
+            background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+            borderRadius: '12px',
+            color: '#fff',
+            fontWeight: '600'
+          }}>
+            🚀 24 Total Effects • 60 FPS • GPU Accelerated • Super Admin Exclusive
           </div>
         </div>
       </div>
