@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './SocialFeed.css';
 import { isLifetimeVIP } from '../utils/vipAccess';
+import api from '../utils/api';
 
 /**
  * Social Feed - Main content feed for all users
@@ -15,7 +16,11 @@ export const SocialFeed = ({ userId, userTier }) => {
   const [friends, setFriends] = useState([]);
   const [followers, setFollowers] = useState([]);
   const [subscriptions, setSubscriptions] = useState([]);
-  const [contentVisibility, setContentVisibility] = useState('public'); // public, friends, subscribers, custom
+  const [contentVisibility, setContentVisibility] = useState('PUBLIC'); // PUBLIC, FRIENDS, SUBSCRIBERS, CUSTOM
+  const [isPaidContent, setIsPaidContent] = useState(false);
+  const [priceCents, setPriceCents] = useState(100000);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   // Check if user has premium features
   const userEmail = localStorage.getItem('ownerEmail') || localStorage.getItem('userEmail');
