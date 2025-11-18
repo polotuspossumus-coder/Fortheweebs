@@ -27,10 +27,10 @@ async function bootstrap() {
   }));
 
   const port = process.env.PORT || 3001;
-  await app.listen(port);
+  await app.listen(port, '0.0.0.0');
   
-  console.log(`🚀 Server running on http://localhost:${port}/v1`);
-  console.log(`📊 Health check: http://localhost:${port}/v1/health`);
+  console.log(`🚀 Server running on port ${port}/v1`);
+  console.log(`📊 Health check: /v1/health`);
 }
 
 bootstrap();
