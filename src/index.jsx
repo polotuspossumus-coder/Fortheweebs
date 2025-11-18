@@ -173,6 +173,7 @@ function AppFlow() {
       localStorage.setItem("userId", "owner");
       localStorage.setItem("adminAuthenticated", "true");
       localStorage.setItem("userTier", "OWNER");
+      localStorage.setItem("onboardingCompleted", "true"); // Skip tutorial
       return 3; // Dashboard
     }
 
