@@ -15,7 +15,7 @@ export default async function handler(req, res) {
 
   try {
     const { message, conversationHistory = [] } = req.body;
-    
+
     if (!message) {
       return res.status(400).json({ error: 'message is required' });
     }
@@ -24,37 +24,105 @@ export default async function handler(req, res) {
       apiKey: process.env.ANTHROPIC_API_KEY,
     });
 
-    const systemPrompt = `You are Mico, an autonomous AI development agent for ForTheWeebs.
+    const tools = [
+      {
+        name: 'read_file',
+        description: 'Read the contents of a file in the project',
+        input_schema: {
+          type: 'object',
+          properties: {
+            filePath: {
+              type: 'string',
+              description: 'Path to the file relative to project root (e.g., src/components/App.jsx)'
+            }
+          },
+          required: ['filePath']
+        }
+      },
+      {
+        name: 'write_file',
+        description: 'Create or completely overwrite a file with new content',
+        input_schema: {
+          type: 'object',
+          properties: {
+            filePath: {
+              type: 'string',
+              description: 'Path where the file should be created/overwritten'
+            },
+            content: {
+              type: 'string',
+              description: 'Full content to write to the file'
+            }
+          },
+          required: ['filePath', 'content']
+        }
+      },
+      {
+        name: 'list_directory',
+        description: 'List all files and folders in a directory',
+        input_schema: {
+          type: 'object',
+          properties: {
+            dirPath: {
+              type: 'string',
+              description: 'Path to directory (e.g., src/components or . for root)'
+            }
+          },
+          required: ['dirPath']
+        }
+      },
+      {
+        name: 'search_files',
+        description: 'Search for text across all project files',
+        input_schema: {
+          type: 'object',
+          properties: {
+            query: {
+              type: 'string',
+              description: 'Text to search for'
+            },
+            filePattern: {
+              type: 'string',
+              description: 'Optional: glob pattern to filter files (e.g., *.jsx)'
+            }
+          },
+          required: ['query']
+        }
+      },
+      {
+        name: 'execute_command',
+        description: 'Execute a shell command (git, npm, node, etc.)',
+        input_schema: {
+          type: 'object',
+          properties: {
+            command: {
+              type: 'string',
+              description: 'Shell command to execute (e.g., git status, npm test)'
+            }
+          },
+          required: ['command']
+        }
+      }
+    ];
 
-You have these tools available:
-1. read-file: Read any file in the project
-2. write-file: Create or overwrite files
-3. edit-file: Replace specific text in files
-4. list-directory: List folder contents
-5. execute-command: Run git, npm, node commands
-6. search-files: Search for text across all files
+    const systemPrompt = `You are Mico, an autonomous AI development agent for ForTheWeebs platform.
 
-When a user asks you to do something:
-1. Think about which tools you need
-2. Execute them in the right order
-3. Verify your work (run builds, check git status)
-4. Report what you did
+Your job: Build features, fix bugs, and improve code autonomously.
 
-Be autonomous. Build features fully. Fix errors. Don't give up.
+Available tools:
+- read_file: Read any file
+- write_file: Create/overwrite files
+- list_directory: Browse folders
+- search_files: Find code patterns
+- execute_command: Run shell commands
 
-Respond with either:
-- Plain text advice/explanation
-- A structured tool invocation (JSON format)
+When given a task:
+1. Break it down into steps
+2. Use tools to implement
+3. Verify your work (build, test, git status)
+4. Report what you accomplished
 
-Example tool invocation:
-{
-  "tool": "write-file",
-  "params": {
-    "filePath": "src/components/NewFeature.jsx",
-    "content": "// Generated code here"
-  },
-  "reasoning": "Creating new feature component"
-}`;
+Be thorough. Don't give up on errors - fix them. Be autonomous.`;
 
     const messages = [
       ...conversationHistory,
@@ -69,33 +137,30 @@ Example tool invocation:
       max_tokens: 4096,
       system: systemPrompt,
       messages,
+      tools,
     });
 
-    const assistantMessage = response.content[0].text;
-
-    // Check if response contains a tool invocation
-    let toolInvocation = null;
-    try {
-      const jsonMatch = assistantMessage.match(/\{[\s\S]*"tool"[\s\S]*\}/);
-      if (jsonMatch) {
-        toolInvocation = JSON.parse(jsonMatch[0]);
-      }
-    } catch (e) {
-      // Not a tool invocation, just plain text
-    }
+    // Extract tool uses and text
+    const toolUses = response.content.filter(block => block.type === 'tool_use');
+    const textBlocks = response.content.filter(block => block.type === 'text');
 
     res.json({
       success: true,
       response: {
         role: 'assistant',
-        content: assistantMessage,
+        content: textBlocks.map(b => b.text).join('\n') || 'Processing...',
+        toolUses: toolUses.map(t => ({
+          id: t.id,
+          name: t.name,
+          input: t.input
+        }))
       },
-      toolInvocation,
+      stopReason: response.stop_reason,
       conversationHistory: [
         ...messages,
         {
           role: 'assistant',
-          content: assistantMessage,
+          content: response.content,
         },
       ],
     });

@@ -1,13 +1,30 @@
 import React, { useState } from 'react';
 
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001';
+
 export default function MicoAssistant() {
     const [isOpen, setIsOpen] = useState(false);
     const [messages, setMessages] = useState([
-        { role: 'assistant', content: "Hi! I'm Mico 🧠, powered by Microsoft Copilot. I can help you with features, answer questions, or log bugs!" }
+        { role: 'assistant', content: "Hi! I'm Mico 🧠, your autonomous AI developer powered by Claude. I can build features, fix bugs, and write code!" }
     ]);
     const [input, setInput] = useState('');
     const [isMinimized, setIsMinimized] = useState(false);
     const [isThinking, setIsThinking] = useState(false);
+    const [conversationHistory, setConversationHistory] = useState([]);
+
+    const executeTool = async (toolName, toolInput) => {
+        try {
+            const response = await fetch(`${API_URL}/api/mico/execute-tool`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ toolName, toolInput })
+            });
+            return await response.json();
+        } catch (error) {
+            console.error(`Failed to execute ${toolName}:`, error);
+            return { success: false, error: error.message };
+        }
+    };
 
     const handleSend = async () => {
         if (!input.trim() || isThinking) return;
@@ -17,96 +34,67 @@ export default function MicoAssistant() {
         setInput('');
         setIsThinking(true);
 
-        // Check if it's a bug report
-        const isBugReport = userMessage.toLowerCase().includes('bug') ||
-            userMessage.toLowerCase().includes('issue') ||
-            userMessage.toLowerCase().includes('broken') ||
-            userMessage.toLowerCase().includes('not working');
-
-        if (isBugReport) {
-            // Log bug to database instead of localStorage
-            try {
-                await fetch('http://localhost:3001/api/issues', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        userId: localStorage.getItem('userId') || 'anonymous',
-                        issueType: 'bug',
-                        description: userMessage,
-                        context: {
-                            url: window.location.href,
-                            timestamp: new Date().toISOString(),
-                            userAgent: navigator.userAgent
-                        }
-                    })
-                });
-            } catch (err) {
-                console.error('Failed to log issue:', err);
-                // Fallback to localStorage
-                try {
-                    const existingIssues = JSON.parse(localStorage.getItem('mico_issues') || '[]');
-                    existingIssues.push({
-                        timestamp: new Date().toISOString(),
-                        userId: localStorage.getItem('userId') || 'anonymous',
-                        issue: userMessage,
-                        status: 'pending'
-                    });
-                    localStorage.setItem('mico_issues', JSON.stringify(existingIssues));
-                } catch (localErr) {
-                    console.error('Fallback failed:', localErr);
-                }
-            }
-        }
-
         try {
-            // Call GitHub Models API (Microsoft Copilot backend)
-            const response = await fetch('https://models.inference.ai.azure.com/chat/completions', {
+            // Send message to Mico chat API
+            const response = await fetch(`${API_URL}/api/mico/chat`, {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${import.meta.env.VITE_GITHUB_TOKEN}`
-                },
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    messages: [
-                        {
-                            role: 'system',
-                            content: `You are Mico, Microsoft Copilot assistant for ForTheWeebs platform. Be helpful, friendly, and concise. Help users with:
-- Platform features (content upload, tiers, tools)
-- Answering questions about functionality
-- Logging bugs (acknowledge and reassure)
-Keep responses under 3 sentences unless explaining complex topics.`
-                        },
-                        ...messages.slice(0, -1), // Previous conversation
-                        { role: 'user', content: userMessage }
-                    ],
-                    model: 'gpt-4o',
-                    temperature: 0.7,
-                    max_tokens: 200
+                    message: userMessage,
+                    conversationHistory
                 })
             });
 
             const data = await response.json();
-            let aiResponse = data.choices?.[0]?.message?.content || "I'm having trouble connecting right now. Please try again!";
 
-            if (isBugReport) {
-                aiResponse += "\n\n🔧 I've logged this issue to my dev panel for investigation!";
+            if (!data.success) {
+                throw new Error(data.error || 'Failed to get response');
             }
 
-            setMessages(prev => [...prev, { role: 'assistant', content: aiResponse }]);
+            // Show Claude's thinking/response
+            if (data.response.content) {
+                setMessages(prev => [...prev, {
+                    role: 'assistant',
+                    content: data.response.content
+                }]);
+            }
+
+            // Execute any tools Claude wants to use
+            if (data.response.toolUses && data.response.toolUses.length > 0) {
+                for (const toolUse of data.response.toolUses) {
+                    // Show tool execution in chat
+                    setMessages(prev => [...prev, {
+                        role: 'system',
+                        content: `🔧 Executing: ${toolUse.name}...`
+                    }]);
+
+                    const toolResult = await executeTool(toolUse.name, toolUse.input);
+
+                    // Show tool result
+                    const resultText = toolResult.success
+                        ? `✅ ${toolUse.name} completed`
+                        : `❌ ${toolUse.name} failed: ${toolResult.error}`;
+
+                    setMessages(prev => [...prev, {
+                        role: 'system',
+                        content: resultText
+                    }]);
+
+                    // If there are more tools to execute or Claude needs to continue,
+                    // we'd send the tool results back to Claude here
+                    // For now, showing results to user
+                }
+            }
+
+            // Update conversation history
+            setConversationHistory(data.conversationHistory || []);
+
         } catch (error) {
-            console.error('AI Error:', error);
-            
-            // Fallback response
-            let fallback = "I'm having connection issues. ";
-            if (isBugReport) {
-                fallback = "🔧 I've logged your issue! I'm having trouble with my AI connection right now, but your bug report is saved.";
-            } else if (userMessage.toLowerCase().includes('help')) {
-                fallback += "Try asking about platform features, tiers, or tools!";
-            } else {
-                fallback += "I'm still here to help - try asking about ForTheWeebs features!";
-            }
-            
-            setMessages(prev => [...prev, { role: 'assistant', content: fallback }]);
+            console.error('Mico error:', error);
+            setMessages(prev => [...prev, {
+                role: 'assistant',
+                content: `❌ Error: ${error.message}. Make sure the backend is running and ANTHROPIC_API_KEY is set.`
+            }]);
         } finally {
             setIsThinking(false);
         }
@@ -171,8 +159,8 @@ Keep responses under 3 sentences unless explaining complex topics.`
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                     <span style={{ fontSize: '1.5rem' }}>🧠</span>
                     <div>
-                        <div style={{ fontWeight: '700' }}>Mico Assistant</div>
-                        <div style={{ fontSize: '0.75rem', opacity: 0.9 }}>Free AI Help</div>
+                        <div style={{ fontWeight: '700' }}>Mico AI Developer</div>
+                        <div style={{ fontSize: '0.75rem', opacity: 0.9 }}>Claude-Powered</div>
                     </div>
                 </div>
                 <div style={{ display: 'flex', gap: '8px' }}>
@@ -224,19 +212,32 @@ Keep responses under 3 sentences unless explaining complex topics.`
                             <div
                                 key={idx}
                                 style={{
-                                    alignSelf: msg.role === 'user' ? 'flex-end' : 'flex-start',
-                                    maxWidth: '80%',
+                                    alignSelf: msg.role === 'user' ? 'flex-end' : msg.role === 'system' ? 'center' : 'flex-start',
+                                    maxWidth: msg.role === 'system' ? '90%' : '80%',
                                     padding: '10px 14px',
                                     borderRadius: '12px',
-                                    background: msg.role === 'user' ? '#667eea' : '#f3f4f6',
+                                    background: msg.role === 'user' ? '#667eea' : msg.role === 'system' ? '#fef3c7' : '#f3f4f6',
                                     color: msg.role === 'user' ? '#fff' : '#1f2937',
                                     fontSize: '0.875rem',
-                                    lineHeight: '1.5'
+                                    lineHeight: '1.5',
+                                    fontStyle: msg.role === 'system' ? 'italic' : 'normal'
                                 }}
                             >
                                 {msg.content}
                             </div>
                         ))}
+                        {isThinking && (
+                            <div style={{
+                                alignSelf: 'flex-start',
+                                padding: '10px 14px',
+                                borderRadius: '12px',
+                                background: '#f3f4f6',
+                                color: '#6b7280',
+                                fontSize: '0.875rem'
+                            }}>
+                                🧠 Thinking...
+                            </div>
+                        )}
                     </div>
 
                     {/* Input */}
@@ -251,25 +252,28 @@ Keep responses under 3 sentences unless explaining complex topics.`
                             value={input}
                             onChange={(e) => setInput(e.target.value)}
                             onKeyPress={(e) => e.key === 'Enter' && handleSend()}
-                            placeholder="Ask anything or report a bug..."
+                            placeholder="Ask me to build something..."
+                            disabled={isThinking}
                             style={{
                                 flex: 1,
                                 padding: '10px 12px',
                                 border: '1px solid #d1d5db',
                                 borderRadius: '8px',
                                 fontSize: '0.875rem',
-                                outline: 'none'
+                                outline: 'none',
+                                opacity: isThinking ? 0.6 : 1
                             }}
                         />
                         <button
                             onClick={handleSend}
+                            disabled={isThinking}
                             style={{
                                 padding: '10px 16px',
-                                background: '#667eea',
+                                background: isThinking ? '#9ca3af' : '#667eea',
                                 color: '#fff',
                                 border: 'none',
                                 borderRadius: '8px',
-                                cursor: 'pointer',
+                                cursor: isThinking ? 'not-allowed' : 'pointer',
                                 fontWeight: '600',
                                 fontSize: '0.875rem'
                             }}
