@@ -7,17 +7,35 @@ import {
   VintageEffect,
   PixelateEffect
 } from '../effects/CGIEffect';
+import {
+  BackgroundBlurEffect,
+  VignetteEffect
+} from '../effects/BackgroundEffects';
+import {
+  TextOverlayEffect,
+  LowerThirdEffect,
+  EmojiReactionEffect
+} from '../effects/TextOverlayEffect';
+import {
+  FloatingCubeEffect,
+  ParticleExplosionEffect,
+  GlowingRingEffect,
+  FloatingHeartsEffect,
+  SpinningStarsEffect
+} from '../effects/ThreeDEffects';
 
 export default function CGIControls({ videoProcessorRef }) {
   const [activeEffects, setActiveEffects] = useState([]);
   const [selectedEffect, setSelectedEffect] = useState(null);
 
   const availableEffects = [
+    // Basic Effects
     {
       id: 'grayscale',
       name: 'Grayscale',
       icon: '⚫',
       description: 'Black and white filter',
+      category: 'basic',
       create: () => new GrayscaleEffect({ intensity: 0.8 })
     },
     {
@@ -25,6 +43,7 @@ export default function CGIControls({ videoProcessorRef }) {
       name: 'Brightness',
       icon: '☀️',
       description: 'Adjust brightness and contrast',
+      category: 'basic',
       create: () => new BrightnessEffect({ params: { brightness: 30, contrast: 0.2 } })
     },
     {
@@ -32,6 +51,7 @@ export default function CGIControls({ videoProcessorRef }) {
       name: 'Color Tint',
       icon: '🎨',
       description: 'Apply color filters',
+      category: 'basic',
       create: () => new ColorFilterEffect({ params: { r: 1.2, g: 0.8, b: 1.0 } })
     },
     {
@@ -39,6 +59,7 @@ export default function CGIControls({ videoProcessorRef }) {
       name: 'Neon Glow',
       icon: '✨',
       description: 'Cyberpunk neon effect',
+      category: 'basic',
       create: () => new NeonGlowEffect({ intensity: 0.7 })
     },
     {
@@ -46,6 +67,7 @@ export default function CGIControls({ videoProcessorRef }) {
       name: 'Vintage',
       icon: '📷',
       description: 'Retro film look',
+      category: 'basic',
       create: () => new VintageEffect({ intensity: 0.8 })
     },
     {
@@ -53,7 +75,88 @@ export default function CGIControls({ videoProcessorRef }) {
       name: 'Pixelate',
       icon: '🎮',
       description: '8-bit retro effect',
+      category: 'basic',
       create: () => new PixelateEffect({ params: { pixelSize: 8 }, intensity: 1.0 })
+    },
+    // Background Effects
+    {
+      id: 'backgroundblur',
+      name: 'Blur Background',
+      icon: '🌫️',
+      description: 'Professional blur effect',
+      category: 'background',
+      create: () => new BackgroundBlurEffect({ params: { blurAmount: 15 } })
+    },
+    {
+      id: 'vignette',
+      name: 'Vignette',
+      icon: '⭕',
+      description: 'Darken edges',
+      category: 'background',
+      create: () => new VignetteEffect({ params: { strength: 0.5 } })
+    },
+    // Text Effects
+    {
+      id: 'textoverlay',
+      name: 'Text Overlay',
+      icon: '💬',
+      description: 'Animated text',
+      category: 'text',
+      create: () => new TextOverlayEffect({ params: { text: 'ForTheWeebs', animation: 'fade' } })
+    },
+    {
+      id: 'lowerthird',
+      name: 'Lower Third',
+      icon: '📛',
+      description: 'Name badge for streams',
+      category: 'text',
+      create: () => new LowerThirdEffect({ params: { name: 'Super Admin', title: 'Premium User' } })
+    },
+    {
+      id: 'emojireaction',
+      name: 'Emoji Rain',
+      icon: '❤️',
+      description: 'Floating emoji effects',
+      category: 'text',
+      create: () => {
+        const effect = new EmojiReactionEffect();
+        // Trigger initial emoji
+        setTimeout(() => effect.trigger('❤️'), 100);
+        return effect;
+      }
+    },
+    // 3D Effects
+    {
+      id: 'floatingcube',
+      name: 'Floating Cube',
+      icon: '🎲',
+      description: '3D rotating cube',
+      category: '3d',
+      create: () => new FloatingCubeEffect()
+    },
+    {
+      id: 'glowingring',
+      name: 'Glowing Ring',
+      icon: '💫',
+      description: 'Pulsing energy ring',
+      category: '3d',
+      create: () => new GlowingRingEffect()
+    },
+    {
+      id: 'floatinghearts',
+      name: 'Floating Hearts',
+      icon: '💕',
+      description: 'Rising heart particles',
+      category: '3d',
+      create: () => new FloatingHeartsEffect()
+    },
+    {
+      id: 'spinningstars',
+      name: 'Spinning Stars',
+      icon: '⭐',
+      description: 'Orbiting stars',
+      category: '3d',
+      create: () => new SpinningStarsEffect()
     }
   ];
 
