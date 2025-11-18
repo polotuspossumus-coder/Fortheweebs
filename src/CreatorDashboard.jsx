@@ -44,6 +44,7 @@ import DeviceManager from "./components/DeviceManager";
 import { isOwner } from "./utils/ownerAuth";
 import UserProfileManager from "./components/UserProfileManager";
 import SocialFeed from "./components/SocialFeed";
+import CGIVideoCall from "./components/CGIVideoCall";
 
 export const CreatorDashboard = ({ userId = "demo_user", ipAddress = "127.0.0.1", tier = "free" }) => {
   // STRICT ADMIN CHECK - Only polotuspossumus@gmail.com
@@ -164,7 +165,9 @@ export const CreatorDashboard = ({ userId = "demo_user", ipAddress = "127.0.0.1"
       </TabsContent>
       <TabsContent value="cgi-video">
         <ToolLockGate userId={userId} toolId="cgi">
-          <AIVideoGenerator userId={userId} tier={tier} />
+          <div>
+            <CGIVideoCall />
+          </div>
         </ToolLockGate>
       </TabsContent>
       <TabsContent value="photos">
