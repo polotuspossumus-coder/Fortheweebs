@@ -42,24 +42,33 @@ import { LanguageSelector } from "./components/LanguageSelector";
 import { t } from "./utils/i18n";
 import DeviceManager from "./components/DeviceManager";
 import { isOwner } from "./utils/ownerAuth";
+import UserProfileManager from "./components/UserProfileManager";
 
 export const CreatorDashboard = ({ userId = "demo_user", ipAddress = "127.0.0.1", tier = "free" }) => {
-  const [isAdmin, setIsAdmin] = useState(userId === "owner" || userId === "admin");
-  const [tosAccepted, setTosAccepted] = useState(isAdmin ? true : false);
-  const [creatorAgreementAccepted, setCreatorAgreementAccepted] = useState(isAdmin ? true : false);
+  // STRICT ADMIN CHECK - Only polotuspossumus@gmail.com
+  const ownerEmail = localStorage.getItem('ownerEmail');
+  const storedUserId = localStorage.getItem('userId');
+  const isAdminUser = (ownerEmail === 'polotuspossumus@gmail.com') || (storedUserId === 'owner');
+  
+  const [isAdmin, setIsAdmin] = useState(isAdminUser);
+  const [tosAccepted, setTosAccepted] = useState(isAdminUser ? true : false);
+  const [creatorAgreementAccepted, setCreatorAgreementAccepted] = useState(isAdminUser ? true : false);
   const [currentTier] = useState(tier || 'General Access');
   const [userBalance, setUserBalance] = useState(0);
   const version = "2025.11"; // Cache bust
 
-  // Check if user is verified owner
+  // Check if user is verified owner - STRICT CHECK
   useEffect(() => {
     const checkOwner = async () => {
       const ownerStatus = await isOwner();
-      setIsAdmin(ownerStatus || userId === "owner" || userId === "admin");
+      // ONLY grant admin if verified owner
+      setIsAdmin(ownerStatus);
       if (ownerStatus) {
         setTosAccepted(true);
         setCreatorAgreementAccepted(true);
         console.log('👑 Owner dashboard access granted');
+      } else {
+        console.log('🚫 Admin access denied - not owner');
       }
     };
     checkOwner();
@@ -138,6 +147,9 @@ export const CreatorDashboard = ({ userId = "demo_user", ipAddress = "127.0.0.1"
         )}
         {userId === "owner" && (
           <TabsTrigger value="mico">🧠 Mico</TabsTrigger>
+        )}
+        {isAdmin && (
+          <TabsTrigger value="profiles">👥 User Profiles</TabsTrigger>
         )}
       </TabsList>
       <TabsContent value="overview">
@@ -284,6 +296,11 @@ export const CreatorDashboard = ({ userId = "demo_user", ipAddress = "127.0.0.1"
       {userId === "owner" && (
         <TabsContent value="mico">
           <MicoDevPanel />
+        </TabsContent>
+      )}
+      {isAdmin && (
+        <TabsContent value="profiles">
+          <UserProfileManager />
         </TabsContent>
       )}
     </Tabs>
