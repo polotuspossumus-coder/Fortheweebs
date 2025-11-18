@@ -385,14 +385,8 @@ export default function CGIControls({ cgiProcessor }) {
     { id: 'audio', name: 'Audio', icon: '🎵' },
     { id: 'particles', name: 'Particles', icon: '❄️' },
     { id: 'streamer', name: 'Streamer', icon: '🎬' }
-  ];  id: 'kaleidoscope',
-      name: 'Kaleidoscope',
-      icon: '🔮',
-      description: 'Mirror segments',
-      category: 'streamer',
-      create: () => new KaleidoscopeEffect()
-    }
   ];
+
 
   const addEffect = (effectDef) => {
     const effect = effectDef.create();
