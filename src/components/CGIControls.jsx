@@ -28,6 +28,8 @@ import {
   FaceBeautifyEffect
 } from '../effects/FaceDetectionEffects';
 import CustomEffectEditor from './CustomEffectEditor';
+import EffectPresetManager from './EffectPresetManager';
+import EffectParameterControls from './EffectParameterControls';
 import {
   MirrorEffect,
   EdgeDetectionEffect,
@@ -59,6 +61,8 @@ export default function CGIControls({ cgiProcessor }) {
   const [activeEffects, setActiveEffects] = useState([]);
   const [selectedEffect, setSelectedEffect] = useState(null);
   const [showCustomEditor, setShowCustomEditor] = useState(false);
+  const [showPresetManager, setShowPresetManager] = useState(false);
+  const [showParamControls, setShowParamControls] = useState(false);
 
   const availableEffects = [
     // Basic Effects
@@ -419,11 +423,14 @@ export default function CGIControls({ cgiProcessor }) {
     { id: 'face', name: 'Face/AR', icon: '😊' },
     { id: 'advanced', name: 'Advanced', icon: '⚡' },
     { id: 'audio', name: 'Audio', icon: '🎵' },
-    { id: 'particles', name: 'Particles', icon: '❄️' }
+    { id: 'particles', name: 'Particles', icon: '❄️' },
+    { id: 'streamer', name: 'Streamer', icon: '🎬' }
   ];
 
   const [activeCategory, setActiveCategory] = useState('basic');
   const filteredEffects = availableEffects.filter(e => e.category === activeCategory);
+
+  const currentView = showCustomEditor ? 'custom' : showPresetManager ? 'presets' : showParamControls ? 'params' : 'effects';
 
   return (
     <div style={{
@@ -442,7 +449,49 @@ export default function CGIControls({ cgiProcessor }) {
         <h2 style={{ margin: 0, fontSize: '1.5rem' }}>🎬 CGI Effects</h2>
         <div style={{ display: 'flex', gap: '10px' }}>
           <button
-            onClick={() => setShowCustomEditor(!showCustomEditor)}
+            onClick={() => {
+              setShowCustomEditor(false);
+              setShowPresetManager(!showPresetManager);
+              setShowParamControls(false);
+            }}
+            style={{
+              padding: '8px 16px',
+              background: showPresetManager ? '#667eea' : '#6c757d',
+              color: '#fff',
+              border: 'none',
+              borderRadius: '6px',
+              cursor: 'pointer',
+              fontSize: '14px',
+              fontWeight: '600'
+            }}
+          >
+            {showPresetManager ? '🎬 Effects' : '🎯 Presets'}
+          </button>
+          <button
+            onClick={() => {
+              setShowCustomEditor(false);
+              setShowPresetManager(false);
+              setShowParamControls(!showParamControls);
+            }}
+            style={{
+              padding: '8px 16px',
+              background: showParamControls ? '#667eea' : '#6c757d',
+              color: '#fff',
+              border: 'none',
+              borderRadius: '6px',
+              cursor: 'pointer',
+              fontSize: '14px',
+              fontWeight: '600'
+            }}
+          >
+            {showParamControls ? '🎬 Effects' : '⚙️ Settings'}
+          </button>
+          <button
+            onClick={() => {
+              setShowCustomEditor(!showCustomEditor);
+              setShowPresetManager(false);
+              setShowParamControls(false);
+            }}
             style={{
               padding: '8px 16px',
               background: showCustomEditor ? '#667eea' : '#6c757d',
@@ -481,8 +530,26 @@ export default function CGIControls({ cgiProcessor }) {
         <CustomEffectEditor cgiProcessor={cgiProcessor} />
       )}
 
+      {/* Preset Manager */}
+      {showPresetManager && (
+        <EffectPresetManager cgiProcessor={cgiProcessor} />
+      )}
+
+      {/* Parameter Controls */}
+      {showParamControls && (
+        <EffectParameterControls 
+          effect={selectedEffect} 
+          onUpdate={(effect, params) => {
+            // Force re-render or update
+            if (cgiProcessor) {
+              cgiProcessor.needsUpdate = true;
+            }
+          }}
+        />
+      )}
+
       {/* Standard Effects */}
-      {!showCustomEditor && (
+      {!showCustomEditor && !showPresetManager && !showParamControls && (
         <>
           {/* Active Effects */}
           {activeEffects.length > 0 && (
@@ -497,19 +564,24 @@ export default function CGIControls({ cgiProcessor }) {
                 Active Effects ({activeEffects.length})
               </div>
               <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
-                {activeEffects.map(({ id, name }) => (
+                {activeEffects.map(({ id, name, effect }) => (
                   <div
                     key={id}
+                    onClick={() => {
+                      setSelectedEffect(effect);
+                      setShowParamControls(true);
+                    }}
                     style={{
                       display: 'flex',
                       alignItems: 'center',
                       gap: '8px',
                       padding: '6px 12px',
-                      background: '#667eea',
-                      color: '#fff',
+                      background: selectedEffect === effect ? '#00ff88' : '#667eea',
+                      color: selectedEffect === effect ? '#000' : '#fff',
                       borderRadius: '20px',
                       fontSize: '13px',
-                      fontWeight: '500'
+                      fontWeight: '500',
+                      cursor: 'pointer'
                     }}
                   >
                     {name}
