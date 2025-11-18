@@ -9,3 +9,4 @@ restartPolicyMaxRetries = 10
 
 [env]
 NODE_ENV = "production"
+PRISMA_CLI_BINARY_TARGETS = "debian-openssl-1.1.x,debian-openssl-3.0.x"
