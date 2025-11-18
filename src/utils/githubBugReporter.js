@@ -3,6 +3,7 @@
  * Automatically creates GitHub Issues from bug reports
  */
 
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001';
 const GITHUB_API = 'https://api.github.com';
 const REPO_OWNER = 'polotuspossumus-coder';
 const REPO_NAME = 'Fortheweebs';
@@ -73,7 +74,7 @@ ${bugData.actualBehavior || '_See description above_'}
     }
 
     // Create GitHub Issue via backend API (handles token securely)
-    const response = await fetch(`/api/github/issues`, {
+    const response = await fetch(`${API_BASE_URL}/api/github/issues`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
