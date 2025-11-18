@@ -1,0 +1,7 @@
+server/
+mico-backend/
+mico-agent-intellij/
+SovereignForgePlugin/
+.git/
+node_modules/
+dist/
