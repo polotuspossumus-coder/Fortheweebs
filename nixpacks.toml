@@ -2,10 +2,15 @@
 nixPkgs = ['nodejs-20_x']
 
 [phases.install]
-cmds = ['npm ci --omit=dev']
+cmds = [
+  'echo "Installing only production dependencies for Express server"',
+  'npm ci --omit=dev --ignore-scripts'
+]
 
 [phases.build]
-cmds = []
+cmds = [
+  'echo "No build step needed - using server.js directly"'
+]
 
 [start]
 cmd = 'node server.js'
