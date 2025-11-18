@@ -13,6 +13,7 @@ export const SocialFeed = ({ userId, userTier }) => {
   const [newPostContent, setNewPostContent] = useState('');
   const [activeTab, setActiveTab] = useState('feed'); // feed, messages, calls, streams
   const [showCGITools, setShowCGITools] = useState(false);
+  const [showMonetizeDialog, setShowMonetizeDialog] = useState(false);
   const [friends, setFriends] = useState([]);
   const [followers, setFollowers] = useState([]);
   const [subscriptions, setSubscriptions] = useState([]);
@@ -197,28 +198,6 @@ export const SocialFeed = ({ userId, userTier }) => {
               </select>
             </div>
 
-            {/* Paid Content Toggle */}
-            <div className="paid-toggle">
-              <label>
-                <input
-                  type="checkbox"
-                  checked={isPaidContent}
-                  onChange={(e) => setIsPaidContent(e.target.checked)}
-                />
-                💰 Paid Content (${(priceCents / 100).toFixed(2)})
-              </label>
-              {isPaidContent && (
-                <input
-                  type="number"
-                  value={priceCents / 100}
-                  onChange={(e) => setPriceCents(Math.round(parseFloat(e.target.value) * 100))}
-                  min="1"
-                  step="0.01"
-                  placeholder="Price"
-                />
-              )}
-            </div>
-
             {error && <div className="error-message">{error}</div>}
 
             <div className="post-creator-actions">
@@ -234,10 +213,78 @@ export const SocialFeed = ({ userId, userTier }) => {
                   </button>
                 )}
               </div>
-              <button className="post-btn" onClick={createPost}>
+              <button 
+                className="post-btn" 
+                onClick={() => {
+                  // Show monetization dialog before posting
+                  if (newPostContent.trim()) {
+                    setShowMonetizeDialog(true);
+                  } else {
+                    createPost();
+                  }
+                }}
+              >
                 Post
               </button>
             </div>
+
+            {/* Monetization Dialog - shown BEFORE posting */}
+            {showMonetizeDialog && (
+              <div className="monetize-dialog">
+                <div className="monetize-dialog-content">
+                  <h3>Ready to share?</h3>
+                  <p>Choose how you want to share this post:</p>
+                  
+                  <label className="monetize-option">
+                    <input
+                      type="radio"
+                      name="monetize"
+                      checked={!isPaidContent}
+                      onChange={() => setIsPaidContent(false)}
+                    />
+                    <div>
+                      <strong>🌟 Post to Feed</strong>
+                      <small>Share with your audience for free</small>
+                    </div>
+                  </label>
+
+                  <label className="monetize-option">
+                    <input
+                      type="radio"
+                      name="monetize"
+                      checked={isPaidContent}
+                      onChange={() => setIsPaidContent(true)}
+                    />
+                    <div>
+                      <strong>💰 Monetized Content</strong>
+                      <small>Charge subscribers to view</small>
+                    </div>
+                  </label>
+
+                  {isPaidContent && (
+                    <div className="price-input">
+                      <label>Set Price:</label>
+                      <input
+                        type="number"
+                        value={priceCents / 100}
+                        onChange={(e) => setPriceCents(Math.round(parseFloat(e.target.value) * 100))}
+                        min="1"
+                        step="0.01"
+                        placeholder="0.00"
+                      />
+                    </div>
+                  )}
+
+                  <div className="monetize-actions">
+                    <button onClick={() => setShowMonetizeDialog(false)}>Cancel</button>
+                    <button className="primary" onClick={() => { setShowMonetizeDialog(false); createPost(); }}>
+                      {isPaidContent ? `Post for $${(priceCents / 100).toFixed(2)}` : 'Post Now'}
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
+
             {showCGITools && isPremium && (
               <div className="cgi-tools-panel">
                 <h4>🎨 CGI Tools ($1000/VIP Only)</h4>
