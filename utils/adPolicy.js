@@ -145,6 +145,20 @@ export function shouldShowPlatformAds(userTier) {
 }
 
 /**
+ * Should user see creator profile ads?
+ * All creators can have ads on profiles, but only free users see them
+ */
+export function shouldShowCreatorProfileAds(viewerTier) {
+  // Free users see all ads
+  if (viewerTier === 'FREE' || !viewerTier) {
+    return true;
+  }
+  
+  // Paid subscribers never see profile ads
+  return false;
+}
+
+/**
  * Log ad violation
  */
 export async function logAdViolation(userId, contentId, violations) {
@@ -173,8 +187,12 @@ export function getAdPolicyText() {
   return `
 📢 ForTheWeebs Ad Policy
 
+✅ PROFILE ADS:
+- ALL creators can have ads on their profile
+- Free users will see profile ads
+- Paid subscribers never see profile ads
+
 ✅ FREE CONTENT:
-- Ads allowed on your profile
 - Ads allowed in free posts
 - You can mention sponsors
 
@@ -192,8 +210,8 @@ export function getAdPolicyText() {
 - 3rd offense: Permanent ban
 
 💰 MONETIZATION:
-- Your subscribers already paid you
-- Don't double-dip with ads in paid content
+- Profile ads = always visible to free users
+- Paid content = must be 100% ad-free
 - Want more money? Offer higher tiers or exclusive content
   `;
 }
