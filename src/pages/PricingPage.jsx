@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
+import { hasVIPAccess, isOwner } from '../utils/vipHelper';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001/api';
 
@@ -10,11 +11,18 @@ export default function PricingPage() {
 
   // Check Sovereign availability on load
   useEffect(() => {
+    // Check if user is VIP - they shouldn't see pricing
+    if (user?.email && (hasVIPAccess(user.email) || isOwner(user.email))) {
+      alert('You already have lifetime VIP access! No payment needed. 👑');
+      window.location.href = '/';
+      return;
+    }
+
     fetch(`${API_URL}/check-sovereign-availability`)
       .then(r => r.json())
       .then(data => setSovereignSpots(data.spotsRemaining))
       .catch(err => console.error('Failed to check sovereign spots:', err));
-  }, []);
+  }, [user]);
 
   const handleCheckout = async (tier, oneTime = false) => {
     if (!user) {

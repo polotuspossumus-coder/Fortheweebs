@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { TIERS, getTierName, getTierPrice } from '../utils/tierAccess';
+import { hasVIPAccess, isOwner } from '../utils/vipHelper';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001/api';
 
@@ -11,12 +12,19 @@ export default function PricingPage() {
   const [vipSpots, setVipSpots] = useState(null);
 
   useEffect(() => {
+    // Check if user is VIP - they shouldn't see pricing
+    if (user?.email && (hasVIPAccess(user.email) || isOwner(user.email))) {
+      alert('You already have lifetime VIP access! No payment needed. 👑');
+      window.location.href = '/';
+      return;
+    }
+
     // Check VIP availability (limited to 10)
     fetch(`${API_URL}/check-vip-availability`)
       .then(r => r.json())
       .then(data => setVipSpots(data.spotsRemaining))
       .catch(() => setVipSpots(10));
-  }, []);
+  }, [user]);
 
   const handleCheckout = async (tierKey) => {
     if (!user) {
