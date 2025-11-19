@@ -12,11 +12,16 @@ export default function PricingPage() {
   const [vipSpots, setVipSpots] = useState(null);
 
   useEffect(() => {
-    // Check if user is VIP - they shouldn't see pricing
-    if (user?.email && (hasVIPAccess(user.email) || isOwner(user.email))) {
-      alert('You already have lifetime VIP access! No payment needed. 👑');
-      window.location.href = '/';
-      return;
+    // Only check VIP status after user is loaded (not null or undefined)
+    if (user !== null && user !== undefined) {
+      if (user.email && (hasVIPAccess(user.email) || isOwner(user.email))) {
+        // Use setTimeout to prevent blocking render
+        setTimeout(() => {
+          alert('You already have lifetime VIP access! No payment needed. 👑');
+          window.location.href = '/';
+        }, 100);
+        return;
+      }
     }
 
     // Check VIP availability (limited to 10)
