@@ -1,8 +1,9 @@
 // SUPABASE STORAGE UTILITIES - Image upload and management
-// NOW WITH ANTI-PIRACY PROTECTION
+// NOW WITH ANTI-PIRACY PROTECTION + AD POLICY ENFORCEMENT
 
 import { supabase } from '../lib/supabase';
 import { checkForPiracy } from './antiPiracy';
+import { validateContentForAds, logAdViolation } from '../../utils/adPolicy';
 
 const BUCKET_NAME = 'artworks';
 
@@ -22,7 +23,7 @@ export async function initializeStorage() {
 }
 
 // Upload file to Supabase Storage
-export async function uploadFile(file, path, userId = null) {
+export async function uploadFile(file, path, userId = null, metadata = {}) {
   // ANTI-PIRACY CHECK BEFORE UPLOAD
   if (userId) {
     const piracyCheck = await checkForPiracy(file, userId);
@@ -36,6 +37,21 @@ export async function uploadFile(file, path, userId = null) {
     // Log warnings but allow upload
     if (piracyCheck.violations.length > 0) {
       console.warn('Upload warnings:', piracyCheck.violations);
+    }
+  }
+  
+  // AD POLICY CHECK FOR PAID CONTENT
+  if (metadata.tier && metadata.tier !== 'FREE') {
+    const adCheck = await validateContentForAds(
+      metadata.description || '',
+      metadata
+    );
+    
+    if (!adCheck.approved) {
+      await logAdViolation(userId, null, adCheck.violations);
+      throw new Error(
+        `Upload blocked: ${adCheck.message}`
+      );
     }
   }
   
