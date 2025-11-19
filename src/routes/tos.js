@@ -31,6 +31,57 @@
  *
  * All media uploaded or processed through Vanguard must be identified as original creator content or flagged if it could potentially violate copyright laws. If media is flagged, the creator will be notified and must review the content. By accepting flagged content, the creator acknowledges and accepts full responsibility for hosting and distributing the material. The platform provides tools for creators to revise, remove, or provide proof of ownership. This process helps prevent accidental copyright violations and shifts legal responsibility to the creator for any flagged content.
  */
+
+/**
+ * ANTI-PIRACY POLICY (Updated November 2025)
+ * 
+ * STRICTLY PROHIBITED CONTENT:
+ * - Pirated anime episodes, series, or movies from any source
+ * - Copyrighted TV shows, films, or streaming platform content
+ * - Content distributed by unauthorized fansub groups (HorribleSubs, SubsPlease, Erai-raws, etc.)
+ * - Complete seasons, episode batches, torrent files, or bulk distributions
+ * - Any copyrighted content you do not own or have explicit legal rights to distribute
+ * 
+ * AUTOMATED DETECTION SYSTEM:
+ * The platform employs automated anti-piracy detection that scans ALL uploads for:
+ * 1. File names containing copyrighted series names (Naruto, One Piece, Attack on Titan, etc.)
+ * 2. Piracy distribution patterns (S01E05 format, resolution tags, codec indicators)
+ * 3. Fansub group watermarks and metadata
+ * 4. File sizes matching typical pirated episode distributions
+ * 5. User upload history and behavioral patterns
+ * 
+ * THREE-STRIKE ENFORCEMENT:
+ * Strike 1: Immediate content blocking + formal warning
+ * Strike 2: 7-day upload suspension + final warning + account review
+ * Strike 3: Permanent upload ban + account termination consideration
+ * (Strikes expire after 90 days of compliant behavior)
+ * 
+ * LEGAL CONSEQUENCES:
+ * Uploading pirated content may result in:
+ * - Immediate account termination without warning
+ * - Reporting to copyright holders (Disney, Sony, Crunchyroll, etc.)
+ * - Reporting to law enforcement agencies
+ * - Civil lawsuits by copyright owners seeking damages
+ * - Criminal prosecution under applicable copyright laws
+ * - Financial liability for statutory damages ($750-$150,000 per work)
+ * 
+ * USER ACKNOWLEDGMENT:
+ * By using ForTheWeebs, you explicitly acknowledge and agree that:
+ * - You are SOLELY RESPONSIBLE for ensuring you have legal rights to all uploaded content
+ * - The platform is NOT LIABLE for any copyright violations you commit
+ * - We cooperate FULLY with DMCA takedown requests and law enforcement
+ * - We maintain comprehensive audit logs for legal compliance and evidence
+ * - Piracy attempts are logged and may be reported to authorities
+ * - False claims of original ownership constitute fraud and may result in prosecution
+ * 
+ * TIMING CONTEXT (November 2025):
+ * This policy is enforced during a global crackdown on piracy and unauthorized content distribution. 
+ * Governments worldwide are actively shutting down piracy websites, torrent sites, and unauthorized 
+ * streaming platforms. ForTheWeebs takes a zero-tolerance approach to protect both creators and the 
+ * platform from legal liability. Only upload content you created or have explicit written permission 
+ * to distribute.
+ */
+
 /**
  * User Content Policy and Liability
  *

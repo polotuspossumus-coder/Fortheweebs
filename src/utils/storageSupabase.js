@@ -1,6 +1,8 @@
 // SUPABASE STORAGE UTILITIES - Image upload and management
+// NOW WITH ANTI-PIRACY PROTECTION
 
 import { supabase } from '../lib/supabase';
+import { checkForPiracy } from './antiPiracy';
 
 const BUCKET_NAME = 'artworks';
 
@@ -20,7 +22,23 @@ export async function initializeStorage() {
 }
 
 // Upload file to Supabase Storage
-export async function uploadFile(file, path) {
+export async function uploadFile(file, path, userId = null) {
+  // ANTI-PIRACY CHECK BEFORE UPLOAD
+  if (userId) {
+    const piracyCheck = await checkForPiracy(file, userId);
+    
+    if (piracyCheck.isBlocked) {
+      throw new Error(
+        `Upload blocked: ${piracyCheck.violations[0]?.message || 'Pirated content detected'}`
+      );
+    }
+    
+    // Log warnings but allow upload
+    if (piracyCheck.violations.length > 0) {
+      console.warn('Upload warnings:', piracyCheck.violations);
+    }
+  }
+  
   const { data, error } = await supabase.storage
     .from(BUCKET_NAME)
     .upload(path, file, {
@@ -49,7 +67,7 @@ export async function uploadFiles(files, userId) {
     const fileExtension = file.name.split('.').pop();
     const filePath = `${userId}/${timestamp}-${randomId}.${fileExtension}`;
 
-    return uploadFile(file, filePath);
+    return uploadFile(file, filePath, userId);
   });
 
   return Promise.all(uploadPromises);

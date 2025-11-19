@@ -15,6 +15,14 @@ const PORT = process.env.PORT || 3001;
 
 console.log('📡 Port:', PORT);
 
+// Security Headers
+const securityHeaders = require('./utils/securityHeaders');
+app.use(securityHeaders);
+
+// Rate Limiting
+const { apiLimiter } = require('./utils/apiRateLimiter');
+app.use('/api', apiLimiter);
+
 // Middleware
 app.use(cors({
     origin: process.env.VITE_APP_URL || 'http://localhost:3002',
@@ -65,6 +73,7 @@ try {
     const aiContentRoutes = require('./api/ai-content');
     const userTierRoutes = require('./api/user-tier');
     const uploadRoutes = require('./api/upload');
+    const uploadProtectedRoutes = require('./api/upload-protected');
     const issuesRoutes = require('./api/issues');
     const familyAccessRoutes = require('./api/family-access');
     const micoRoutes = require('./api/mico');
@@ -74,9 +83,11 @@ try {
     app.use('/api/ai-content', aiContentRoutes);
     app.use('/api', userTierRoutes);
     app.use('/api/upload', uploadRoutes);
+    app.use('/api/upload', uploadProtectedRoutes); // Anti-piracy protected uploads
     app.use('/api/issues', issuesRoutes);
     app.use('/api/family-access', familyAccessRoutes);
     app.use('/api/mico', micoRoutes);
+    console.log('✅ Anti-piracy protection enabled');
 } catch (error) {
     console.error('Failed to load API routes:', error);
     console.error('Server will start without some routes');

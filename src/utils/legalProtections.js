@@ -98,6 +98,26 @@ export function checkContentLegality(text, cardData = null) {
       break;
     }
   }
+  
+  // ANTI-PIRACY: Block common piracy file patterns
+  const piracyPatterns = [
+    /S\d{2}E\d{2}/i, // Season/Episode format
+    /\[.*subs.*\]/i, // Fansub groups
+    /\d{3,4}p/i, // Resolution
+    /x26[45]/i, // Video codec
+    /complete series/i
+  ];
+  
+  for (const pattern of piracyPatterns) {
+    if (pattern.test(text)) {
+      issues.push({
+        type: 'piracy_indicator',
+        severity: 'HIGH',
+        message: 'Content appears to be pirated material. Only upload original content.',
+        blocked: true
+      });
+    }
+  }
 
   if (hasAdultContent) {
     issues.push({
