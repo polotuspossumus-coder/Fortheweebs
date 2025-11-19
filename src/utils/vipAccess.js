@@ -18,7 +18,7 @@ export const LIFETIME_VIP_EMAILS = [
   'palmlana@yahoo.com',        // VIP Slot 7
   'Billyxfitzgerald@yahoo.com', // VIP Slot 8
   'Yeahitsmeangel@yahoo.com',  // VIP Slot 9
-  'vip10@example.com'          // VIP Slot 10 - Replace with real email
+  'Atolbert66@gmail.com'       // VIP Slot 10
 ];
 
 /**
