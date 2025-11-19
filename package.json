@@ -14,7 +14,12 @@
     "postinstall": "echo 'Skipping postinstall'",
     "lint": "eslint . --ext .js,.ts,.jsx,.tsx",
     "test": "vitest",
-    "analyze": "node scripts/analyze-bundle.js"
+    "analyze": "node scripts/analyze-bundle.js",
+    "android:build": "npm run build && npx cap sync android && npx cap copy android",
+    "android:open": "npx cap open android",
+    "android:run": "npm run android:build && npx cap run android",
+    "android:release": "npm run build && npx cap sync android && cd android && .\\gradlew assembleRelease && cd ..",
+    "android:bundle": "npm run build && npx cap sync android && cd android && .\\gradlew bundleRelease && cd .."
   },
   "keywords": [
     "creator",
@@ -28,11 +33,15 @@
     "@vitejs/plugin-react": "^5.1.0",
     "eslint": "^8.56.0",
     "terser": "^5.44.1",
+    "typescript": "^5.9.3",
     "vite": "^7.2.2",
     "vitest": "^4.0.8"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.32.1",
+    "@capacitor/android": "^7.4.4",
+    "@capacitor/cli": "^7.4.4",
+    "@capacitor/core": "^7.4.4",
     "@octokit/rest": "^21.0.2",
     "@radix-ui/react-switch": "^1.2.6",
     "@radix-ui/react-tabs": "^1.1.13",

@@ -27,10 +27,23 @@ import { registerServiceWorker } from "./utils/registerServiceWorker.js";
 import { autoLoginOwner, isDeviceTrusted } from "./utils/deviceAuth.js";
 import { requireOwner, isOwner } from "./utils/ownerAuth.js";
 import { isLifetimeVIP, shouldSkipPayment } from './utils/vipAccess.js';
+import { initMobileTouchOptimizations, isCapacitor } from './utils/mobileOptimizations';
 import './utils/notifications.js'; // Import notification handler
 
 // Register service worker for PWA support
 registerServiceWorker();
+
+// Initialize mobile optimizations
+if (typeof window !== 'undefined') {
+  initMobileTouchOptimizations();
+  
+  // Log platform info
+  if (isCapacitor()) {
+    console.log('🚀 Running in Capacitor native app');
+  } else {
+    console.log('🌐 Running in web browser');
+  }
+}
 
 // CHECK OWNER ACCESS BEFORE ANYTHING RENDERS
 if (localStorage.getItem('userId') === 'owner' || localStorage.getItem('ownerEmail') === 'polotuspossumus@gmail.com') {
