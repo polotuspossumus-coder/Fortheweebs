@@ -18,6 +18,7 @@ import AchievementSystem from "./components/AchievementSystem.jsx";
 import InteractiveTutorial from "./components/InteractiveTutorial.jsx";
 import HelpButton from "./components/HelpButton.jsx";
 import Invite from "./pages/Invite.jsx";
+import AgeGate from "./components/AgeGate.jsx";
 import { NotificationProvider } from "./notifications/NotificationProvider.jsx";
 import EngagementTracker from "./components/EngagementTracker.jsx";
 import MicoAssistant from "./components/MicoAssistant.jsx";
@@ -280,6 +281,7 @@ function AppFlow() {
     <ErrorBoundary>
       <ThemeProvider>
         <React.StrictMode>
+          <AgeGate onVerified={() => console.log('Age verified')} />
           {step === 'mico' ? (
             // Direct Mico interface mode
             <MicoDevPanel />
