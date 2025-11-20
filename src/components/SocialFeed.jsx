@@ -293,7 +293,7 @@ export const SocialFeed = ({ userId, userTier }) => {
 
             {showCGITools && access.hasCGI.basic && (
               <div className="cgi-tools-panel">
-                <h4>🎨 CGI Tools ($1000/VIP Only)</h4>
+                <h4>🎨 CGI Tools</h4>
                 <div className="cgi-options">
                   <button>🌈 Background Effects</button>
                   <button>✨ Filters</button>

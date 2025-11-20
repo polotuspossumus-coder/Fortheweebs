@@ -91,10 +91,10 @@ export default function PricingPage() {
     },
     {
       key: TIERS.PREMIUM_1000,
-      name: '$1000 Admin Tier',
+      name: '$1000',
       icon: '🔱',
       price: '$1,000/month',
-      badge: 'UNLIMITED SEATS',
+      badge: '👑 Admin Toys & Super Powers',
       features: [
         '✅ Full admin powers',
         '✅ All features unlocked',
