@@ -73,8 +73,8 @@ ${bugData.actualBehavior || '_See description above_'}
       labels.push('priority:urgent');
     }
 
-    // Create GitHub Issue via backend API (handles token securely)
-    const response = await fetch(`${API_BASE_URL}/api/github/issues`, {
+    // Create GitHub Issue via Vercel serverless function (handles token securely)
+    const response = await fetch('/api/github/issues', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
