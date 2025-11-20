@@ -51,6 +51,7 @@ app/dist/
 # Temporary files
 *.tmp
 *.temp
+.tmp.driveupload/
 
 # Large binary files (your code.txt seems to be a large PDF)
 code.txt
