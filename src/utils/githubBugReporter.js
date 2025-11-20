@@ -74,7 +74,7 @@ ${bugData.actualBehavior || '_See description above_'}
     }
 
     // Create GitHub Issue via Vercel serverless function (handles token securely)
-    const response = await fetch('/api/github/issues', {
+    const response = await fetch('/api/github-issues', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
