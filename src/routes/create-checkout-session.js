@@ -16,10 +16,9 @@ export async function POST(request) {
 
     // Check if Stripe is configured
     if (!process.env.STRIPE_SECRET_KEY) {
-      console.warn('STRIPE_SECRET_KEY not configured');
       return new Response(JSON.stringify({
-        error: 'Payment system not configured',
-        message: 'Please add STRIPE_SECRET_KEY to environment variables'
+        error: 'Payment system temporarily unavailable',
+        message: 'Please contact support to complete your upgrade'
       }), {
         status: 503,
         headers: { 'Content-Type': 'application/json' }

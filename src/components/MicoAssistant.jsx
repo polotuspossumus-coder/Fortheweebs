@@ -5,7 +5,7 @@ const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001';
 export default function MicoAssistant() {
     const [isOpen, setIsOpen] = useState(false);
     const [messages, setMessages] = useState([
-        { role: 'assistant', content: "Hi! I'm Mico 🧠, your autonomous AI developer powered by Claude. I can build features, fix bugs, and write code!" }
+        { role: 'assistant', content: "Hi! I'm Mico 🧠, your AI assistant powered by Microsoft Copilot!\n\nI can help you with:\n✅ Coding questions\n✅ How-to guides\n✅ Feature explanations\n✅ General assistance\n\n💡 Want a new feature? Type: /suggest [your idea]" }
     ]);
     const [input, setInput] = useState('');
     const [isMinimized, setIsMinimized] = useState(false);
@@ -30,6 +30,13 @@ export default function MicoAssistant() {
         if (!input.trim() || isThinking) return;
 
         const userMessage = input.trim();
+
+        // Check if it's a suggestion command
+        if (userMessage.startsWith('/suggest ')) {
+            await handleSuggestion(userMessage.slice(9).trim());
+            return;
+        }
+
         setMessages(prev => [...prev, { role: 'user', content: userMessage }]);
         setInput('');
         setIsThinking(true);
@@ -93,7 +100,57 @@ export default function MicoAssistant() {
             console.error('Mico error:', error);
             setMessages(prev => [...prev, {
                 role: 'assistant',
-                content: `❌ Error: ${error.message}. Make sure the backend is running and ANTHROPIC_API_KEY is set.`
+                content: `❌ Service temporarily unavailable. Please try again or contact support.`
+            }]);
+        } finally {
+            setIsThinking(false);
+        }
+    };
+
+    const handleSuggestion = async (suggestion) => {
+        if (!suggestion || suggestion.length < 20) {
+            setMessages(prev => [...prev, {
+                role: 'system',
+                content: '⚠️ Suggestion too short. Please provide more details (at least 20 characters).'
+            }]);
+            setInput('');
+            return;
+        }
+
+        setMessages(prev => [...prev, {
+            role: 'user',
+            content: `💡 Suggestion: ${suggestion}`
+        }]);
+        setInput('');
+        setIsThinking(true);
+
+        try {
+            const response = await fetch(`${API_URL}/api/mico-suggestion-pipeline`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    userId: 'user-id', // TODO: Get from auth context
+                    email: 'user@email.com', // TODO: Get from auth context
+                    tier: 'free', // TODO: Get from auth context
+                    suggestion
+                })
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+                setMessages(prev => [...prev, {
+                    role: 'assistant',
+                    content: data.message
+                }]);
+            } else {
+                throw new Error(data.error);
+            }
+        } catch (error) {
+            console.error('Suggestion error:', error);
+            setMessages(prev => [...prev, {
+                role: 'assistant',
+                content: '❌ Failed to submit suggestion. Please try again.'
             }]);
         } finally {
             setIsThinking(false);

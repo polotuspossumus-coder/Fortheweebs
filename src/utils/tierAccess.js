@@ -29,16 +29,20 @@ export const TIERS = {
 export const checkTierAccess = (userId, userTier, userEmail) => {
   const isOwner = userId === 'owner' || userEmail === localStorage.getItem('ownerEmail');
   const isVIP = userTier === TIERS.VIP || isLifetimeVIP(userEmail);
-  
+
+  // VIPs automatically get PREMIUM_1000 tier benefits + admin powers
+  const effectiveTier = isOwner ? TIERS.OWNER : (isVIP ? TIERS.PREMIUM_1000 : (userTier || TIERS.FREE));
+
   return {
     // Core tier info
-    tier: isOwner ? TIERS.OWNER : userTier || TIERS.FREE,
+    tier: isOwner ? TIERS.OWNER : (isVIP ? TIERS.VIP : (userTier || TIERS.FREE)),
+    effectiveTier, // What tier benefits they actually get
     isOwner,
     isVIP,
-    
+
     // Admin powers - OWNER + VIPs ONLY (not even $1000 tier)
     hasAdminPowers: isOwner || isVIP,
-    
+
     // Free content access - Owner and VIPs get everything free
     hasFreeContentAccess: isOwner || isVIP,
     

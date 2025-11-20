@@ -151,7 +151,7 @@ export default function PricingPage() {
           <ul className="features">
             <li>✅ All features (except CGI)</li>
             <li>✅ Unlimited Mico AI (lifetime)</li>
-            <li>✅ 1000 AI commands/mo (monthly)</li>
+            <li>✅ Unlimited Mico AI (FREE)</li>
             <li>✅ 12 effect presets</li>
             <li>✅ Recording</li>
             <li>✅ Custom branding</li>
@@ -173,7 +173,7 @@ export default function PricingPage() {
           <ul className="features">
             <li>✅ 12 CGI effects (50%)</li>
             <li>✅ 6 effect presets</li>
-            <li>✅ 500 Mico AI commands/mo</li>
+            <li>✅ Unlimited Mico AI (FREE)</li>
             <li>✅ Recording</li>
             <li>✅ Analytics</li>
             <li>✅ 100GB storage</li>
@@ -198,7 +198,7 @@ export default function PricingPage() {
           <ul className="features">
             <li>✅ 6 CGI effects</li>
             <li>✅ 3 effect presets</li>
-            <li>✅ 200 Mico AI commands/mo</li>
+            <li>✅ Unlimited Mico AI (FREE)</li>
             <li>✅ Recording</li>
             <li>✅ 50GB storage</li>
           </ul>

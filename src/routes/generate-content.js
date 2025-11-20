@@ -117,10 +117,9 @@ export async function POST(request) {
 async function generateImage(prompt) {
   // Check if OpenAI API key is configured
   if (!process.env.OPENAI_API_KEY) {
-    console.warn('OPENAI_API_KEY not configured');
     return {
       url: 'https://placeholder.com/generated-image.png',
-      message: 'Image generation not yet configured. Add OPENAI_API_KEY environment variable.'
+      message: 'Image generation temporarily unavailable. Please contact support.'
     };
   }
 
@@ -212,9 +211,8 @@ async function generateVideo(prompt) {
 
 async function generateText(prompt) {
   if (!process.env.OPENAI_API_KEY) {
-    console.warn('OPENAI_API_KEY not configured');
     return {
-      text: `Generated text for: "${prompt}"\n\nText generation not yet configured. Add OPENAI_API_KEY environment variable.`
+      text: `Text generation temporarily unavailable. Please contact support.`
     };
   }
 

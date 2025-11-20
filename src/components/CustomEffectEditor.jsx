@@ -22,8 +22,11 @@ export default function CustomEffectEditor({ cgiProcessor }) {
     }
 
     try {
-      const func = eval(`(${code})`);
-      
+      // SECURITY: Use Function constructor instead of eval for safer code evaluation
+      const func = effectType === 'pixel'
+        ? new Function('pixel', 'time', `return (${code})(pixel, time)`)
+        : new Function('ctx', 'imageData', 'time', `return (${code})(ctx, imageData, time)`);
+
       if (effectType === 'pixel') {
         builder.addPixelShader(effectName, func);
       } else {

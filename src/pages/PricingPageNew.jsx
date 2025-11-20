@@ -132,7 +132,7 @@ export default function PricingPage() {
         '✅ 18 CGI effects',
         '✅ 8 effect presets',
         '✅ Video calls (no CGI)',
-        '✅ 500 Mico AI commands/mo',
+        '✅ Unlimited Mico AI (FREE)',
         '✅ Recording',
         '✅ 200GB storage',
         '❌ No VR/AR',
@@ -147,7 +147,7 @@ export default function PricingPage() {
       features: [
         '✅ 12 CGI effects',
         '✅ 6 effect presets',
-        '✅ 200 Mico AI commands/mo',
+        '✅ Unlimited Mico AI (FREE)',
         '✅ Recording',
         '✅ 100GB storage',
         '❌ No video calls',
@@ -162,7 +162,7 @@ export default function PricingPage() {
       features: [
         '✅ 6 CGI effects',
         '✅ 3 effect presets',
-        '✅ 50 Mico AI commands/mo',
+        '✅ Unlimited Mico AI (FREE)',
         '✅ Recording',
         '✅ 50GB storage',
         '❌ No video calls',
@@ -177,6 +177,7 @@ export default function PricingPage() {
       features: [
         '✅ Adult content access',
         '✅ 3 CGI effects',
+        '✅ Unlimited Mico AI (FREE)',
         '✅ Basic features',
         '✅ 10GB storage',
         '❌ No video calls',
@@ -190,6 +191,7 @@ export default function PricingPage() {
       price: 'FREE',
       features: [
         '✅ Family-friendly content',
+        '✅ Unlimited Mico AI (FREE)',
         '✅ View posts',
         '✅ Basic messaging',
         '✅ Community access',

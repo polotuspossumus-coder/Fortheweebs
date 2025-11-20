@@ -84,14 +84,16 @@ export class CustomEffectBuilder {
   loadPreset(name) {
     const stored = localStorage.getItem(`custom_effect_${name}`);
     if (!stored) return false;
-    
+
     const preset = JSON.parse(stored);
+    // SECURITY: Use Function constructor instead of eval for safer code evaluation
+    // This still evaluates code but is more contained than eval()
     this.effects = preset.effects.map(e => ({
       type: e.type,
       name: e.name,
-      apply: eval(`(${e.code})`)
+      apply: new Function('imageData', 'canvas', 'ctx', `return (${e.code})(imageData, canvas, ctx)`)
     }));
-    
+
     return true;
   }
 

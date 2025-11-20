@@ -152,7 +152,7 @@ export function PremiumSubscription({ userId, currentTier }) {
         const stripe = await stripePromise;
 
         if (!stripe || !import.meta.env.VITE_STRIPE_PUBLIC_KEY) {
-          alert(`💳 Stripe not configured yet.\n\nTo enable credit card payments:\n1. Get Stripe API keys from stripe.com\n2. Add to .env file:\n   VITE_STRIPE_PUBLIC_KEY=pk_test_...\n   STRIPE_SECRET_KEY=sk_test_...\n\nFor now, use "Pay from Balance" option.`);
+          alert(`💳 Credit card payments temporarily unavailable.\n\nPlease use "Pay from Balance" option or contact support.`);
           return;
         }
 
@@ -228,7 +228,7 @@ export function PremiumSubscription({ userId, currentTier }) {
       const stripe = await stripePromise;
 
       if (!stripe || !import.meta.env.VITE_STRIPE_PUBLIC_KEY) {
-        alert(`💳 Stripe not configured yet.\n\nTo enable subscriptions:\n1. Get Stripe API keys from stripe.com\n2. Add to .env file:\n   VITE_STRIPE_PUBLIC_KEY=pk_test_...\n   STRIPE_SECRET_KEY=sk_test_...\n   STRIPE_PRICE_ADULT=price_...\n   STRIPE_PRICE_UNLIMITED=price_...\n   STRIPE_PRICE_SUPER_ADMIN=price_...`);
+        alert(`💳 Subscription service temporarily unavailable.\n\nPlease contact support to upgrade your account.`);
         setProcessing(false);
         return;
       }

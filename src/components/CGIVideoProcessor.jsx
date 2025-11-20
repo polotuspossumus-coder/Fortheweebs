@@ -143,7 +143,8 @@ export default function CGIVideoProcessor({ onStreamReady, enableEffects = true 
   // Helper methods for Mico integration
   const addEffectById = useCallback((effectId, params = {}) => {
     // Import and create effect instance
-    import(`../effects/${getEffectModule(effectId)}`).then(module => {
+    const moduleName = getEffectModule(effectId);
+    import(`../effects/${moduleName}.js`).then(module => {
       const EffectClass = module[getEffectClass(effectId)];
       if (EffectClass) {
         const effect = new EffectClass({ params });
