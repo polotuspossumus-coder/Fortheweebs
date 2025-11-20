@@ -54,6 +54,13 @@ router.post('/analyze-screenshot', async (req, res) => {
             return res.status(400).json({ error: 'Screenshot and description required' });
         }
 
+        if (!hasOpenAI) {
+            return res.status(503).json({
+                error: 'OpenAI API not configured',
+                message: 'Please set OPENAI_API_KEY in .env file'
+            });
+        }
+
         // Call GPT-4 Vision API
         const response = await openai.chat.completions.create({
             model: "gpt-4-vision-preview",
@@ -104,16 +111,18 @@ Respond in JSON format:
 
         const analysis = JSON.parse(response.choices[0].message.content);
 
-        // Save analysis to database
-        await supabase
-            .from('bug_analyses')
-            .insert({
-                screenshot_hash: screenshot.substring(0, 50),
-                description: description,
-                analysis: analysis,
-                browser_info: browserInfo,
-                created_at: new Date().toISOString()
-            });
+        // Save analysis to database (if configured)
+        if (hasSupabase) {
+            await supabase
+                .from('bug_analyses')
+                .insert({
+                    screenshot_hash: screenshot.substring(0, 50),
+                    description: description,
+                    analysis: analysis,
+                    browser_info: browserInfo,
+                    created_at: new Date().toISOString()
+                });
+        }
 
         res.json(analysis);
 
@@ -145,9 +154,16 @@ router.post('/generate-fix', async (req, res) => {
             return res.status(400).json({ error: 'Bug report and analysis required' });
         }
 
+        if (!hasOpenAI) {
+            return res.status(503).json({
+                error: 'OpenAI API not configured',
+                message: 'Please set OPENAI_API_KEY in .env file'
+            });
+        }
+
         // Get relevant code from repository
         let relevantCode = codeContext;
-        if (!relevantCode && analysis.component) {
+        if (!relevantCode && analysis.component && hasGitHub) {
             try {
                 const { data } = await octokit.repos.getContent({
                     owner: process.env.GITHUB_REPO_OWNER,
@@ -203,24 +219,29 @@ Generate a precise code fix. Respond in JSON format:
 
         const fix = JSON.parse(response.choices[0].message.content);
 
-        // Save fix to database
-        const { data, error } = await supabase
-            .from('bug_fixes')
-            .insert({
-                bug_report_id: bugReport.id,
-                analysis_id: analysis.id,
-                fix: fix,
-                status: 'generated',
-                created_at: new Date().toISOString()
-            })
-            .select()
-            .single();
+        // Save fix to database (if configured)
+        let fixId = null;
+        if (hasSupabase) {
+            const { data, error } = await supabase
+                .from('bug_fixes')
+                .insert({
+                    bug_report_id: bugReport.id,
+                    analysis_id: analysis.id,
+                    fix: fix,
+                    status: 'generated',
+                    created_at: new Date().toISOString()
+                })
+                .select()
+                .single();
 
-        if (error) {
-            console.error('Failed to save fix:', error);
+            if (error) {
+                console.error('Failed to save fix:', error);
+            } else {
+                fixId = data?.id;
+            }
         }
 
-        res.json({ ...fix, fixId: data?.id });
+        res.json({ ...fix, fixId });
 
     } catch (error) {
         console.error('Fix generation error:', error);
@@ -248,6 +269,13 @@ router.post('/create-pr', async (req, res) => {
 
         if (!fix || !bugReport) {
             return res.status(400).json({ error: 'Fix and bug report required' });
+        }
+
+        if (!hasGitHub) {
+            return res.status(503).json({
+                error: 'GitHub API not configured',
+                message: 'Please set GITHUB_TOKEN, GITHUB_REPO_OWNER, and GITHUB_REPO_NAME in .env file'
+            });
         }
 
         const owner = process.env.GITHUB_REPO_OWNER;
@@ -343,16 +371,18 @@ ${fix.testPlan.map(t => `- [ ] ${t}`).join('\n')}
 `
         });
 
-        // Update bug fix record
-        await supabase
-            .from('bug_fixes')
-            .update({
-                pr_number: prData.number,
-                pr_url: prData.html_url,
-                status: 'pr_created',
-                updated_at: new Date().toISOString()
-            })
-            .eq('bug_report_id', bugReport.id);
+        // Update bug fix record (if configured)
+        if (hasSupabase) {
+            await supabase
+                .from('bug_fixes')
+                .update({
+                    pr_number: prData.number,
+                    pr_url: prData.html_url,
+                    status: 'pr_created',
+                    updated_at: new Date().toISOString()
+                })
+                .eq('bug_report_id', bugReport.id);
+        }
 
         res.json({
             prNumber: prData.number,
@@ -376,6 +406,13 @@ ${fix.testPlan.map(t => `- [ ] ${t}`).join('\n')}
 router.get('/bug/:reportId/status', async (req, res) => {
     try {
         const { reportId } = req.params;
+
+        if (!hasSupabase) {
+            return res.status(503).json({
+                error: 'Supabase not configured',
+                message: 'Please set VITE_SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY in .env file'
+            });
+        }
 
         const { data, error } = await supabase
             .from('bug_fixes')
