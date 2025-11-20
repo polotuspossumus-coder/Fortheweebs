@@ -1,0 +1,54 @@
+{
+  "github.copilot.chat.welcomeMessage": "first",
+  "github.copilot.referencesVscodeAPI": "enabled",
+  "github.copilot.enable": {
+    "*": true,
+    "yaml": true,
+    "plaintext": true,
+    "markdown": true
+  },
+
+  // Make Copilot SMARTER
+  "github.copilot.editor.enableAutoCompletions": true,
+  "github.copilot.editor.enableCodeActions": true,
+
+  // Faster suggestions
+  "editor.inlineSuggest.enabled": true,
+  "editor.quickSuggestions": {
+    "other": true,
+    "comments": true,
+    "strings": true
+  },
+  "editor.suggest.preview": true,
+  "editor.suggestOnTriggerCharacters": true,
+
+  // Better context awareness
+  "github.copilot.advanced": {
+    "debug.overrideEngine": "gpt-4",
+    "authProvider": "github"
+  },
+
+  // Accept suggestions faster
+  "editor.acceptSuggestionOnCommitCharacter": true,
+  "editor.acceptSuggestionOnEnter": "on",
+  "editor.tabCompletion": "on",
+
+  // Show more suggestions
+  "editor.suggestSelection": "first",
+  "editor.suggest.showKeywords": true,
+  "editor.suggest.showSnippets": true,
+
+  // Copilot Chat improvements
+  "github.copilot.chat.localeOverride": "en",
+  "github.copilot.chat.useProjectTemplates": true,
+
+  "workbench.editorAssociations": {
+    "*.md": "default"
+  },
+  "workbench.startupEditor": "readme",
+  "files.associations": {
+    "COPILOT_HANDOFF.md": "markdown"
+  },
+  "markdown.preview.breaks": true,
+  "markdown.preview.fontSize": 16
+}
