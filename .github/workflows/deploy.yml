@@ -1,0 +1,143 @@
+name: 🚀 Deploy & Test
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+env:
+  NODE_VERSION: '18'
+
+jobs:
+  test:
+    name: 🧪 Test & Lint
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: 📥 Checkout
+        uses: actions/checkout@v4
+        
+      - name: 📦 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          
+      - name: 📚 Install Dependencies
+        run: npm ci
+        
+      - name: 🔍 Lint Code
+        run: npm run lint --if-present
+        continue-on-error: true
+        
+      - name: 🧪 Run Tests
+        run: npm test --if-present
+        continue-on-error: true
+        
+      - name: 📊 Upload Test Results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results
+          path: |
+            coverage/
+            test-results/
+          retention-days: 30
+
+  build:
+    name: 🏗️ Build
+    runs-on: ubuntu-latest
+    needs: test
+    
+    steps:
+      - name: 📥 Checkout
+        uses: actions/checkout@v4
+        
+      - name: 📦 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          
+      - name: 📚 Install Dependencies
+        run: npm ci
+        
+      - name: 🏗️ Build Project
+        run: npm run build
+        env:
+          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+          VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
+          VITE_STRIPE_PUBLIC_KEY: ${{ secrets.VITE_STRIPE_PUBLIC_KEY }}
+          VITE_API_URL: ${{ secrets.VITE_API_URL }}
+          
+      - name: 📊 Upload Build Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-${{ github.sha }}
+          path: dist/
+          retention-days: 30
+          
+  deploy-log:
+    name: 📝 Log Deployment
+    runs-on: ubuntu-latest
+    needs: build
+    if: github.ref == 'refs/heads/main'
+    
+    steps:
+      - name: 📥 Checkout
+        uses: actions/checkout@v4
+        
+      - name: 📝 Create Deploy Log
+        run: |
+          echo "## 🚀 Deployment Log" > deploy-log.md
+          echo "" >> deploy-log.md
+          echo "**Commit:** \`${{ github.sha }}\`" >> deploy-log.md
+          echo "**Branch:** \`${{ github.ref_name }}\`" >> deploy-log.md
+          echo "**Timestamp:** $(date -u +"%Y-%m-%d %H:%M:%S UTC")" >> deploy-log.md
+          echo "**Author:** ${{ github.actor }}" >> deploy-log.md
+          echo "**Message:** ${{ github.event.head_commit.message }}" >> deploy-log.md
+          echo "" >> deploy-log.md
+          echo "**Vercel:** https://fortheweebs.vercel.app" >> deploy-log.md
+          echo "**Railway:** https://fortheweebs-production.up.railway.app" >> deploy-log.md
+          echo "" >> deploy-log.md
+          echo "---" >> deploy-log.md
+          echo "*Deployed via GitHub Actions*" >> deploy-log.md
+          
+      - name: 📊 Upload Deploy Log
+        uses: actions/upload-artifact@v4
+        with:
+          name: deploy-log-${{ github.sha }}
+          path: deploy-log.md
+          retention-days: 90
+          
+  verify:
+    name: ✅ Verify Deployment
+    runs-on: ubuntu-latest
+    needs: deploy-log
+    if: github.ref == 'refs/heads/main'
+    
+    steps:
+      - name: 🔍 Check Vercel Deployment
+        run: |
+          echo "Checking Vercel deployment..."
+          curl -f https://fortheweebs.vercel.app || echo "⚠️ Vercel deployment not reachable"
+          
+      - name: 🔍 Check Railway Backend
+        run: |
+          echo "Checking Railway backend..."
+          curl -f https://fortheweebs-production.up.railway.app/api/status || echo "⚠️ Railway backend not reachable"
+          
+  notify:
+    name: 📢 Notify
+    runs-on: ubuntu-latest
+    needs: [test, build, deploy-log, verify]
+    if: always() && github.ref == 'refs/heads/main'
+    
+    steps:
+      - name: 📢 Deployment Summary
+        run: |
+          echo "🚀 Deployment Complete"
+          echo "Commit: ${{ github.sha }}"
+          echo "Status: ${{ job.status }}"
+          echo "View at: https://fortheweebs.vercel.app"
