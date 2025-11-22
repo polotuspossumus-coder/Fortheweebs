@@ -8,6 +8,11 @@ yarn-error.log*
 dist/
 release-build/
 
+# Vite cache (SAFE TO DELETE - auto-regenerates)
+.vite/
+node_modules/.vite/
+.cache/
+
 # Environment variables
 .env
 .env.*
