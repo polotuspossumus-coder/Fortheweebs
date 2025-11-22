@@ -3,10 +3,27 @@ import "./TermsOfService.css";
 
 const TERMS_TEXT = `# Fortheweebs Terms of Service
 
-_Last updated: October 2025_
+_Last updated: November 2025_
+
+## ⚠️ OUR PROMISE TO YOU - WE NEVER SELL YOUR DATA
+
+**THIS IS NON-NEGOTIABLE:** ForTheWeebs does not sell, rent, trade, or monetize your personal information. Period. We will never traffic your data to third parties, advertisers, data brokers, or anyone else. Your information belongs to YOU, not to us, and certainly not to corporations looking to exploit it.
+
+We believe selling user data is a grimy, unethical way to make money. We built this platform for creators and fans to connect directly, not to harvest your information for profit. This guarantee is permanent and applies at every level of our operation.
+
+**What this means:**
+- Your email, payment info, browsing history, and personal data stay private
+- We only share what's legally required (tax forms, payment processing)
+- No targeted advertising based on your data
+- No data mining or selling to third-party marketers
+- You can request deletion of your data at any time
+
+If anyone ever tries to change this policy, we'll notify you 90 days in advance so you can delete your account first. That's a promise.
+
+---
 
 ## 1. Introduction
-Welcome to Fortheweebs (“the Platform”). By accessing or using Fortheweebs, you agree to be bound by these Terms of Service (“Terms”). These Terms govern your relationship with Fortheweebs, including your use of the Platform as a creator, subscriber, or visitor.
+Welcome to Fortheweebs ("the Platform"). By accessing or using Fortheweebs, you agree to be bound by these Terms of Service ("Terms"). These Terms govern your relationship with Fortheweebs, including your use of the Platform as a creator, subscriber, or visitor.
 ---
 ## 2. Platform Scope
 Fortheweebs provides infrastructure for creators to publish content, manage subscriptions, and engage with their audience. Fortheweebs does not produce, endorse, or monitor creator content. The Platform is a neutral automation and orchestration service.

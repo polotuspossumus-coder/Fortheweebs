@@ -1,0 +1,21 @@
+# Required Environment Variables Check
+
+## ✅ Autonomous AI System
+ANTHROPIC_API_KEY - For Claude AI (bug fixing, Q&A, suggestions)
+GITHUB_TOKEN - For auto-deploying fixes
+GITHUB_REPO_OWNER - Your GitHub username
+GITHUB_REPO_NAME - Repository name
+
+## ✅ Database
+VITE_SUPABASE_URL - Supabase project URL
+VITE_SUPABASE_ANON_KEY - Public anon key
+SUPABASE_SERVICE_ROLE_KEY - Admin key for server
+
+## ✅ Payment System
+STRIPE_SECRET_KEY - Stripe payments
+STRIPE_PUBLISHABLE_KEY - Stripe frontend
+STRIPE_WEBHOOK_SECRET - Stripe webhooks
+All STRIPE_PRICE_* variables for tiers
+
+## ✅ Optional
+MICROSOFT_COPILOT_KEY - If you have access

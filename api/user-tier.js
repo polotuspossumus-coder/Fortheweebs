@@ -19,9 +19,10 @@ const LIFETIME_VIP_EMAILS = [
     'kh@savantenergy.com',       // VIP Slot 5
     'Bleska@mindspring.com',     // VIP Slot 6
     'palmlana@yahoo.com',        // VIP Slot 7
-    'vip8@example.com',          // VIP Slot 8 - Replace with real email
-    'vip9@example.com',          // VIP Slot 9 - Replace with real email
-    'vip10@example.com'          // VIP Slot 10 - Replace with real email
+    'Billyxfitzgerald@yahoo.com', // VIP Slot 8
+    'Yeahitsmeangel@yahoo.com',  // VIP Slot 9
+    'Atolbert66@gmail.com',      // VIP Slot 10
+    'brookewhitley530@gmail.com' // VIP Slot 11
 ];
 
 function isLifetimeVIP(email) {

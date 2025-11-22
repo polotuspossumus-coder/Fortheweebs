@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 
 /**
- * InfluencerVerification - Verify social media following to unlock free access to all creator tools
- * Verified influencers get $500 CREATOR tier for free
+ * InfluencerVerification - Verify social media following to unlock $500 Full Unlock tier
+ * Limited to 25 influencers total - First come, first served
+ * Verified influencers get $500 Full Unlock for FREE (all tools, no ads, 0% fees)
  */
 export function InfluencerVerification({ userId, onVerified }) {
   const [platform, setPlatform] = useState('');
@@ -129,7 +130,7 @@ export function InfluencerVerification({ userId, onVerified }) {
           Verify your following to unlock all creator tools for FREE
         </p>
         <p style={{ fontSize: '14px', opacity: 0.7, marginTop: '10px' }}>
-          Worth $500 - completely free for verified influencers
+          Worth $500 - Limited to first 25 influencers only!
         </p>
       </div>
 
@@ -141,20 +142,20 @@ export function InfluencerVerification({ userId, onVerified }) {
         marginBottom: '30px'
       }}>
         <h3 style={{ fontSize: '24px', marginBottom: '20px', textAlign: 'center' }}>
-          🎁 What You Get FREE
+          🎁 What You Get FREE ($500 Full Unlock)
         </h3>
         <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
           {[
-            'Professional Photo Tools: Enhancement, filters, batch processing',
-            'VR/AR Studio: Create immersive 3D content',
-            'Pro Filters: 18+ unique filters (Radiance, Golden, Electric, etc)',
-            'Duplicate Detector: Find and remove duplicate photos',
-            'Batch Processor: Process hundreds of photos at once',
-            'AI Content Generator: Generate images, 3D models, videos',
-            'CGI to VR/AR Converter: Convert 3D models to VR/AR',
-            'Priority Support: Get help faster',
-            'No Watermarks: Export without branding',
-            'Unlimited Storage: Upload as much as you want'
+            '💰 0% Platform Fees - Keep 100% of ALL earnings',
+            '🎨 ALL Tools Unlocked Forever - Photo, VR/AR, CGI, Design, everything',
+            '🔞 Adult Content Access Included',
+            '⚡ Never See Ads - Premium ad-free experience',
+            '💎 Priority Support',
+            '👑 Verified Influencer Badge',
+            '📊 Advanced Analytics',
+            '🚀 Better Revenue Split',
+            '🎁 Lifetime Access - Never pay again',
+            '✨ Premium Features Unlocked'
           ].map((benefit, i) => (
             <li key={i} style={{
               padding: '10px 0',

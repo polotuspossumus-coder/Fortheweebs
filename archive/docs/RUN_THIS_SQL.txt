@@ -1,0 +1,37 @@
+================================================================================
+🎯 FINAL STEP - RUN THIS SQL IN SUPABASE
+================================================================================
+
+You need to manually run the SQL because I can't access your Supabase directly.
+
+📋 THE ONLY THING LEFT TO DO:
+
+1. Click this link (opens Supabase SQL Editor):
+   👉 https://supabase.com/dashboard/project/iqipomerawkvtojbtvom/sql/new
+
+2. Open this file: create-remaining-tables.sql
+
+3. Copy EVERYTHING in that file (Ctrl+A, Ctrl+C)
+
+4. Paste into Supabase SQL Editor (Ctrl+V)
+
+5. Click the "RUN" button
+
+6. Wait ~5 seconds
+
+7. ✅ DONE! All tables created!
+
+================================================================================
+
+After running this, your payment system will be 100% complete with:
+- ✅ tier_unlocks table
+- ✅ monetized_content_access table
+- ✅ creator_subscriptions table
+- ✅ crypto_payments table
+- ✅ 8 new user columns
+- ✅ All RLS policies
+- ✅ All indexes
+
+Then you can accept payments immediately! 💰
+
+================================================================================

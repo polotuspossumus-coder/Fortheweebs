@@ -222,7 +222,6 @@ router.post('/redeem', async (req, res) => {
         });
 
     return res.status(200).json({
-    return res.status(200).json({
       success: true,
       message: 'Access code redeemed successfully',
       tier: accessCode.tier,

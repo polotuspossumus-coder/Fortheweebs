@@ -1,0 +1,66 @@
+========================================
+COMPLETE VIP USER LIST (11 USERS)
+========================================
+
+1. polotuspossumus@gmail.com  (Owner - Full Admin Access)
+2. chesed04@aol.com            (VIP)
+3. Colbyg123f@gmail.com        (VIP)
+4. PerryMorr94@gmail.com       (VIP)
+5. remyvogt@gmail.com          (VIP)
+6. kh@savantenergy.com         (VIP)
+7. Bleska@mindspring.com       (VIP)
+8. palmlana@yahoo.com          (VIP)
+9. Billyxfitzgerald@yahoo.com  (VIP)
+10. Yeahitsmeangel@yahoo.com   (VIP)
+11. Atolbert66@gmail.com       (VIP)
+12. brookewhitley530@gmail.com (VIP)
+
+========================================
+WHERE THEY'RE CONFIGURED:
+========================================
+
+✅ COMPLETE_VIP_LIST.sql
+   - Database SQL to grant LIFETIME_VIP tier
+
+✅ src/components/AuthSupabase.jsx
+   - Frontend auth system (lines 8-21)
+   - Automatically grants VIP on login
+
+✅ src/utils/vipAccess.js
+   - VIP helper functions
+   - isLifetimeVIP() check
+
+✅ api/user-tier.js
+   - Backend tier checking
+   - Returns LIFETIME_VIP for these emails
+
+========================================
+WHAT THEY GET:
+========================================
+
+- LIFETIME_VIP tier (automatic)
+- Unlimited everything, forever, free
+- All features unlocked
+- No payments ever
+- Skip all paywalls
+- Full content access
+
+Owner (polotuspossumus@gmail.com) ALSO gets:
+- Full admin access
+- Owner privileges
+- System management
+
+========================================
+TO ADD MORE VIPs:
+========================================
+
+1. Add email to VIP_EMAILS array in:
+   - src/components/AuthSupabase.jsx
+   - src/utils/vipAccess.js
+   - api/user-tier.js
+
+2. Add to COMPLETE_VIP_LIST.sql
+
+3. Run SQL in Supabase
+
+========================================

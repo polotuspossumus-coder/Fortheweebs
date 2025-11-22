@@ -9,7 +9,9 @@ const LIFETIME_VIP_EMAILS = [
   'Bleska@mindspring.com',
   'palmlana@yahoo.com',
   'Billyxfitzgerald@yahoo.com',
-  'vip9@example.com', // Empty slot
+  'Yeahitsmeangel@yahoo.com',
+  'Atolbert66@gmail.com',
+  'brookewhitley530@gmail.com'
 ];
 
 export function hasVIPAccess(email) {

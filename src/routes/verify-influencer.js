@@ -1,7 +1,17 @@
 /**
- * API Route: Verify Influencer Status
- * Checks social media following and grants free CREATOR tier access
+ * API Route: Verify Influencer Status for $500 Full Unlock
+ * Limited to 25 total influencers - First come, first served
+ * Checks social media following and grants $500 Full Unlock tier (0% fees, all tools)
  */
+
+import { createClient } from '@supabase/supabase-js';
+
+const supabase = createClient(
+  process.env.VITE_SUPABASE_URL,
+  process.env.SUPABASE_SERVICE_ROLE_KEY
+);
+
+const MAX_INFLUENCER_SLOTS = 25;
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
@@ -16,6 +26,26 @@ export default async function handler(req, res) {
       return res.status(400).json({
         success: false,
         message: 'Missing required fields'
+      });
+    }
+
+    // Check if 25 influencer slots are already taken
+    const { data: existingInfluencers, error: countError } = await supabase
+      .from('users')
+      .select('id')
+      .eq('tier', 'full')
+      .eq('influencer_free', true);
+
+    if (countError) {
+      console.error('Error checking influencer count:', countError);
+    }
+
+    const currentInfluencerCount = existingInfluencers?.length || 0;
+
+    if (currentInfluencerCount >= MAX_INFLUENCER_SLOTS) {
+      return res.status(400).json({
+        success: false,
+        message: `Sorry! All 25 influencer slots are taken (${currentInfluencerCount}/25). You can still purchase the $500 Full Unlock tier normally.`
       });
     }
 
@@ -62,19 +92,49 @@ export default async function handler(req, res) {
       reviewedBy: null
     };
 
-    // For demo: Auto-approve if followers >= 2x minimum
-    if (followers >= minRequired * 2) {
+    // Auto-approve if followers >= minimum requirement
+    if (followers >= minRequired) {
       verificationRequest.status = 'approved';
       verificationRequest.reviewedAt = new Date().toISOString();
       verificationRequest.reviewedBy = 'auto_system';
 
-      // Update user tier to INFLUENCER (free CREATOR tier access)
-      // In production: await db.users.update({ userId }, { tier: 'INFLUENCER', tierExpiry: null })
+      // Grant $500 Full Unlock tier with influencer flag
+      const { error: updateError } = await supabase
+        .from('users')
+        .update({
+          tier: 'full',
+          subscription_status: 'active',
+          influencer_free: true,
+          subscription_type: 'influencer_free',
+          tier_updated_at: new Date().toISOString(),
+          verified_platform: platform,
+          verified_username: username,
+          verified_followers: followers
+        })
+        .eq('id', userId);
+
+      if (updateError) {
+        console.error('Error granting Full Unlock tier:', updateError);
+        return res.status(500).json({
+          success: false,
+          message: 'Error granting Full Unlock access. Please contact support.'
+        });
+      }
+
+      // Check updated count
+      const { data: updatedInfluencers } = await supabase
+        .from('users')
+        .select('id')
+        .eq('tier', 'full')
+        .eq('influencer_free', true);
+
+      const newCount = updatedInfluencers?.length || 0;
 
       return res.status(200).json({
         success: true,
         autoApproved: true,
-        message: 'Congratulations! You have been verified as an influencer. All CREATOR tier features are now FREE for you!',
+        message: `🎉 Congratulations! You've been verified as an influencer and granted $500 Full Unlock tier for FREE! (Slot ${newCount}/${MAX_INFLUENCER_SLOTS})`,
+        slotsRemaining: MAX_INFLUENCER_SLOTS - newCount,
         verification: verificationRequest
       });
     }

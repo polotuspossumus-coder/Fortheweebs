@@ -23,6 +23,11 @@ app.use(securityHeaders);
 const { apiLimiter } = require('./utils/apiRateLimiter');
 app.use('/api', apiLimiter);
 
+// DATA PRIVACY ENFORCEMENT - WE NEVER SELL USER DATA
+const { dataPrivacyMiddleware } = require('./utils/dataPrivacyEnforcement');
+app.use('/api', dataPrivacyMiddleware);
+console.log('🔒 Data privacy enforcement active - user data selling is BLOCKED');
+
 // Middleware
 app.use(cors({
     origin: process.env.VITE_APP_URL || 'http://localhost:3002',
@@ -66,32 +71,44 @@ try {
     console.warn('⚠️ Socket.io not available (install with: npm install socket.io)');
 }
 
-// API Routes
-try {
-    const stripeRoutes = require('./api/stripe');
-    const aiRoutes = require('./api/ai');
-    const aiContentRoutes = require('./api/ai-content');
-    const userTierRoutes = require('./api/user-tier');
-    const uploadRoutes = require('./api/upload');
-    const uploadProtectedRoutes = require('./api/upload-protected');
-    const issuesRoutes = require('./api/issues');
-    const familyAccessRoutes = require('./api/family-access');
-    const micoRoutes = require('./api/mico');
+// API Routes - Load individually with error handling
+const routes = [
+    { path: '/api', file: './api/stripe', name: 'Stripe' },
+    { path: '/api/stripe-connect', file: './api/stripe-connect', name: 'Stripe Connect' },
+    { path: '/api/stripe-webhooks', file: './api/stripe-webhooks', name: 'Stripe Webhooks' },
+    { path: '/api/crypto', file: './api/crypto-payments', name: 'Crypto Payments' },
+    { path: '/api/tier-access', file: './api/tier-access', name: 'Tier Access' },
+    { path: '/api/tier-upgrades', file: './api/tier-upgrades', name: 'Tier Upgrades' },
+    { path: '/api/blocks', file: './api/block-enforcement', name: 'Block Enforcement' },
+    { path: '/api/ai', file: './api/ai', name: 'AI' },
+    { path: '/api/ai-content', file: './api/ai-content', name: 'AI Content' },
+    { path: '/api', file: './api/user-tier', name: 'User Tier' },
+    { path: '/api/upload', file: './api/upload-protected', name: 'Upload (Protected)' },
+    { path: '/api/issues', file: './api/issues', name: 'Issues' },
+    { path: '/api/family-access', file: './api/family-access', name: 'Family Access' },
+    { path: '/api/mico', file: './api/mico', name: 'Mico AI' },
+    { path: '/api/mico-hybrid', file: './api/mico-hybrid', name: 'Mico Hybrid (Mico + Claude)' },
+    { path: '/api/auto-implement-suggestions', file: './src/routes/auto-implement-suggestions', name: 'Auto-Implement Suggestions' },
+    { path: '/api/auto-answer-questions', file: './src/routes/auto-answer-questions', name: 'Auto-Answer Questions' },
+    { path: '/api/debugger-to-cloud', file: './src/routes/debugger-to-cloud', name: 'Cloud Bug Fixer' }
+];
 
-    app.use('/api', stripeRoutes);
-    app.use('/api/ai', aiRoutes);
-    app.use('/api/ai-content', aiContentRoutes);
-    app.use('/api', userTierRoutes);
-    app.use('/api/upload', uploadRoutes);
-    app.use('/api/upload', uploadProtectedRoutes); // Anti-piracy protected uploads
-    app.use('/api/issues', issuesRoutes);
-    app.use('/api/family-access', familyAccessRoutes);
-    app.use('/api/mico', micoRoutes);
-    console.log('✅ Anti-piracy protection enabled');
-} catch (error) {
-    console.error('Failed to load API routes:', error);
-    console.error('Server will start without some routes');
-}
+let loadedCount = 0;
+let failedCount = 0;
+
+routes.forEach(({ path, file, name }) => {
+    try {
+        const route = require(file);
+        app.use(path, route);
+        console.log(`✅ ${name}`);
+        loadedCount++;
+    } catch (error) {
+        console.warn(`⚠️  ${name} (skipped - ${error.message.substring(0, 40)})`);
+        failedCount++;
+    }
+});
+
+console.log(`\n📊 Routes loaded: ${loadedCount}/${routes.length} ${failedCount > 0 ? `(${failedCount} skipped)` : ''}`);
 
 
 // Error handling middleware

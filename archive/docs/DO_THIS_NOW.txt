@@ -1,0 +1,75 @@
+========================================
+STEP 1: SUPABASE SQL (2 FILES TO RUN)
+========================================
+
+Go here: https://supabase.com/dashboard
+1. Click your project
+2. Click "SQL Editor" (left sidebar)
+3. Click "New query"
+4. Copy EVERYTHING from "autonomous-tables-FOR-POLOTUS.sql"
+5. Paste and click RUN
+6. Wait for green checkmark
+7. Click "New query" again
+8. Copy EVERYTHING from "COMPLETE_VIP_LIST.sql"
+9. Paste and click RUN
+10. Wait for green checkmark
+
+========================================
+STEP 2: GITHUB SECRETS (3 TO ADD)
+========================================
+
+Go here: https://github.com/polotuspossumus-coder/Fortheweebs/settings/secrets/actions
+
+Click "New repository secret" button
+
+SECRET #1:
+Name: ANTHROPIC_API_KEY
+Value: YOUR_ANTHROPIC_API_KEY_HERE
+
+Click "Add secret"
+
+SECRET #2:
+Name: VITE_SUPABASE_URL
+Value: https://iqipomerawkvtojbtvom.supabase.co
+
+Click "Add secret"
+
+SECRET #3:
+Name: VITE_SUPABASE_ANON_KEY
+Value: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlxaXBvbWVyYXdrdnRvamJ0dm9tIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjI2NTgyMjYsImV4cCI6MjA3ODIzNDIyNn0.DmvVhLUCdWCbjzGB6w-oSYVA40wGi7TKW26MbLKrVVw
+
+Click "Add secret"
+
+========================================
+STEP 3: STRIPE CONNECT TO CHIME
+========================================
+
+1. Go to: https://dashboard.stripe.com/settings/connect
+2. Click "Get started" or "Settings"
+3. Under "Payout bank account":
+   - Click "Add bank account"
+   - Select "United States"
+   - Enter your Chime routing & account numbers:
+     * Routing number: Find in Chime app → Settings → Account Info
+     * Account number: Find in Chime app → Settings → Account Info
+   - Click "Add account"
+4. Stripe will send 2 micro-deposits (takes 1-2 days)
+5. Check Chime app for the amounts
+6. Go back to Stripe dashboard
+7. Click "Verify" and enter the 2 amounts
+8. Done! Payouts will go to your Chime account
+
+PAYOUT SCHEDULE:
+- Default: Every 2 days
+- Can change to: Daily, Weekly, or Monthly
+- Go to: Stripe Dashboard → Settings → Bank accounts and scheduling
+
+========================================
+DONE!
+========================================
+
+Files you need to copy from:
+1. autonomous-tables-FOR-POLOTUS.sql (in this folder)
+2. COMPLETE_VIP_LIST.sql (in this folder)
+
+That's everything. No other steps needed.

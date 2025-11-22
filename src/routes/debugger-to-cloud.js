@@ -14,17 +14,18 @@
  * Your computer can be OFF - everything runs in the cloud
  */
 
-import { Octokit } from '@octokit/rest';
-import { supabase } from '../lib/supabase.js';
+const { Octokit } = require('@octokit/rest');
+const { supabase } = require('../lib/supabase-server.js');
+const express = require('express');
+const router = express.Router();
 
 const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY;
 const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
 const REPO_OWNER = process.env.GITHUB_REPO_OWNER || 'your-username';
 const REPO_NAME = process.env.GITHUB_REPO_NAME || 'fortheweebs';
 
-export async function POST(request) {
+router.post('/', async (req, res) => {
   try {
-    const body = await request.json();
     const {
       userId,
       email,
@@ -34,7 +35,7 @@ export async function POST(request) {
       userAgent,
       url,
       timestamp
-    } = body;
+    } = req.body;
 
     // Rate limit check
     const oneHourAgo = new Date(Date.now() - 60 * 60 * 1000).toISOString();
@@ -45,10 +46,10 @@ export async function POST(request) {
       .gte('created_at', oneHourAgo);
 
     if (recentReports && recentReports.length >= 10) {
-      return new Response(JSON.stringify({
+      return res.status(429).json({
         success: false,
         error: 'Rate limit: 10 reports/hour'
-      }), { status: 429, headers: { 'Content-Type': 'application/json' } });
+      });
     }
 
     // Sanitize
@@ -94,26 +95,22 @@ export async function POST(request) {
       console.error('Cloud healing failed:', err);
     });
 
-    return new Response(JSON.stringify({
+    return res.status(200).json({
       success: true,
       message: '🤖 Bug sent to cloud AI! Fix will be deployed automatically, even if server goes offline.',
       reportId: bugReport.id
-    }), {
-      status: 200,
-      headers: { 'Content-Type': 'application/json' }
     });
 
   } catch (error) {
     console.error('Debugger cloud error:', error);
-    return new Response(JSON.stringify({
+    return res.status(500).json({
       success: false,
       error: 'Failed to submit to cloud'
-    }), {
-      status: 500,
-      headers: { 'Content-Type': 'application/json' }
     });
   }
-}
+});
+
+module.exports = router;
 
 /**
  * Send bug report to Claude API (Anthropic cloud)
@@ -357,7 +354,3 @@ function sanitizeInput(input) {
   sanitized = sanitized.replace(/pk_live_[a-zA-Z0-9]{24,}/g, '[REDACTED]');
   return sanitized;
 }
-
-export const config = {
-  api: { bodyParser: true },
-};

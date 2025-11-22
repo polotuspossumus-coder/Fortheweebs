@@ -112,7 +112,12 @@ router.post('/create-checkout-session', async (req, res) => {
 
         // Build session config
         const sessionConfig = {
-            payment_method_types: ['card'],
+            payment_method_types: [
+                'card',
+                'cashapp',           // Cash App Pay
+                'link',              // Stripe Link (fast checkout)
+                'us_bank_account',   // ACH Direct Debit
+            ],
             line_items: [
                 {
                     price: priceId,
