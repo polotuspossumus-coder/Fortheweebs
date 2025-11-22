@@ -131,7 +131,7 @@ export default function MicoAssistant() {
                 body: JSON.stringify({
                     userId: 'anonymous', // Set via auth context when available
                     email: 'anonymous@fortheweebs.com',
-                    tier: 'free'
+                    tier: 'free',
                     suggestion
                 })
             });
