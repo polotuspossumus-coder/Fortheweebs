@@ -295,8 +295,8 @@ async function attemptAutoFix(bugReport, analysis) {
       })
       .eq('id', bugReport.id);
 
-    // TODO: Implement actual auto-fix logic here
-    // This would require careful sandboxing and testing
+    // Auto-fix implementation requires careful sandboxing and testing
+    // Currently logs suggestion only - manual review required
 
   } catch (error) {
     console.error('Auto-fix failed:', error);

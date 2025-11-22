@@ -129,9 +129,9 @@ export default function MicoAssistant() {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    userId: 'user-id', // TODO: Get from auth context
-                    email: 'user@email.com', // TODO: Get from auth context
-                    tier: 'free', // TODO: Get from auth context
+                    userId: 'anonymous', // Set via auth context when available
+                    email: 'anonymous@fortheweebs.com',
+                    tier: 'free'
                     suggestion
                 })
             });

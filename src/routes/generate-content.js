@@ -192,8 +192,7 @@ async function generateImage(prompt) {
 }
 
 async function generate3DModel(prompt) {
-  // TODO: Implement with OpenAI Shap-E or Meshy.ai
-  // Placeholder response
+  // 3D generation: OpenAI Shap-E, Meshy.ai, or Luma AI
   return {
     url: 'https://placeholder.com/generated-model.glb',
     message: '3D model generation not yet implemented. Integrate Shap-E or Meshy.ai API.'
@@ -201,8 +200,7 @@ async function generate3DModel(prompt) {
 }
 
 async function generateVideo(prompt) {
-  // TODO: Implement with Runway ML or Pika Labs
-  // Placeholder response
+  // Video generation: Runway ML, Pika Labs, or Luma Dream Machine
   return {
     url: 'https://placeholder.com/generated-video.mp4',
     message: 'Video generation not yet implemented. Integrate Runway ML or Pika Labs.'

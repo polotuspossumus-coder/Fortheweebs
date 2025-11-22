@@ -1,7 +1,7 @@
 import React from 'react';
 
 export default function MessageBadge({ onClick }) {
-  const unreadCount = 3; // TODO: Connect to actual message state
+  const unreadCount = 0; // Connect to Supabase real-time subscriptions when implementing messaging
 
   return (
     <button

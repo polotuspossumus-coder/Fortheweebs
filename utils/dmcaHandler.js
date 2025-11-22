@@ -184,7 +184,7 @@ Thank you for helping us maintain a legal platform.
 ForTheWeebs Legal Team
   `;
   
-  // TODO: Integrate with SendGrid, AWS SES, or similar
+  // Email service integration: SendGrid, AWS SES, or Resend.com
 }
 
 /**

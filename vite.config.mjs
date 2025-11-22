@@ -11,7 +11,7 @@ export default defineConfig({
     minify: 'terser', // Better minification than esbuild
     sourcemap: false,
     target: 'es2015',
-    chunkSizeWarningLimit: 1500, // Increased to reduce warnings
+    chunkSizeWarningLimit: 800, // Warn if chunks exceed 800KB
     cssCodeSplit: true,
     rollupOptions: {
       input: {
@@ -19,36 +19,84 @@ export default defineConfig({
       },
       output: {
         manualChunks(id) {
-          // Vendor chunks
+          // Vendor chunks - split by package for better caching
           if (id.includes('node_modules')) {
+            // React ecosystem
             if (id.includes('react') || id.includes('react-dom')) {
               return 'react-vendor';
             }
+            if (id.includes('react-router')) {
+              return 'router-vendor';
+            }
+
+            // 3D rendering (large)
             if (id.includes('three') || id.includes('@react-three')) {
               return 'three-vendor';
             }
+
+            // Payment providers
             if (id.includes('@stripe')) {
               return 'stripe-vendor';
             }
-            if (id.includes('chart.js')) {
+
+            // Data visualization
+            if (id.includes('chart.js') || id.includes('react-chartjs')) {
               return 'chart-vendor';
             }
-            if (id.includes('openai') || id.includes('@anthropic')) {
-              return 'ai-vendor';
+
+            // AI APIs
+            if (id.includes('openai')) {
+              return 'openai-vendor';
             }
-            if (id.includes('supabase')) {
+            if (id.includes('@anthropic')) {
+              return 'anthropic-vendor';
+            }
+
+            // Database & Auth (large)
+            if (id.includes('@supabase')) {
               return 'supabase-vendor';
             }
-            // Other large libraries
+
+            // Markdown & utilities
+            if (id.includes('react-markdown') || id.includes('remark') || id.includes('rehype')) {
+              return 'markdown-vendor';
+            }
+
+            // Media processing
+            if (id.includes('jszip') || id.includes('qrcode')) {
+              return 'media-vendor';
+            }
+
+            // CGI/Effects presets
+            if (id.includes('cgiPresets')) {
+              return 'cgiPresets';
+            }
+
+            // Everything else
             return 'vendor';
           }
 
-          // Code-split by feature
+          // Code-split by feature for lazy loading
           if (id.includes('/components/')) {
+            // Split large component groups
+            if (id.includes('Dashboard') || id.includes('Admin')) {
+              return 'admin-components';
+            }
+            if (id.includes('VR') || id.includes('3D')) {
+              return '3d-components';
+            }
+            if (id.includes('Payment') || id.includes('Stripe')) {
+              return 'payment-components';
+            }
             return 'components';
           }
+
           if (id.includes('/effects/')) {
             return 'effects';
+          }
+
+          if (id.includes('/utils/')) {
+            return 'utils';
           }
         },
         entryFileNames: 'assets/[name].[hash].js',
