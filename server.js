@@ -109,31 +109,50 @@ try {
 
 // API Routes - Load individually with error handling
 const routes = [
+    // Payment & Monetization
     { path: '/api', file: './api/stripe', name: 'Stripe' },
     { path: '/api/stripe-connect', file: './api/stripe-connect', name: 'Stripe Connect' },
     { path: '/api/stripe-webhooks', file: './api/stripe-webhooks', name: 'Stripe Webhooks' },
     { path: '/api/crypto', file: './api/crypto-payments', name: 'Crypto Payments' },
+    { path: '/api/subscriptions', file: './api/routes/subscriptions', name: 'Subscriptions (Creator Monetization)' },
+
+    // Social Media Core
+    { path: '/api/posts', file: './api/routes/posts', name: 'Posts (Feed)' },
+    { path: '/api/comments', file: './api/routes/comments', name: 'Comments & Replies' },
+    { path: '/api/relationships', file: './api/routes/relationships', name: 'Friends & Follows' },
+    { path: '/api/messages', file: './api/routes/messages', name: 'Direct Messages' },
+    { path: '/api/notifications', file: './api/routes/notifications', name: 'Notifications' },
+
+    // User & Access Control
     { path: '/api/tier-access', file: './api/tier-access', name: 'Tier Access' },
     { path: '/api/tier-upgrades', file: './api/tier-upgrades', name: 'Tier Upgrades' },
     { path: '/api/blocks', file: './api/block-enforcement', name: 'Block Enforcement' },
+    { path: '/api', file: './api/user-tier', name: 'User Tier' },
+    { path: '/api/auth', file: './api/auth', name: 'Authentication (JWT)' },
+    { path: '/api/family-access', file: './api/family-access', name: 'Family Access' },
+
+    // Content & AI
     { path: '/api/ai', file: './api/ai', name: 'AI' },
     { path: '/api/ai-content', file: './api/ai-content', name: 'AI Content' },
-    { path: '/api', file: './api/user-tier', name: 'User Tier' },
     { path: '/api/upload', file: './api/upload-protected', name: 'Upload (Protected)' },
-    { path: '/api/issues', file: './api/issues', name: 'Issues' },
-    { path: '/api/family-access', file: './api/family-access', name: 'Family Access' },
+    { path: '/api/moderation', file: './api/moderation-actions', name: 'AI CSAM Moderation' },
+
+    // Creator Tools
+    { path: '/api/creator-applications', file: './api/creator-applications', name: 'Creator Applications' },
+    { path: '/api/trial', file: './api/trial', name: 'Free Trial System' },
+
+    // Mico AI & Governance
     { path: '/api/mico', file: './api/mico', name: 'Mico AI' },
     { path: '/api/mico-hybrid', file: './api/mico-hybrid', name: 'Mico Hybrid (Mico + Claude)' },
+    { path: '/api/governance', file: './api/governance', name: 'Mico Governance (Notary + Policy Overrides)' },
+    { path: '/api/queue', file: './api/routes/queue', name: 'Queue Control (Sovereign)' },
+    { path: '/api/metrics', file: './api/routes/metrics', name: 'Governance Metrics' },
+
+    // Developer Tools
     { path: '/api/auto-implement-suggestions', file: './src/routes/auto-implement-suggestions', name: 'Auto-Implement Suggestions' },
     { path: '/api/auto-answer-questions', file: './src/routes/auto-answer-questions', name: 'Auto-Answer Questions' },
     { path: '/api/debugger-to-cloud', file: './src/routes/debugger-to-cloud', name: 'Cloud Bug Fixer' },
-    { path: '/api/moderation', file: './api/moderation-actions', name: 'AI CSAM Moderation' },
-    { path: '/api/creator-applications', file: './api/creator-applications', name: 'Creator Applications' },
-    { path: '/api/trial', file: './api/trial', name: 'Free Trial System' },
-    { path: '/api/auth', file: './api/auth', name: 'Authentication (JWT)' },
-    { path: '/api/governance', file: './api/governance', name: 'Mico Governance (Notary + Policy Overrides)' },
-    { path: '/api/queue', file: './api/routes/queue', name: 'Queue Control (Sovereign)' },
-    { path: '/api/metrics', file: './api/routes/metrics', name: 'Governance Metrics' }
+    { path: '/api/issues', file: './api/issues', name: 'Issues' }
 ];
 
 let loadedCount = 0;

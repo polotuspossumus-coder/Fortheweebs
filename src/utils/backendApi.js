@@ -1,5 +1,5 @@
-// Backend API Client for NestJS Backend
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001/v1';
+// Backend API Client for ForTheWeebs
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001/api';
 
 // Helper to get auth token
 const getAuthToken = () => localStorage.getItem('authToken');
@@ -64,69 +64,82 @@ export const auth = {
 
 // Relationships API
 export const relationships = {
-  async follow(userId) {
-    return apiRequest(`/users/${userId}/follow`, { method: 'POST' });
+  async follow(targetUserId) {
+    return apiRequest('/relationships/follow', {
+      method: 'POST',
+      body: JSON.stringify({ targetUserId })
+    });
   },
 
-  async getFollowers(userId) {
-    return apiRequest(`/users/${userId}/followers`);
+  async unfollow(targetUserId) {
+    return apiRequest(`/relationships/follow/${targetUserId}`, { method: 'DELETE' });
   },
 
-  async getFollowing(userId) {
-    return apiRequest(`/users/${userId}/following`);
+  async getFollowers() {
+    return apiRequest('/relationships/followers');
   },
 
-  async sendFriendRequest(userId) {
-    return apiRequest(`/users/${userId}/friend-requests`, { method: 'POST' });
+  async getFollowing() {
+    return apiRequest('/relationships/following');
   },
 
-  async acceptFriendRequest(requestId) {
-    return apiRequest(`/friend-requests/${requestId}/accept`, { method: 'POST' });
+  async sendFriendRequest(targetUserId) {
+    return apiRequest('/relationships/friend-request', {
+      method: 'POST',
+      body: JSON.stringify({ targetUserId })
+    });
   },
 
-  async declineFriendRequest(requestId) {
-    return apiRequest(`/friend-requests/${requestId}/decline`, { method: 'POST' });
+  async acceptFriendRequest(targetUserId) {
+    return apiRequest(`/relationships/friend-request/${targetUserId}/accept`, { method: 'POST' });
   },
 
-  async getFriends(userId) {
-    return apiRequest(`/users/${userId}/friends`);
+  async removeFriend(friendId) {
+    return apiRequest(`/relationships/friend/${friendId}`, { method: 'DELETE' });
   },
 
-  async getPendingRequests() {
-    return apiRequest('/friend-requests/pending');
+  async getFriends() {
+    return apiRequest('/relationships/friends');
+  },
+
+  async blockUser(targetUserId) {
+    return apiRequest('/relationships/block', {
+      method: 'POST',
+      body: JSON.stringify({ targetUserId })
+    });
   },
 };
 
 // Subscriptions API
 export const subscriptions = {
-  async createCheckout(creatorId, tier = 'PREMIUM_1000', priceCents = 100000) {
-    return apiRequest(`/users/${creatorId}/subscriptions`, {
+  async createCheckout(creatorId, tier, priceCents) {
+    return apiRequest('/subscriptions/create-checkout', {
       method: 'POST',
-      body: JSON.stringify({ tier, priceCents }),
+      body: JSON.stringify({ creatorId, tier, priceCents }),
     });
   },
 
-  async getStatus(creatorId) {
-    return apiRequest(`/users/${creatorId}/subscriptions/me`);
+  async checkSubscription(creatorId) {
+    return apiRequest(`/subscriptions/check/${creatorId}`);
   },
 
   async getMySubscriptions() {
-    return apiRequest('/subscriptions/me');
+    return apiRequest('/subscriptions/my-subscriptions');
   },
 
   async getMySubscribers() {
-    return apiRequest('/subscriptions/subscribers');
+    return apiRequest('/subscriptions/my-subscribers');
   },
 
-  async cancel(creatorId) {
-    return apiRequest(`/users/${creatorId}/subscriptions`, { method: 'DELETE' });
+  async cancel(subscriptionId) {
+    return apiRequest(`/subscriptions/${subscriptionId}`, { method: 'DELETE' });
   },
 };
 
 // Posts API
 export const posts = {
   async create(postData) {
-    return apiRequest('/posts', {
+    return apiRequest('/posts/create', {
       method: 'POST',
       body: JSON.stringify(postData),
     });
@@ -140,16 +153,95 @@ export const posts = {
     return apiRequest(`/posts/${postId}`);
   },
 
-  async getUserPosts(userId, limit = 20, offset = 0) {
-    return apiRequest(`/posts/user/${userId}?limit=${limit}&offset=${offset}`);
-  },
-
   async like(postId) {
     return apiRequest(`/posts/${postId}/like`, { method: 'POST' });
   },
 
+  async share(postId) {
+    return apiRequest(`/posts/${postId}/share`, { method: 'POST' });
+  },
+
   async delete(postId) {
     return apiRequest(`/posts/${postId}`, { method: 'DELETE' });
+  },
+};
+
+// Comments API
+export const comments = {
+  async getComments(postId, limit = 50, offset = 0) {
+    return apiRequest(`/comments/${postId}?limit=${limit}&offset=${offset}`);
+  },
+
+  async create(postId, body, parentCommentId = null) {
+    return apiRequest('/comments/create', {
+      method: 'POST',
+      body: JSON.stringify({ postId, body, parentCommentId }),
+    });
+  },
+
+  async like(commentId) {
+    return apiRequest(`/comments/${commentId}/like`, { method: 'POST' });
+  },
+
+  async getReplies(commentId, limit = 20, offset = 0) {
+    return apiRequest(`/comments/${commentId}/replies?limit=${limit}&offset=${offset}`);
+  },
+
+  async delete(commentId) {
+    return apiRequest(`/comments/${commentId}`, { method: 'DELETE' });
+  },
+};
+
+// Messages API
+export const messages = {
+  async getConversations() {
+    return apiRequest('/messages/conversations');
+  },
+
+  async getConversation(conversationId, limit = 50, offset = 0) {
+    return apiRequest(`/messages/conversation/${conversationId}?limit=${limit}&offset=${offset}`);
+  },
+
+  async send(recipientId, body, mediaUrls = [], conversationId = null) {
+    return apiRequest('/messages/send', {
+      method: 'POST',
+      body: JSON.stringify({ recipientId, body, mediaUrls, conversationId }),
+    });
+  },
+
+  async markRead(messageId) {
+    return apiRequest(`/messages/${messageId}/read`, { method: 'POST' });
+  },
+
+  async delete(messageId) {
+    return apiRequest(`/messages/${messageId}`, { method: 'DELETE' });
+  },
+
+  async getUnreadCount() {
+    return apiRequest('/messages/unread-count');
+  },
+};
+
+// Notifications API
+export const notifications = {
+  async getNotifications(unreadOnly = false) {
+    return apiRequest(`/notifications?unreadOnly=${unreadOnly}`);
+  },
+
+  async getUnreadCount() {
+    return apiRequest('/notifications/unread-count');
+  },
+
+  async markRead(notificationId) {
+    return apiRequest(`/notifications/${notificationId}/read`, { method: 'POST' });
+  },
+
+  async markAllRead() {
+    return apiRequest('/notifications/mark-all-read', { method: 'POST' });
+  },
+
+  async delete(notificationId) {
+    return apiRequest(`/notifications/${notificationId}`, { method: 'DELETE' });
   },
 };
 
@@ -174,6 +266,9 @@ const api = {
   relationships,
   subscriptions,
   posts,
+  comments,
+  messages,
+  notifications,
   stats,
 };
 
