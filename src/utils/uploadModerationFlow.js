@@ -13,6 +13,7 @@ import { scanImageWithAI } from './aiCSAMDetection.js';
 import { scanImageForCopyright } from './imageContentScanner.js';
 import { moderateContent } from './aiModeration.js';
 import { checkContentLegality } from './legalProtections.js';
+import { processContentReview } from './aiContentReviewer.js';
 
 /**
  * Complete upload moderation flow
@@ -109,8 +110,30 @@ export async function moderateUpload(file, userId, ipAddress, metadata = {}) {
         }
       }
 
+      // AI AUTO-REVIEW for flagged copyright content
       if (copyrightCheck.requiresReview) {
-        result.requiresManualReview = true;
+        console.log('[MODERATION] Step 2.5: AI auto-reviewing flagged content...');
+
+        const aiReview = await processContentReview(copyrightCheck, metadata);
+
+        if (aiReview.approved) {
+          console.log(`[MODERATION] ✅ AI approved: ${aiReview.reasoning}`);
+          result.warnings.push({
+            type: 'AI_REVIEWED',
+            message: `AI reviewed and approved: ${aiReview.reasoning}`,
+            confidence: aiReview.confidence,
+          });
+          // Don't require manual review - AI approved it
+        } else {
+          console.log(`[MODERATION] ❌ AI rejected: ${aiReview.reasoning}`);
+          result.blocked = true;
+          result.violations.push({
+            type: 'AI_REJECTED',
+            severity: 'HIGH',
+            message: `AI review rejected: ${aiReview.reasoning}`,
+            confidence: aiReview.confidence,
+          });
+        }
       }
     }
 

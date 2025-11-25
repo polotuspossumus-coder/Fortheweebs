@@ -149,6 +149,7 @@ const routes = [
     // Content & AI
     { path: '/api/ai', file: './api/ai', name: 'AI' },
     { path: '/api/ai-content', file: './api/ai-content', name: 'AI Content' },
+    { path: '/api/ai/review', file: './api/ai-review-content', name: 'AI Auto-Review (Copyright)' },
     { path: '/api/upload', file: './api/upload-protected', name: 'Upload (Protected)' },
     { path: '/api/moderation', file: './api/moderation-actions', name: 'AI CSAM Moderation' },
 
