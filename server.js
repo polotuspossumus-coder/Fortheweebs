@@ -128,6 +128,7 @@ const routes = [
     { path: '/api', file: './api/stripe', name: 'Stripe' },
     { path: '/api/stripe-connect', file: './api/stripe-connect', name: 'Stripe Connect' },
     { path: '/api/stripe-webhooks', file: './api/stripe-webhooks', name: 'Stripe Webhooks' },
+    { path: '/api/webhooks/ccbill', file: './api/ccbill-webhook', name: 'CCBill Webhooks (Adult Content)' },
     { path: '/api/crypto', file: './api/crypto-payments', name: 'Crypto Payments' },
     { path: '/api/subscriptions', file: './api/routes/subscriptions', name: 'Subscriptions (Creator Monetization)' },
 
