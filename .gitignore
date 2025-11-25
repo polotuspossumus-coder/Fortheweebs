@@ -33,7 +33,7 @@ ehthumbs.db
 Thumbs.db
 
 # IDE files
-.vscode/
+# .vscode/ - Now tracked for team consistency
 .idea/
 *.swp
 *.swo
