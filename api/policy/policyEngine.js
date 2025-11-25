@@ -5,6 +5,7 @@
  */
 
 const EventEmitter = require("events");
+const metrics = require("../services/metrics");
 
 class PolicyEngine extends EventEmitter {
   constructor(initial = {}) {
@@ -43,6 +44,7 @@ class PolicyEngine extends EventEmitter {
     const oldValue = this.state.thresholds[key];
     this.state.thresholds[key] = v;
     this.bump("thresholds", key, v, oldValue);
+    metrics.recordPolicyChange();
     return { key, value: v, oldValue };
   }
 
@@ -54,6 +56,7 @@ class PolicyEngine extends EventEmitter {
     const oldValue = this.state.caps[key];
     this.state.caps[key] = v;
     this.bump("caps", key, v, oldValue);
+    metrics.recordPolicyChange();
     return { key, value: v, oldValue };
   }
 
@@ -62,6 +65,7 @@ class PolicyEngine extends EventEmitter {
     const oldValue = this.state.toggles[key];
     this.state.toggles[key] = v;
     this.bump("toggles", key, v, oldValue);
+    metrics.recordPolicyChange();
     return { key, value: v, oldValue };
   }
 

@@ -19,6 +19,9 @@ const { authenticateToken, requireOwner, requireRole, ROLES } = require('./middl
 const { governanceRateLimiter, readRateLimiter } = require('./middleware/rateLimiter');
 const { sentinelWatchdog } = require('./middleware/sentinelWatchdog');
 
+// Metrics tracking
+const metrics = require('./services/metrics');
+
 // Import TypeScript modules (will be compiled)
 let governanceNotary, policyOverrides, artifactLogger;
 
@@ -491,6 +494,10 @@ router.post('/override', authenticateToken, requireOwner, governanceRateLimiter,
         return res.status(400).json({ error: `Unknown command: ${command}` });
     }
 
+    // Record metrics
+    const startTime = Date.now();
+    metrics.recordOverride();
+
     // Inscribe the decision with user signature
     const inscriptionId = await governanceNotary.inscribeDecision({
       actionType: 'policy_override',
@@ -500,6 +507,9 @@ router.post('/override', authenticateToken, requireOwner, governanceRateLimiter,
       justification: `${justification} | Authorized by: ${req.user.email} | Timestamp: ${new Date().toISOString()}`,
       authorizedBy: req.user.email,
     });
+
+    // Record latency
+    metrics.recordLatency(Date.now() - startTime);
 
     // Log to artifact stream
     if (artifactLogger) {

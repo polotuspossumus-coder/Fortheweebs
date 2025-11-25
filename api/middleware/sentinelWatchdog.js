@@ -14,6 +14,9 @@ try {
   console.warn('⚠️ Artifact logger not available for Sentinel');
 }
 
+// Import metrics tracking
+const metrics = require('../services/metrics');
+
 /**
  * Sentinel Watchdog - Validates all governance operations
  */
@@ -37,6 +40,8 @@ async function sentinelWatchdog(req, res, next) {
       severity: 'high',
     });
 
+    metrics.recordUnauthorized(operation.ip);
+
     return res.status(401).json({
       error: 'Authentication required',
       code: 'SENTINEL_BLOCK_NO_AUTH',
@@ -55,6 +60,8 @@ async function sentinelWatchdog(req, res, next) {
         user: req.user.email,
         role: req.user.role,
       });
+
+      metrics.recordBlocked('non_owner_write_attempt');
 
       return res.status(403).json({
         error: 'Owner signature required',

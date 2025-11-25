@@ -5,6 +5,7 @@
  */
 
 const crypto = require("crypto");
+const { appendRecord } = require("./externalLedger");
 
 // In-memory ledger (can be swapped for database persistence)
 let ledger = [];
@@ -40,6 +41,9 @@ function notaryRecord({ actor, command, key, value, version, oldValue }) {
   };
 
   ledger.push(record);
+
+  // Append to external ledger (immutable, append-only)
+  appendRecord(record);
 
   // Push to artifact stream if available
   if (global.artifactStream) {

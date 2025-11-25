@@ -6,6 +6,7 @@
 const express = require('express');
 const router = express.Router();
 const queueControl = require('../services/queueControl');
+const metrics = require('../services/metrics');
 
 const SOVEREIGN_KEY = process.env.SOVEREIGN_KEY;
 
@@ -67,6 +68,7 @@ router.post('/pause', verifySovereignKey, (req, res) => {
     const { actor = 'system', reason = 'Manual pause' } = req.body;
 
     const result = queueControl.pauseQueue(actor, reason);
+    metrics.recordQueueOperation();
 
     if (result.success) {
       res.json(result);
@@ -93,6 +95,7 @@ router.post('/resume', verifySovereignKey, (req, res) => {
     const { actor = 'system' } = req.body;
 
     const result = queueControl.resumeQueue(actor);
+    metrics.recordQueueOperation();
 
     if (result.success) {
       res.json(result);
@@ -131,6 +134,7 @@ router.post('/priority', verifySovereignKey, (req, res) => {
     }
 
     const result = queueControl.setPriority(creatorId, priority, actor);
+    metrics.recordQueueOperation();
 
     if (result.success) {
       res.json(result);

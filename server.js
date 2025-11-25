@@ -132,7 +132,8 @@ const routes = [
     { path: '/api/trial', file: './api/trial', name: 'Free Trial System' },
     { path: '/api/auth', file: './api/auth', name: 'Authentication (JWT)' },
     { path: '/api/governance', file: './api/governance', name: 'Mico Governance (Notary + Policy Overrides)' },
-    { path: '/api/queue', file: './api/routes/queue', name: 'Queue Control (Sovereign)' }
+    { path: '/api/queue', file: './api/routes/queue', name: 'Queue Control (Sovereign)' },
+    { path: '/api/metrics', file: './api/routes/metrics', name: 'Governance Metrics' }
 ];
 
 let loadedCount = 0;

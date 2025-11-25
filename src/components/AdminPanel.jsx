@@ -3,6 +3,7 @@ import { ModerationQueueItem } from './ContentModeration';
 import DockedConsole from './DockedConsole';
 import CommandPanelAdvanced from './admin/CommandPanelAdvanced';
 import DockedConsolePro from './admin/DockedConsolePro';
+import MetricsDashboard from './admin/MetricsDashboard';
 import './AdminPanel.css';
 
 function AdminPanel() {
@@ -426,6 +427,7 @@ function AdminPanel() {
       {activeTab === 'governance' && (
         <div className="governance-tab">
           <h2>🎛️ Governance & Policy Control</h2>
+          <MetricsDashboard />
           <CommandPanelAdvanced />
           <div style={{ marginTop: '32px' }}>
             <DockedConsolePro />
