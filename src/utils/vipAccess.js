@@ -19,7 +19,8 @@ export const LIFETIME_VIP_EMAILS = [
   'Billyxfitzgerald@yahoo.com', // VIP Slot 8
   'Yeahitsmeangel@yahoo.com',  // VIP Slot 9
   'Atolbert66@gmail.com',      // VIP Slot 10
-  'brookewhitley530@gmail.com' // VIP Slot 11
+  'brookewhitley530@gmail.com', // VIP Slot 11
+  'cleonwilliams1973@gmail.com' // VIP Slot 12
 ];
 
 /**
