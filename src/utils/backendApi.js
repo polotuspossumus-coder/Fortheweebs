@@ -1,5 +1,5 @@
 // Backend API Client for ForTheWeebs
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001/api';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000';
 
 // Helper to get auth token
 const getAuthToken = () => localStorage.getItem('authToken');
@@ -224,7 +224,7 @@ export const messages = {
 
 // Notifications API
 export const notifications = {
-  async getNotifications(unreadOnly = false) {
+  async getAll(unreadOnly = false) {
     return apiRequest(`/notifications?unreadOnly=${unreadOnly}`);
   },
 
@@ -232,11 +232,11 @@ export const notifications = {
     return apiRequest('/notifications/unread-count');
   },
 
-  async markRead(notificationId) {
+  async markAsRead(notificationId) {
     return apiRequest(`/notifications/${notificationId}/read`, { method: 'POST' });
   },
 
-  async markAllRead() {
+  async markAllAsRead() {
     return apiRequest('/notifications/mark-all-read', { method: 'POST' });
   },
 

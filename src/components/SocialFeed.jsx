@@ -3,6 +3,8 @@ import './SocialFeed.css';
 import { isLifetimeVIP } from '../utils/vipAccess';
 import { checkTierAccess } from '../utils/tierAccess';
 import api from '../utils/backendApi';
+import featureDetector from '../utils/featureDetection';
+import { FeatureBlocker } from './FeatureDisabledBanner';
 
 /**
  * Social Feed - Main content feed for all users
@@ -31,20 +33,57 @@ export const SocialFeed = ({ userId, userTier }) => {
   const [priceCents, setPriceCents] = useState(500); // Default $5.00
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [showCommentsForPost, setShowCommentsForPost] = useState(null);
+  const [commentsMap, setCommentsMap] = useState({});
+  const [newCommentText, setNewCommentText] = useState('');
+  const [features, setFeatures] = useState(featureDetector.getFeatures());
 
   // Get user's tier access
   const userEmail = localStorage.getItem('ownerEmail') || localStorage.getItem('userEmail');
   const access = checkTierAccess(userId, userTier, userEmail);
 
+  // Subscribe to feature changes
   useEffect(() => {
-    // Load posts from localStorage or API
-    const savedPosts = JSON.parse(localStorage.getItem('socialPosts') || '[]');
-    setPosts(savedPosts);
-    
-    // Load friends, followers, subscriptions
-    setFriends(JSON.parse(localStorage.getItem('userFriends') || '[]'));
-    setFollowers(JSON.parse(localStorage.getItem('userFollowers') || '[]'));
-    setSubscriptions(JSON.parse(localStorage.getItem('userSubscriptions') || '[]'));
+    const unsubscribe = featureDetector.subscribe(setFeatures);
+    featureDetector.checkFeatures();
+    return unsubscribe;
+  }, []);
+
+  useEffect(() => {
+    const loadFeed = async () => {
+      try {
+        setLoading(true);
+        // Load posts from API
+        const feedData = await api.posts.getFeed(50, 0);
+        setPosts(feedData.posts || []);
+
+        // Load relationships from API
+        const [friendsData, followersData, subscriptionsData] = await Promise.all([
+          api.relationships.getFriends().catch(() => ({ friends: [] })),
+          api.relationships.getFollowers().catch(() => ({ followers: [] })),
+          api.subscriptions.getMySubscriptions().catch(() => ({ subscriptions: [] }))
+        ]);
+
+        setFriends(friendsData.friends || []);
+        setFollowers(followersData.followers || []);
+        setSubscriptions(subscriptionsData.subscriptions || []);
+        setError(null);
+      } catch (err) {
+        console.error('Failed to load feed:', err);
+        setError('Failed to load feed. Please refresh.');
+
+        // Fallback to localStorage
+        const savedPosts = JSON.parse(localStorage.getItem('socialPosts') || '[]');
+        setPosts(savedPosts);
+        setFriends(JSON.parse(localStorage.getItem('userFriends') || '[]'));
+        setFollowers(JSON.parse(localStorage.getItem('userFollowers') || '[]'));
+        setSubscriptions(JSON.parse(localStorage.getItem('userSubscriptions') || '[]'));
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadFeed();
   }, []);
 
   const createPost = async () => {
@@ -127,13 +166,59 @@ export const SocialFeed = ({ userId, userTier }) => {
 
   const handleLike = async (postId) => {
     try {
-      await api.posts.like(postId);
-      // Update local state
-      setPosts(posts.map(p => 
-        p.id === postId ? { ...p, likesCount: p.likesCount + 1 } : p
+      const result = await api.posts.like(postId);
+
+      // Refetch the post to get accurate counts
+      const updatedPost = await api.posts.getPost(postId);
+
+      // Update local state with fresh data
+      setPosts(posts.map(p =>
+        p.id === postId ? { ...updatedPost, liked: result.liked } : p
       ));
     } catch (err) {
       console.error('Like failed:', err);
+      setError('Failed to like post');
+    }
+  };
+
+  const toggleComments = async (postId) => {
+    if (showCommentsForPost === postId) {
+      // Close comments
+      setShowCommentsForPost(null);
+    } else {
+      // Open comments and load them
+      setShowCommentsForPost(postId);
+      if (!commentsMap[postId]) {
+        try {
+          const commentsData = await api.comments.getComments(postId, 50, 0);
+          setCommentsMap({ ...commentsMap, [postId]: commentsData.comments || [] });
+        } catch (err) {
+          console.error('Failed to load comments:', err);
+          setCommentsMap({ ...commentsMap, [postId]: [] });
+        }
+      }
+    }
+  };
+
+  const handleAddComment = async (postId) => {
+    if (!newCommentText.trim()) return;
+
+    try {
+      const comment = await api.comments.create(postId, newCommentText);
+
+      // Add to comments map
+      const currentComments = commentsMap[postId] || [];
+      setCommentsMap({ ...commentsMap, [postId]: [comment, ...currentComments] });
+
+      // Update post comments count
+      setPosts(posts.map(p =>
+        p.id === postId ? { ...p, commentsCount: (p.commentsCount || 0) + 1 } : p
+      ));
+
+      setNewCommentText('');
+    } catch (err) {
+      console.error('Failed to add comment:', err);
+      setError('Failed to add comment');
     }
   };
 
@@ -177,6 +262,7 @@ export const SocialFeed = ({ userId, userTier }) => {
 
       {/* Feed Tab */}
       {activeTab === 'feed' && (
+        <FeatureBlocker feature="socialMedia" features={features}>
         <div className="feed-content">
           <div className="owner-badge">
             <h2>👑 Owner Dashboard</h2>
@@ -372,21 +458,52 @@ export const SocialFeed = ({ userId, userTier }) => {
                 )}
                 
                 <div className="post-actions">
-                  <button onClick={() => likePost(post.id)}>
-                    ❤️ {post.likes}
+                  <button onClick={() => handleLike(post.id)}>
+                    ❤️ {post.likesCount || 0}
                   </button>
-                  <button>💬 Comment</button>
+                  <button onClick={() => toggleComments(post.id)}>
+                    💬 {post.commentsCount || 0}
+                  </button>
                   <button>🔁 Share</button>
                 </div>
+
+                {/* Comments Section */}
+                {showCommentsForPost === post.id && (
+                  <div className="comments-section">
+                    <div className="add-comment">
+                      <input
+                        type="text"
+                        value={newCommentText}
+                        onChange={(e) => setNewCommentText(e.target.value)}
+                        placeholder="Write a comment..."
+                        onKeyPress={(e) => e.key === 'Enter' && handleAddComment(post.id)}
+                      />
+                      <button onClick={() => handleAddComment(post.id)}>Post</button>
+                    </div>
+                    <div className="comments-list">
+                      {(commentsMap[post.id] || []).map(comment => (
+                        <div key={comment.id} className="comment">
+                          <strong>{comment.author?.username || 'Anonymous'}</strong>
+                          <p>{comment.body}</p>
+                          <span className="comment-time">
+                            {new Date(comment.createdAt).toLocaleString()}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
               </div>
               );
             })}
           </div>
         </div>
+        </FeatureBlocker>
       )}
 
       {/* Messages Tab */}
       {activeTab === 'messages' && (
+        <FeatureBlocker feature="socialMedia" features={features}>
         <div className="messages-content">
           <h2>💬 Messages</h2>
           <p className="feature-status">✅ Free for all users</p>
@@ -424,6 +541,7 @@ export const SocialFeed = ({ userId, userTier }) => {
             <button className="coming-soon-btn">Full Messaging Coming Soon</button>
           </div>
         </div>
+        </FeatureBlocker>
       )}
 
       {/* Calls Tab */}

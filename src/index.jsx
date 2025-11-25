@@ -31,6 +31,8 @@ import { isLifetimeVIP, shouldSkipPayment } from './utils/vipAccess.js';
 import { initMobileTouchOptimizations, isCapacitor } from './utils/mobileOptimizations';
 import './utils/notifications.js'; // Import notification handler
 import { initBugFixerMonitoring } from './utils/bugFixerIntegration.js';
+import featureDetector from './utils/featureDetection.js';
+import FeatureDisabledBanner from './components/FeatureDisabledBanner.jsx';
 
 // Register service worker for PWA support
 registerServiceWorker();
@@ -70,7 +72,7 @@ function AppFlow() {
   // FORCE OWNER ACCESS FIRST - Before any state logic
   const currentEmail = localStorage.getItem('ownerEmail');
   const currentUserId = localStorage.getItem('userId');
-  
+
   // If ANY owner indicator exists, force all keys and go to dashboard
   if (currentEmail === 'polotuspossumus@gmail.com' || currentUserId === 'owner') {
     localStorage.setItem('ownerEmail', 'polotuspossumus@gmail.com');
@@ -83,6 +85,16 @@ function AppFlow() {
     localStorage.setItem('privacyAccepted', 'true');
     localStorage.setItem('userTier', 'LIFETIME_VIP');
   }
+
+  // Feature detection state
+  const [features, setFeatures] = useState(featureDetector.getFeatures());
+
+  // Subscribe to feature updates
+  useEffect(() => {
+    const unsubscribe = featureDetector.subscribe(setFeatures);
+    featureDetector.checkFeatures(); // Check on mount
+    return unsubscribe;
+  }, []);
 
   const [step, setStep] = useState(() => {
     // IMMEDIATE CHECK - if owner, go to dashboard
@@ -315,6 +327,7 @@ function AppFlow() {
             <>
               <A11ySkipLink />
               <ToastContainer />
+              <FeatureDisabledBanner features={features} />
               <InstallPWA />
               <CommandPalette />
               <QuickActions />

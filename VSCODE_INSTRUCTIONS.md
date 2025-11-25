@@ -6,6 +6,42 @@
 
 ---
 
+## 🔍 HOW TO FIND FILES IN VS CODE (READ THIS FIRST!)
+
+**Problem:** IntelliJ leaves you files but you can never find them. Here's how:
+
+### Method 1: Quick Open (FASTEST)
+1. Press `Ctrl+P` (Windows/Linux) or `Cmd+P` (Mac)
+2. Start typing the filename (e.g., "SUPABASE_DATABASE")
+3. Hit Enter when you see the file
+
+### Method 2: Search in Files
+1. Press `Ctrl+Shift+F` (Windows/Linux) or `Cmd+Shift+F` (Mac)
+2. Type keywords from the file content
+3. Click the file in the results
+
+### Method 3: Explorer Sidebar
+1. Press `Ctrl+Shift+E` (Windows/Linux) or `Cmd+Shift+E` (Mac)
+2. Look in the left sidebar
+3. Root folder is: `C:\Users\polot\OneDrive\Desktop\fortheweebs`
+
+### Method 4: Go to Symbol
+1. Press `Ctrl+T` (Windows/Linux) or `Cmd+T` (Mac)
+2. Type function/class name
+3. Jump directly to definition
+
+### Important Files You'll Need:
+- `SUPABASE_DATABASE_SETUP.md` - Database schemas & RLS policies
+- `DATABASE_WIRING_COMPLETE.md` - Status of database conversion
+- `VSCODE_CATCHUP.md` - What IntelliJ did for you
+- `server.js` - Main backend entry point
+- `api/routes/*.js` - All API endpoints
+- `.env` - Environment variables (DON'T COMMIT THIS)
+
+**Pro Tip:** If you see a filename mentioned but can't find it, use `Ctrl+P` and type a few letters. VS Code fuzzy-matches.
+
+---
+
 ## 🎯 YOUR IMMEDIATE TASKS (IN ORDER)
 
 ### **TASK 1: Database Wiring (CRITICAL - Start Now)**

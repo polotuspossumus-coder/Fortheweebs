@@ -77,12 +77,27 @@ policyEngine.on('policy:changed', (evt) => {
 // SSE artifact stream endpoint
 app.get('/api/artifacts/stream', sseRoute);
 
-// Health check
+// Feature flags
+const { featureFlags } = require('./config/featureFlags');
+
+// Health check with feature status
 app.get('/health', (req, res) => {
     res.json({
         status: 'OK',
         timestamp: new Date().toISOString(),
-        environment: process.env.NODE_ENV || 'development'
+        environment: process.env.NODE_ENV || 'development',
+        features: featureFlags.getStatus()
+    });
+});
+
+// Feature status endpoint
+app.get('/api/features/status', (req, res) => {
+    res.json({
+        status: featureFlags.getStatus(),
+        disabled: featureFlags.getDisabledFeatures(),
+        message: featureFlags.socialMediaEnabled
+            ? 'All features enabled'
+            : 'Social media features will be enabled once PhotoDNA API key is configured'
     });
 });
 
@@ -116,12 +131,12 @@ const routes = [
     { path: '/api/crypto', file: './api/crypto-payments', name: 'Crypto Payments' },
     { path: '/api/subscriptions', file: './api/routes/subscriptions', name: 'Subscriptions (Creator Monetization)' },
 
-    // Social Media Core
-    { path: '/api/posts', file: './api/routes/posts', name: 'Posts (Feed)' },
-    { path: '/api/comments', file: './api/routes/comments', name: 'Comments & Replies' },
-    { path: '/api/relationships', file: './api/routes/relationships', name: 'Friends & Follows' },
-    { path: '/api/messages', file: './api/routes/messages', name: 'Direct Messages' },
-    { path: '/api/notifications', file: './api/routes/notifications', name: 'Notifications' },
+    // Social Media Core - REQUIRES PhotoDNA
+    { path: '/api/posts', file: './api/routes/posts', name: 'Posts (Feed)', requirePhotoDNA: true },
+    { path: '/api/comments', file: './api/routes/comments', name: 'Comments & Replies', requirePhotoDNA: true },
+    { path: '/api/relationships', file: './api/routes/relationships', name: 'Friends & Follows', requirePhotoDNA: true },
+    { path: '/api/messages', file: './api/routes/messages', name: 'Direct Messages', requirePhotoDNA: true },
+    { path: '/api/notifications', file: './api/routes/notifications', name: 'Notifications', requirePhotoDNA: true },
 
     // User & Access Control
     { path: '/api/tier-access', file: './api/tier-access', name: 'Tier Access' },
@@ -140,6 +155,7 @@ const routes = [
     // Creator Tools
     { path: '/api/creator-applications', file: './api/creator-applications', name: 'Creator Applications' },
     { path: '/api/trial', file: './api/trial', name: 'Free Trial System' },
+    { path: '/api/creator-copyright', file: './api/creator-copyright-requests', name: 'Creator Copyright Requests (AI-Validated)' },
 
     // Mico AI & Governance
     { path: '/api/mico', file: './api/mico', name: 'Mico AI' },
@@ -157,13 +173,31 @@ const routes = [
 
 let loadedCount = 0;
 let failedCount = 0;
+let blockedCount = 0;
 
-routes.forEach(({ path, file, name }) => {
+const { requirePhotoDNA } = require('./config/featureFlags');
+
+routes.forEach(({ path, file, name, requirePhotoDNA: needsPhotoDNA }) => {
     try {
         const route = require(file);
-        app.use(path, route);
-        console.log(`✅ ${name}`);
-        loadedCount++;
+
+        // Apply PhotoDNA middleware if required
+        if (needsPhotoDNA) {
+            if (featureFlags.socialMediaEnabled) {
+                app.use(path, route);
+                console.log(`✅ ${name}`);
+                loadedCount++;
+            } else {
+                // Block with middleware that returns 503
+                app.use(path, requirePhotoDNA);
+                console.log(`🔒 ${name} (blocked until PhotoDNA configured)`);
+                blockedCount++;
+            }
+        } else {
+            app.use(path, route);
+            console.log(`✅ ${name}`);
+            loadedCount++;
+        }
     } catch (error) {
         console.warn(`⚠️  ${name} (skipped - ${error.message.substring(0, 40)})`);
         failedCount++;
@@ -171,6 +205,10 @@ routes.forEach(({ path, file, name }) => {
 });
 
 console.log(`\n📊 Routes loaded: ${loadedCount}/${routes.length} ${failedCount > 0 ? `(${failedCount} skipped)` : ''}`);
+if (blockedCount > 0) {
+    console.log(`🔒 ${blockedCount} routes blocked pending PhotoDNA API key`);
+    console.log(`💡 Add PHOTODNA_API_KEY to .env to enable social media features`);
+}
 
 
 // Error handling middleware
