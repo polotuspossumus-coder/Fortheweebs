@@ -159,26 +159,41 @@ router.post('/:postId/share', authenticateToken, async (req, res) => {
     const { userId } = req.user;
     const { postId } = req.params;
 
-    const post = posts.find(p => p.id === parseInt(postId));
+    // Check if post exists
+    const { data: post, error: postError } = await supabase
+      .from('posts')
+      .select('id')
+      .eq('id', postId)
+      .single();
 
-    if (!post) {
+    if (postError || !post) {
       return res.status(404).json({ error: 'Post not found' });
     }
 
-    post.sharesCount++;
+    // Track share in Supabase
+    const { error } = await supabase
+      .from('post_shares')
+      .insert([{
+        post_id: postId,
+        user_id: userId
+      }]);
 
-    // TODO: Track shares in Supabase
-    // await supabase.from('post_shares').insert([{
-    //   post_id: postId,
-    //   user_id: userId,
-    //   shared_at: new Date().toISOString()
-    // }]);
+    if (error) {
+      console.error('Share error:', error);
+      return res.status(500).json({ error: 'Failed to share post' });
+    }
+
+    // Get updated share count
+    const { count } = await supabase
+      .from('post_shares')
+      .select('*', { count: 'exact', head: true })
+      .eq('post_id', postId);
 
     console.log(`🔁 Post ${postId} shared by user ${userId}`);
 
     res.json({
       success: true,
-      sharesCount: post.sharesCount
+      sharesCount: count || 0
     });
   } catch (error) {
     console.error('Share post error:', error);
@@ -194,25 +209,45 @@ router.get('/:postId', async (req, res) => {
   try {
     const { postId } = req.params;
 
-    const post = posts.find(p => p.id === parseInt(postId));
+    // Get post with author info and counts
+    const { data: post, error } = await supabase
+      .from('posts')
+      .select(`
+        *,
+        author:users(id, email, display_name, avatar_url, is_verified)
+      `)
+      .eq('id', postId)
+      .single();
 
-    if (!post) {
+    if (error || !post) {
       return res.status(404).json({ error: 'Post not found' });
     }
 
-    // TODO: Get from Supabase with full details
-    // const { data, error } = await supabase
-    //   .from('posts')
-    //   .select(`
-    //     *,
-    //     author:users(*),
-    //     likes:post_likes(count),
-    //     comments:post_comments(count)
-    //   `)
-    //   .eq('id', postId)
-    //   .single();
+    // Get likes count
+    const { count: likesCount } = await supabase
+      .from('post_likes')
+      .select('*', { count: 'exact', head: true })
+      .eq('post_id', postId);
 
-    res.json(post);
+    // Get comments count
+    const { count: commentsCount } = await supabase
+      .from('comments')
+      .select('*', { count: 'exact', head: true })
+      .eq('post_id', postId)
+      .is('parent_comment_id', null);
+
+    // Get shares count
+    const { count: sharesCount } = await supabase
+      .from('post_shares')
+      .select('*', { count: 'exact', head: true })
+      .eq('post_id', postId);
+
+    res.json({
+      ...post,
+      likesCount: likesCount || 0,
+      commentsCount: commentsCount || 0,
+      sharesCount: sharesCount || 0
+    });
   } catch (error) {
     console.error('Get post error:', error);
     res.status(500).json({ error: 'Failed to load post' });

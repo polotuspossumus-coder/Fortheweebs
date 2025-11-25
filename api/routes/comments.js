@@ -1,14 +1,12 @@
 /**
  * Comments API - Post Comments & Replies
+ * Fully integrated with Supabase
  */
 
 const express = require('express');
 const router = express.Router();
 const { authenticateToken } = require('../middleware/authMiddleware');
-
-// Mock database
-let comments = [];
-let commentIdCounter = 1;
+const { supabase } = require('../lib/supabaseServer');
 
 /**
  * GET /api/comments/:postId
@@ -19,29 +17,47 @@ router.get('/:postId', async (req, res) => {
     const { postId } = req.params;
     const { limit = 50, offset = 0 } = req.query;
 
-    // TODO: Replace with Supabase
-    // const { data, error } = await supabase
-    //   .from('comments')
-    //   .select('*, author:users(*), replies:comments(*)')
-    //   .eq('post_id', postId)
-    //   .is('parent_comment_id', null)
-    //   .order('created_at', { ascending: false })
-    //   .range(offset, offset + limit - 1);
+    const { data, error } = await supabase
+      .from('comments')
+      .select(`
+        *,
+        author:users(id, email, display_name, avatar_url, is_verified)
+      `)
+      .eq('post_id', postId)
+      .is('parent_comment_id', null)
+      .order('created_at', { ascending: false })
+      .range(offset, offset + parseInt(limit) - 1);
 
-    const postComments = comments
-      .filter(c => c.postId === parseInt(postId) && !c.parentCommentId)
-      .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
-      .slice(offset, offset + limit);
+    if (error) {
+      console.error('Get comments error:', error);
+      return res.status(500).json({ error: 'Failed to load comments' });
+    }
 
-    // Get reply counts
-    postComments.forEach(comment => {
-      comment.repliesCount = comments.filter(c => c.parentCommentId === comment.id).length;
-    });
+    // Get reply counts for each comment
+    const commentsWithCounts = await Promise.all(
+      (data || []).map(async (comment) => {
+        const { count } = await supabase
+          .from('comments')
+          .select('*', { count: 'exact', head: true })
+          .eq('parent_comment_id', comment.id);
+
+        const { count: likesCount } = await supabase
+          .from('comment_likes')
+          .select('*', { count: 'exact', head: true })
+          .eq('comment_id', comment.id);
+
+        return {
+          ...comment,
+          repliesCount: count || 0,
+          likesCount: likesCount || 0
+        };
+      })
+    );
 
     res.json({
-      comments: postComments,
-      hasMore: offset + limit < postComments.length,
-      total: postComments.length
+      comments: commentsWithCounts,
+      hasMore: data && data.length === parseInt(limit),
+      total: data ? data.length : 0
     });
   } catch (error) {
     console.error('Get comments error:', error);
@@ -70,40 +86,33 @@ router.post('/create', authenticateToken, async (req, res) => {
       return res.status(400).json({ error: 'Post ID is required' });
     }
 
-    const newComment = {
-      id: commentIdCounter++,
-      postId: parseInt(postId),
-      parentCommentId: parentCommentId || null,
-      authorId: userId,
-      author: {
-        id: userId,
-        email,
-        displayName: req.user.displayName || email.split('@')[0],
-        avatar: '👤'
-      },
-      body,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-      likesCount: 0
-    };
+    // Insert into Supabase
+    const { data, error } = await supabase
+      .from('comments')
+      .insert([{
+        post_id: postId,
+        parent_comment_id: parentCommentId || null,
+        author_id: userId,
+        body
+      }])
+      .select(`
+        *,
+        author:users(id, email, display_name, avatar_url, is_verified)
+      `)
+      .single();
 
-    // TODO: Insert into Supabase
-    // const { data, error } = await supabase
-    //   .from('comments')
-    //   .insert([{
-    //     post_id: postId,
-    //     parent_comment_id: parentCommentId,
-    //     author_id: userId,
-    //     body
-    //   }])
-    //   .select()
-    //   .single();
-
-    comments.push(newComment);
+    if (error) {
+      console.error('Database error:', error);
+      return res.status(500).json({ error: 'Failed to create comment' });
+    }
 
     console.log(`💬 Comment created on post ${postId} by ${email}`);
 
-    res.status(201).json(newComment);
+    res.status(201).json({
+      ...data,
+      likesCount: 0,
+      repliesCount: 0
+    });
   } catch (error) {
     console.error('Create comment error:', error);
     res.status(500).json({ error: 'Failed to create comment' });
@@ -119,27 +128,17 @@ router.delete('/:commentId', authenticateToken, async (req, res) => {
     const { userId } = req.user;
     const { commentId } = req.params;
 
-    const commentIndex = comments.findIndex(c => c.id === parseInt(commentId));
+    // Delete from Supabase (RLS will check ownership)
+    const { error } = await supabase
+      .from('comments')
+      .delete()
+      .eq('id', commentId)
+      .eq('author_id', userId);
 
-    if (commentIndex === -1) {
-      return res.status(404).json({ error: 'Comment not found' });
+    if (error) {
+      console.error('Delete error:', error);
+      return res.status(500).json({ error: 'Failed to delete comment' });
     }
-
-    const comment = comments[commentIndex];
-
-    // Check ownership
-    if (comment.authorId !== userId) {
-      return res.status(403).json({ error: 'You can only delete your own comments' });
-    }
-
-    // TODO: Delete from Supabase
-    // const { error } = await supabase
-    //   .from('comments')
-    //   .delete()
-    //   .eq('id', commentId)
-    //   .eq('author_id', userId);
-
-    comments.splice(commentIndex, 1);
 
     console.log(`🗑️ Comment ${commentId} deleted by user ${userId}`);
 
@@ -159,22 +158,37 @@ router.post('/:commentId/like', authenticateToken, async (req, res) => {
     const { userId } = req.user;
     const { commentId } = req.params;
 
-    const comment = comments.find(c => c.id === parseInt(commentId));
+    // Check if already liked
+    const { data: existingLike } = await supabase
+      .from('comment_likes')
+      .select('*')
+      .eq('comment_id', commentId)
+      .eq('user_id', userId)
+      .single();
 
-    if (!comment) {
-      return res.status(404).json({ error: 'Comment not found' });
+    if (existingLike) {
+      // Unlike
+      await supabase.from('comment_likes').delete().eq('id', existingLike.id);
+
+      const { count } = await supabase
+        .from('comment_likes')
+        .select('*', { count: 'exact', head: true })
+        .eq('comment_id', commentId);
+
+      console.log(`💔 Comment ${commentId} unliked by user ${userId}`);
+      return res.json({ success: true, liked: false, likesCount: count || 0 });
+    } else {
+      // Like
+      await supabase.from('comment_likes').insert([{ comment_id: commentId, user_id: userId }]);
+
+      const { count } = await supabase
+        .from('comment_likes')
+        .select('*', { count: 'exact', head: true })
+        .eq('comment_id', commentId);
+
+      console.log(`❤️ Comment ${commentId} liked by user ${userId}`);
+      return res.json({ success: true, liked: true, likesCount: count || 0 });
     }
-
-    // TODO: Track likes in Supabase
-    comment.likesCount++;
-
-    console.log(`❤️ Comment ${commentId} liked by user ${userId}`);
-
-    res.json({
-      success: true,
-      likesCount: comment.likesCount,
-      liked: true
-    });
   } catch (error) {
     console.error('Like comment error:', error);
     res.status(500).json({ error: 'Failed to like comment' });
@@ -190,16 +204,40 @@ router.get('/:commentId/replies', async (req, res) => {
     const { commentId } = req.params;
     const { limit = 20, offset = 0 } = req.query;
 
-    // TODO: Get from Supabase
-    const replies = comments
-      .filter(c => c.parentCommentId === parseInt(commentId))
-      .sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt))
-      .slice(offset, offset + limit);
+    const { data, error } = await supabase
+      .from('comments')
+      .select(`
+        *,
+        author:users(id, email, display_name, avatar_url, is_verified)
+      `)
+      .eq('parent_comment_id', commentId)
+      .order('created_at', { ascending: true })
+      .range(offset, offset + parseInt(limit) - 1);
+
+    if (error) {
+      console.error('Get replies error:', error);
+      return res.status(500).json({ error: 'Failed to load replies' });
+    }
+
+    // Get likes count for each reply
+    const repliesWithCounts = await Promise.all(
+      (data || []).map(async (reply) => {
+        const { count: likesCount } = await supabase
+          .from('comment_likes')
+          .select('*', { count: 'exact', head: true })
+          .eq('comment_id', reply.id);
+
+        return {
+          ...reply,
+          likesCount: likesCount || 0
+        };
+      })
+    );
 
     res.json({
-      replies,
-      hasMore: offset + limit < replies.length,
-      total: replies.length
+      replies: repliesWithCounts,
+      hasMore: data && data.length === parseInt(limit),
+      total: data ? data.length : 0
     });
   } catch (error) {
     console.error('Get replies error:', error);
