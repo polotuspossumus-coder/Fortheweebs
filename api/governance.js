@@ -355,4 +355,132 @@ router.get('/artifacts/recent', async (req, res) => {
   }
 });
 
+/**
+ * POST /api/governance/override
+ * Simplified unified endpoint for all command types
+ * Accepts { command, value } and routes to appropriate handler
+ */
+router.post('/override', async (req, res) => {
+  try {
+    if (!policyOverrides || !governanceNotary) {
+      return res.status(503).json({ error: 'Governance modules not available' });
+    }
+
+    const { command, value } = req.body;
+
+    if (!command || value === undefined) {
+      return res.status(400).json({ error: 'command and value are required' });
+    }
+
+    let result;
+    let justification = `Command executed: ${command} = ${value}`;
+
+    // Route command to appropriate handler
+    switch (command) {
+      case 'moderation_threshold_violence':
+      case 'moderation_threshold_nsfw':
+      case 'moderation_threshold_hate':
+      case 'moderation_threshold_csam': {
+        const flagType = command.replace('moderation_threshold_', '');
+        const threshold = parseFloat(value);
+
+        if (isNaN(threshold) || threshold < 0 || threshold > 1) {
+          return res.status(400).json({ error: 'Threshold must be between 0 and 1' });
+        }
+
+        await policyOverrides.setModerationThreshold(
+          'image',
+          flagType,
+          threshold,
+          `Threshold override via command panel: ${threshold}`,
+          'mico'
+        );
+
+        result = { threshold, flagType };
+        justification = `Set ${flagType} threshold to ${threshold}`;
+        break;
+      }
+
+      case 'pause_lane_csam_detection':
+      case 'pause_lane_violence_extreme':
+      case 'pause_lane_new_user':
+      case 'pause_lane_trusted_creator': {
+        const laneName = command.replace('pause_lane_', '');
+        const shouldPause = value === 'true' || value === true;
+
+        if (shouldPause) {
+          await policyOverrides.pausePriorityLane(laneName, 'Paused via command panel');
+        } else {
+          await policyOverrides.resumePriorityLane(laneName);
+        }
+
+        result = { lane: laneName, paused: shouldPause };
+        justification = shouldPause ? `Paused lane: ${laneName}` : `Resumed lane: ${laneName}`;
+        break;
+      }
+
+      case 'agent_authority_moderation_sentinel':
+      case 'agent_authority_content_companion':
+      case 'agent_authority_automation_clerk':
+      case 'agent_authority_profile_architect':
+      case 'agent_authority_legacy_archivist': {
+        const agentType = command.replace('agent_authority_', '');
+        const authorityLevel = value.toLowerCase();
+
+        if (!['read', 'suggest', 'act', 'enforce'].includes(authorityLevel)) {
+          return res.status(400).json({ error: 'Invalid authority level. Must be: read, suggest, act, or enforce' });
+        }
+
+        const overrideKey = `agent_authority_${agentType}`;
+        await policyOverrides.setOverride({
+          overrideKey,
+          overrideType: 'agent_authority',
+          overrideValue: { authority_level: authorityLevel },
+          active: true,
+          setBy: 'mico',
+          reason: `Authority override via command panel: ${authorityLevel}`,
+        });
+
+        result = { agentType, authorityLevel };
+        justification = `Set ${agentType} authority to ${authorityLevel}`;
+        break;
+      }
+
+      case 'guard_mode': {
+        const enabled = value === 'true' || value === true;
+
+        if (enabled) {
+          const policy = require('./agents/policy');
+          await policy.enableGuardMode(3600000, 'mico'); // 1 hour
+        } else {
+          const policy = require('./agents/policy');
+          await policy.disableGuardMode('mico');
+        }
+
+        result = { guardMode: enabled };
+        justification = enabled ? 'Enabled guard mode' : 'Disabled guard mode';
+        break;
+      }
+
+      default:
+        return res.status(400).json({ error: `Unknown command: ${command}` });
+    }
+
+    // Inscribe the decision
+    await governanceNotary.inscribeDecision({
+      actionType: 'policy_override',
+      entityType: 'command_panel',
+      beforeState: { command },
+      afterState: result,
+      justification,
+      authorizedBy: 'mico',
+    });
+
+    res.json({ success: true, command, value, result });
+  } catch (error) {
+    console.error('Failed to execute override command:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
 module.exports = router;
