@@ -1,15 +1,12 @@
 /**
  * Relationships API - Friends, Follows, Blocks
+ * Fully integrated with Supabase
  */
 
 const express = require('express');
 const router = express.Router();
 const { authenticateToken } = require('../middleware/authMiddleware');
-
-// Mock database
-let friendships = []; // { userId1, userId2, status: 'pending'|'accepted' }
-let follows = []; // { followerId, followingId }
-let blocks = []; // { blockerId, blockedId }
+const { supabase } = require('../lib/supabaseServer');
 
 /**
  * POST /api/relationships/follow
@@ -29,29 +26,29 @@ router.post('/follow', authenticateToken, async (req, res) => {
     }
 
     // Check if already following
-    const existingFollow = follows.find(
-      f => f.followerId === userId && f.followingId === targetUserId
-    );
+    const { data: existing } = await supabase
+      .from('follows')
+      .select('*')
+      .eq('follower_id', userId)
+      .eq('following_id', targetUserId)
+      .single();
 
-    if (existingFollow) {
+    if (existing) {
       return res.status(400).json({ error: 'Already following this user' });
     }
 
-    // TODO: Insert into Supabase
-    // const { data, error } = await supabase
-    //   .from('follows')
-    //   .insert([{
-    //     follower_id: userId,
-    //     following_id: targetUserId
-    //   }])
-    //   .select()
-    //   .single();
+    // Insert into Supabase
+    const { error } = await supabase
+      .from('follows')
+      .insert([{
+        follower_id: userId,
+        following_id: targetUserId
+      }]);
 
-    follows.push({
-      followerId: userId,
-      followingId: targetUserId,
-      createdAt: new Date().toISOString()
-    });
+    if (error) {
+      console.error('Follow error:', error);
+      return res.status(500).json({ error: 'Failed to follow user' });
+    }
 
     console.log(`👁️ User ${userId} followed user ${targetUserId}`);
 
@@ -74,16 +71,16 @@ router.delete('/follow/:targetUserId', authenticateToken, async (req, res) => {
     const { userId } = req.user;
     const { targetUserId } = req.params;
 
-    const followIndex = follows.findIndex(
-      f => f.followerId === userId && f.followingId === targetUserId
-    );
+    const { error } = await supabase
+      .from('follows')
+      .delete()
+      .eq('follower_id', userId)
+      .eq('following_id', targetUserId);
 
-    if (followIndex === -1) {
-      return res.status(404).json({ error: 'Not following this user' });
+    if (error) {
+      console.error('Unfollow error:', error);
+      return res.status(500).json({ error: 'Failed to unfollow user' });
     }
-
-    // TODO: Delete from Supabase
-    follows.splice(followIndex, 1);
 
     console.log(`👁️ User ${userId} unfollowed user ${targetUserId}`);
 
@@ -114,27 +111,39 @@ router.post('/friend-request', authenticateToken, async (req, res) => {
       return res.status(400).json({ error: 'You cannot friend yourself' });
     }
 
-    // Check if already friends or pending
-    const existingFriendship = friendships.find(
-      f => (f.userId1 === userId && f.userId2 === targetUserId) ||
-           (f.userId1 === targetUserId && f.userId2 === userId)
-    );
+    // Normalize IDs (smaller first)
+    const user1 = userId < targetUserId ? userId : targetUserId;
+    const user2 = userId < targetUserId ? targetUserId : userId;
 
-    if (existingFriendship) {
-      if (existingFriendship.status === 'accepted') {
+    // Check if friendship already exists
+    const { data: existing } = await supabase
+      .from('friendships')
+      .select('*')
+      .eq('user_id_1', user1)
+      .eq('user_id_2', user2)
+      .single();
+
+    if (existing) {
+      if (existing.status === 'accepted') {
         return res.status(400).json({ error: 'Already friends' });
       } else {
         return res.status(400).json({ error: 'Friend request already sent' });
       }
     }
 
-    // TODO: Insert into Supabase
-    friendships.push({
-      userId1: userId,
-      userId2: targetUserId,
-      status: 'pending',
-      requestedAt: new Date().toISOString()
-    });
+    // Insert friendship
+    const { error } = await supabase
+      .from('friendships')
+      .insert([{
+        user_id_1: user1,
+        user_id_2: user2,
+        status: 'pending'
+      }]);
+
+    if (error) {
+      console.error('Friend request error:', error);
+      return res.status(500).json({ error: 'Failed to send friend request' });
+    }
 
     console.log(`👥 User ${userId} sent friend request to user ${targetUserId}`);
 
@@ -149,7 +158,7 @@ router.post('/friend-request', authenticateToken, async (req, res) => {
 });
 
 /**
- * POST /api/relationships/friend-request/:requestId/accept
+ * POST /api/relationships/friend-request/:targetUserId/accept
  * Accept a friend request
  */
 router.post('/friend-request/:targetUserId/accept', authenticateToken, async (req, res) => {
@@ -157,22 +166,24 @@ router.post('/friend-request/:targetUserId/accept', authenticateToken, async (re
     const { userId } = req.user;
     const { targetUserId } = req.params;
 
-    const friendship = friendships.find(
-      f => f.userId1 === targetUserId && f.userId2 === userId && f.status === 'pending'
-    );
+    // Normalize IDs
+    const user1 = userId < targetUserId ? userId : targetUserId;
+    const user2 = userId < targetUserId ? targetUserId : userId;
 
-    if (!friendship) {
-      return res.status(404).json({ error: 'Friend request not found' });
+    const { error } = await supabase
+      .from('friendships')
+      .update({
+        status: 'accepted',
+        accepted_at: new Date().toISOString()
+      })
+      .eq('user_id_1', user1)
+      .eq('user_id_2', user2)
+      .eq('status', 'pending');
+
+    if (error) {
+      console.error('Accept friend request error:', error);
+      return res.status(500).json({ error: 'Failed to accept friend request' });
     }
-
-    friendship.status = 'accepted';
-    friendship.acceptedAt = new Date().toISOString();
-
-    // TODO: Update in Supabase
-    // await supabase
-    //   .from('friendships')
-    //   .update({ status: 'accepted', accepted_at: new Date().toISOString() })
-    //   .eq('id', requestId);
 
     console.log(`✅ User ${userId} accepted friend request from ${targetUserId}`);
 
@@ -195,17 +206,21 @@ router.delete('/friend/:friendId', authenticateToken, async (req, res) => {
     const { userId } = req.user;
     const { friendId } = req.params;
 
-    const friendshipIndex = friendships.findIndex(
-      f => ((f.userId1 === userId && f.userId2 === friendId) ||
-            (f.userId1 === friendId && f.userId2 === userId)) &&
-           f.status === 'accepted'
-    );
+    // Normalize IDs
+    const user1 = userId < friendId ? userId : friendId;
+    const user2 = userId < friendId ? friendId : userId;
 
-    if (friendshipIndex === -1) {
-      return res.status(404).json({ error: 'Friendship not found' });
+    const { error } = await supabase
+      .from('friendships')
+      .delete()
+      .eq('user_id_1', user1)
+      .eq('user_id_2', user2)
+      .eq('status', 'accepted');
+
+    if (error) {
+      console.error('Remove friend error:', error);
+      return res.status(500).json({ error: 'Failed to remove friend' });
     }
-
-    friendships.splice(friendshipIndex, 1);
 
     console.log(`💔 User ${userId} removed friend ${friendId}`);
 
@@ -227,19 +242,38 @@ router.get('/friends', authenticateToken, async (req, res) => {
   try {
     const { userId } = req.user;
 
-    const userFriends = friendships
-      .filter(f =>
-        ((f.userId1 === userId || f.userId2 === userId) && f.status === 'accepted')
-      )
-      .map(f => ({
-        friendId: f.userId1 === userId ? f.userId2 : f.userId1,
-        since: f.acceptedAt
-      }));
+    // Get friendships where user is either user_id_1 or user_id_2
+    const { data, error } = await supabase
+      .from('friendships')
+      .select('*')
+      .eq('status', 'accepted')
+      .or(`user_id_1.eq.${userId},user_id_2.eq.${userId}`);
 
-    // TODO: Get full user details from Supabase
+    if (error) {
+      console.error('Get friends error:', error);
+      return res.status(500).json({ error: 'Failed to load friends' });
+    }
+
+    // Extract friend IDs and get user details
+    const friendIds = data.map(f => f.user_id_1 === userId ? f.user_id_2 : f.user_id_1);
+
+    if (friendIds.length === 0) {
+      return res.json({ friends: [], count: 0 });
+    }
+
+    const { data: friendUsers, error: usersError } = await supabase
+      .from('users')
+      .select('id, email, display_name, avatar_url, is_verified')
+      .in('id', friendIds);
+
+    if (usersError) {
+      console.error('Get friend users error:', usersError);
+      return res.status(500).json({ error: 'Failed to load friend details' });
+    }
+
     res.json({
-      friends: userFriends,
-      count: userFriends.length
+      friends: friendUsers || [],
+      count: friendUsers ? friendUsers.length : 0
     });
   } catch (error) {
     console.error('Get friends error:', error);
@@ -255,16 +289,27 @@ router.get('/followers', authenticateToken, async (req, res) => {
   try {
     const { userId } = req.user;
 
-    const userFollowers = follows
-      .filter(f => f.followingId === userId)
-      .map(f => ({
-        userId: f.followerId,
-        followedAt: f.createdAt
-      }));
+    const { data, error } = await supabase
+      .from('follows')
+      .select(`
+        follower:users!follows_follower_id_fkey(id, email, display_name, avatar_url, is_verified),
+        created_at
+      `)
+      .eq('following_id', userId);
+
+    if (error) {
+      console.error('Get followers error:', error);
+      return res.status(500).json({ error: 'Failed to load followers' });
+    }
+
+    const followers = (data || []).map(f => ({
+      ...f.follower,
+      followedAt: f.created_at
+    }));
 
     res.json({
-      followers: userFollowers,
-      count: userFollowers.length
+      followers,
+      count: followers.length
     });
   } catch (error) {
     console.error('Get followers error:', error);
@@ -280,16 +325,27 @@ router.get('/following', authenticateToken, async (req, res) => {
   try {
     const { userId } = req.user;
 
-    const userFollowing = follows
-      .filter(f => f.followerId === userId)
-      .map(f => ({
-        userId: f.followingId,
-        followedAt: f.createdAt
-      }));
+    const { data, error } = await supabase
+      .from('follows')
+      .select(`
+        following:users!follows_following_id_fkey(id, email, display_name, avatar_url, is_verified),
+        created_at
+      `)
+      .eq('follower_id', userId);
+
+    if (error) {
+      console.error('Get following error:', error);
+      return res.status(500).json({ error: 'Failed to load following' });
+    }
+
+    const following = (data || []).map(f => ({
+      ...f.following,
+      followedAt: f.created_at
+    }));
 
     res.json({
-      following: userFollowing,
-      count: userFollowing.length
+      following,
+      count: following.length
     });
   } catch (error) {
     console.error('Get following error:', error);
@@ -311,19 +367,28 @@ router.post('/block', authenticateToken, async (req, res) => {
     }
 
     // Check if already blocked
-    const existingBlock = blocks.find(
-      b => b.blockerId === userId && b.blockedId === targetUserId
-    );
+    const { data: existing } = await supabase
+      .from('blocks')
+      .select('*')
+      .eq('blocker_id', userId)
+      .eq('blocked_id', targetUserId)
+      .single();
 
-    if (existingBlock) {
+    if (existing) {
       return res.status(400).json({ error: 'User already blocked' });
     }
 
-    blocks.push({
-      blockerId: userId,
-      blockedId: targetUserId,
-      createdAt: new Date().toISOString()
-    });
+    const { error } = await supabase
+      .from('blocks')
+      .insert([{
+        blocker_id: userId,
+        blocked_id: targetUserId
+      }]);
+
+    if (error) {
+      console.error('Block user error:', error);
+      return res.status(500).json({ error: 'Failed to block user' });
+    }
 
     console.log(`🚫 User ${userId} blocked user ${targetUserId}`);
 
