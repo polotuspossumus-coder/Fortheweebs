@@ -31,11 +31,12 @@ export const IMAGE_SCANNER_CONFIG = {
     }
   },
 
-  // Confidence thresholds
+  // Confidence thresholds - VERY HIGH to prevent false positives
+  // Most content will pass through - only exact logo matches get blocked
   thresholds: {
-    auto_reject: 0.85, // 85%+ confidence = automatically reject
-    manual_review: 0.65, // 65-84% = flag for human review
-    auto_approve: 0.65 // <65% = auto approve
+    auto_reject: 0.95, // 95%+ confidence = block (RARE - only exact copyrighted logos)
+    manual_review: 0.90, // 90-94% = flag for human review (don't auto-block)
+    auto_approve: 0.90 // <90% = auto approve (assume original/transformative)
   },
 
   // Blocked visual patterns (detected characters/logos)
@@ -86,23 +87,27 @@ export async function scanImageForCopyright(image, userId) {
       ...reverseImageResults.detections
     ];
 
-    // Check for copyright violations
+    // Check for copyright violations - CAUTIOUS to prevent false positives
     const violations = [];
     for (const detection of allDetections) {
-      if (isBlockedContent(detection)) {
-        violations.push({
-          type: 'COPYRIGHT_VIOLATION',
-          severity: detection.confidence > 0.85 ? 'CRITICAL' : 'WARNING',
-          detected: detection.label,
-          confidence: detection.confidence,
-          source: detection.source,
-          message: `Detected copyrighted content: ${detection.label} (${Math.round(detection.confidence * 100)}% confidence)`,
-          blocked: detection.confidence > IMAGE_SCANNER_CONFIG.thresholds.auto_reject
-        });
+      // Only check high-confidence detections (90%+)
+      if (detection.confidence >= IMAGE_SCANNER_CONFIG.thresholds.manual_review) {
+        if (isBlockedContent(detection)) {
+          violations.push({
+            type: 'COPYRIGHT_VIOLATION',
+            severity: detection.confidence >= 0.95 ? 'CRITICAL' : 'INFO',
+            detected: detection.label,
+            confidence: detection.confidence,
+            source: detection.source,
+            message: `Possible copyrighted content: ${detection.label} (${Math.round(detection.confidence * 100)}% match) - Flagged for review`,
+            blocked: detection.confidence >= IMAGE_SCANNER_CONFIG.thresholds.auto_reject, // Only 95%+ blocks
+            requiresReview: detection.confidence < IMAGE_SCANNER_CONFIG.thresholds.auto_reject // 90-94% needs review
+          });
+        }
       }
     }
 
-    // Check for explicit/violent content
+    // Check for explicit/violent content (this is the only thing we auto-block)
     const explicitCheck = checkExplicitContent(googleResults, awsResults);
     if (explicitCheck.isExplicit) {
       violations.push({
@@ -111,27 +116,28 @@ export async function scanImageForCopyright(image, userId) {
         detected: explicitCheck.categories.join(', '),
         confidence: explicitCheck.confidence,
         message: 'Image contains explicit or violent content',
-        blocked: true
+        blocked: true // ONLY explicit content auto-blocks
       });
     }
 
     // Determine if image should be rejected
-    const criticalViolations = violations.filter(v => v.blocked);
-    const needsReview = violations.some(v =>
-      v.confidence >= IMAGE_SCANNER_CONFIG.thresholds.manual_review &&
-      v.confidence < IMAGE_SCANNER_CONFIG.thresholds.auto_reject
-    );
+    // Copyright violations NEVER auto-block - they go to manual review
+    const criticalViolations = violations.filter(v => v.blocked && v.type === 'EXPLICIT_CONTENT');
+
+    // Copyright violations always need review (no auto-block to prevent false positives)
+    const needsReview = violations.some(v => v.type === 'COPYRIGHT_VIOLATION');
 
     // Log scan for audit trail
     logImageScan(userId, image.name || 'uploaded-image', violations);
 
     return {
-      isLegal: criticalViolations.length === 0,
+      isLegal: criticalViolations.length === 0, // Only blocked by explicit content, NOT copyright
       violations,
       requiresReview: needsReview,
       detections: allDetections,
       scanTimestamp: new Date().toISOString(),
-      scanId: generateScanId()
+      scanId: generateScanId(),
+      message: needsReview ? 'Content flagged for review - you can still post it while we review' : null
     };
 
   } catch (error) {

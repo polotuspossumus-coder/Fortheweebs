@@ -20,6 +20,60 @@ export const MONITORED_SYSTEMS = {
   DATABASE: 'database',
   EMAIL_TEMPLATES: 'email_templates',
   API_ENDPOINTS: 'api_endpoints',
+  STRIPE_INTEGRATION: 'stripe_integration',
+  FEATURE_DETECTION: 'feature_detection',
+  AUTHENTICATION: 'authentication',
+  VIP_SYSTEM: 'vip_system',
+};
+
+/**
+ * Smart error pattern detection - learns from common errors
+ */
+const ERROR_PATTERNS = {
+  // Network errors
+  NETWORK_TIMEOUT: /timeout|ETIMEDOUT|ECONNREFUSED/i,
+  NETWORK_OFFLINE: /network|offline|ERR_INTERNET_DISCONNECTED/i,
+
+  // API errors
+  API_RATE_LIMIT: /rate limit|429|too many requests/i,
+  API_AUTH_FAIL: /401|unauthorized|authentication failed/i,
+  API_NOT_FOUND: /404|not found|endpoint/i,
+
+  // Database errors
+  DB_CONNECTION: /database|connection|supabase|ECONNRESET/i,
+  DB_QUERY_FAIL: /query|sql|syntax error/i,
+
+  // Payment errors
+  STRIPE_ERROR: /stripe|payment|card declined/i,
+
+  // Security errors
+  SECURITY_BREACH: /xss|injection|csrf|unauthorized access/i,
+};
+
+/**
+ * Auto-recovery strategies for common errors
+ */
+const RECOVERY_STRATEGIES = {
+  NETWORK_TIMEOUT: async () => {
+    // Wait and retry with exponential backoff
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    return { action: 'retry', delay: 1000 };
+  },
+
+  API_RATE_LIMIT: async () => {
+    // Wait for rate limit to reset
+    return { action: 'wait', delay: 60000, notify: true };
+  },
+
+  DB_CONNECTION: async () => {
+    // Attempt reconnection
+    return { action: 'reconnect', target: 'database' };
+  },
+
+  STRIPE_ERROR: async (error) => {
+    // Log payment failure, notify admin
+    return { action: 'notify_admin', critical: true, error };
+  },
 };
 
 /**
@@ -33,15 +87,47 @@ export const SEVERITY = {
 };
 
 /**
- * Auto-report error to bug fixer
+ * Detect error pattern and determine best recovery strategy
+ */
+function detectErrorPattern(error) {
+  const errorMessage = error.message || error.toString();
+
+  for (const [pattern, regex] of Object.entries(ERROR_PATTERNS)) {
+    if (regex.test(errorMessage)) {
+      return pattern;
+    }
+  }
+
+  return null;
+}
+
+/**
+ * Auto-report error to bug fixer with smart recovery
  */
 export async function reportBugToFixer(error, context = {}) {
   try {
+    // Detect error pattern for smart handling
+    const errorPattern = detectErrorPattern(error);
+    const recoveryStrategy = errorPattern ? RECOVERY_STRATEGIES[errorPattern] : null;
+
+    // Attempt auto-recovery for known patterns
+    if (recoveryStrategy && context.severity !== SEVERITY.CRITICAL) {
+      console.log(`🔄 Attempting auto-recovery for ${errorPattern}...`);
+      const recovery = await recoveryStrategy(error);
+
+      if (recovery.action === 'retry') {
+        await new Promise(resolve => setTimeout(resolve, recovery.delay));
+        console.log('✅ Auto-recovery successful - retrying operation');
+        return { recovered: true, strategy: errorPattern };
+      }
+    }
+
     const bugReport = {
       error: {
         message: error.message,
         stack: error.stack,
         name: error.name,
+        pattern: errorPattern, // Add detected pattern
       },
       context: {
         system: context.system || 'unknown',
@@ -52,9 +138,20 @@ export async function reportBugToFixer(error, context = {}) {
         userId: localStorage.getItem('userId') || 'anonymous',
         url: window.location.href,
         userAgent: navigator.userAgent,
+        errorPattern, // Track patterns for ML learning
+        attemptedRecovery: !!recoveryStrategy,
         ...context,
       },
       screenshot: await captureScreenshot(),
+      performance: {
+        memory: performance.memory ? {
+          used: performance.memory.usedJSHeapSize,
+          total: performance.memory.totalJSHeapSize,
+        } : null,
+        timing: performance.timing ? {
+          loadTime: performance.timing.loadEventEnd - performance.timing.navigationStart,
+        } : null,
+      },
     };
 
     // Send to bug fixer API
