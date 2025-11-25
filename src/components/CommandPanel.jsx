@@ -1,15 +1,57 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './CommandPanel.css';
 
 const API_BASE = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3001';
+const OWNER_EMAIL = 'polotuspossumus@gmail.com';
 
 export default function CommandPanel() {
   const [command, setCommand] = useState('');
   const [value, setValue] = useState('');
   const [status, setStatus] = useState('');
   const [isExecuting, setIsExecuting] = useState(false);
+  const [token, setToken] = useState(null);
+  const [authError, setAuthError] = useState(null);
+
+  // Auto-authenticate as owner on mount
+  useEffect(() => {
+    authenticateOwner();
+  }, []);
+
+  const authenticateOwner = async () => {
+    try {
+      const ownerEmail = localStorage.getItem('ownerEmail');
+      if (ownerEmail !== OWNER_EMAIL) {
+        setAuthError('⚠️ Owner access required');
+        return;
+      }
+
+      const res = await fetch(`${API_BASE}/api/auth/owner`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({ email: ownerEmail }),
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        setToken(data.token);
+        setAuthError(null);
+        console.log('✅ Authenticated as owner for Command Panel');
+      } else {
+        setAuthError('⚠️ Authentication failed');
+      }
+    } catch (err) {
+      console.error('Authentication error:', err);
+      setAuthError('⚠️ Authentication error');
+    }
+  };
 
   const executeCommand = async () => {
+    if (!token) {
+      setStatus('⚠️ Not authenticated - refresh page');
+      return;
+    }
+
     if (!command.trim() || value === '') {
       setStatus('⚠️ Enter both command and value');
       return;
@@ -21,18 +63,26 @@ export default function CommandPanel() {
     try {
       const res = await fetch(`${API_BASE}/api/governance/override`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+        credentials: 'include',
         body: JSON.stringify({ command, value }),
       });
 
       const data = await res.json();
 
       if (res.ok) {
-        setStatus(`✅ Success: ${JSON.stringify(data.result)}`);
+        const resultSummary = data.result ? JSON.stringify(data.result) : 'OK';
+        setStatus(`✅ Success: ${resultSummary} | ID: ${data.inscriptionId?.slice(0, 8)}`);
         setCommand('');
         setValue('');
+      } else if (res.status === 401 || res.status === 403) {
+        setStatus(`🛡️ Sentinel blocked: ${data.error || data.message}`);
+        setAuthError('⚠️ Authentication expired');
       } else {
-        setStatus(`❌ Error: ${data.error}`);
+        setStatus(`❌ Error: ${data.error || 'Unknown error'}`);
       }
     } catch (err) {
       setStatus(`❌ Network error: ${err.message}`);
@@ -52,11 +102,28 @@ export default function CommandPanel() {
     { cmd: 'guard_mode', val: 'true', label: '🛡️ Enable Guard Mode' },
   ];
 
+  // Show authentication error if not authorized
+  if (authError) {
+    return (
+      <div className="command-panel">
+        <div className="command-panel-header">
+          <h2>⚡ Mico Command Panel</h2>
+          <p className="subtitle">Live governance controls</p>
+        </div>
+        <div className="auth-error">
+          <p>{authError}</p>
+          <p>Only the owner can access this panel.</p>
+          <button onClick={authenticateOwner}>Retry Authentication</button>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="command-panel">
       <div className="command-panel-header">
         <h2>⚡ Mico Command Panel</h2>
-        <p className="subtitle">Live governance controls</p>
+        <p className="subtitle">Live governance controls • Authenticated</p>
       </div>
 
       <div className="command-input-group">
@@ -85,14 +152,14 @@ export default function CommandPanel() {
         <button
           className="execute-btn"
           onClick={executeCommand}
-          disabled={isExecuting}
+          disabled={isExecuting || !token}
         >
           {isExecuting ? 'Executing...' : '▶ Execute'}
         </button>
       </div>
 
       {status && (
-        <div className={`status-bar ${status.startsWith('✅') ? 'success' : status.startsWith('❌') ? 'error' : 'warning'}`}>
+        <div className={`status-bar ${status.startsWith('✅') ? 'success' : status.startsWith('❌') || status.startsWith('🛡️') ? 'error' : 'warning'}`}>
           {status}
         </div>
       )}
@@ -108,7 +175,7 @@ export default function CommandPanel() {
                 setCommand(qc.cmd);
                 setValue(qc.val);
               }}
-              disabled={isExecuting}
+              disabled={isExecuting || !token}
             >
               {qc.label}
             </button>

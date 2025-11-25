@@ -29,6 +29,8 @@ app.use('/api', dataPrivacyMiddleware);
 console.log('🔒 Data privacy enforcement active - user data selling is BLOCKED');
 
 // Middleware
+const cookieParser = require('cookie-parser');
+app.use(cookieParser());
 app.use(cors({
     origin: process.env.VITE_APP_URL || 'http://localhost:3002',
     credentials: true
@@ -94,6 +96,7 @@ const routes = [
     { path: '/api/moderation', file: './api/moderation-actions', name: 'AI CSAM Moderation' },
     { path: '/api/creator-applications', file: './api/creator-applications', name: 'Creator Applications' },
     { path: '/api/trial', file: './api/trial', name: 'Free Trial System' },
+    { path: '/api/auth', file: './api/auth', name: 'Authentication (JWT)' },
     { path: '/api/governance', file: './api/governance', name: 'Mico Governance (Notary + Policy Overrides)' }
 ];
 

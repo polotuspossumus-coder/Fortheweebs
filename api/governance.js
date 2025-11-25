@@ -1,10 +1,23 @@
 /**
  * Governance API: Endpoints for Mico's authority controls
  * Provides governance notary and policy override management
+ *
+ * SECURITY ENFORCED:
+ * - JWT authentication required
+ * - Role-based access control (RBAC)
+ * - Owner signature for all overrides
+ * - Rate limiting
+ * - Sentinel watchdog monitoring
+ * - Immutable audit trail
  */
 
 const express = require('express');
 const router = express.Router();
+
+// Security middleware
+const { authenticateToken, requireOwner, requireRole, ROLES } = require('./middleware/authMiddleware');
+const { governanceRateLimiter, readRateLimiter } = require('./middleware/rateLimiter');
+const { sentinelWatchdog } = require('./middleware/sentinelWatchdog');
 
 // Import TypeScript modules (will be compiled)
 let governanceNotary, policyOverrides, artifactLogger;
@@ -16,6 +29,9 @@ try {
 } catch (error) {
   console.error('Failed to load governance modules:', error.message);
 }
+
+// Apply rate limiting to all routes
+router.use(readRateLimiter);
 
 /**
  * GET /api/governance/notary/history
@@ -86,9 +102,10 @@ router.get('/notary/audit/:entityType/:entityId', async (req, res) => {
 
 /**
  * POST /api/governance/notary/inscribe
- * Inscribe a governance decision (Mico only)
+ * Inscribe a governance decision (Owner only)
+ * SECURITY: Requires authentication, owner role, and sentinel validation
  */
-router.post('/notary/inscribe', async (req, res) => {
+router.post('/notary/inscribe', authenticateToken, requireOwner, governanceRateLimiter, sentinelWatchdog, async (req, res) => {
   try {
     if (!governanceNotary) {
       return res.status(503).json({ error: 'Governance notary not available' });
@@ -158,9 +175,10 @@ router.get('/overrides/:key', async (req, res) => {
 
 /**
  * POST /api/governance/overrides
- * Set a policy override (Mico only)
+ * Set a policy override (Owner only)
+ * SECURITY: Requires authentication, owner role, and sentinel validation
  */
-router.post('/overrides', async (req, res) => {
+router.post('/overrides', authenticateToken, requireOwner, governanceRateLimiter, sentinelWatchdog, async (req, res) => {
   try {
     if (!policyOverrides) {
       return res.status(503).json({ error: 'Policy overrides not available' });
@@ -191,9 +209,10 @@ router.post('/overrides', async (req, res) => {
 
 /**
  * DELETE /api/governance/overrides/:key
- * Deactivate a policy override
+ * Deactivate a policy override (Owner only)
+ * SECURITY: Requires authentication, owner role, and sentinel validation
  */
-router.delete('/overrides/:key', async (req, res) => {
+router.delete('/overrides/:key', authenticateToken, requireOwner, governanceRateLimiter, sentinelWatchdog, async (req, res) => {
   try {
     if (!policyOverrides) {
       return res.status(503).json({ error: 'Policy overrides not available' });
@@ -210,9 +229,10 @@ router.delete('/overrides/:key', async (req, res) => {
 
 /**
  * POST /api/governance/threshold
- * Set moderation threshold (runtime override)
+ * Set moderation threshold (runtime override, Owner only)
+ * SECURITY: Requires authentication, owner role, and sentinel validation
  */
-router.post('/threshold', async (req, res) => {
+router.post('/threshold', authenticateToken, requireOwner, governanceRateLimiter, sentinelWatchdog, async (req, res) => {
   try {
     if (!policyOverrides) {
       return res.status(503).json({ error: 'Policy overrides not available' });
@@ -252,9 +272,10 @@ router.get('/lanes', async (req, res) => {
 
 /**
  * POST /api/governance/lanes/:name/pause
- * Pause a priority lane
+ * Pause a priority lane (Owner only)
+ * SECURITY: Requires authentication, owner role, and sentinel validation
  */
-router.post('/lanes/:name/pause', async (req, res) => {
+router.post('/lanes/:name/pause', authenticateToken, requireOwner, governanceRateLimiter, sentinelWatchdog, async (req, res) => {
   try {
     if (!policyOverrides) {
       return res.status(503).json({ error: 'Policy overrides not available' });
@@ -271,9 +292,10 @@ router.post('/lanes/:name/pause', async (req, res) => {
 
 /**
  * POST /api/governance/lanes/:name/resume
- * Resume a priority lane
+ * Resume a priority lane (Owner only)
+ * SECURITY: Requires authentication, owner role, and sentinel validation
  */
-router.post('/lanes/:name/resume', async (req, res) => {
+router.post('/lanes/:name/resume', authenticateToken, requireOwner, governanceRateLimiter, sentinelWatchdog, async (req, res) => {
   try {
     if (!policyOverrides) {
       return res.status(503).json({ error: 'Policy overrides not available' });
@@ -359,8 +381,11 @@ router.get('/artifacts/recent', async (req, res) => {
  * POST /api/governance/override
  * Simplified unified endpoint for all command types
  * Accepts { command, value } and routes to appropriate handler
+ *
+ * SECURITY: Maximum protection - Owner only, rate limited, sentinel validated
+ * This is the main command endpoint for the Command Panel
  */
-router.post('/override', async (req, res) => {
+router.post('/override', authenticateToken, requireOwner, governanceRateLimiter, sentinelWatchdog, async (req, res) => {
   try {
     if (!policyOverrides || !governanceNotary) {
       return res.status(503).json({ error: 'Governance modules not available' });
@@ -466,17 +491,40 @@ router.post('/override', async (req, res) => {
         return res.status(400).json({ error: `Unknown command: ${command}` });
     }
 
-    // Inscribe the decision
-    await governanceNotary.inscribeDecision({
+    // Inscribe the decision with user signature
+    const inscriptionId = await governanceNotary.inscribeDecision({
       actionType: 'policy_override',
       entityType: 'command_panel',
       beforeState: { command },
       afterState: result,
-      justification,
-      authorizedBy: 'mico',
+      justification: `${justification} | Authorized by: ${req.user.email} | Timestamp: ${new Date().toISOString()}`,
+      authorizedBy: req.user.email,
     });
 
-    res.json({ success: true, command, value, result });
+    // Log to artifact stream
+    if (artifactLogger) {
+      await artifactLogger.logArtifact({
+        artifactType: 'governance_override',
+        source: 'command_panel',
+        payload: {
+          command,
+          value,
+          result,
+          user: req.user.email,
+          inscriptionId,
+        },
+        severity: 'high',
+      });
+    }
+
+    res.json({
+      success: true,
+      command,
+      value,
+      result,
+      inscriptionId,
+      authorizedBy: req.user.email,
+    });
   } catch (error) {
     console.error('Failed to execute override command:', error);
     res.status(500).json({ error: error.message });

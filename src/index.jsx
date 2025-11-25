@@ -249,6 +249,18 @@ function AppFlow() {
     return <Invite />;
   }
 
+  // Check if this is admin panel (owner only)
+  if (window.location.pathname === '/admin') {
+    if (isAdmin || localStorage.getItem('ownerEmail') === 'polotuspossumus@gmail.com') {
+      const AdminPanel = require('./components/AdminPanel').default;
+      return <AdminPanel />;
+    } else {
+      // Redirect non-admin users
+      window.location.href = '/';
+      return null;
+    }
+  }
+
   // Check if this is a landing site page
   const landingPaths = ['/apply', '/trial', '/parental-controls', '/compliance-2257', '/admin/applications'];
   if (landingPaths.includes(window.location.pathname)) {
