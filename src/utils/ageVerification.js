@@ -293,8 +293,9 @@ async function verifyParentalConsent(userId, data) {
 
 /**
  * Check if user can access content based on age
+ * AUTOMATIC AGE VERIFICATION: Payment history = 18+ verified
  */
-export function canAccessContent(userAge, contentRating) {
+export function canAccessContent(userAge, contentRating, user = null) {
   const ratingRequirements = {
     'G': 0, // General audiences
     'PG': 0, // Parental guidance
@@ -307,7 +308,38 @@ export function canAccessContent(userAge, contentRating) {
   };
 
   const requiredAge = ratingRequirements[contentRating] || 0;
+
+  // PAYMENT-BASED AGE VERIFICATION
+  // If user has completed ANY payment (buying OR receiving payouts), they're 18+
+  if (user && (user.hasCompletedPurchase || user.hasReceivedPayout || user.stripeAccountVerified)) {
+    // Credit card = must be 18+
+    // Stripe payouts = must be 18+
+    return true; // Bypass age gate for paying customers and creators
+  }
+
   return userAge >= requiredAge;
+}
+
+/**
+ * Check if user needs age gate for NSFW content
+ * Returns false if user is auto-verified via payment
+ */
+export function needsAgeGate(user, contentRating) {
+  if (contentRating !== 'ADULT' && contentRating !== 'NC-17') {
+    return false; // Only adult content needs age gate
+  }
+
+  // AUTO-VERIFY: User has payment history = 18+
+  if (user && (user.hasCompletedPurchase || user.hasReceivedPayout || user.stripeAccountVerified)) {
+    return false; // No age gate needed
+  }
+
+  // Check if manually verified
+  if (user && user.ageVerified && user.verifiedAge >= 18) {
+    return false;
+  }
+
+  return true; // Show age gate
 }
 
 /**

@@ -30,9 +30,16 @@ import { requireOwner, isOwner } from "./utils/ownerAuth.js";
 import { isLifetimeVIP, shouldSkipPayment } from './utils/vipAccess.js';
 import { initMobileTouchOptimizations, isCapacitor } from './utils/mobileOptimizations';
 import './utils/notifications.js'; // Import notification handler
+import { initBugFixerMonitoring } from './utils/bugFixerIntegration.js';
 
 // Register service worker for PWA support
 registerServiceWorker();
+
+// Initialize bug fixer monitoring for the entire app
+if (typeof window !== 'undefined') {
+  initBugFixerMonitoring();
+  console.log('🐛 Bug Fixer: Monitoring all systems');
+}
 
 // Initialize mobile optimizations
 if (typeof window !== 'undefined') {
@@ -240,6 +247,13 @@ function AppFlow() {
   // Check if this is the invite page
   if (window.location.pathname === '/invite' || window.location.pathname.startsWith('/invite/')) {
     return <Invite />;
+  }
+
+  // Check if this is a landing site page
+  const landingPaths = ['/apply', '/trial', '/parental-controls', '/compliance-2257', '/admin/applications'];
+  if (landingPaths.includes(window.location.pathname)) {
+    const LandingSite = require('./LandingSite').default;
+    return <LandingSite />;
   }
 
   const userId = isAdmin ? "owner" : `user_${Date.now()}`;

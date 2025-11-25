@@ -90,7 +90,11 @@ const routes = [
     { path: '/api/mico-hybrid', file: './api/mico-hybrid', name: 'Mico Hybrid (Mico + Claude)' },
     { path: '/api/auto-implement-suggestions', file: './src/routes/auto-implement-suggestions', name: 'Auto-Implement Suggestions' },
     { path: '/api/auto-answer-questions', file: './src/routes/auto-answer-questions', name: 'Auto-Answer Questions' },
-    { path: '/api/debugger-to-cloud', file: './src/routes/debugger-to-cloud', name: 'Cloud Bug Fixer' }
+    { path: '/api/debugger-to-cloud', file: './src/routes/debugger-to-cloud', name: 'Cloud Bug Fixer' },
+    { path: '/api/moderation', file: './api/moderation-actions', name: 'AI CSAM Moderation' },
+    { path: '/api/creator-applications', file: './api/creator-applications', name: 'Creator Applications' },
+    { path: '/api/trial', file: './api/trial', name: 'Free Trial System' },
+    { path: '/api/governance', file: './api/governance', name: 'Mico Governance (Notary + Policy Overrides)' }
 ];
 
 let loadedCount = 0;

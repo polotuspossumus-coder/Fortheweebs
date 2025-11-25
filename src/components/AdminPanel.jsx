@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { ModerationQueueItem } from './ContentModeration';
+import DockedConsole from './DockedConsole';
 import './AdminPanel.css';
 
 function AdminPanel() {
@@ -412,6 +413,9 @@ function AdminPanel() {
           </div>
         )}
       </div>
+
+      {/* Mico's Governance Console */}
+      <DockedConsole />
     </div>
   );
 }

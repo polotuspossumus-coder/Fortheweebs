@@ -71,7 +71,7 @@ export const AI_MODERATION_CONFIG = {
 /**
  * Main moderation function - analyzes all content types
  */
-export async function moderateContent(content, type = 'text', userId = null) {
+export async function moderateContent(content, type = 'text', userId = null, ipAddress = null) {
   const results = {
     isApproved: false,
     requiresReview: false,
@@ -82,6 +82,36 @@ export async function moderateContent(content, type = 'text', userId = null) {
   };
 
   try {
+    // Step 0: CSAM CHECK - MUST BE FIRST (Federal law requirement)
+    if (type === 'image' || type === 'video') {
+      const { scanForCSAM } = await import('./csamDetection.js');
+      const csamCheck = await scanForCSAM(content, userId, ipAddress);
+
+      if (csamCheck.isCSAM) {
+        // CSAM detected - account terminated, NCMEC report filed
+        results.violations.push({
+          type: 'CSAM_DETECTED',
+          severity: 'CRITICAL_FEDERAL_CRIME',
+          message: 'Child sexual abuse material detected',
+          blocked: true,
+          confidence: 1.0,
+        });
+        results.isApproved = false;
+        return results; // Stop all processing immediately
+      }
+
+      if (csamCheck.requiresManualReview) {
+        // CSAM detection failed - require manual review
+        results.requiresReview = true;
+        results.violations.push({
+          type: 'CSAM_CHECK_FAILED',
+          severity: 'HIGH',
+          message: csamCheck.message || 'Content requires manual review',
+          blocked: false,
+        });
+      }
+    }
+
     // Step 1: Basic validation
     const validation = validateContentBasics(content, type);
     if (!validation.isValid) {

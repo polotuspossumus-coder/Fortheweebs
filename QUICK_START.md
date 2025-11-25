@@ -42,11 +42,20 @@ npm run dev:all
    - Find your account row, copy the `id` column (UUID)
    - Edit `.env` file, set: `OWNER_USER_ID=your-uuid-here`
 
-2. **Test Payments**:
+2. **Adult Content System Setup** (NEW - REQUIRED):
+   - Generate encryption key: `openssl rand -base64 32`
+   - Add to `.env`: `ID_ENCRYPTION_KEY=your-key-here`
+   - Create Supabase bucket: `creator-compliance` (private)
+   - Run SQL: `supabase/schema_adult_content.sql`
+   - Sign up for CCBill: https://www.ccbill.com/
+   - Set custodian address in `.env`
+   - **Full guide:** `ADULT_CONTENT_SETUP_GUIDE.md`
+
+3. **Test Payments**:
    - Use Stripe test cards: `4242 4242 4242 4242`
    - Any future expiry date, any CVC
 
-3. **Deploy** (when ready):
+4. **Deploy** (when ready):
    - Push to GitHub (already set up)
    - Deploy to Vercel/Netlify/Railway
    - Point your domain

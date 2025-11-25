@@ -1,0 +1,277 @@
+"use strict";
+/**
+ * Policy Engine: Authority toggles and governance for AI agents
+ * Controls what each agent type can READ, SUGGEST, ACT, or ENFORCE
+ */
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.getAuthority = getAuthority;
+exports.canPerformAction = canPerformAction;
+exports.setAuthority = setAuthority;
+exports.getAllAuthorities = getAllAuthorities;
+exports.enableGuardMode = enableGuardMode;
+exports.disableGuardMode = disableGuardMode;
+const supabase_js_1 = require("@supabase/supabase-js");
+const supabase = (0, supabase_js_1.createClient)(process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_KEY);
+/**
+ * Default authority matrix: what each agent can do
+ * READ: Can observe and report
+ * SUGGEST: Can recommend actions
+ * ACT: Can execute non-critical actions
+ * ENFORCE: Can execute critical actions (hide/remove/ban)
+ */
+const DEFAULT_AUTHORITY_MATRIX = {
+    moderation_sentinel: 'suggest', // Default: suggest, can be elevated to 'enforce'
+    content_companion: 'act', // Can generate content
+    automation_clerk: 'act', // Can create tickets, triage
+    profile_architect: 'suggest', // Default: suggest profiles
+    legacy_archivist: 'read', // Read-only logging
+};
+/**
+ * Capability definitions: what each agent type can potentially do
+ */
+const AGENT_CAPABILITIES = {
+    moderation_sentinel: [
+        'flag_content',
+        'blur_media',
+        'hide_post',
+        'remove_content',
+        'suspend_user',
+        'report_to_ncmec',
+    ],
+    content_companion: [
+        'generate_caption',
+        'translate_content',
+        'suggest_hashtags',
+        'optimize_description',
+        'generate_alt_text',
+    ],
+    automation_clerk: [
+        'create_ticket',
+        'triage_ticket',
+        'assign_priority',
+        'create_github_issue',
+        'close_duplicate',
+        'auto_respond',
+    ],
+    profile_architect: [
+        'generate_bio',
+        'generate_banner',
+        'suggest_categories',
+        'recommend_perks',
+        'optimize_profile',
+    ],
+    legacy_archivist: [
+        'log_action',
+        'create_bundle',
+        'archive_artifact',
+        'generate_report',
+    ],
+};
+/**
+ * Authority constraints: limits on what agents can do even with authority
+ */
+const AUTHORITY_CONSTRAINTS = {
+    moderation_sentinel: {
+        read: {},
+        suggest: {
+            maxFlagsPerHour: 1000,
+            requiresHumanReview: ['csam', 'violence_extreme'],
+        },
+        act: {
+            maxFlagsPerHour: 1000,
+            canBlur: true,
+            canHide: true,
+            canRemove: false, // Cannot remove, only hide
+            requiresHumanReview: ['csam'],
+        },
+        enforce: {
+            maxFlagsPerHour: 10000,
+            canBlur: true,
+            canHide: true,
+            canRemove: true,
+            canSuspend: true,
+            requiresHumanReview: [], // Can act immediately on all
+        },
+    },
+    content_companion: {
+        read: {},
+        suggest: { maxCallsPerUser: 5 },
+        act: { maxCallsPerUser: 100 },
+        enforce: { maxCallsPerUser: -1 }, // Unlimited
+    },
+    automation_clerk: {
+        read: {},
+        suggest: { maxTicketsPerHour: 100 },
+        act: { maxTicketsPerHour: 1000, canCreateGitHubIssue: true },
+        enforce: { maxTicketsPerHour: -1, canAutoClose: true },
+    },
+    profile_architect: {
+        read: {},
+        suggest: { maxGenerationsPerDay: 10 },
+        act: { maxGenerationsPerDay: 100, canAutoPublish: false },
+        enforce: { maxGenerationsPerDay: -1, canAutoPublish: true },
+    },
+    legacy_archivist: {
+        read: { retention: '7 days' },
+        suggest: { retention: '30 days' },
+        act: { retention: '90 days' },
+        enforce: { retention: 'indefinite' },
+    },
+};
+/**
+ * Get current authority level for an agent type
+ */
+async function getAuthority(agentType) {
+    // Check for override in feature_flags table
+    const { data: flag } = await supabase
+        .from('feature_flags')
+        .select('*')
+        .eq('flag_key', `${agentType}_authority`)
+        .single();
+    const authorityLevel = flag?.enabled
+        ? flag.metadata?.authority_level || DEFAULT_AUTHORITY_MATRIX[agentType]
+        : DEFAULT_AUTHORITY_MATRIX[agentType];
+    const capabilities = AGENT_CAPABILITIES[agentType].filter((cap) => {
+        // Filter capabilities based on authority level
+        const constraints = AUTHORITY_CONSTRAINTS[agentType][authorityLevel];
+        if (!constraints)
+            return true;
+        // Check if capability is allowed at this authority level
+        if (cap === 'remove_content' && !constraints.canRemove)
+            return false;
+        if (cap === 'suspend_user' && !constraints.canSuspend)
+            return false;
+        return true;
+    });
+    return {
+        agentType,
+        authorityLevel,
+        capabilities,
+        constraints: AUTHORITY_CONSTRAINTS[agentType][authorityLevel],
+    };
+}
+/**
+ * Check if agent has permission to perform action
+ */
+async function canPerformAction(agentType, action, context) {
+    const policy = await getAuthority(agentType);
+    // Check if action is in capabilities
+    if (!policy.capabilities.includes(action)) {
+        return {
+            allowed: false,
+            reason: `Action '${action}' not in capabilities for ${agentType} at ${policy.authorityLevel} level`,
+        };
+    }
+    // Check constraints
+    if (policy.constraints) {
+        // Check human review requirements
+        if (policy.constraints.requiresHumanReview &&
+            Array.isArray(policy.constraints.requiresHumanReview)) {
+            const flagType = context?.flagType;
+            if (flagType &&
+                policy.constraints.requiresHumanReview.includes(flagType)) {
+                return {
+                    allowed: false,
+                    reason: `Action requires human review for flag type: ${flagType}`,
+                };
+            }
+        }
+        // Check rate limits
+        if (policy.constraints.maxFlagsPerHour !== undefined) {
+            const recentFlags = await supabase
+                .from('artifact_log')
+                .select('id', { count: 'exact', head: true })
+                .eq('agent_type', agentType)
+                .eq('action', action)
+                .gte('timestamp', new Date(Date.now() - 60 * 60 * 1000).toISOString());
+            if (recentFlags.count &&
+                policy.constraints.maxFlagsPerHour !== -1 &&
+                recentFlags.count >= policy.constraints.maxFlagsPerHour) {
+                return {
+                    allowed: false,
+                    reason: `Rate limit exceeded: ${recentFlags.count}/${policy.constraints.maxFlagsPerHour} per hour`,
+                };
+            }
+        }
+    }
+    return { allowed: true };
+}
+/**
+ * Set authority level for an agent (admin operation)
+ */
+async function setAuthority(agentType, authorityLevel, adminId) {
+    // Update or insert feature flag
+    const { error } = await supabase.from('feature_flags').upsert({
+        flag_key: `${agentType}_authority`,
+        display_name: `${agentType} Authority Level`,
+        description: `Authority level for ${agentType}: ${authorityLevel}`,
+        enabled: true,
+        rollout_percentage: 100,
+        metadata: { authority_level: authorityLevel, set_by: adminId },
+    });
+    if (error) {
+        throw new Error(`Failed to set authority: ${error.message}`);
+    }
+    console.log(`✅ Authority set: ${agentType} -> ${authorityLevel} by ${adminId}`);
+}
+/**
+ * Get all agent authorities (dashboard view)
+ */
+async function getAllAuthorities() {
+    const authorities = {};
+    for (const agentType of Object.keys(DEFAULT_AUTHORITY_MATRIX)) {
+        authorities[agentType] = await getAuthority(agentType);
+    }
+    return authorities;
+}
+/**
+ * Temporarily elevate authority (guard mode)
+ * Use before critical deploys or events
+ */
+async function enableGuardMode(duration = 3600000, // 1 hour default
+adminId) {
+    console.log(`🛡️  GUARD MODE ENABLED by ${adminId} for ${duration / 1000}s`);
+    // Temporarily set stricter thresholds
+    const { error: modThresholdError } = await supabase
+        .from('moderation_thresholds')
+        .update({ threshold: supabase.raw('threshold * 0.8') }) // 20% stricter
+        .neq('flag_type', 'csam'); // Keep CSAM threshold unchanged
+    if (modThresholdError) {
+        console.error('Failed to update moderation thresholds:', modThresholdError);
+    }
+    // Enable release marshal auto-rollback
+    const { error: flagError } = await supabase
+        .from('feature_flags')
+        .update({ enabled: true, rollout_percentage: 100 })
+        .eq('flag_key', 'release_marshal_auto_rollback');
+    if (flagError) {
+        console.error('Failed to enable release marshal:', flagError);
+    }
+    // Schedule guard mode disable
+    setTimeout(async () => {
+        await disableGuardMode(adminId);
+    }, duration);
+}
+/**
+ * Disable guard mode
+ */
+async function disableGuardMode(adminId) {
+    console.log(`🛡️  GUARD MODE DISABLED by ${adminId}`);
+    // Restore original thresholds
+    const { error: modThresholdError } = await supabase
+        .from('moderation_thresholds')
+        .update({ threshold: supabase.raw('threshold / 0.8') })
+        .neq('flag_type', 'csam');
+    if (modThresholdError) {
+        console.error('Failed to restore moderation thresholds:', modThresholdError);
+    }
+}
+exports.default = {
+    getAuthority,
+    canPerformAction,
+    setAuthority,
+    getAllAuthorities,
+    enableGuardMode,
+    disableGuardMode,
+};
+//# sourceMappingURL=policy.js.map

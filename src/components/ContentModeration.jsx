@@ -85,8 +85,13 @@ export function AgeGate({ onVerify }) {
 }
 
 // NSFW Content Wrapper
-export function NSFWContent({ children, isNSFW }) {
+export function NSFWContent({ children, isNSFW, user = null }) {
   const [verified, setVerified] = useState(() => {
+    // AUTO-VERIFY: User has payment history = 18+
+    if (user && (user.hasCompletedPurchase || user.hasReceivedPayout || user.stripeAccountVerified)) {
+      return true; // Payment = age verified
+    }
+
     const stored = localStorage.getItem('ageVerified');
     const verifiedAt = localStorage.getItem('ageVerifiedAt');
 
@@ -110,6 +115,7 @@ export function NSFWContent({ children, isNSFW }) {
     <div className="nsfw-content-wrapper">
       <div className="nsfw-warning-banner">
         🔞 This content is marked as NSFW/Adult
+        {user?.hasCompletedPurchase && <span> (Age verified via payment)</span>}
       </div>
       {children}
     </div>
@@ -117,9 +123,14 @@ export function NSFWContent({ children, isNSFW }) {
 }
 
 // NSFW Blur Overlay (for thumbnails)
-export function NSFWBlur({ src, alt, isNSFW, onClick }) {
+export function NSFWBlur({ src, alt, isNSFW, onClick, user = null }) {
   const [revealed, setRevealed] = useState(false);
   const [ageVerified, setAgeVerified] = useState(() => {
+    // AUTO-VERIFY: User has payment history = 18+
+    if (user && (user.hasCompletedPurchase || user.hasReceivedPayout || user.stripeAccountVerified)) {
+      return true;
+    }
+
     const stored = localStorage.getItem('ageVerified');
     return stored === 'true';
   });

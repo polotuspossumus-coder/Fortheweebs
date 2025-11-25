@@ -8,6 +8,7 @@
     "dev:server": "nodemon server.js",
     "dev:all": "concurrently \"npm run dev\" \"npm run dev:server\"",
     "build": "node scripts/inject-env.js && vite build",
+    "build:agents": "tsc --project tsconfig.agents.json",
     "preview": "vite preview",
     "server": "node server.js",
     "setup": "echo 'Skipping face models for now'",
@@ -30,6 +31,7 @@
   "author": "Jacob Morris",
   "license": "MIT",
   "devDependencies": {
+    "@types/node": "^24.10.1",
     "@vitejs/plugin-react": "^5.1.0",
     "eslint": "^8.56.0",
     "terser": "^5.44.1",

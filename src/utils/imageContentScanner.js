@@ -155,73 +155,147 @@ export async function scanImageForCopyright(image, userId) {
  * Scan image using Google Cloud Vision API
  */
 async function scanWithGoogleVision(base64Image) {
-  // In production, this would make actual API calls to Google Vision
-  // For now, return mock structure
+  const config = IMAGE_SCANNER_CONFIG.providers.google_vision;
 
-  // REAL IMPLEMENTATION:
-  /*
-  const response = await fetch(IMAGE_SCANNER_CONFIG.providers.google_vision.endpoint, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${IMAGE_SCANNER_CONFIG.providers.google_vision.api_key}`
-    },
-    body: JSON.stringify({
-      requests: [{
-        image: { content: base64Image },
-        features: [
-          { type: 'LOGO_DETECTION', maxResults: 10 },
-          { type: 'LABEL_DETECTION', maxResults: 10 },
-          { type: 'TEXT_DETECTION' },
-          { type: 'SAFE_SEARCH_DETECTION' },
-          { type: 'WEB_DETECTION', maxResults: 10 }
-        ]
-      }]
-    })
-  });
-  
-  const data = await response.json();
-  const annotations = data.responses[0];
-  
-  return {
-    detections: [
-      ...(annotations.logoAnnotations || []).map(logo => ({
-        label: logo.description.toLowerCase(),
-        confidence: logo.score,
-        source: 'google_vision_logo'
-      })),
-      ...(annotations.labelAnnotations || []).map(label => ({
-        label: label.description.toLowerCase(),
-        confidence: label.score,
-        source: 'google_vision_label'
-      })),
-      ...(annotations.webDetection?.webEntities || []).map(entity => ({
-        label: entity.description.toLowerCase(),
-        confidence: entity.score,
-        source: 'google_vision_web'
-      }))
-    ],
-    safeSearch: annotations.safeSearchAnnotation
-  };
-  */
+  // Check if API key is configured
+  if (!config.api_key || config.api_key === 'YOUR_API_KEY_HERE') {
+    console.warn('Google Vision API key not configured - skipping scan');
+    return {
+      detections: [],
+      safeSearch: { adult: 'UNKNOWN', violence: 'UNKNOWN' }
+    };
+  }
 
-  // MOCK for development
-  return {
-    detections: [],
-    safeSearch: { adult: 'VERY_UNLIKELY', violence: 'UNLIKELY' }
-  };
+  try {
+    const response = await fetch(`${config.endpoint}?key=${config.api_key}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        requests: [{
+          image: { content: base64Image },
+          features: [
+            { type: 'LOGO_DETECTION', maxResults: 10 },
+            { type: 'LABEL_DETECTION', maxResults: 10 },
+            { type: 'TEXT_DETECTION' },
+            { type: 'SAFE_SEARCH_DETECTION' },
+            { type: 'WEB_DETECTION', maxResults: 10 }
+          ]
+        }]
+      })
+    });
+
+    if (!response.ok) {
+      throw new Error(`Google Vision API error: ${response.status}`);
+    }
+
+    const data = await response.json();
+    const annotations = data.responses[0];
+
+    return {
+      detections: [
+        ...(annotations.logoAnnotations || []).map(logo => ({
+          label: logo.description.toLowerCase(),
+          confidence: logo.score,
+          source: 'google_vision_logo'
+        })),
+        ...(annotations.labelAnnotations || []).map(label => ({
+          label: label.description.toLowerCase(),
+          confidence: label.score,
+          source: 'google_vision_label'
+        })),
+        ...(annotations.webDetection?.webEntities || []).map(entity => ({
+          label: entity.description ? entity.description.toLowerCase() : '',
+          confidence: entity.score || 0,
+          source: 'google_vision_web'
+        }))
+      ].filter(d => d.label), // Remove empty labels
+      safeSearch: annotations.safeSearchAnnotation || { adult: 'UNKNOWN', violence: 'UNKNOWN' }
+    };
+
+  } catch (error) {
+    console.error('Google Vision API error:', error);
+    // Return empty results on error (fail open for copyright, but log)
+    return {
+      detections: [],
+      safeSearch: { adult: 'UNKNOWN', violence: 'UNKNOWN' },
+      error: error.message
+    };
+  }
 }
 
 /**
  * Scan image using AWS Rekognition
  */
 async function scanWithAWSRekognition(base64Image) {
-  // In production, integrate AWS SDK
-  // MOCK for development
-  return {
-    detections: [],
-    moderation: { ModerationLabels: [] }
-  };
+  const config = IMAGE_SCANNER_CONFIG.providers.aws_rekognition;
+
+  // Check if credentials are configured
+  if (!config.access_key || !config.secret_key ||
+      config.access_key === 'YOUR_KEY_HERE' || config.secret_key === 'YOUR_SECRET_HERE') {
+    console.warn('AWS Rekognition credentials not configured - skipping scan');
+    return {
+      detections: [],
+      moderation: { ModerationLabels: [] }
+    };
+  }
+
+  try {
+    // Note: In production, use AWS SDK proper. This is a simplified version.
+    // You'll need: npm install @aws-sdk/client-rekognition
+    /*
+    import { RekognitionClient, DetectLabelsCommand, DetectModerationLabelsCommand } from '@aws-sdk/client-rekognition';
+
+    const client = new RekognitionClient({
+      region: config.region,
+      credentials: {
+        accessKeyId: config.access_key,
+        secretAccessKey: config.secret_key
+      }
+    });
+
+    // Convert base64 to buffer
+    const buffer = Buffer.from(base64Image, 'base64');
+
+    // Detect labels
+    const labelsCommand = new DetectLabelsCommand({
+      Image: { Bytes: buffer },
+      MaxLabels: 10
+    });
+    const labelsResponse = await client.send(labelsCommand);
+
+    // Detect moderation labels
+    const moderationCommand = new DetectModerationLabelsCommand({
+      Image: { Bytes: buffer }
+    });
+    const moderationResponse = await client.send(moderationCommand);
+
+    return {
+      detections: (labelsResponse.Labels || []).map(label => ({
+        label: label.Name.toLowerCase(),
+        confidence: label.Confidence / 100,
+        source: 'aws_rekognition'
+      })),
+      moderation: moderationResponse
+    };
+    */
+
+    // For now, return empty (AWS SDK requires server-side implementation)
+    console.warn('AWS Rekognition requires server-side implementation');
+    return {
+      detections: [],
+      moderation: { ModerationLabels: [] }
+    };
+
+  } catch (error) {
+    console.error('AWS Rekognition error:', error);
+    return {
+      detections: [],
+      moderation: { ModerationLabels: [] },
+      error: error.message
+    };
+  }
 }
 
 /**
