@@ -1,9 +1,11 @@
 .metrics-dashboard {
-  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  background: #0b0b0f;
   border-radius: 12px;
   padding: 24px;
-  color: #e0e0e0;
+  color: #39ff14;
+  font-family: 'Courier New', monospace;
   margin-bottom: 32px;
+  border-top: 2px solid #00ffff;
 }
 
 .dashboard-header {
@@ -22,9 +24,77 @@
 }
 
 .last-updated {
-  color: #9090a0;
+  color: #00ffff;
   font-size: 13px;
   font-family: 'Courier New', monospace;
+}
+
+/* Metric Cards */
+.cards {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.card {
+  background: #111;
+  border: 1px solid #39ff14;
+  padding: 16px;
+  border-radius: 6px;
+}
+
+.label {
+  color: #00ffff;
+  display: block;
+  margin-bottom: 8px;
+  font-size: 12px;
+  text-transform: uppercase;
+}
+
+.value {
+  font-size: 28px;
+  color: #fff;
+  font-weight: 700;
+}
+
+.value.warn {
+  color: #ffea00;
+}
+
+/* Charts */
+.charts {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+.chart {
+  background: #090909;
+  border: 1px solid #ff00ff;
+  padding: 16px;
+  border-radius: 8px;
+  height: 300px;
+}
+
+.chart h4 {
+  margin: 0 0 12px 0;
+  color: #39ff14;
+  font-size: 14px;
+}
+
+.chart canvas {
+  height: 250px !important;
+}
+
+.no-data {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 250px;
+  color: #6b7280;
+  font-style: italic;
 }
 
 .metrics-section {

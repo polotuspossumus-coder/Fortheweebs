@@ -6,6 +6,7 @@
 
 const crypto = require("crypto");
 const { appendRecord } = require("./externalLedger");
+const { mirrorRecord } = require("./webhookMirror");
 
 // In-memory ledger (can be swapped for database persistence)
 let ledger = [];
@@ -44,6 +45,9 @@ function notaryRecord({ actor, command, key, value, version, oldValue }) {
 
   // Append to external ledger (immutable, append-only)
   appendRecord(record);
+
+  // Mirror to external webhook (independent auditing)
+  mirrorRecord(record);
 
   // Push to artifact stream if available
   if (global.artifactStream) {
