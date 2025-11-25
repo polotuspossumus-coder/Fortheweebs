@@ -42,6 +42,40 @@ app.use('/api/stripe-webhook', express.raw({ type: 'application/json' }));
 // For all other routes (JSON)
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ extended: true, limit: '50mb' }));
+// Disable x-powered-by header for security
+app.disable('x-powered-by');
+
+// Initialize Policy Engine and SSE Artifact Stream
+const { initArtifactStream, sseRoute } = require('./api/services/sse');
+const policyEngine = require('./api/policy/policyEngine');
+const { notaryRecord } = require('./api/services/notary');
+
+initArtifactStream();
+
+// Wire policy changes to artifact stream and notary
+policyEngine.on('policy:changed', (evt) => {
+  // Push to artifact stream
+  global.artifactStream.push({
+    timestamp: evt.ts,
+    type: 'POLICY',
+    severity: 'info',
+    message: `Updated ${evt.type}.${evt.key}=${evt.value} v${evt.version}`,
+    data: evt,
+  });
+
+  // Record in notary ledger
+  notaryRecord({
+    actor: 'policy_engine',
+    command: `update_${evt.type}`,
+    key: evt.key,
+    value: evt.value,
+    oldValue: evt.oldValue,
+    version: evt.version,
+  });
+});
+
+// SSE artifact stream endpoint
+app.get('/api/artifacts/stream', sseRoute);
 
 // Health check
 app.get('/health', (req, res) => {
@@ -97,7 +131,8 @@ const routes = [
     { path: '/api/creator-applications', file: './api/creator-applications', name: 'Creator Applications' },
     { path: '/api/trial', file: './api/trial', name: 'Free Trial System' },
     { path: '/api/auth', file: './api/auth', name: 'Authentication (JWT)' },
-    { path: '/api/governance', file: './api/governance', name: 'Mico Governance (Notary + Policy Overrides)' }
+    { path: '/api/governance', file: './api/governance', name: 'Mico Governance (Notary + Policy Overrides)' },
+    { path: '/api/queue', file: './api/routes/queue', name: 'Queue Control (Sovereign)' }
 ];
 
 let loadedCount = 0;

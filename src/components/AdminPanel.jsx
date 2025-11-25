@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { ModerationQueueItem } from './ContentModeration';
 import DockedConsole from './DockedConsole';
+import CommandPanelAdvanced from './admin/CommandPanelAdvanced';
+import DockedConsolePro from './admin/DockedConsolePro';
 import './AdminPanel.css';
 
 function AdminPanel() {
-  const [activeTab, setActiveTab] = useState('moderation');
+  const [activeTab, setActiveTab] = useState('governance');
   const [stats, setStats] = useState({
     totalUsers: 0,
     totalArtworks: 0,
@@ -196,6 +198,12 @@ function AdminPanel() {
 
       {/* Tabs */}
       <div className="admin-tabs">
+        <button
+          className={activeTab === 'governance' ? 'active' : ''}
+          onClick={() => setActiveTab('governance')}
+        >
+          🎛️ Governance
+        </button>
         <button
           className={activeTab === 'moderation' ? 'active' : ''}
           onClick={() => setActiveTab('moderation')}
@@ -414,8 +422,23 @@ function AdminPanel() {
         )}
       </div>
 
-      {/* Mico's Governance Console */}
-      <DockedConsole />
+      {/* Mico's Governance System */}
+      {activeTab === 'governance' && (
+        <div className="governance-tab">
+          <h2>🎛️ Governance & Policy Control</h2>
+          <CommandPanelAdvanced />
+          <div style={{ marginTop: '32px' }}>
+            <DockedConsolePro />
+          </div>
+        </div>
+      )}
+
+      {activeTab === 'legacy-console' && (
+        <div className="legacy-console-tab">
+          <h2>Legacy Console</h2>
+          <DockedConsole />
+        </div>
+      )}
     </div>
   );
 }
