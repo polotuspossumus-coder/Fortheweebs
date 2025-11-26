@@ -154,6 +154,11 @@ const routes = [
     { path: '/api/upload', file: './api/upload-protected', name: 'Upload (Protected)' },
     { path: '/api/moderation', file: './api/moderation-actions', name: 'AI CSAM Moderation' },
 
+    // Advanced Features
+    { path: '/api/analytics', file: './api/routes/analytics', name: 'Analytics Dashboard' },
+    { path: '/api/activity', file: './api/routes/activity', name: 'Real-Time Activity Feed' },
+    { path: '/api/experiments', file: './api/routes/experiments', name: 'A/B Testing Framework' },
+
     // Creator Tools
     { path: '/api/creator-applications', file: './api/creator-applications', name: 'Creator Applications' },
     { path: '/api/trial', file: './api/trial', name: 'Free Trial System' },

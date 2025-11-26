@@ -11,6 +11,11 @@ import {
   Legend,
 } from 'chart.js';
 import './CreatorDashboard.css';
+import { AdvancedAnalytics } from './AdvancedAnalytics';
+import { RealTimeActivityFeed } from './RealTimeActivityFeed';
+import { AIRecommendations } from './AIRecommendations';
+import { PerformanceOptimizer } from './PerformanceOptimizer';
+import { ABTestingFramework } from './ABTestingFramework';
 
 ChartJS.register(
   CategoryScale,
@@ -300,6 +305,36 @@ function CreatorDashboard({ userId }) {
         >
           Subscribers ({stats.activeSubscribers})
         </button>
+        <button
+          className={activeTab === 'analytics' ? 'active' : ''}
+          onClick={() => setActiveTab('analytics')}
+        >
+          📊 Analytics
+        </button>
+        <button
+          className={activeTab === 'activity' ? 'active' : ''}
+          onClick={() => setActiveTab('activity')}
+        >
+          ⚡ Activity
+        </button>
+        <button
+          className={activeTab === 'recommendations' ? 'active' : ''}
+          onClick={() => setActiveTab('recommendations')}
+        >
+          🤖 AI
+        </button>
+        <button
+          className={activeTab === 'performance' ? 'active' : ''}
+          onClick={() => setActiveTab('performance')}
+        >
+          📊 Performance
+        </button>
+        <button
+          className={activeTab === 'experiments' ? 'active' : ''}
+          onClick={() => setActiveTab('experiments')}
+        >
+          🎯 A/B Tests
+        </button>
       </div>
 
       {/* Tab Content */}
@@ -442,6 +477,41 @@ function CreatorDashboard({ userId }) {
               ))}
             </div>
           </div>
+        )}
+
+        {activeTab === 'analytics' && (
+          <AdvancedAnalytics 
+            userId={userId} 
+            userTier="premium"
+            isOwner={true}
+          />
+        )}
+
+        {activeTab === 'activity' && (
+          <RealTimeActivityFeed userId={userId} />
+        )}
+
+        {activeTab === 'recommendations' && (
+          <AIRecommendations 
+            userId={userId}
+            userTier="premium"
+            userPreferences={{}}
+          />
+        )}
+
+        {activeTab === 'performance' && (
+          <PerformanceOptimizer 
+            onOptimizationApplied={(result) => {
+              console.log('Optimization applied:', result);
+            }}
+          />
+        )}
+
+        {activeTab === 'experiments' && (
+          <ABTestingFramework 
+            userId={userId}
+            userTier="premium"
+          />
         )}
       </div>
     </div>
