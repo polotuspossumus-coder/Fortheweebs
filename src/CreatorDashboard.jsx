@@ -194,6 +194,9 @@ export const CreatorDashboard = ({ userId = "demo_user", ipAddress = "127.0.0.1"
         <TabsTrigger value="rewards">🏆 Rewards</TabsTrigger>
       </TabsList>
       <TabsContent value="overview">
+        <div style={{ padding: '20px', textAlign: 'center', background: 'rgba(255, 255, 255, 0.05)', borderRadius: '8px', marginBottom: '20px' }}>
+          <p style={{ fontSize: '16px', color: '#888' }}>📢 Social Feed & Messaging features are coming soon! Backend APIs are ready but require PhotoDNA configuration for content safety.</p>
+        </div>
         <SocialFeed userId={userId} userTier={currentTier} />
       </TabsContent>
       <TabsContent value="bug-fixer">
