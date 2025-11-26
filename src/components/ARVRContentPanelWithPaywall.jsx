@@ -109,7 +109,17 @@ export function ARVRContentPanel({ userId }) {
         {/* Upload Tab */}
         {activeTab === 'upload' && (
           <div>
-            <CloudUploader onUploadComplete={handleUploadComplete} />
+            <div style={{ 
+              padding: '40px', 
+              textAlign: 'center',
+              background: 'linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%)',
+              borderRadius: '12px',
+              border: '2px dashed rgba(102, 126, 234, 0.3)'
+            }}>
+              <div style={{ fontSize: '48px', marginBottom: '16px' }}>☁️</div>
+              <h3>Cloud Upload Coming Soon</h3>
+              <p style={{ color: '#666', marginTop: '8px' }}>Upload AR/VR content directly to the cloud</p>
+            </div>
           </div>
         )}
 
