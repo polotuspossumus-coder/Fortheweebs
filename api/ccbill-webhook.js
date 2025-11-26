@@ -3,19 +3,17 @@
  * Processes payment confirmations, chargebacks, and refunds for adult content
  */
 
-import crypto from 'crypto';
-import { createClient } from '@supabase/supabase-js';
+const crypto = require('crypto');
+const { createClient } = require('@supabase/supabase-js');
+const express = require('express');
+const router = express.Router();
 
 const supabase = createClient(
   process.env.VITE_SUPABASE_URL,
   process.env.SUPABASE_SERVICE_KEY
 );
 
-export default async function handler(req, res) {
-  if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Method not allowed' });
-  }
-
+router.post('/', async (req, res) => {
   try {
     const webhookData = req.body;
 
@@ -34,7 +32,7 @@ export default async function handler(req, res) {
     console.error('CCBill webhook error:', error);
     return res.status(500).json({ error: error.message });
   }
-}
+});
 
 function verifyCCBillSignature(data) {
   const {
@@ -248,3 +246,5 @@ async function sendPurchaseConfirmation(email, contentId, amount) {
   // TODO: Implement email sending
   console.log(`Sending confirmation to ${email} for content ${contentId} ($${amount})`);
 }
+
+module.exports = router;
