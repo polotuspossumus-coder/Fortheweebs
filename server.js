@@ -175,7 +175,15 @@ const routes = [
     { path: '/api/auto-implement-suggestions', file: './src/routes/auto-implement-suggestions', name: 'Auto-Implement Suggestions' },
     { path: '/api/auto-answer-questions', file: './src/routes/auto-answer-questions', name: 'Auto-Answer Questions' },
     { path: '/api/debugger-to-cloud', file: './src/routes/debugger-to-cloud', name: 'Cloud Bug Fixer' },
-    { path: '/api/issues', file: './api/issues', name: 'Issues' }
+    { path: '/api/issues', file: './api/issues', name: 'Issues' },
+
+    // New Feature APIs (Nov 26, 2025 Update)
+    { path: '/api/moderation', file: './api/moderation', name: 'Community Moderation System' },
+    { path: '/api/merch', file: './api/merch', name: 'Merchandise Store' },
+    { path: '/api/rewards', file: './api/rewards', name: 'Fan Rewards & Loyalty' },
+    { path: '/api/collaboration', file: './api/collaboration', name: 'Collaboration Rooms' },
+    { path: '/api/render', file: './api/render', name: 'Cloud Rendering' },
+    { path: '/api/analytics', file: './api/analytics', name: 'Creator Analytics' }
 ];
 
 let loadedCount = 0;
