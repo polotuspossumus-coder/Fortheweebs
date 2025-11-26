@@ -1,6 +1,6 @@
-import express from 'express';
-import { createClient } from '@supabase/supabase-js';
-import Stripe from 'stripe';
+const express = require('express');
+const { createClient } = require('@supabase/supabase-js');
+const Stripe = require('stripe');
 
 const router = express.Router();
 const supabase = createClient(
@@ -381,4 +381,4 @@ router.get('/orders/:id', requireAuth, async (req, res) => {
   }
 });
 
-export default router;
+module.exports = router;

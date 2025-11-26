@@ -1,6 +1,6 @@
-import express from 'express';
-import { createClient } from '@supabase/supabase-js';
-import { WebSocketServer } from 'ws';
+const express = require('express');
+const { createClient } = require('@supabase/supabase-js');
+const { WebSocketServer } = require('ws');
 
 const router = express.Router();
 const supabase = createClient(
@@ -336,7 +336,7 @@ router.post('/rooms/:id/assets', requireAuth, async (req, res) => {
 });
 
 // WebSocket handler for real-time collaboration
-export function setupCollaborationWebSocket(wss) {
+function setupCollaborationWebSocket(wss) {
   wss.on('connection', async (ws, req) => {
     try {
       // Extract token and room ID from URL
