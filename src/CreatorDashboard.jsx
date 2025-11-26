@@ -15,6 +15,10 @@ import { ARVRStudioPro } from "./components/ARVRStudioPro";
 import WebXRExperience from "./components/WebXRExperience";
 import VRARCreatorStudio from "./components/VRARCreatorStudio";
 import Model3DViewer from "./components/Model3DViewer";
+import VRRecordingStudio from "./components/VRRecordingStudio";
+import ModelAssetLibrary from "./components/ModelAssetLibrary";
+import ContentExportBackup from "./components/ContentExportBackup";
+import CreatorCollaboration from "./components/CreatorCollaboration";
 import { PhotoToolsHub } from "./components/PhotoToolsHub";
 import { ContentPlannerPro } from "./components/ContentPlannerPro";
 import { InfluencerVerification } from "./components/InfluencerVerification";
@@ -60,7 +64,7 @@ export const CreatorDashboard = ({ userId = "demo_user", ipAddress = "127.0.0.1"
   const [creatorAgreementAccepted, setCreatorAgreementAccepted] = useState(isAdminUser ? true : false);
   const [currentTier] = useState(tier || 'General Access');
   const [userBalance, setUserBalance] = useState(0);
-  const version = "2025.11"; // Cache bust
+  const version = "1.8.0"; // Production version with VR/AR
 
   // Check if user is verified owner - STRICT CHECK
   useEffect(() => {
@@ -130,6 +134,10 @@ export const CreatorDashboard = ({ userId = "demo_user", ipAddress = "127.0.0.1"
         <TabsTrigger value="design">🎨 Graphic Design</TabsTrigger>
         <TabsTrigger value="planner">📅 Content Planner</TabsTrigger>
         <TabsTrigger value="arvr">🎭 AR/VR Studio</TabsTrigger>
+        <TabsTrigger value="vr-recording">🎥 VR Recording</TabsTrigger>
+        <TabsTrigger value="3d-library">🧊 3D Library</TabsTrigger>
+        <TabsTrigger value="backup">💾 Export/Backup</TabsTrigger>
+        <TabsTrigger value="collaborate">🤝 Collaborate</TabsTrigger>
         {!isAdmin && <TabsTrigger value="influencer">👑 Influencer</TabsTrigger>}
         <TabsTrigger value="overlays">Overlays</TabsTrigger>
         <TabsTrigger value="shop">📦 Print Shop</TabsTrigger>
@@ -345,6 +353,22 @@ export const CreatorDashboard = ({ userId = "demo_user", ipAddress = "127.0.0.1"
             </div>
           </div>
         </ToolLockGate>
+      </TabsContent>
+      <TabsContent value="vr-recording">
+        <ToolLockGate userId={userId} toolId="arvr">
+          <VRRecordingStudio userId={userId} />
+        </ToolLockGate>
+      </TabsContent>
+      <TabsContent value="3d-library">
+        <ToolLockGate userId={userId} toolId="arvr">
+          <ModelAssetLibrary userId={userId} />
+        </ToolLockGate>
+      </TabsContent>
+      <TabsContent value="backup">
+        <ContentExportBackup userId={userId} />
+      </TabsContent>
+      <TabsContent value="collaborate">
+        <CreatorCollaboration userId={userId} />
       </TabsContent>
       <TabsContent value="influencer">
         <InfluencerVerification userId={userId} onVerified={(data) => {
