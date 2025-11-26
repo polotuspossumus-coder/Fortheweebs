@@ -34,8 +34,7 @@
     "humao.rest-client",
 
     // Markdown
-    "yzhang.markdown-all-in-one",
-    "bierner.markdown-preview-github-styles"
+    "yzhang.markdown-all-in-one"
   ],
   "unwantedRecommendations": []
 }

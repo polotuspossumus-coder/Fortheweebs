@@ -19,6 +19,8 @@ import VRRecordingStudio from "./components/VRRecordingStudio";
 import ModelAssetLibrary from "./components/ModelAssetLibrary";
 import ContentExportBackup from "./components/ContentExportBackup";
 import CreatorCollaboration from "./components/CreatorCollaboration";
+import { AIContentGenerator } from "./components/AIContentGenerator";
+import AdvancedFileEditor from "./components/AdvancedFileEditor";
 import { PhotoToolsHub } from "./components/PhotoToolsHub";
 import { ContentPlannerPro } from "./components/ContentPlannerPro";
 import { InfluencerVerification } from "./components/InfluencerVerification";
@@ -138,6 +140,8 @@ export const CreatorDashboard = ({ userId = "demo_user", ipAddress = "127.0.0.1"
         <TabsTrigger value="3d-library">🧊 3D Library</TabsTrigger>
         <TabsTrigger value="backup">💾 Export/Backup</TabsTrigger>
         <TabsTrigger value="collaborate">🤝 Collaborate</TabsTrigger>
+        <TabsTrigger value="ai-gen">🤖 AI Generator</TabsTrigger>
+        <TabsTrigger value="file-editor">📁 File Editor</TabsTrigger>
         {!isAdmin && <TabsTrigger value="influencer">👑 Influencer</TabsTrigger>}
         <TabsTrigger value="overlays">Overlays</TabsTrigger>
         <TabsTrigger value="shop">📦 Print Shop</TabsTrigger>
@@ -369,6 +373,14 @@ export const CreatorDashboard = ({ userId = "demo_user", ipAddress = "127.0.0.1"
       </TabsContent>
       <TabsContent value="collaborate">
         <CreatorCollaboration userId={userId} />
+      </TabsContent>
+      <TabsContent value="ai-gen">
+        <ToolLockGate userId={userId} toolId="arvr">
+          <AIContentGenerator userId={userId} />
+        </ToolLockGate>
+      </TabsContent>
+      <TabsContent value="file-editor">
+        <AdvancedFileEditor userId={userId} />
       </TabsContent>
       <TabsContent value="influencer">
         <InfluencerVerification userId={userId} onVerified={(data) => {
