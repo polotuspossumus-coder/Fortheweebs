@@ -423,4 +423,5 @@ function broadcast(roomId, message, excludeWs = null) {
   });
 }
 
-export default router;
+module.exports = router;
+module.exports.setupCollaborationWebSocket = setupCollaborationWebSocket;
