@@ -12,6 +12,9 @@ import TierInfo from "./components/TierInfo";
 import UpgradePrompt from "./components/UpgradePrompt";
 import VaultEntryList from "./components/VaultEntryList";
 import { ARVRStudioPro } from "./components/ARVRStudioPro";
+import WebXRExperience from "./components/WebXRExperience";
+import VRARCreatorStudio from "./components/VRARCreatorStudio";
+import Model3DViewer from "./components/Model3DViewer";
 import { PhotoToolsHub } from "./components/PhotoToolsHub";
 import { ContentPlannerPro } from "./components/ContentPlannerPro";
 import { InfluencerVerification } from "./components/InfluencerVerification";
@@ -236,7 +239,111 @@ export const CreatorDashboard = ({ userId = "demo_user", ipAddress = "127.0.0.1"
       </TabsContent>
       <TabsContent value="arvr">
         <ToolLockGate userId={userId} toolId="arvr">
-          <ARVRStudioPro userId={userId} />
+          <div style={{ background: '#0a0a0a', minHeight: '100vh' }}>
+            <div style={{
+              maxWidth: '1400px',
+              margin: '0 auto',
+              padding: '40px 20px'
+            }}>
+              <h2 style={{
+                fontSize: '36px',
+                marginBottom: '10px',
+                background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent'
+              }}>
+                🥽 VR/AR Creator Studio
+              </h2>
+              <p style={{ color: '#aaa', fontSize: '18px', marginBottom: '30px' }}>
+                Build immersive VR worlds and AR experiences - Better than Unity for creators
+              </p>
+
+              <Tabs defaultValue="creator-studio" style={{ marginTop: '20px' }}>
+                <TabsList style={{ marginBottom: '2rem', background: 'rgba(255,255,255,0.05)' }}>
+                  <TabsTrigger value="creator-studio">🎨 Creator Studio</TabsTrigger>
+                  <TabsTrigger value="3d-viewer">🧊 3D Viewer</TabsTrigger>
+                  <TabsTrigger value="vr-experience">🥽 VR Experience</TabsTrigger>
+                  <TabsTrigger value="ar-experience">📱 AR Experience</TabsTrigger>
+                  <TabsTrigger value="legacy">⚙️ Legacy Tools</TabsTrigger>
+                </TabsList>
+
+                <TabsContent value="creator-studio">
+                  <VRARCreatorStudio userId={userId} />
+                </TabsContent>
+
+                <TabsContent value="3d-viewer">
+                  <Model3DViewer userId={userId} />
+                </TabsContent>
+
+                <TabsContent value="vr-experience">
+                  <div style={{
+                    background: 'rgba(255,255,255,0.05)',
+                    border: '2px solid rgba(255,255,255,0.1)',
+                    borderRadius: '20px',
+                    padding: '30px',
+                    marginBottom: '20px'
+                  }}>
+                    <h3 style={{ fontSize: '24px', marginBottom: '15px' }}>
+                      🥽 VR Experience Preview
+                    </h3>
+                    <p style={{ color: '#aaa', marginBottom: '20px' }}>
+                      Test your content in full VR. Compatible with Meta Quest, HTC VIVE, Valve Index, PSVR.
+                    </p>
+                    <div style={{
+                      background: '#000',
+                      borderRadius: '15px',
+                      overflow: 'hidden',
+                      border: '2px solid #667eea'
+                    }}>
+                      <WebXRExperience mode="vr" userId={userId} />
+                    </div>
+                  </div>
+                </TabsContent>
+
+                <TabsContent value="ar-experience">
+                  <div style={{
+                    background: 'rgba(255,255,255,0.05)',
+                    border: '2px solid rgba(255,255,255,0.1)',
+                    borderRadius: '20px',
+                    padding: '30px',
+                    marginBottom: '20px'
+                  }}>
+                    <h3 style={{ fontSize: '24px', marginBottom: '15px' }}>
+                      📱 AR Experience Preview
+                    </h3>
+                    <p style={{ color: '#aaa', marginBottom: '20px' }}>
+                      Place your content in the real world. Works on iPhone (ARKit) and Android (ARCore).
+                    </p>
+                    <div style={{
+                      background: '#000',
+                      borderRadius: '15px',
+                      overflow: 'hidden',
+                      border: '2px solid #22c55e'
+                    }}>
+                      <WebXRExperience mode="ar" userId={userId} />
+                    </div>
+                  </div>
+                </TabsContent>
+
+                <TabsContent value="legacy">
+                  <div style={{
+                    background: 'rgba(255,255,255,0.05)',
+                    border: '2px solid rgba(255,255,255,0.1)',
+                    borderRadius: '20px',
+                    padding: '30px'
+                  }}>
+                    <h3 style={{ fontSize: '24px', marginBottom: '15px' }}>
+                      ⚙️ Legacy AR/VR Studio Pro
+                    </h3>
+                    <p style={{ color: '#aaa', marginBottom: '20px' }}>
+                      Original professional interface (maintained for compatibility)
+                    </p>
+                    <ARVRStudioPro userId={userId} />
+                  </div>
+                </TabsContent>
+              </Tabs>
+            </div>
+          </div>
         </ToolLockGate>
       </TabsContent>
       <TabsContent value="influencer">
