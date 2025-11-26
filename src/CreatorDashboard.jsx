@@ -432,10 +432,14 @@ export const CreatorDashboard = ({ userId = "demo_user", ipAddress = "127.0.0.1"
         <PrintOnDemand />
       </TabsContent>
       <TabsContent value="tips">
-        <div style={{ padding: '20px', textAlign: 'center', background: 'rgba(255, 255, 255, 0.05)', borderRadius: '8px' }}>
-          <h2 style={{ fontSize: '24px', color: '#ff6b6b', marginBottom: '16px' }}>🔒 Tips Disabled</h2>
-          <p style={{ fontSize: '16px', color: '#888' }}>Tipping requires PhotoDNA API for content moderation.</p>
-        </div>
+        {userId === 'owner' ? (
+          <TipsAndDonations creatorId={userId} creatorName={userId} />
+        ) : (
+          <div style={{ padding: '20px', textAlign: 'center', background: 'rgba(255, 255, 255, 0.05)', borderRadius: '8px' }}>
+            <h2 style={{ fontSize: '24px', color: '#ff6b6b', marginBottom: '16px' }}>🔒 Tips Disabled</h2>
+            <p style={{ fontSize: '16px', color: '#888' }}>Tipping requires PhotoDNA API for content moderation.</p>
+          </div>
+        )}
       </TabsContent>
       <TabsContent value="commissions">
         <div style={{ padding: '20px', textAlign: 'center', background: 'rgba(255, 255, 255, 0.05)', borderRadius: '8px' }}>
