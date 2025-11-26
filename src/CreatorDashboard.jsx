@@ -55,6 +55,19 @@ import UserProfileManager from "./components/UserProfileManager";
 import SocialFeed from "./components/SocialFeed";
 import CGIVideoCall from "./components/CGIVideoCall";
 
+// New feature imports
+import ThreeDModelViewer from "./components/ThreeDModelViewer";
+import CollaborationRoom from "./components/CollaborationRoom";
+import CloudRenderManager from "./components/CloudRenderManager";
+import TimelineVideoEditor from "./components/TimelineVideoEditor";
+import AssetLibrary from "./components/AssetLibrary";
+import VoiceChatRoom from "./components/VoiceChatRoom";
+import CreatorRevenueAnalytics from "./components/CreatorRevenueAnalytics";
+import LiveStreamingStudio from "./components/LiveStreamingStudio";
+import CommunityModTools from "./components/CommunityModTools";
+import MerchStore from "./components/MerchStore";
+import FanRewardsSystem from "./components/FanRewardsSystem";
+
 export const CreatorDashboard = ({ userId = "demo_user", ipAddress = "127.0.0.1", tier = "free" }) => {
   // STRICT ADMIN CHECK - Only polotuspossumus@gmail.com
   const ownerEmail = localStorage.getItem('ownerEmail');
@@ -168,6 +181,17 @@ export const CreatorDashboard = ({ userId = "demo_user", ipAddress = "127.0.0.1"
         {isAdmin && (
           <TabsTrigger value="profiles">👥 User Profiles</TabsTrigger>
         )}
+        <TabsTrigger value="3d-model">🧊 3D Viewer</TabsTrigger>
+        <TabsTrigger value="collab-room">🤝 Collab Room</TabsTrigger>
+        <TabsTrigger value="cloud-render">☁️ Cloud Render</TabsTrigger>
+        <TabsTrigger value="video-editor">🎬 Video Editor</TabsTrigger>
+        <TabsTrigger value="asset-lib">📦 Assets</TabsTrigger>
+        <TabsTrigger value="voice-chat">🎤 Voice Chat</TabsTrigger>
+        <TabsTrigger value="revenue">💰 Revenue</TabsTrigger>
+        <TabsTrigger value="livestream">📡 Stream</TabsTrigger>
+        <TabsTrigger value="modtools">🛡️ Community Mod</TabsTrigger>
+        <TabsTrigger value="merch">👕 Merch Store</TabsTrigger>
+        <TabsTrigger value="rewards">🏆 Rewards</TabsTrigger>
       </TabsList>
       <TabsContent value="overview">
         <SocialFeed userId={userId} userTier={currentTier} />
@@ -447,6 +471,39 @@ export const CreatorDashboard = ({ userId = "demo_user", ipAddress = "127.0.0.1"
           <UserProfileManager />
         </TabsContent>
       )}
+      <TabsContent value="3d-model">
+        <ThreeDModelViewer userId={userId} />
+      </TabsContent>
+      <TabsContent value="collab-room">
+        <CollaborationRoom userId={userId} />
+      </TabsContent>
+      <TabsContent value="cloud-render">
+        <CloudRenderManager userId={userId} />
+      </TabsContent>
+      <TabsContent value="video-editor">
+        <TimelineVideoEditor userId={userId} />
+      </TabsContent>
+      <TabsContent value="asset-lib">
+        <AssetLibrary userId={userId} />
+      </TabsContent>
+      <TabsContent value="voice-chat">
+        <VoiceChatRoom userId={userId} />
+      </TabsContent>
+      <TabsContent value="revenue">
+        <CreatorRevenueAnalytics userId={userId} />
+      </TabsContent>
+      <TabsContent value="livestream">
+        <LiveStreamingStudio userId={userId} />
+      </TabsContent>
+      <TabsContent value="modtools">
+        <CommunityModTools userId={userId} />
+      </TabsContent>
+      <TabsContent value="merch">
+        <MerchStore userId={userId} />
+      </TabsContent>
+      <TabsContent value="rewards">
+        <FanRewardsSystem userId={userId} />
+      </TabsContent>
     </Tabs>
   );
 };
