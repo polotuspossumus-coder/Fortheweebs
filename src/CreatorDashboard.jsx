@@ -194,16 +194,20 @@ export const CreatorDashboard = ({ userId = "demo_user", ipAddress = "127.0.0.1"
         <TabsTrigger value="rewards">🏆 Rewards</TabsTrigger>
       </TabsList>
       <TabsContent value="overview">
-        <div style={{ padding: '20px', textAlign: 'center', background: 'rgba(255, 255, 255, 0.05)', borderRadius: '8px', marginBottom: '20px' }}>
-          <p style={{ fontSize: '16px', color: '#888' }}>📢 Social Feed & Messaging features are coming soon! Backend APIs are ready but require PhotoDNA configuration for content safety.</p>
+        <div style={{ padding: '20px', textAlign: 'center', background: 'rgba(255, 255, 255, 0.05)', borderRadius: '8px' }}>
+          <h2 style={{ fontSize: '24px', color: '#ff6b6b', marginBottom: '16px' }}>🔒 Social Features Disabled</h2>
+          <p style={{ fontSize: '16px', color: '#888', marginBottom: '12px' }}>All social interaction features (feed, messaging, comments, profiles) are currently disabled for platform safety.</p>
+          <p style={{ fontSize: '14px', color: '#666' }}>These features require PhotoDNA API configuration for content moderation before they can be enabled.</p>
         </div>
-        <SocialFeed userId={userId} userTier={currentTier} />
       </TabsContent>
       <TabsContent value="bug-fixer">
         <AIBugFixer userId={userId} />
       </TabsContent>
       <TabsContent value="profile">
-        <ProfileCreator userId={userId} tier={tier} />
+        <div style={{ padding: '20px', textAlign: 'center', background: 'rgba(255, 255, 255, 0.05)', borderRadius: '8px' }}>
+          <h2 style={{ fontSize: '24px', color: '#ff6b6b', marginBottom: '16px' }}>🔒 Profiles Disabled</h2>
+          <p style={{ fontSize: '16px', color: '#888' }}>User profiles require PhotoDNA API for content moderation.</p>
+        </div>
       </TabsContent>
       <TabsContent value="cgi-video">
         <ToolLockGate userId={userId} toolId="cgi">
@@ -399,7 +403,10 @@ export const CreatorDashboard = ({ userId = "demo_user", ipAddress = "127.0.0.1"
         <ContentExportBackup userId={userId} />
       </TabsContent>
       <TabsContent value="collaborate">
-        <CreatorCollaboration userId={userId} />
+        <div style={{ padding: '20px', textAlign: 'center', background: 'rgba(255, 255, 255, 0.05)', borderRadius: '8px' }}>
+          <h2 style={{ fontSize: '24px', color: '#ff6b6b', marginBottom: '16px' }}>🔒 Collaboration Disabled</h2>
+          <p style={{ fontSize: '16px', color: '#888' }}>Creator collaboration requires PhotoDNA API for content moderation.</p>
+        </div>
       </TabsContent>
       <TabsContent value="ai-gen">
         <ToolLockGate userId={userId} toolId="arvr">
@@ -425,10 +432,16 @@ export const CreatorDashboard = ({ userId = "demo_user", ipAddress = "127.0.0.1"
         <PrintOnDemand />
       </TabsContent>
       <TabsContent value="tips">
-        <TipsAndDonations creatorId={userId} creatorName={userId} />
+        <div style={{ padding: '20px', textAlign: 'center', background: 'rgba(255, 255, 255, 0.05)', borderRadius: '8px' }}>
+          <h2 style={{ fontSize: '24px', color: '#ff6b6b', marginBottom: '16px' }}>🔒 Tips Disabled</h2>
+          <p style={{ fontSize: '16px', color: '#888' }}>Tipping requires PhotoDNA API for content moderation.</p>
+        </div>
       </TabsContent>
       <TabsContent value="commissions">
-        <CommissionMarketplace userId={userId} isCreator={true} />
+        <div style={{ padding: '20px', textAlign: 'center', background: 'rgba(255, 255, 255, 0.05)', borderRadius: '8px' }}>
+          <h2 style={{ fontSize: '24px', color: '#ff6b6b', marginBottom: '16px' }}>🔒 Commissions Disabled</h2>
+          <p style={{ fontSize: '16px', color: '#888' }}>Commission marketplace requires PhotoDNA API for content moderation.</p>
+        </div>
       </TabsContent>
       <TabsContent value="premium">
         <PremiumSubscription userId={userId} currentTier={currentTier} />
