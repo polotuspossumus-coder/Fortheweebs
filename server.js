@@ -124,13 +124,13 @@ try {
 
 // API Routes - Load individually with error handling
 const routes = [
-    // Payment & Monetization
-    { path: '/api', file: './api/stripe', name: 'Stripe' },
-    { path: '/api/stripe-connect', file: './api/stripe-connect', name: 'Stripe Connect' },
-    { path: '/api/stripe-webhooks', file: './api/stripe-webhooks', name: 'Stripe Webhooks' },
-    { path: '/api/webhooks/ccbill', file: './api/ccbill-webhook', name: 'CCBill Webhooks (Adult Content)' },
-    { path: '/api/crypto', file: './api/crypto-payments', name: 'Crypto Payments' },
-    { path: '/api/subscriptions', file: './api/routes/subscriptions', name: 'Subscriptions (Creator Monetization)' },
+    // Payment & Monetization - REQUIRES PhotoDNA for content safety
+    { path: '/api', file: './api/stripe', name: 'Stripe', requirePhotoDNA: true },
+    { path: '/api/stripe-connect', file: './api/stripe-connect', name: 'Stripe Connect', requirePhotoDNA: true },
+    { path: '/api/stripe-webhooks', file: './api/stripe-webhooks', name: 'Stripe Webhooks', requirePhotoDNA: true },
+    { path: '/api/webhooks/ccbill', file: './api/ccbill-webhook', name: 'CCBill Webhooks (Adult Content)', requirePhotoDNA: true },
+    { path: '/api/crypto', file: './api/crypto-payments', name: 'Crypto Payments', requirePhotoDNA: true },
+    { path: '/api/subscriptions', file: './api/routes/subscriptions', name: 'Subscriptions (Creator Monetization)', requirePhotoDNA: true },
 
     // Social Media Core - REQUIRES PhotoDNA
     { path: '/api/posts', file: './api/routes/posts', name: 'Posts (Feed)', requirePhotoDNA: true },
@@ -177,13 +177,13 @@ const routes = [
     { path: '/api/debugger-to-cloud', file: './src/routes/debugger-to-cloud', name: 'Cloud Bug Fixer' },
     { path: '/api/issues', file: './api/issues', name: 'Issues' },
 
-    // New Feature APIs (Nov 26, 2025 Update)
-    { path: '/api/moderation', file: './api/moderation', name: 'Community Moderation System' },
-    { path: '/api/merch', file: './api/merch', name: 'Merchandise Store' },
-    { path: '/api/rewards', file: './api/rewards', name: 'Fan Rewards & Loyalty' },
-    { path: '/api/collaboration', file: './api/collaboration', name: 'Collaboration Rooms' },
-    { path: '/api/render', file: './api/render', name: 'Cloud Rendering' },
-    { path: '/api/analytics', file: './api/analytics', name: 'Creator Analytics' }
+    // New Feature APIs (Nov 26, 2025 Update) - REQUIRES PhotoDNA
+    { path: '/api/moderation', file: './api/moderation', name: 'Community Moderation System', requirePhotoDNA: true },
+    { path: '/api/merch', file: './api/merch', name: 'Merchandise Store', requirePhotoDNA: true },
+    { path: '/api/rewards', file: './api/rewards', name: 'Fan Rewards & Loyalty', requirePhotoDNA: true },
+    { path: '/api/collaboration', file: './api/collaboration', name: 'Collaboration Rooms', requirePhotoDNA: true },
+    { path: '/api/render', file: './api/render', name: 'Cloud Rendering', requirePhotoDNA: true },
+    { path: '/api/analytics', file: './api/analytics', name: 'Creator Analytics', requirePhotoDNA: true }
 ];
 
 let loadedCount = 0;
