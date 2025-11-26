@@ -22,6 +22,14 @@ router.post('/create-account', async (req, res) => {
             return res.status(400).json({ error: 'userId and email required' });
         }
 
+        // OWNER ONLY - Block other creators from setting up payments
+        if (userId !== 'owner') {
+            return res.status(403).json({ 
+                error: 'Creator payments not yet available',
+                message: 'Only the platform owner can accept payments at this time. Creator payouts coming soon!'
+            });
+        }
+
         // Check if user already has a connected account
         const { data: existingUser } = await supabase
             .from('users')
