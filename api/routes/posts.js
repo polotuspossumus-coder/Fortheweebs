@@ -7,6 +7,7 @@ const express = require('express');
 const router = express.Router();
 const { authenticateToken } = require('../middleware/authMiddleware');
 const { supabase } = require('../lib/supabaseServer');
+const { validatePostCreation, rateLimit } = require('../middleware/validationMiddleware');
 
 /**
  * GET /api/posts/feed
@@ -44,18 +45,10 @@ router.get('/feed', authenticateToken, async (req, res) => {
  * POST /api/posts/create
  * Create a new post
  */
-router.post('/create', authenticateToken, async (req, res) => {
+router.post('/create', authenticateToken, rateLimit(30, 60000), validatePostCreation, async (req, res) => {
   try {
     const { userId, email } = req.user;
     const { body, visibility, isPaid, priceCents, mediaUrls, hasCGI } = req.body;
-
-    if (!body || body.trim().length === 0) {
-      return res.status(400).json({ error: 'Post body is required' });
-    }
-
-    if (body.length > 5000) {
-      return res.status(400).json({ error: 'Post too long (max 5000 characters)' });
-    }
 
     // Insert into Supabase
     const { data, error } = await supabase

@@ -7,6 +7,7 @@ const express = require('express');
 const router = express.Router();
 const { authenticateToken } = require('../middleware/authMiddleware');
 const { supabase } = require('../lib/supabaseServer');
+const { validateCommentCreation, rateLimit } = require('../middleware/validationMiddleware');
 
 /**
  * GET /api/comments/:postId
@@ -69,18 +70,10 @@ router.get('/:postId', async (req, res) => {
  * POST /api/comments/create
  * Create a new comment or reply
  */
-router.post('/create', authenticateToken, async (req, res) => {
+router.post('/create', authenticateToken, rateLimit(60, 60000), validateCommentCreation, async (req, res) => {
   try {
     const { userId, email } = req.user;
     const { postId, body, parentCommentId } = req.body;
-
-    if (!body || body.trim().length === 0) {
-      return res.status(400).json({ error: 'Comment body is required' });
-    }
-
-    if (body.length > 2000) {
-      return res.status(400).json({ error: 'Comment too long (max 2000 characters)' });
-    }
 
     if (!postId) {
       return res.status(400).json({ error: 'Post ID is required' });
