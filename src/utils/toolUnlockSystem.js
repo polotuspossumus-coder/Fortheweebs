@@ -1,5 +1,7 @@
 // Tool Unlock System - Tracks which tools users have unlocked
 
+import { isLifetimeVIP } from './vipAccess';
+
 export const TOOL_PRICES = {
   photo: 25,
   design: 50,
@@ -33,6 +35,18 @@ export function isToolUnlocked(userId, toolId) {
   try {
     // Admin/owner always has access
     if (userId === 'owner' || userId === 'admin') {
+      return true;
+    }
+
+    // Check if user is VIP by email
+    const userEmail = localStorage.getItem('ownerEmail') || localStorage.getItem('userEmail');
+    if (userEmail && isLifetimeVIP(userEmail)) {
+      return true;
+    }
+
+    // Check if user has LIFETIME_VIP tier
+    const userTier = localStorage.getItem('userTier');
+    if (userTier === 'LIFETIME_VIP' || userTier === 'platinum') {
       return true;
     }
 
