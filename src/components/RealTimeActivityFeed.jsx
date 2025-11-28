@@ -10,6 +10,8 @@ export const RealTimeActivityFeed = ({ userId }) => {
   const [isConnected, setIsConnected] = useState(false);
   const [filter, setFilter] = useState('all'); // all, posts, comments, likes, subs
   const eventSourceRef = useRef(null);
+  const reconnectAttemptsRef = useRef(0);
+  const MAX_RECONNECT_ATTEMPTS = 3;
 
   useEffect(() => {
     connectToActivityStream();
@@ -17,13 +19,21 @@ export const RealTimeActivityFeed = ({ userId }) => {
   }, []);
 
   const connectToActivityStream = () => {
+    // Don't try to connect if backend isn't available
+    if (reconnectAttemptsRef.current >= MAX_RECONNECT_ATTEMPTS) {
+      console.log('⚠️ Activity stream unavailable - using mock data');
+      loadMockActivities();
+      return;
+    }
+
     try {
       // Use Server-Sent Events for real-time updates
       const eventSource = new EventSource(`/api/activity/stream?userId=${userId}`);
-      
+
       eventSource.onopen = () => {
         console.log('✅ Activity stream connected');
         setIsConnected(true);
+        reconnectAttemptsRef.current = 0;
       };
 
       eventSource.onmessage = (event) => {
@@ -35,22 +45,33 @@ export const RealTimeActivityFeed = ({ userId }) => {
         }
       };
 
-      eventSource.onerror = () => {
+      eventSource.onerror = (error) => {
         console.error('❌ Activity stream disconnected');
         setIsConnected(false);
-        
-        // Reconnect after 5 seconds
-        setTimeout(() => {
-          connectToActivityStream();
-        }, 5000);
+
+        if (eventSourceRef.current) {
+          eventSourceRef.current.close();
+          eventSourceRef.current = null;
+        }
+
+        reconnectAttemptsRef.current++;
+
+        // Only reconnect if under max attempts
+        if (reconnectAttemptsRef.current < MAX_RECONNECT_ATTEMPTS) {
+          setTimeout(() => {
+            connectToActivityStream();
+          }, 5000);
+        } else {
+          console.log('⚠️ Max reconnect attempts reached - using mock data');
+          loadMockActivities();
+        }
       };
 
       eventSourceRef.current = eventSource;
     } catch (error) {
       console.error('Failed to connect to activity stream:', error);
-      
-      // Fallback to polling
-      startPolling();
+      reconnectAttemptsRef.current = MAX_RECONNECT_ATTEMPTS;
+      loadMockActivities();
     }
   };
 
@@ -59,6 +80,20 @@ export const RealTimeActivityFeed = ({ userId }) => {
       eventSourceRef.current.close();
       eventSourceRef.current = null;
     }
+  };
+
+  const loadMockActivities = () => {
+    // Load some mock activities when backend is unavailable
+    const mockActivities = [
+      {
+        id: 'mock-1',
+        type: 'post',
+        user: { name: 'Sample Creator', avatar: null },
+        timestamp: new Date().toISOString(),
+        content: 'Backend API unavailable - showing sample data'
+      }
+    ];
+    setActivities(mockActivities);
   };
 
   const handleNewActivity = (activity) => {
