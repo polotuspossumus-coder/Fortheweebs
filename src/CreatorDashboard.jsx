@@ -22,6 +22,7 @@ import CreatorCollaboration from "./components/CreatorCollaboration";
 import { AIContentGenerator } from "./components/AIContentGenerator";
 import AdvancedFileEditor from "./components/AdvancedFileEditor";
 import { PhotoToolsHub } from "./components/PhotoToolsHub";
+import { FacialMediaSorter } from "./components/FacialMediaSorter";
 import { ContentPlannerPro } from "./components/ContentPlannerPro";
 import { InfluencerVerification } from "./components/InfluencerVerification";
 import { FamilyAccessSystem } from "./components/FamilyAccessSystem";
@@ -145,6 +146,7 @@ export const CreatorDashboard = ({ userId = "demo_user", ipAddress = "127.0.0.1"
         <TabsTrigger value="profile">👤 My Profile</TabsTrigger>
         <TabsTrigger value="cgi-video">🎬 CGI Video</TabsTrigger>
         <TabsTrigger value="photos">📸 Photo Tools</TabsTrigger>
+        <TabsTrigger value="media-sorter">👤 Media Sorter</TabsTrigger>
         <TabsTrigger value="music">🎵 Audio Production</TabsTrigger>
         <TabsTrigger value="design">🎨 Graphic Design</TabsTrigger>
         <TabsTrigger value="planner">📅 Content Planner</TabsTrigger>
@@ -219,6 +221,11 @@ export const CreatorDashboard = ({ userId = "demo_user", ipAddress = "127.0.0.1"
       <TabsContent value="photos">
         <ToolLockGate userId={userId} toolId="photo">
           <PhotoToolsHub userId={userId} />
+        </ToolLockGate>
+      </TabsContent>
+      <TabsContent value="media-sorter">
+        <ToolLockGate userId={userId} toolId="photo">
+          <FacialMediaSorter />
         </ToolLockGate>
       </TabsContent>
       <TabsContent value="music">
