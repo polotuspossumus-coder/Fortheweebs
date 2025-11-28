@@ -1,1 +1,10 @@
-# Trigger clean rebuild
+# Exclude backend API from frontend build
+api/
+
+# Development files
+*.log
+.env.local
+.DS_Store
+node_modules/
+
+# Trigger clean rebuild - force cache clear
