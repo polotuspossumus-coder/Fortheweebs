@@ -224,9 +224,8 @@ export const CreatorDashboard = ({ userId = "demo_user", ipAddress = "127.0.0.1"
         </ToolLockGate>
       </TabsContent>
       <TabsContent value="media-sorter">
-        <ToolLockGate userId={userId} toolId="photo">
-          <FacialMediaSorter />
-        </ToolLockGate>
+        {/* Media Sorter is FREE for everyone - no paywall */}
+        <FacialMediaSorter userId={userId} tier={tier} hasSuperAdminPowers={isAdmin} />
       </TabsContent>
       <TabsContent value="music">
         <ToolLockGate userId={userId} toolId="audio">
