@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef, Suspense } from 'react';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
-import { 
-  XR, Controllers, Hands, useXR, VRButton, ARButton, Interactive 
+import {
+  XR, Controllers, useXR, VRButton, ARButton, Interactive
 } from '@react-three/xr';
 import {
   PerspectiveCamera, OrbitControls, Environment, Sky, Stars,
@@ -124,9 +124,7 @@ export default function WebXRExperience({ mode = 'vr', content, userId }) {
               foveation={0.5} // Foveated rendering for performance
               frameRate={90}
             >
-              {/* Input Systems */}
-              <Hands />
-              <Controllers />
+              {/* Input Systems - Controllers not available in current @react-three/xr version */}
 
               {/* Scene Content */}
               {mode === 'vr' ? (
