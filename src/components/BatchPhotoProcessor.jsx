@@ -202,27 +202,78 @@ export function BatchPhotoProcessor({ userId }) {
       return;
     }
 
-    alert(`📦 Downloading ${completed.length} images...\nThey will download one by one.`);
+    const message = `📦 Starting download of ${completed.length} images...\n\nNote: Your browser may ask for permission to download multiple files.\n\nFiles will download one by one automatically.`;
+    alert(message);
 
     completed.forEach((photo, index) => {
       setTimeout(() => {
-        const link = document.createElement('a');
-        link.download = `processed-${index + 1}-${photo.name}`;
-        link.href = photo.processedData;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
+        try {
+          const link = document.createElement('a');
+          link.download = `processed-${String(index + 1).padStart(3, '0')}-${photo.name}`;
+          link.href = photo.processedData;
+          link.style.display = 'none';
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
 
-        if (index === completed.length - 1) {
-          alert('✅ All downloads complete!');
+          if (index === completed.length - 1) {
+            setTimeout(() => {
+              alert('✅ All downloads complete!');
+            }, 500);
+          }
+        } catch (error) {
+          console.error('Download failed:', error);
+          alert(`❌ Failed to download ${photo.name}. Please try again.`);
         }
-      }, index * 500); // Delay 500ms between each download
+      }, index * 800); // Increased delay to 800ms for browser compatibility
     });
   };
 
   const downloadZip = async () => {
-    alert('Zip download would require JSZip library. Downloading individually...');
-    downloadAll();
+    if (completed.length === 0) {
+      alert('⚠️ No processed images to download');
+      return;
+    }
+
+    // Check if JSZip is available
+    if (typeof window.JSZip === 'undefined') {
+      alert('📦 ZIP feature requires JSZip library.\n\nDownloading files individually instead...');
+      downloadAll();
+      return;
+    }
+
+    try {
+      const JSZip = window.JSZip;
+      const zip = new JSZip();
+
+      alert('📦 Creating ZIP file... Please wait.');
+
+      // Add all processed images to zip
+      completed.forEach((photo, index) => {
+        const fileName = `processed-${String(index + 1).padStart(3, '0')}-${photo.name}`;
+        // Extract base64 data from data URL
+        const base64Data = photo.processedData.split(',')[1];
+        zip.file(fileName, base64Data, { base64: true });
+      });
+
+      // Generate zip file
+      const blob = await zip.generateAsync({ type: 'blob' });
+
+      // Download the zip
+      const link = document.createElement('a');
+      link.download = `batch-processed-${Date.now()}.zip`;
+      link.href = URL.createObjectURL(blob);
+      link.style.display = 'none';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+
+      alert('✅ ZIP file downloaded successfully!');
+    } catch (error) {
+      console.error('ZIP creation failed:', error);
+      alert('❌ ZIP creation failed. Downloading individually...');
+      downloadAll();
+    }
   };
 
   return (

@@ -91,18 +91,80 @@ export const FacialMediaSorter = ({ userId, tier, hasSuperAdminPowers = false })
   };
 
   const handleApplyRenaming = () => {
-    alert('Renaming applied! Files will be downloaded with new names.');
+    if (groupedFaces.length === 0) {
+      alert('⚠️ No groups to download');
+      return;
+    }
 
-    // In production, this would:
-    // 1. Rename files according to pattern: [CharacterName]_001.jpg, [CharacterName]_002.jpg, etc.
-    // 2. Create ZIP file with organized folders
-    // 3. Trigger download or upload to user's storage
+    const totalImages = groupedFaces.reduce((sum, g) => sum + g.images.length, 0);
+    const message = `📦 Downloading ${totalImages} images from ${groupedFaces.length} groups...\n\nFiles will be named according to your settings.\n\nYour browser may ask permission for multiple downloads.`;
+    alert(message);
+
+    let downloadIndex = 0;
+    groupedFaces.forEach((group) => {
+      const characterName = renamingRules[group.id] || group.suggestedName || `Character_${group.id}`;
+
+      group.images.forEach((img, imgIndex) => {
+        setTimeout(() => {
+          try {
+            const link = document.createElement('a');
+            const fileName = `${characterName}_${String(imgIndex + 1).padStart(3, '0')}.jpg`;
+            link.download = fileName;
+            link.href = img.url;
+            link.style.display = 'none';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+
+            if (downloadIndex === totalImages - 1) {
+              setTimeout(() => {
+                alert('✅ All downloads complete!');
+              }, 500);
+            }
+          } catch (error) {
+            console.error('Download failed:', error);
+            alert(`❌ Failed to download image from ${characterName}. Please try again.`);
+          }
+          downloadIndex++;
+        }, downloadIndex * 800);
+      });
+    });
   };
 
   const handleDownloadGroup = (group) => {
-    alert(`Downloading ${group.faceCount} images for ${renamingRules[group.id] || group.characterName}`);
+    const characterName = renamingRules[group.id] || group.suggestedName || `Character_${group.id}`;
+    const imageCount = group.images.length;
 
-    // In production, this would create a ZIP with properly named files
+    if (imageCount === 0) {
+      alert('⚠️ No images to download in this group');
+      return;
+    }
+
+    alert(`📦 Downloading ${imageCount} images for ${characterName}...\n\nYour browser may ask permission for multiple downloads.`);
+
+    group.images.forEach((img, index) => {
+      setTimeout(() => {
+        try {
+          const link = document.createElement('a');
+          const fileName = `${characterName}_${String(index + 1).padStart(3, '0')}.jpg`;
+          link.download = fileName;
+          link.href = img.url;
+          link.style.display = 'none';
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+
+          if (index === imageCount - 1) {
+            setTimeout(() => {
+              alert(`✅ Download complete for ${characterName}!`);
+            }, 500);
+          }
+        } catch (error) {
+          console.error('Download failed:', error);
+          alert(`❌ Failed to download ${fileName}. Please try again.`);
+        }
+      }, index * 800);
+    });
   };
 
   return (
