@@ -60,20 +60,44 @@ Creators agree to indemnify and hold harmless Fortheweebs, its founders, affilia
 export const TermsOfService = ({ onAccept }) => {
   const [accepted, setAccepted] = useState(false);
 
+  const handleCheckboxChange = (e) => {
+    e.stopPropagation();
+    setAccepted(e.target.checked);
+  };
+
+  const handleCheckboxClick = (e) => {
+    e.stopPropagation();
+  };
+
+  const handleButtonClick = (e) => {
+    e.stopPropagation();
+    if (accepted) {
+      onAccept();
+    }
+  };
+
   return (
   <div className="terms-container">
       <h2>Terms of Service</h2>
       <div className="terms-content">
         <pre className="terms-pre">{TERMS_TEXT}</pre>
       </div>
-  <label className="terms-label">
-        <input type="checkbox" checked={accepted} onChange={e => setAccepted(e.target.checked)} />
+  <label 
+        className="terms-label"
+        onClick={handleCheckboxClick}
+      >
+        <input 
+          type="checkbox" 
+          checked={accepted} 
+          onChange={handleCheckboxChange}
+          onClick={handleCheckboxClick}
+        />
         I accept the Terms of Service
       </label>
       <button
         disabled={!accepted}
         className={`terms-button${!accepted ? " disabled" : ""}`}
-        onClick={() => accepted && onAccept()}
+        onClick={handleButtonClick}
       >
         Continue
       </button>

@@ -7,6 +7,7 @@ import './Auth.css';
 // VIP Email List - All these users get LIFETIME_VIP tier automatically
 const VIP_EMAILS = [
   'polotuspossumus@gmail.com',  // Owner
+  'shellymontoya82@gmail.com',  // VIP - Shelly
   'chesed04@aol.com',
   'Colbyg123f@gmail.com',
   'PerryMorr94@gmail.com',

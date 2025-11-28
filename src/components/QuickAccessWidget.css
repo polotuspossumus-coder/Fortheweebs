@@ -1,5 +1,7 @@
 .quick-access-widget {
   position: fixed;
+  bottom: 176px;
+  left: 24px;
   z-index: 8000;
   width: 60px;
   height: 60px;

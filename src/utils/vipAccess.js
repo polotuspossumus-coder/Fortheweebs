@@ -9,6 +9,7 @@
 
 export const LIFETIME_VIP_EMAILS = [
   'polotuspossumus@gmail.com', // Owner - always VIP
+  'shellymontoya82@gmail.com', // VIP - Shelly
   'chesed04@aol.com',          // VIP Slot 1
   'Colbyg123f@gmail.com',      // VIP Slot 2
   'PerryMorr94@gmail.com',     // VIP Slot 3

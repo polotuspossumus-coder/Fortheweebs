@@ -20,7 +20,7 @@ export default function QuickAccessWidget() {
   const [isEditing, setIsEditing] = useState(false);
   const [position, setPosition] = useState(() => {
     const saved = localStorage.getItem('quickAccessPosition');
-    return saved ? JSON.parse(saved) : { x: 20, y: window.innerHeight - 100 };
+    return saved ? JSON.parse(saved) : { x: 24, y: window.innerHeight - 176 };
   });
   const [isDragging, setIsDragging] = useState(false);
   const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });

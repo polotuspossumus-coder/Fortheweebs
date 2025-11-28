@@ -164,7 +164,7 @@ export default function MicoAssistant() {
                 style={{
                     position: 'fixed',
                     bottom: '24px',
-                    right: '24px',
+                    left: '24px',
                     width: '60px',
                     height: '60px',
                     borderRadius: '50%',

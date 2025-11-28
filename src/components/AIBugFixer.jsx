@@ -261,10 +261,11 @@ export function AIBugFixer({ userId }) {
     return (
         <div style={{
             background: 'linear-gradient(135deg, #1a1a2e 0%, #0f0f1e 100%)',
-            minHeight: '100vh',
+            minHeight: 'auto',
             color: '#fff',
             padding: '30px',
             fontFamily: 'Arial, sans-serif',
+            position: 'relative',
         }}>
             {/* Header */}
             <div style={{ marginBottom: '30px' }}>

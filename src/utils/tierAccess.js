@@ -28,7 +28,8 @@ export const TIERS = {
 
 export const checkTierAccess = (userId, userTier, userEmail) => {
   const isOwner = userId === 'owner' || userEmail === localStorage.getItem('ownerEmail');
-  const isVIP = userTier === TIERS.VIP || isLifetimeVIP(userEmail);
+  // Check for VIP - includes LIFETIME_VIP, platinum tier, and isLifetimeVIP() check
+  const isVIP = userTier === TIERS.VIP || userTier === 'platinum' || isLifetimeVIP(userEmail);
 
   // VIPs automatically get PREMIUM_1000 tier benefits + admin powers
   const effectiveTier = isOwner ? TIERS.OWNER : (isVIP ? TIERS.PREMIUM_1000 : (userTier || TIERS.FREE));
