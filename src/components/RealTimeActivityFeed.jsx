@@ -5,16 +5,22 @@ import './RealTimeActivityFeed.css';
  * Real-Time Activity Feed
  * Live updates using Server-Sent Events (SSE) or WebSocket
  */
-export const RealTimeActivityFeed = ({ userId }) => {
+export const RealTimeActivityFeed = ({ userId = 'anonymous' }) => {
   const [activities, setActivities] = useState([]);
   const [isConnected, setIsConnected] = useState(false);
   const [filter, setFilter] = useState('all'); // all, posts, comments, likes, subs
-] const [error, setError] = useState(null);
+  const [error, setError] = useState(null);
   const eventSourceRef = useRef(null);
   const reconnectAttemptsRef = useRef(0);
   const MAX_RECONNECT_ATTEMPTS = 3;
 
   useEffect(() => {
+    // Don't connect if userId is invalid
+    if (!userId || userId === 'anonymous') {
+      console.warn('⚠️ RealTimeActivityFeed: No valid userId, loading mock data');
+      loadMockActivities();
+      return;
+    }
     try {
       connectToActivityStream();
     } catch (err) {
