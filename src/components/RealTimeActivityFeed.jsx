@@ -9,19 +9,40 @@ export const RealTimeActivityFeed = ({ userId }) => {
   const [activities, setActivities] = useState([]);
   const [isConnected, setIsConnected] = useState(false);
   const [filter, setFilter] = useState('all'); // all, posts, comments, likes, subs
+]  const [error, setError] = useState(null);
   const eventSourceRef = useRef(null);
   const reconnectAttemptsRef = useRef(0);
   const MAX_RECONNECT_ATTEMPTS = 3;
 
   useEffect(() => {
-    connectToActivityStream();
-    return () => disconnectFromActivityStream();
+    try {
+      connectToActivityStream();
+    } catch (err) {
+      console.error('Failed to initialize activity stream:', err);
+      setError(err.message);
+      loadMockActivities();
+    }
+    return () => {
+      try {
+        disconnectFromActivityStream();
+      } catch (err) {
+        console.error('Failed to disconnect activity stream:', err);
+      }
+    };
   }, []);
 
   const connectToActivityStream = () => {
     // Don't try to connect if backend isn't available
     if (reconnectAttemptsRef.current >= MAX_RECONNECT_ATTEMPTS) {
       console.log('⚠️ Activity stream unavailable - using mock data');
+      loadMockActivities();
+      return;
+    }
+
+    // Check if EventSource is available (browser support)
+    if (typeof EventSource === 'undefined') {
+      console.warn('⚠️ EventSource not supported - using mock data');
+      reconnectAttemptsRef.current = MAX_RECONNECT_ATTEMPTS;
       loadMockActivities();
       return;
     }
