@@ -1,29 +1,31 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Suspense, lazy } from "react";
 import { createRoot } from "react-dom/client";
 import { AuthProvider, useAuth } from "./components/AuthSupabase.jsx";
-import { LegalDocumentsList } from "./components/LegalDocumentsList.jsx";
-import CreatorSignup from "./CreatorSignup.jsx";
-import PaymentModule from "./PaymentModule.jsx";
-import { CreatorDashboard } from "./CreatorDashboard.jsx";
-import BugReporter from "./components/BugReporter.jsx";
 import { ErrorBoundary } from "./components/ErrorBoundary.jsx";
-import { ToastContainer } from "./components/Toast.jsx";
-import { ThemeProvider } from "./components/ThemeToggle.jsx";
-import CookieConsent from "./components/CookieConsent.jsx";
-import A11ySkipLink from "./components/A11ySkipLink.jsx";
-import InstallPWA from "./components/InstallPWA.jsx";
-import CommandPalette from "./components/CommandPalette.jsx";
-import QuickActions from "./components/QuickActions.jsx";
-import AchievementSystem from "./components/AchievementSystem.jsx";
-import InteractiveTutorial from "./components/InteractiveTutorial.jsx";
-import HelpButton from "./components/HelpButton.jsx";
-import Invite from "./pages/Invite.jsx";
-import AgeGate from "./components/AgeGate.jsx";
 import { NotificationProvider } from "./notifications/NotificationProvider.jsx";
 import EngagementTracker from "./components/EngagementTracker.jsx";
-import MicoAssistant from "./components/MicoAssistant.jsx";
-import MicoDevPanel from "./components/MicoDevPanel.jsx";
-import QuickAccessWidget from "./components/QuickAccessWidget.jsx";
+
+// Lazy load heavy components to prevent them from breaking initial render
+const LegalDocumentsList = lazy(() => import("./components/LegalDocumentsList.jsx").then(m => ({ default: m.LegalDocumentsList })));
+const CreatorSignup = lazy(() => import("./CreatorSignup.jsx"));
+const PaymentModule = lazy(() => import("./PaymentModule.jsx"));
+const CreatorDashboard = lazy(() => import("./CreatorDashboard.jsx").then(m => ({ default: m.CreatorDashboard })));
+const BugReporter = lazy(() => import("./components/BugReporter.jsx"));
+const ToastContainer = lazy(() => import("./components/Toast.jsx").then(m => ({ default: m.ToastContainer })));
+const ThemeProvider = lazy(() => import("./components/ThemeToggle.jsx").then(m => ({ default: m.ThemeProvider })));
+const CookieConsent = lazy(() => import("./components/CookieConsent.jsx"));
+const A11ySkipLink = lazy(() => import("./components/A11ySkipLink.jsx"));
+const InstallPWA = lazy(() => import("./components/InstallPWA.jsx"));
+const CommandPalette = lazy(() => import("./components/CommandPalette.jsx"));
+const QuickActions = lazy(() => import("./components/QuickActions.jsx"));
+const AchievementSystem = lazy(() => import("./components/AchievementSystem.jsx"));
+const InteractiveTutorial = lazy(() => import("./components/InteractiveTutorial.jsx"));
+const HelpButton = lazy(() => import("./components/HelpButton.jsx"));
+const Invite = lazy(() => import("./pages/Invite.jsx"));
+const AgeGate = lazy(() => import("./components/AgeGate.jsx"));
+const MicoAssistant = lazy(() => import("./components/MicoAssistant.jsx"));
+const MicoDevPanel = lazy(() => import("./components/MicoDevPanel.jsx"));
+const QuickAccessWidget = lazy(() => import("./components/QuickAccessWidget.jsx"));
 import { registerServiceWorker } from "./utils/registerServiceWorker.js";
 import { autoLoginOwner, isDeviceTrusted } from "./utils/deviceAuth.js";
 import { requireOwner, isOwner } from "./utils/ownerAuth.js";
@@ -320,10 +322,11 @@ function AppFlow() {
 
   return (
     <ErrorBoundary>
-      <ThemeProvider>
-        <React.StrictMode>
-          <AgeGate onVerified={() => console.log('Age verified')} />
-          {step === 'mico' ? (
+      <Suspense fallback={<div style={{ color: 'white', padding: '50px', fontSize: '24px' }}>Loading ForTheWeebs...</div>}>
+        <ThemeProvider>
+          <React.StrictMode>
+            <AgeGate onVerified={() => console.log('Age verified')} />
+            {step === 'mico' ? (
             // Direct Mico interface mode
             <MicoDevPanel />
           ) : (
@@ -353,6 +356,7 @@ function AppFlow() {
           )}
         </React.StrictMode>
       </ThemeProvider>
+      </Suspense>
     </ErrorBoundary>
   );
 }
