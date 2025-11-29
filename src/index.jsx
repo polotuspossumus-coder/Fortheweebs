@@ -34,20 +34,22 @@ import { initBugFixerMonitoring } from './utils/bugFixerIntegration.js';
 import featureDetector from './utils/featureDetection.js';
 import FeatureDisabledBanner from './components/FeatureDisabledBanner.jsx';
 
-// Register service worker for PWA support
-registerServiceWorker();
+// Defer all initialization until DOM is ready
+const initializeServices = () => {
+  // Register service worker for PWA support
+  registerServiceWorker();
 
-// Initialize bug fixer monitoring for the entire app
-if (typeof window !== 'undefined') {
-  initBugFixerMonitoring();
-  console.log('🐛 Bug Fixer: Monitoring all systems');
-}
+  // Initialize bug fixer monitoring for the entire app
+  if (typeof window !== 'undefined') {
+    initBugFixerMonitoring();
+    console.log('🐛 Bug Fixer: Monitoring all systems');
+  }
 
-// Initialize mobile optimizations
-if (typeof window !== 'undefined') {
-  initMobileTouchOptimizations();
-  
-  // Log platform info
+  // Initialize mobile optimizations
+  if (typeof window !== 'undefined') {
+    initMobileTouchOptimizations();
+
+    // Log platform info
   if (isCapacitor()) {
     console.log('🚀 Running in Capacitor native app');
   } else {
