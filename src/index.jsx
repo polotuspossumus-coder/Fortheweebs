@@ -354,14 +354,36 @@ function AppFlow() {
   );
 }
 
-const container = document.getElementById("root");
-const root = createRoot(container);
-root.render(
-  <AuthProvider>
-    <NotificationProvider>
-      <EngagementTracker>
-        <AppFlow />
-      </EngagementTracker>
-    </NotificationProvider>
-  </AuthProvider>
-);
+// Wait for DOM to be ready before mounting React
+const initializeApp = () => {
+  const container = document.getElementById("root");
+
+  if (!container) {
+    console.error('❌ Root container not found! Waiting for DOM...');
+    // If root doesn't exist yet, wait and try again
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initializeApp);
+      return;
+    }
+    return;
+  }
+
+  console.log('✅ Root container found, initializing React app...');
+  const root = createRoot(container);
+  root.render(
+    <AuthProvider>
+      <NotificationProvider>
+        <EngagementTracker>
+          <AppFlow />
+        </EngagementTracker>
+      </NotificationProvider>
+    </AuthProvider>
+  );
+};
+
+// Initialize app when DOM is ready
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initializeApp);
+} else {
+  initializeApp();
+}
