@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>React Test</title>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script type="module">
+    import React from 'https://esm.sh/react@18';
+    import { createRoot } from 'https://esm.sh/react-dom@18/client';
+
+    const App = () => {
+      return React.createElement('div', null, 'React is working!');
+    };
+
+    const container = document.getElementById('root');
+    console.log('Container:', container);
+
+    if (container) {
+      const root = createRoot(container);
+      root.render(React.createElement(App));
+      console.log('✅ React mounted successfully');
+    } else {
+      console.error('❌ Container not found');
+    }
+  </script>
+</body>
+</html>

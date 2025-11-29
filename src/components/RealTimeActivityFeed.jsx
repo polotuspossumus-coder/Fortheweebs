@@ -9,7 +9,7 @@ export const RealTimeActivityFeed = ({ userId }) => {
   const [activities, setActivities] = useState([]);
   const [isConnected, setIsConnected] = useState(false);
   const [filter, setFilter] = useState('all'); // all, posts, comments, likes, subs
-]  const [error, setError] = useState(null);
+] const [error, setError] = useState(null);
   const eventSourceRef = useRef(null);
   const reconnectAttemptsRef = useRef(0);
   const MAX_RECONNECT_ATTEMPTS = 3;

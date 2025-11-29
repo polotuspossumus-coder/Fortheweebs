@@ -50,12 +50,13 @@ const initializeServices = () => {
     initMobileTouchOptimizations();
 
     // Log platform info
-  if (isCapacitor()) {
-    console.log('🚀 Running in Capacitor native app');
-  } else {
-    console.log('🌐 Running in web browser');
+    if (isCapacitor()) {
+      console.log('🚀 Running in Capacitor native app');
+    } else {
+      console.log('🌐 Running in web browser');
+    }
   }
-}
+};
 
 // CHECK OWNER ACCESS BEFORE ANYTHING RENDERS
 if (localStorage.getItem('userId') === 'owner' || localStorage.getItem('ownerEmail') === 'polotuspossumus@gmail.com') {
@@ -371,6 +372,10 @@ const initializeApp = () => {
   }
 
   console.log('✅ Root container found, initializing React app...');
+
+  // Initialize services (PWA, bug fixer, etc.)
+  initializeServices();
+
   const root = createRoot(container);
   root.render(
     <AuthProvider>
