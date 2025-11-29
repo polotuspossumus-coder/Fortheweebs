@@ -114,8 +114,9 @@ export const ThreeDModelViewer = ({ modelUrl, modelType = 'gltf', onLoad, onErro
   };
 
   const setupLighting = (scene, preset) => {
-    // Remove existing lights
-    scene.children = scene.children.filter(child => !(child instanceof THREE.Light));
+    // Remove existing lights safely
+    const lightsToRemove = scene.children.filter(child => child instanceof THREE.Light);
+    lightsToRemove.forEach(light => scene.remove(light));
 
     switch (preset) {
       case 'studio':

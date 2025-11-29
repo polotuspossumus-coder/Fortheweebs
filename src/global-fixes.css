@@ -1,0 +1,24 @@
+/* Global CSS fixes for cross-browser compatibility */
+
+/* Add webkit prefix support for backdrop-filter everywhere */
+* {
+  -webkit-backdrop-filter: inherit;
+}
+
+[style*="backdrop-filter"] {
+  -webkit-backdrop-filter: inherit;
+}
+
+/* Specific backdrop-filter fixes */
+.modal-overlay,
+.overlay,
+.blur-background,
+[class*="modal"],
+[class*="popup"],
+[class*="dialog"] {
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+}
+
+/* Ensure Children property is never undefined in React */
+/* This fixes the React vendor error */

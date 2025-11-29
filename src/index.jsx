@@ -4,6 +4,7 @@ import { AuthProvider, useAuth } from "./components/AuthSupabase.jsx";
 import { ErrorBoundary } from "./components/ErrorBoundary.jsx";
 import { NotificationProvider } from "./notifications/NotificationProvider.jsx";
 import EngagementTracker from "./components/EngagementTracker.jsx";
+import "./global-fixes.css"; // Cross-browser compatibility fixes
 
 // Lazy load heavy components to prevent them from breaking initial render
 const LegalDocumentsList = lazy(() => import("./components/LegalDocumentsList.jsx").then(m => ({ default: m.LegalDocumentsList })));
