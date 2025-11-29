@@ -970,13 +970,13 @@
   <script>
     // Hide landing page and show React app if URL has params OR admin.html OR /app
     const params = new URLSearchParams(window.location.search);
-    const showApp = window.location.search ||
+    const showApp = (window.location.search && window.location.search.length > 0) ||
       window.location.pathname.includes('admin') ||
       window.location.pathname === '/app' ||
-      window.location.hash ||
+      (window.location.hash && window.location.hash.length > 1) ||
       params.get('app') === 'true';
 
-    console.log('showApp:', showApp, 'search:', window.location.search, 'params:', params.get('app'));
+    console.log('showApp:', showApp, 'search:', window.location.search, 'params:', params.get('app'), 'hash:', window.location.hash);
 
     if (showApp) {
       // Show loader briefly for smooth transition
@@ -1006,7 +1006,7 @@
     // Backup: Re-check after a short delay in case React hasn't mounted yet
     setTimeout(() => {
       const params2 = new URLSearchParams(window.location.search);
-      if (params2.get('app') === 'true' || window.location.search) {
+      if (params2.get('app') === 'true') {
         const landingPage = document.getElementById('landing-page');
         if (landingPage) {
           landingPage.classList.add('hidden');
