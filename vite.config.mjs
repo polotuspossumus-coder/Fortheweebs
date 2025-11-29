@@ -21,8 +21,11 @@ export default defineConfig({
         manualChunks(id) {
           // Vendor chunks - split by package for better caching
           if (id.includes('node_modules')) {
-            // React ecosystem
-            if (id.includes('react') || id.includes('react-dom')) {
+            // React ecosystem - keep react and react-dom together to prevent Children property error
+            if (id.includes('react-dom')) {
+              return 'react-vendor';
+            }
+            if (id.includes('react') && !id.includes('react-router') && !id.includes('@react-three')) {
               return 'react-vendor';
             }
             if (id.includes('react-router')) {
@@ -126,6 +129,10 @@ export default defineConfig({
     host: true
   },
   optimizeDeps: {
-    include: ['react', 'react-dom', 'three', '@stripe/stripe-js']
+    include: ['react', 'react-dom', 'three', '@stripe/stripe-js'],
+    exclude: []
+  },
+  resolve: {
+    dedupe: ['react', 'react-dom']
   }
 });
