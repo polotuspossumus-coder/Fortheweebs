@@ -133,6 +133,10 @@ export default defineConfig({
     exclude: []
   },
   resolve: {
-    dedupe: ['react', 'react-dom']
+    dedupe: ['react', 'react-dom'],
+    alias: {
+      'react': 'react',
+      'react-dom': 'react-dom'
+    }
   }
 });
