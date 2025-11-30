@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ForTheWeebs - Cache Fix</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #1a1a1a;
+            color: #fff;
+        }
+        .container {
+            background: #2a2a2a;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+        }
+        h1 {
+            color: #4CAF50;
+            margin-bottom: 20px;
+        }
+        .status {
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+            background: #333;
+        }
+        .success {
+            background: #4CAF50;
+            color: white;
+        }
+        .info {
+            background: #2196F3;
+            color: white;
+        }
+        .log {
+            background: #333;
+            padding: 10px;
+            margin: 5px 0;
+            border-left: 3px solid #4CAF50;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+        }
+        button {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+        button:hover {
+            background: #45a049;
+        }
+        button:disabled {
+            background: #666;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔧 ForTheWeebs Cache Fix & Owner Access Restore</h1>
+        
+        <div class="status info">
+            <strong>Status:</strong> Ready to clear cache and restore owner access
+        </div>
+
+        <div id="logs"></div>
+
+        <button id="fixBtn" onclick="runFix()">Run Fix Now</button>
+    </div>
+
+    <script>
+        const logsDiv = document.getElementById('logs');
+        const fixBtn = document.getElementById('fixBtn');
+
+        function log(message, isSuccess = false) {
+            const logEntry = document.createElement('div');
+            logEntry.className = isSuccess ? 'log success' : 'log';
+            logEntry.textContent = message;
+            logsDiv.appendChild(logEntry);
+            console.log(message);
+        }
+
+        async function runFix() {
+            fixBtn.disabled = true;
+            fixBtn.textContent = 'Running fixes...';
+            logsDiv.innerHTML = '';
+
+            try {
+                log('🔧 Starting comprehensive fix...');
+
+                // 1. Clear all storage
+                localStorage.clear();
+                sessionStorage.clear();
+                log('✅ Storage cleared', true);
+
+                // 2. Set owner access with all required flags
+                localStorage.setItem('ownerEmail', 'polotuspossumus@gmail.com');
+                localStorage.setItem('userId', 'owner');
+                localStorage.setItem('adminAuthenticated', 'true');
+                localStorage.setItem('ownerVerified', 'true');
+                localStorage.setItem('hasOnboarded', 'true');
+                localStorage.setItem('legalAccepted', 'true');
+                localStorage.setItem('tosAccepted', 'true');
+                localStorage.setItem('userTier', 'LIFETIME_VIP');
+                log('✅ Owner access restored', true);
+
+                // 3. Clear all service worker caches
+                if ('caches' in window) {
+                    const cacheNames = await caches.keys();
+                    for (const cacheName of cacheNames) {
+                        await caches.delete(cacheName);
+                        log(`✅ Deleted cache: ${cacheName}`, true);
+                    }
+                }
+
+                // 4. Unregister service workers
+                if ('serviceWorker' in navigator) {
+                    const registrations = await navigator.serviceWorker.getRegistrations();
+                    for (const registration of registrations) {
+                        await registration.unregister();
+                        log('✅ Unregistered service worker', true);
+                    }
+                }
+
+                log('✅ All fixes applied successfully!', true);
+                log('🔄 Reloading app in 2 seconds with fresh cache...');
+
+                // 5. Force hard reload
+                setTimeout(() => {
+                    window.location.href = 'https://fortheweebs.vercel.app';
+                }, 2000);
+
+            } catch (error) {
+                log(`❌ Error: ${error.message}`);
+                fixBtn.disabled = false;
+                fixBtn.textContent = 'Retry Fix';
+            }
+        }
+
+        // Auto-run on load if URL has ?auto parameter
+        if (window.location.search.includes('auto')) {
+            runFix();
+        }
+    </script>
+</body>
+</html>
