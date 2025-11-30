@@ -21,23 +21,17 @@ export default defineConfig({
         manualChunks(id) {
           // Vendor chunks - split by package for better caching
           if (id.includes('node_modules')) {
-            // React ecosystem - keep react and react-dom together to prevent Children property error
-            if (id.includes('react-dom')) {
-              return 'react-vendor';
-            }
-            if (id.includes('react') && !id.includes('react-router') && !id.includes('@react-three')) {
-              return 'react-vendor';
-            }
-            if (id.includes('react-router')) {
-              return 'router-vendor';
-            }
-
-            // 3D rendering (large) - Keep @react-three with react to prevent hook issues
-            if (id.includes('three') && !id.includes('@react-three')) {
-              return 'three-vendor';
+            // CRITICAL: Keep ALL React ecosystem together to prevent Children property error
+            if (id.includes('react') || id.includes('scheduler')) {
+              return 'react-vendor'; // Everything React-related in ONE bundle
             }
             if (id.includes('@react-three')) {
-              return 'react-vendor'; // Bundle with React to share hooks properly
+              return 'react-vendor'; // 3D libs need same React instance
+            }
+
+            // 3D rendering (large) - separate from React
+            if (id.includes('three') && !id.includes('@react-three')) {
+              return 'three-vendor';
             }
 
             // Payment providers
