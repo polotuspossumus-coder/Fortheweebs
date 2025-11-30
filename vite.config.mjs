@@ -32,9 +32,12 @@ export default defineConfig({
               return 'router-vendor';
             }
 
-            // 3D rendering (large)
-            if (id.includes('three') || id.includes('@react-three')) {
+            // 3D rendering (large) - Keep @react-three with react to prevent hook issues
+            if (id.includes('three') && !id.includes('@react-three')) {
               return 'three-vendor';
+            }
+            if (id.includes('@react-three')) {
+              return 'react-vendor'; // Bundle with React to share hooks properly
             }
 
             // Payment providers
