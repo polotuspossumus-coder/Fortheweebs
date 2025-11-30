@@ -34,6 +34,8 @@ export class ErrorBoundary extends React.Component {
         </div>
       );
     }
-    return this.props.children;
+    // CRITICAL: Destructure props to avoid bundler confusion with 'this'
+    const { children } = this.props;
+    return children;
   }
 }
