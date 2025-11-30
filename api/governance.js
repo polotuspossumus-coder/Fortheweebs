@@ -23,12 +23,14 @@ const { sentinelWatchdog } = require('./middleware/sentinelWatchdog');
 const metrics = require('./services/metrics');
 
 // Import TypeScript modules (will be compiled)
+// TEMPORARY: Disabled for deployment - these modules don't exist yet
 let governanceNotary, policyOverrides, artifactLogger;
 
 try {
-  governanceNotary = require('./agents/governanceNotary');
-  policyOverrides = require('./agents/policyOverrides');
-  artifactLogger = require('./agents/artifactLogger');
+  // governanceNotary = require('./agents/governanceNotary');
+  // policyOverrides = require('./agents/policyOverrides');
+  // artifactLogger = require('./agents/artifactLogger');
+  console.log('⚠️ Governance modules disabled - not implemented yet');
 } catch (error) {
   console.error('Failed to load governance modules:', error.message);
 }
