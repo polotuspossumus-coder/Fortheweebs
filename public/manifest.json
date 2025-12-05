@@ -1,0 +1,39 @@
+{
+  "name": "ForTheWeebs - Creator Platform",
+  "short_name": "ForTheWeebs",
+  "description": "Sovereign creator-first platform for content creators, artists, and fans",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0a0a0a",
+  "theme_color": "#667eea",
+  "orientation": "any",
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["entertainment", "social", "productivity"],
+  "shortcuts": [
+    {
+      "name": "Upload Content",
+      "url": "/upload"
+    },
+    {
+      "name": "VR Studio",
+      "url": "/vr-studio"
+    },
+    {
+      "name": "Dashboard",
+      "url": "/dashboard"
+    }
+  ]
+}

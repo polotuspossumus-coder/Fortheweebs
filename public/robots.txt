@@ -1,0 +1,14 @@
+# ForTheWeebs - Robots.txt
+# https://fortheweebs.netlify.app/robots.txt
+
+User-agent: *
+Allow: /
+Disallow: /admin
+Disallow: /api/
+Disallow: *.json$
+
+# Crawl-delay for polite bots
+Crawl-delay: 1
+
+# Sitemap location
+Sitemap: https://fortheweebs.netlify.app/sitemap.xml

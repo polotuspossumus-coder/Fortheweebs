@@ -1,0 +1,624 @@
+.social-feed-container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* Navigation */
+.feed-nav {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 24px;
+  background: white;
+  padding: 12px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.feed-nav-btn {
+  flex: 1;
+  padding: 12px 20px;
+  background: #f5f5f5;
+  border: none;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.feed-nav-btn:hover {
+  background: #e8e8e8;
+}
+
+.feed-nav-btn.active {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+}
+
+/* Owner Badge */
+.owner-badge {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 20px;
+  border-radius: 12px;
+  margin-bottom: 24px;
+  text-align: center;
+}
+
+.owner-badge h2 {
+  margin: 0 0 8px 0;
+  font-size: 24px;
+}
+
+.owner-badge p {
+  margin: 0;
+  opacity: 0.9;
+}
+
+/* Post Creator */
+.post-creator {
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 24px;
+}
+
+.post-creator textarea {
+  width: 100%;
+  padding: 12px;
+  border: 2px solid #e1e8ed;
+  border-radius: 8px;
+  font-size: 15px;
+  font-family: inherit;
+  resize: vertical;
+  margin-bottom: 12px;
+}
+
+.post-creator textarea:focus {
+  outline: none;
+  border-color: #667eea;
+}
+
+/* Visibility Selector */
+.visibility-selector {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+  padding: 12px;
+  background: #f8f9fa;
+  border-radius: 8px;
+}
+
+.visibility-selector label {
+  font-weight: 600;
+  font-size: 14px;
+  color: #333;
+}
+
+.visibility-selector select {
+  flex: 1;
+  padding: 8px 12px;
+  border: 2px solid #e1e8ed;
+  border-radius: 6px;
+  font-size: 14px;
+  background: white;
+  cursor: pointer;
+}
+
+.visibility-selector select:focus {
+  outline: none;
+  border-color: #667eea;
+}
+
+/* Paid Content Toggle */
+.paid-toggle {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+  padding: 12px;
+  background: #fff8e1;
+  border: 2px solid #ffd54f;
+  border-radius: 8px;
+}
+
+.paid-toggle label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+  font-size: 14px;
+  color: #f57c00;
+  cursor: pointer;
+}
+
+.paid-toggle input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+}
+
+.paid-toggle input[type="number"] {
+  width: 100px;
+  padding: 6px 10px;
+  border: 2px solid #ffd54f;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+.error-message {
+  padding: 12px;
+  background: #ffebee;
+  border: 2px solid #f44336;
+  border-radius: 8px;
+  color: #c62828;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+
+.loading {
+  text-align: center;
+  padding: 40px;
+  font-size: 18px;
+  color: #667eea;
+}
+
+.empty-feed {
+  text-align: center;
+  padding: 60px 20px;
+  color: #666;
+}
+
+.empty-feed p {
+  font-size: 18px;
+  margin: 0;
+}
+
+.post-creator-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.post-options {
+  display: flex;
+  gap: 8px;
+}
+
+.post-option {
+  padding: 8px 16px;
+  background: #f5f5f5;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.post-option:hover {
+  background: #e8e8e8;
+}
+
+.post-option.premium {
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+  border: 2px solid #667eea;
+  color: #667eea;
+  font-weight: 600;
+}
+
+.post-btn {
+  padding: 10px 32px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.post-btn:hover {
+  transform: translateY(-2px);
+}
+
+/* CGI Tools Panel */
+.cgi-tools-panel {
+  margin-top: 16px;
+  padding: 16px;
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.05) 0%, rgba(118, 75, 162, 0.05) 100%);
+  border: 2px solid #667eea;
+  border-radius: 8px;
+}
+
+.cgi-tools-panel h4 {
+  margin: 0 0 12px 0;
+  color: #667eea;
+}
+
+.cgi-options {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.cgi-options button {
+  padding: 8px 16px;
+  background: white;
+  border: 2px solid #667eea;
+  border-radius: 6px;
+  color: #667eea;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.cgi-options button:hover {
+  background: #667eea;
+  color: white;
+}
+
+/* Posts Feed */
+.posts-feed {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.empty-feed {
+  background: white;
+  padding: 60px 20px;
+  border-radius: 12px;
+  text-align: center;
+  color: #666;
+}
+
+.empty-feed h3 {
+  margin: 0 0 8px 0;
+  color: #333;
+}
+
+/* Post Card */
+.post-card {
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.post-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.post-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: #f5f5f5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  flex-shrink: 0;
+}
+
+.post-meta {
+  flex: 1;
+}
+
+.post-meta strong {
+  display: block;
+  font-size: 16px;
+  color: #333;
+  margin-bottom: 4px;
+}
+
+.post-time {
+  font-size: 13px;
+  color: #666;
+  margin-right: 8px;
+}
+
+.visibility-badge {
+  display: inline-block;
+  padding: 2px 8px;
+  background: #667eea;
+  color: white;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 600;
+  margin-left: 8px;
+}
+
+.paid-badge {
+  display: inline-block;
+  padding: 2px 8px;
+  background: #f59e0b;
+  color: white;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 600;
+  margin-left: 8px;
+}
+
+.post-actions-menu {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.follow-btn,
+.friend-btn,
+.subscribe-btn {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.follow-btn {
+  background: #667eea;
+  color: white;
+}
+
+.follow-btn:hover {
+  background: #5568d3;
+}
+
+.friend-btn {
+  background: #22c55e;
+  color: white;
+}
+
+.friend-btn:hover {
+  background: #16a34a;
+}
+
+.subscribe-btn {
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+  color: white;
+  font-weight: 700;
+  padding: 8px 16px;
+}
+
+.subscribe-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(245, 158, 11, 0.4);
+}
+
+.follow-btn:disabled,
+.friend-btn:disabled,
+.subscribe-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.post-meta strong {
+  display: block;
+  font-size: 16px;
+  color: #333;
+}
+
+.post-time {
+  font-size: 13px;
+  color: #666;
+}
+
+.post-content {
+  margin-bottom: 16px;
+  font-size: 15px;
+  line-height: 1.6;
+  color: #333;
+}
+
+.post-actions {
+  display: flex;
+  gap: 16px;
+  padding-top: 16px;
+  border-top: 1px solid #e1e8ed;
+}
+
+.post-actions button {
+  padding: 8px 16px;
+  background: none;
+  border: none;
+  color: #666;
+  font-size: 14px;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+}
+
+.post-actions button:hover {
+  background: #f5f5f5;
+  color: #333;
+}
+
+/* Messages/Calls/Streams Content */
+.messages-content,
+.calls-content,
+.streams-content {
+  background: white;
+  padding: 32px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.messages-content h2,
+.calls-content h2,
+.streams-content h2 {
+  margin: 0 0 8px 0;
+  font-size: 28px;
+}
+
+.feature-status {
+  color: #22c55e;
+  font-weight: 600;
+  margin: 0 0 24px 0;
+}
+
+/* Social Stats */
+.social-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.stat-card {
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.05) 0%, rgba(118, 75, 162, 0.05) 100%);
+  border: 2px solid #667eea;
+  border-radius: 12px;
+  padding: 20px;
+  text-align: center;
+}
+
+.stat-card h3 {
+  margin: 0 0 8px 0;
+  font-size: 16px;
+  color: #667eea;
+}
+
+.stat-number {
+  margin: 0;
+  font-size: 32px;
+  font-weight: 700;
+  color: #333;
+}
+
+.messages-placeholder,
+.calls-placeholder,
+.streams-placeholder {
+  text-align: center;
+  padding: 40px 20px;
+}
+
+.messages-placeholder h3,
+.calls-placeholder h3,
+.streams-placeholder h3 {
+  font-size: 24px;
+  margin: 0 0 12px 0;
+  color: #333;
+}
+
+.premium-features {
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.05) 0%, rgba(118, 75, 162, 0.05) 100%);
+  border: 2px solid #667eea;
+  border-radius: 12px;
+  padding: 24px;
+  margin: 24px 0;
+  text-align: left;
+}
+
+.premium-features h4 {
+  margin: 0 0 16px 0;
+  color: #667eea;
+  font-size: 20px;
+}
+
+.premium-features ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.premium-features li {
+  padding: 8px 0;
+  font-size: 15px;
+  color: #333;
+}
+
+.coming-soon-btn {
+  padding: 16px 32px;
+  background: #667eea;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 24px;
+  transition: all 0.2s ease;
+}
+
+.coming-soon-btn:hover {
+  background: #5568d3;
+  transform: translateY(-2px);
+}
+
+/* Premium Upsell */
+.premium-upsell {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(102, 126, 234, 0.3);
+  max-width: 300px;
+  z-index: 1000;
+}
+
+.premium-upsell h3 {
+  margin: 0 0 8px 0;
+  font-size: 18px;
+}
+
+.premium-upsell p {
+  margin: 0 0 16px 0;
+  font-size: 14px;
+  opacity: 0.9;
+}
+
+.premium-upsell button {
+  width: 100%;
+  padding: 12px;
+  background: white;
+  color: #667eea;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.premium-upsell button:hover {
+  transform: scale(1.05);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .social-feed-container {
+    padding: 12px;
+  }
+
+  .feed-nav {
+    flex-wrap: wrap;
+  }
+
+  .feed-nav-btn {
+    font-size: 13px;
+    padding: 10px 12px;
+  }
+
+  .post-options {
+    flex-wrap: wrap;
+  }
+
+  .premium-upsell {
+    left: 20px;
+    right: 20px;
+    max-width: none;
+  }
+}
