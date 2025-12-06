@@ -191,6 +191,7 @@ const routes = [
     { path: '/api/auth', file: './api/auth', name: 'Authentication (JWT)' },
     { path: '/api/family-access', file: './api/family-access', name: 'Family Access' },
     { path: '/api/accounts', file: './api/accounts', name: 'Multi-Account System' },
+    { path: '/api/user', file: './api/user', name: 'User Info & VIP Status' },
 
     // Admin & System
     { path: '/api/admin', file: './api/admin-stats', name: 'Admin Stats & Health' },

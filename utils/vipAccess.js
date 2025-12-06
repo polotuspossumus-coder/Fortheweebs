@@ -22,10 +22,10 @@
  */
 
 // OWNER - Only person with admin/owner access
-export const OWNER_EMAIL = 'polotuspossumus@gmail.com';
+const OWNER_EMAIL = 'polotuspossumus@gmail.com';
 
 // TIER 1: Owner's Freebies - Never pay anything
-export const LIFETIME_VIP_EMAILS = [
+const LIFETIME_VIP_EMAILS = [
   'shellymontoya82@gmail.com',
   'chesed04@aol.com',
   'Colbyg123f@gmail.com',
@@ -47,16 +47,16 @@ export const LIFETIME_VIP_EMAILS = [
 // After 100 total VIPs (14 free + 86 paid), new users are Tier 3
 
 // Maximum lifetime VIP slots (free + paid)
-export const MAX_LIFETIME_VIP_SLOTS = 100;
-export const FREEBIE_SLOTS_FILLED = 14;
-export const PAID_LIFETIME_SLOTS_REMAINING = 86;
+const MAX_LIFETIME_VIP_SLOTS = 100;
+const FREEBIE_SLOTS_FILLED = 14;
+const PAID_LIFETIME_SLOTS_REMAINING = 86;
 
 /**
  * Check if email is the owner
  * @param {string} email - User's email address
  * @returns {boolean} - True if owner, false otherwise
  */
-export function isOwner(email) {
+function isOwner(email) {
   if (!email) return false;
   return email.toLowerCase().trim() === OWNER_EMAIL.toLowerCase().trim();
 }
@@ -66,7 +66,7 @@ export function isOwner(email) {
  * @param {string} email - User's email address
  * @returns {boolean} - True if VIP, false otherwise
  */
-export function isLifetimeVIP(email) {
+function isLifetimeVIP(email) {
   if (!email) return false;
   
   const normalizedEmail = email.toLowerCase().trim();
@@ -81,7 +81,7 @@ export function isLifetimeVIP(email) {
  * @param {string} userId - User's ID
  * @returns {Promise<boolean>} - True if VIP, false otherwise
  */
-export async function isUserVIP(userId) {
+async function isUserVIP(userId) {
   // Owner is always VIP
   if (userId === 'owner') return true;
   
@@ -103,7 +103,7 @@ export async function isUserVIP(userId) {
  * @param {string} email - User's email
  * @returns {string} - 'OWNER' for owner, 'PRO_VIP' for VIPs
  */
-export function getVIPTier(email) {
+function getVIPTier(email) {
   if (isOwner(email)) return 'OWNER';
   if (isLifetimeVIP(email)) return 'PRO_VIP';
   return null;
@@ -114,7 +114,7 @@ export function getVIPTier(email) {
  * @param {string} email - User's email
  * @returns {boolean} - True if should skip payment
  */
-export function shouldSkipPayment(email) {
+function shouldSkipPayment(email) {
   return isLifetimeVIP(email);
 }
 
@@ -123,6 +123,21 @@ export function shouldSkipPayment(email) {
  * @param {string} email - User's email
  * @returns {boolean} - True if VIP
  */
-export function isVIP(email) {
+function isVIP(email) {
   return isLifetimeVIP(email);
 }
+
+// CommonJS exports for Node.js backend
+module.exports = {
+  OWNER_EMAIL,
+  LIFETIME_VIP_EMAILS,
+  MAX_LIFETIME_VIP_SLOTS,
+  FREEBIE_SLOTS_FILLED,
+  PAID_LIFETIME_SLOTS_REMAINING,
+  isOwner,
+  isLifetimeVIP,
+  isUserVIP,
+  getVIPTier,
+  shouldSkipPayment,
+  isVIP
+};

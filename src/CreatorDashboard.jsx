@@ -43,6 +43,7 @@ import AnalyticsDashboard from "./components/AnalyticsDashboard";
 import MicoDevPanel from "./components/MicoDevPanel";
 import FAQ from "./components/FAQ";
 import AccountSettings from "./components/AccountSettings";
+import AccountManagement from "./components/AccountManagement";
 
 import { ToolLockGate } from "./components/ToolLockGate";
 import { DevBalanceManager } from "./components/DevBalanceManager";
@@ -160,6 +161,7 @@ export const CreatorDashboard = ({ userId, ipAddress = "127.0.0.1", tier = "free
     <Tabs value={activeTab} onValueChange={setActiveTab} defaultValue="overview" className="dashboard-tabs">
       <TabsList>
         <TabsTrigger value="overview">📊 Overview</TabsTrigger>
+        <TabsTrigger value="accounts">👥 My Accounts</TabsTrigger>
         <TabsTrigger value="settings">⚙️ Settings</TabsTrigger>
         <TabsTrigger value="help">❓ FAQ & Help</TabsTrigger>
         <TabsTrigger value="video">🎬 Video Editor</TabsTrigger>
@@ -179,6 +181,9 @@ export const CreatorDashboard = ({ userId, ipAddress = "127.0.0.1", tier = "free
           border: '2px solid #FFC107'
         }}>⚠️ EXPERIMENTAL</TabsTrigger>
       </TabsList>
+      <TabsContent value="accounts">
+        <AccountManagement />
+      </TabsContent>
       <TabsContent value="settings">
         <AccountSettings userId={userId} />
       </TabsContent>
