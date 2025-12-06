@@ -36,6 +36,9 @@ const app = express();
 const server = http.createServer(app);
 const PORT = process.env.PORT || 3001;
 
+// Trust Railway/Vercel proxy for rate limiting
+app.set('trust proxy', true);
+
 console.log('📡 Port:', PORT);
 
 // Security Headers
