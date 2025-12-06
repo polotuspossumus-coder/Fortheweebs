@@ -56,6 +56,7 @@ import { LanguageSelector } from "./components/LanguageSelector";
 import { t } from "./utils/i18n";
 import DeviceManager from "./components/DeviceManager";
 import { isOwner } from "./utils/ownerAuth";
+import { isVIP } from "./utils/vipAccess";
 import UserProfileManager from "./components/UserProfileManager";
 import SocialFeed from "./components/SocialFeed";
 import CGIVideoCall from "./components/CGIVideoCall";
@@ -80,9 +81,10 @@ import QuickCreateFAB from "./components/QuickCreateFAB";
 
 export const CreatorDashboard = ({ userId, ipAddress = "127.0.0.1", tier = "free" }) => {
   // STRICT ADMIN CHECK - Only polotuspossumus@gmail.com
-  const ownerEmail = localStorage.getItem('ownerEmail');
+  const ownerEmail = localStorage.getItem('ownerEmail') || localStorage.getItem('userEmail');
   const storedUserId = localStorage.getItem('userId');
   const isAdminUser = (ownerEmail === 'polotuspossumus@gmail.com') || (storedUserId === 'owner');
+  const isVipUser = isVIP(ownerEmail) || isAdminUser;
   
   const [isAdmin, setIsAdmin] = useState(isAdminUser);
   const [tosAccepted, setTosAccepted] = useState(isAdminUser ? true : false);
@@ -161,7 +163,7 @@ export const CreatorDashboard = ({ userId, ipAddress = "127.0.0.1", tier = "free
     <Tabs value={activeTab} onValueChange={setActiveTab} defaultValue="overview" className="dashboard-tabs">
       <TabsList>
         <TabsTrigger value="overview">📊 Overview</TabsTrigger>
-        <TabsTrigger value="accounts">👥 My Accounts</TabsTrigger>
+        {isVipUser && <TabsTrigger value="accounts">👥 My Accounts</TabsTrigger>}
         <TabsTrigger value="settings">⚙️ Settings</TabsTrigger>
         <TabsTrigger value="help">❓ FAQ & Help</TabsTrigger>
         <TabsTrigger value="video">🎬 Video Editor</TabsTrigger>
@@ -175,11 +177,11 @@ export const CreatorDashboard = ({ userId, ipAddress = "127.0.0.1", tier = "free
           border: '2px solid #FFD700',
           fontWeight: 'bold'
         }}>🌟 MYTHIC LAYER</TabsTrigger>
-        <TabsTrigger value="experimental" style={{ 
+        {isAdminUser && <TabsTrigger value="experimental" style={{ 
           background: 'linear-gradient(135deg, #F44336 0%, #E91E63 100%)',
           color: 'white',
           border: '2px solid #FFC107'
-        }}>⚠️ EXPERIMENTAL</TabsTrigger>
+        }}>⚠️ EXPERIMENTAL</TabsTrigger>}
       </TabsList>
       <TabsContent value="accounts">
         <AccountManagement />

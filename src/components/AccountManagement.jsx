@@ -32,35 +32,53 @@ export default function AccountManagement() {
   const loadAccounts = async () => {
     try {
       setLoading(true);
-      const userEmail = localStorage.getItem('userEmail') || '';
+      const userEmail = localStorage.getItem('userEmail') || localStorage.getItem('ownerEmail') || '';
       const isOwnerCheck = userEmail === 'polotuspossumus@gmail.com';
       setIsOwner(isOwnerCheck);
 
       // Check VIP status
-      const vipResponse = await fetch(`${import.meta.env.VITE_API_URL}/api/user/vip-status`, {
-        headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
-      });
-      const vipData = await vipResponse.json();
-      setIsVip(vipData.isVip);
+      try {
+        const vipResponse = await fetch(`${import.meta.env.VITE_API_URL}/api/user/vip-status`, {
+          headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+        });
+        const vipData = await vipResponse.json();
+        setIsVip(vipData.isVip || isOwnerCheck);
+      } catch (vipErr) {
+        console.warn('VIP check failed, using owner check:', vipErr);
+        setIsVip(isOwnerCheck);
+      }
 
       // Load accounts
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/accounts/list`, {
-        headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
-      });
-      const data = await response.json();
-      
-      if (data.success) {
-        setAccounts(data.accounts);
-        setCurrentAccount(data.currentAccount);
+      try {
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/api/accounts/list`, {
+          headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+        });
+        const data = await response.json();
         
-        // Check if can create more
-        const subAccountCount = data.accounts.filter(a => a.account_type === 'sub').length;
-        if (isOwnerCheck) {
-          setCanCreateMore(true); // Owner: unlimited
-        } else if (vipData.isVip) {
-          setCanCreateMore(subAccountCount < 3); // VIPs: max 3
+        if (data.success) {
+          setAccounts(data.accounts);
+          setCurrentAccount(data.currentAccount);
+          
+          // Check if can create more
+          const subAccountCount = data.accounts.filter(a => a.account_type === 'sub').length;
+          if (isOwnerCheck) {
+            setCanCreateMore(true); // Owner: unlimited
+          } else if (vipData.isVip) {
+            setCanCreateMore(subAccountCount < 3); // VIPs: max 3
+          } else {
+            setCanCreateMore(false); // Non-VIPs: none
+          }
         } else {
-          setCanCreateMore(false); // Non-VIPs: none
+          // No accounts yet - that's ok for first time
+          setAccounts([]);
+          setCanCreateMore(isOwnerCheck);
+        }
+      } catch (apiErr) {
+        console.warn('Accounts API not ready yet:', apiErr);
+        // Set defaults for owner
+        if (isOwnerCheck) {
+          setAccounts([]);
+          setCanCreateMore(true);
         }
       }
     } catch (err) {
