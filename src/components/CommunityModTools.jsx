@@ -1,92 +1,33 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './CommunityModTools.css';
 
 const CommunityModTools = () => {
   const [activeTab, setActiveTab] = useState('reports');
-  const [reports, setReports] = useState([
-    {
-      id: 1,
-      type: 'content',
-      reportedBy: 'AnimeFan2024',
-      reportedUser: 'BadActor123',
-      content: 'Inappropriate comment on CGI tutorial',
-      reason: 'Harassment',
-      timestamp: '2 hours ago',
-      status: 'pending',
-      severity: 'high'
-    },
-    {
-      id: 2,
-      type: 'user',
-      reportedBy: 'OtakuKing',
-      reportedUser: 'Spammer99',
-      content: 'Spam messages in chat',
-      reason: 'Spam',
-      timestamp: '5 hours ago',
-      status: 'pending',
-      severity: 'medium'
-    },
-    {
-      id: 3,
-      type: 'content',
-      reportedBy: 'CosplayQueen',
-      reportedUser: 'TrollMaster',
-      content: 'Offensive artwork uploaded',
-      reason: 'Inappropriate Content',
-      timestamp: '1 day ago',
-      status: 'reviewing',
-      severity: 'high'
-    }
-  ]);
+  const [reports, setReports] = useState([]);
+  const [bannedUsers, setBannedUsers] = useState([]);
+  const [autoModRules, setAutoModRules] = useState([]);
+  const [contentQueue, setContentQueue] = useState([]);
 
-  const [bannedUsers, setBannedUsers] = useState([
-    {
-      id: 1,
-      username: 'BannedUser1',
-      reason: 'Multiple harassment violations',
-      bannedBy: 'Admin',
-      bannedDate: '2024-11-20',
-      expiresDate: '2024-12-20',
-      permanent: false
-    },
-    {
-      id: 2,
-      username: 'PermanentBan',
-      reason: 'Illegal content distribution',
-      bannedBy: 'SuperAdmin',
-      bannedDate: '2024-11-15',
-      permanent: true
-    }
-  ]);
+  useEffect(() => {
+    loadModerationData();
+  }, []);
 
-  const [autoModRules, setAutoModRules] = useState([
-    { id: 1, name: 'Block Spam Links', enabled: true, type: 'spam', action: 'delete', triggers: 234 },
-    { id: 2, name: 'Filter Profanity', enabled: true, type: 'profanity', action: 'warn', triggers: 567 },
-    { id: 3, name: 'Detect Harassment', enabled: true, type: 'harassment', action: 'flag', triggers: 89 },
-    { id: 4, name: 'NSFW Content Filter', enabled: true, type: 'nsfw', action: 'blur', triggers: 145 }
-  ]);
-
-  const [contentQueue, setContentQueue] = useState([
-    {
-      id: 1,
-      type: 'video',
-      title: 'New CGI Animation',
-      creator: 'ArtistPro',
-      uploadedDate: '1 hour ago',
-      flagged: true,
-      flagReason: 'Potential copyright issue',
-      thumbnail: 'https://via.placeholder.com/120x80/667eea/fff?text=Video'
-    },
-    {
-      id: 2,
-      type: 'image',
-      title: 'Fan Art Collection',
-      creator: 'DrawMaster',
-      uploadedDate: '3 hours ago',
-      flagged: false,
-      thumbnail: 'https://via.placeholder.com/120x80/764ba2/fff?text=Image'
+  const loadModerationData = async () => {
+    try {
+      const response = await fetch('/api/moderation/dashboard', {
+        headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+      });
+      if (response.ok) {
+        const data = await response.json();
+        setReports(data.reports || []);
+        setBannedUsers(data.bannedUsers || []);
+        setAutoModRules(data.autoModRules || []);
+        setContentQueue(data.contentQueue || []);
+      }
+    } catch (error) {
+      console.error('Failed to load moderation data:', error);
     }
-  ]);
+  };
 
   const handleReportAction = (reportId, action) => {
     setReports(reports.map(r => r.id === reportId ? { ...r, status: action } : r));

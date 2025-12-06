@@ -37,8 +37,13 @@ export default async function handler(req, res) {
     }
 
     // Create Stripe payment intent
-    // Uncomment when STRIPE_SECRET_KEY is set
-    /*
+    if (!process.env.STRIPE_SECRET_KEY) {
+      return res.status(503).json({
+        error: 'Payment system not configured',
+        message: 'Stripe payment processing is not set up yet. Please contact support.'
+      });
+    }
+
     const paymentIntent = await stripe.paymentIntents.create({
       amount: Math.round(amount * 100), // Convert to cents
       currency: 'usd',
@@ -48,13 +53,6 @@ export default async function handler(req, res) {
         currentTier
       }
     });
-    */
-
-    // For now, mock successful payment
-    const paymentIntent = {
-      id: `pi_mock_${Date.now()}`,
-      client_secret: 'mock_secret'
-    };
 
     // Get user's current total donations
     // In production: const user = await db.users.findOne({ userId })

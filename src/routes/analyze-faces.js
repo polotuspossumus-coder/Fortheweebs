@@ -153,35 +153,15 @@ async function processImagesWithRekognition(rekognition, images) {
 }
 
 function generateMockFaceGroups(images) {
-  // Generate mock face groups when AWS is not available
-  const numGroups = Math.min(3, Math.ceil(images.length / 3));
-  const groups = [];
-
-  for (let i = 0; i < numGroups; i++) {
-    const startIdx = Math.floor((images.length / numGroups) * i);
-    const endIdx = Math.floor((images.length / numGroups) * (i + 1));
-    const groupImages = images.slice(startIdx, endIdx);
-
-    groups.push({
-      id: `group_${i + 1}`,
-      characterName: `Character_${String.fromCharCode(65 + i)}`,
-      detectedCharacter: 'Mock Data',
-      faceCount: groupImages.length,
-      confidence: 0.85 + Math.random() * 0.10,
-      images: groupImages,
-      suggestedName: `Character_${String.fromCharCode(65 + i)}`,
-      isMockData: true
-    });
-  }
-
+  // AWS Rekognition not configured - return error
   return new Response(JSON.stringify({
-    success: true,
-    groups: groups,
+    success: false,
+    error: 'Face detection service not configured. Please add AWS Rekognition API keys.',
+    groups: [],
     totalImages: images.length,
-    totalGroups: groups.length,
-    message: 'Using mock data - AWS Rekognition not configured'
+    totalGroups: 0
   }), {
-    status: 200,
+    status: 503,
     headers: { 'Content-Type': 'application/json' }
   });
 }

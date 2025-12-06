@@ -10,14 +10,22 @@ const UserPresence = ({ userId, showDetails = true }) => {
     const [userStatus, setUserStatus] = useState('online');
 
     useEffect(() => {
-        // Simulate online users (replace with real Supabase realtime)
-        const mockUsers = [
-            { id: 1, name: 'Sarah K.', avatar: '👩‍🎨', status: 'creating', lastSeen: 'now' },
-            { id: 2, name: 'Mike D.', avatar: '🧑‍💻', status: 'editing', lastSeen: '2m ago' },
-            { id: 3, name: 'Alex T.', avatar: '👨‍🎤', status: 'online', lastSeen: 'now' },
-        ];
+        // Load real online users from Supabase presence
+        const loadOnlineUsers = async () => {
+            try {
+                const response = await fetch('/api/presence/online', {
+                    headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+                });
+                const data = await response.json();
+                setOnlineUsers(data.users || []);
+            } catch (error) {
+                console.error('Failed to load online users:', error);
+                setOnlineUsers([]);
+            }
+        };
 
-        setOnlineUsers(mockUsers);
+        loadOnlineUsers();
+        const interval = setInterval(loadOnlineUsers, 30000); // Update every 30s
 
         // Update user's own status
         const updateStatus = () => {
@@ -26,7 +34,10 @@ const UserPresence = ({ userId, showDetails = true }) => {
         };
 
         document.addEventListener('visibilitychange', updateStatus);
-        return () => document.removeEventListener('visibilitychange', updateStatus);
+        return () => {
+            document.removeEventListener('visibilitychange', updateStatus);
+            clearInterval(interval);
+        };
     }, [userId]);
 
     if (!showDetails) {

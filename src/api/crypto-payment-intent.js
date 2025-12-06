@@ -82,47 +82,11 @@ export default async function handler(req, res) {
         const charge = await Charge.create(chargeData);
         */
 
-        // Simulated response for development
-        const paymentIntent = {
-            id: `crypto_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
-            userId,
-            unlockType,
-            cryptoType,
-            amountUSD: amount,
-            currency: rules.currency,
-            status: 'pending',
-            hostedUrl: `https://commerce.coinbase.com/charges/DEMO_${Date.now()}`, // Demo URL
-            expiresAt: new Date(Date.now() + 60 * 60 * 1000).toISOString(), // 1 hour
-            addresses: {
-                bitcoin: cryptoType === 'bitcoin' ? `bc1q${Math.random().toString(36).substr(2, 39)}` : null,
-                ethereum: cryptoType === 'ethereum' ? `0x${Math.random().toString(16).substr(2, 40)}` : null
-            },
-            pricing: {
-                local: { amount: amount.toFixed(2), currency: 'USD' },
-                // In production, fetch real exchange rates
-                [rules.currency.toLowerCase()]: {
-                    amount: cryptoType === 'bitcoin'
-                        ? (amount / 45000).toFixed(8) // Example BTC rate
-                        : (amount / 2500).toFixed(8),  // Example ETH rate
-                    currency: rules.currency
-                }
-            },
-            warnings: [
-                '⚠️ Upcharge is NON-NEGOTIABLE',
-                '⚠️ Payment auto-converted to USD',
-                '⚠️ Gas fees are your responsibility',
-                '⚠️ We prefer cash/card - pay that instead'
-            ],
-            createdAt: new Date().toISOString()
-        };
-
-        // Log payment intent (in production, save to database)
-        console.log('Crypto payment intent created:', paymentIntent);
-
-        return res.status(200).json({
-            success: true,
-            paymentIntent,
-            message: `${rules.currency} payment initiated. Please complete payment within 1 hour.`
+        // Return error when crypto payment system not configured
+        return res.status(503).json({
+            success: false,
+            error: 'Crypto payment system not configured',
+            message: 'Coinbase Commerce integration is not set up yet. Please use card payment or contact support.'
         });
 
     } catch (error) {

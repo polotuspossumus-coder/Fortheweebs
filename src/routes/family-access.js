@@ -49,21 +49,7 @@ async function listAccessCodes(req, res) {
 
     if (error) {
       console.error('Database error:', error);
-      // Return mock data as fallback
-      const mockCodes = [
-        {
-          id: 'fac_001',
-          code: 'FAMILY-MOM-2024',
-          name: 'Mom',
-          type: 'free',
-          notes: 'Full free access for testing',
-          link: `${process.env.VERCEL_URL || 'http://localhost:3000'}/redeem?code=FAMILY-MOM-2024`,
-          created_at: new Date().toISOString(),
-          used_count: 0,
-          active: true
-        }
-      ];
-      return res.status(200).json({ codes: mockCodes, usingMockData: true });
+      return res.status(500).json({ error: 'Failed to fetch access codes', codes: [] });
     }
 
     return res.status(200).json({ codes });

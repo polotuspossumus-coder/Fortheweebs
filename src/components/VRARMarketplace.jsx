@@ -6,6 +6,42 @@ export function VRARMarketplace({ userId }) {
   const [searchTerm, setSearchTerm] = useState('');
   const [sortBy, setSortBy] = useState('popular');
   const [items, setItems] = useState([]);
+  const [collections, setCollections] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    loadMarketplaceItems();
+    loadCollections();
+  }, [category, sortBy]);
+
+  const loadMarketplaceItems = async () => {
+    setLoading(true);
+    try {
+      const response = await fetch(`/api/vr-marketplace?category=${category}&sort=${sortBy}`, {
+        headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+      });
+      const data = await response.json();
+      setItems(data.items || []);
+    } catch (error) {
+      console.error('Failed to load marketplace items:', error);
+      setItems([]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const loadCollections = async () => {
+    try {
+      const response = await fetch('/api/vr-marketplace/collections', {
+        headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+      });
+      const data = await response.json();
+      setCollections(data.collections || []);
+    } catch (error) {
+      console.error('Failed to load collections:', error);
+      setCollections([]);
+    }
+  };
 
   const categories = [
     { id: 'all', name: 'All Content', icon: '🌐' },
@@ -139,7 +175,17 @@ export function VRARMarketplace({ userId }) {
         gap: '25px',
         marginBottom: '40px'
       }}>
-        {SAMPLE_ITEMS.map(item => (
+        {loading ? (
+          <div style={{ textAlign: 'center', padding: '60px', color: '#888' }}>
+            <div style={{ fontSize: '48px', marginBottom: '20px' }}>⏳</div>
+            <p>Loading marketplace items...</p>
+          </div>
+        ) : items.length === 0 ? (
+          <div style={{ textAlign: 'center', padding: '60px', color: '#888' }}>
+            <div style={{ fontSize: '48px', marginBottom: '20px' }}>📦</div>
+            <p>No items found. Be the first to create content!</p>
+          </div>
+        ) : items.map(item => (
           <MarketplaceItem key={item.id} item={item} />
         ))}
       </div>
@@ -359,7 +405,11 @@ function TrendingCollections() {
         gridTemplateColumns: 'repeat(auto-fill, minmax(350px, 1fr))',
         gap: '25px'
       }}>
-        {SAMPLE_COLLECTIONS.map(collection => (
+        {collections.length === 0 ? (
+          <div style={{ textAlign: 'center', padding: '40px', color: '#888', gridColumn: '1 / -1' }}>
+            <p>No collections yet. Check back soon!</p>
+          </div>
+        ) : collections.map(collection => (
           <div key={collection.id} style={{
             background: `linear-gradient(135deg, ${collection.color1}, ${collection.color2})`,
             borderRadius: '20px',
@@ -406,125 +456,3 @@ function TrendingCollections() {
     </div>
   );
 }
-
-// Sample Data
-const SAMPLE_ITEMS = [
-  {
-    id: 1,
-    title: 'Cyberpunk City VR',
-    creator: 'VRMaster',
-    description: 'Explore a futuristic neon-lit cityscape in stunning detail',
-    price: 29.99,
-    rating: 4.8,
-    views: '125K',
-    reviews: '2.3K',
-    icon: '🏙️',
-    color1: '#667eea',
-    color2: '#764ba2',
-    badge: 'TRENDING',
-    badgeColor: '#ff6b6b'
-  },
-  {
-    id: 2,
-    title: 'AR Face Filters Pack',
-    creator: 'ARQueen',
-    description: '50+ professional AR filters for social media',
-    price: 0,
-    rating: 4.9,
-    views: '89K',
-    reviews: '1.8K',
-    icon: '😎',
-    color1: '#f093fb',
-    color2: '#f5576c',
-    badge: 'FREE',
-    badgeColor: '#4CAF50'
-  },
-  {
-    id: 3,
-    title: 'Medieval Castle 3D',
-    creator: '3DWizard',
-    description: 'Highly detailed medieval castle environment',
-    price: 49.99,
-    rating: 5.0,
-    views: '67K',
-    reviews: '987',
-    icon: '🏰',
-    color1: '#4facfe',
-    color2: '#00f2fe',
-    badge: 'NEW',
-    badgeColor: '#2196F3'
-  },
-  {
-    id: 4,
-    title: 'VR Meditation Space',
-    creator: 'ZenCreator',
-    description: 'Peaceful VR environments for meditation',
-    price: 14.99,
-    rating: 4.7,
-    views: '54K',
-    reviews: '765',
-    icon: '🧘',
-    color1: '#a18cd1',
-    color2: '#fbc2eb'
-  },
-  {
-    id: 5,
-    title: 'Space Station Tour',
-    creator: 'AstroVR',
-    description: 'Educational VR tour of the ISS',
-    price: 0,
-    rating: 4.6,
-    views: '43K',
-    reviews: '654',
-    icon: '🚀',
-    color1: '#fa709a',
-    color2: '#fee140',
-    badge: 'FEATURED',
-    badgeColor: '#FF9800'
-  },
-  {
-    id: 6,
-    title: 'Horror Escape Room',
-    creator: 'ScareVR',
-    description: 'Terrifying VR escape room experience',
-    price: 19.99,
-    rating: 4.9,
-    views: '98K',
-    reviews: '2.1K',
-    icon: '👻',
-    color1: '#434343',
-    color2: '#000000',
-    badge: 'HOT',
-    badgeColor: '#f44336'
-  }
-];
-
-const SAMPLE_COLLECTIONS = [
-  {
-    id: 1,
-    title: 'Best of VR Gaming',
-    description: 'Top VR games from indie developers',
-    itemCount: 45,
-    icon: '🎮',
-    color1: '#667eea',
-    color2: '#764ba2'
-  },
-  {
-    id: 2,
-    title: 'AR Education Pack',
-    description: 'Learn through augmented reality',
-    itemCount: 32,
-    icon: '📚',
-    color1: '#f093fb',
-    color2: '#f5576c'
-  },
-  {
-    id: 3,
-    title: 'Social VR Worlds',
-    description: 'Meet and hang out with friends',
-    itemCount: 28,
-    icon: '👥',
-    color1: '#4facfe',
-    color2: '#00f2fe'
-  }
-];

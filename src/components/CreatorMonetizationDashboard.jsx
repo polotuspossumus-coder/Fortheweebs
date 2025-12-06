@@ -8,10 +8,31 @@ import {
 export function CreatorMonetizationDashboard({ userId }) {
   const [stats, setStats] = useState(null);
   const [timeRange, setTimeRange] = useState('7d'); // 7d, 30d, 90d, 1y
+  const [revenueData, setRevenueData] = useState([]);
+  const [contentPerformance, setContentPerformance] = useState([]);
+  const [revenueSources, setRevenueSources] = useState([]);
 
   useEffect(() => {
-    fetchAnalytics(userId, timeRange);
+    loadAnalytics(userId, timeRange);
   }, [userId, timeRange]);
+
+  const loadAnalytics = async (userId, range) => {
+    try {
+      const data = await fetchAnalytics(userId, range);
+      if (data) {
+        setRevenueData(data.revenueData || []);
+        setContentPerformance(data.contentPerformance || []);
+        setRevenueSources(data.revenueSources || []);
+        setStats(data.stats);
+      }
+    } catch (error) {
+      console.error('Failed to load analytics:', error);
+      // Set empty arrays for empty state
+      setRevenueData([]);
+      setContentPerformance([]);
+      setRevenueSources([]);
+    }
+  };
 
   return (
     <div style={{ padding: '40px', background: '#0a0a0a', minHeight: '100vh', color: 'white' }}>
@@ -333,32 +354,6 @@ function PayoutSettings({ userId }) {
     </ChartCard>
   );
 }
-
-// Sample Data
-const revenueData = [
-  { date: 'Nov 1', earnings: 1200, views: 45000 },
-  { date: 'Nov 2', earnings: 1450, views: 52000 },
-  { date: 'Nov 3', earnings: 1100, views: 41000 },
-  { date: 'Nov 4', earnings: 1800, views: 68000 },
-  { date: 'Nov 5', earnings: 2100, views: 78000 },
-  { date: 'Nov 6', earnings: 1950, views: 72000 },
-  { date: 'Nov 7', earnings: 2400, views: 88000 },
-];
-
-const contentPerformance = [
-  { title: 'VR Gallery #1', revenue: 4500 },
-  { title: 'AR Experience', revenue: 3200 },
-  { title: '3D Model Pack', revenue: 2800 },
-  { title: 'VR Game', revenue: 5500 },
-  { title: 'Tutorial Series', revenue: 1900 },
-];
-
-const revenueSources = [
-  { name: 'Content Sales', value: 45 },
-  { name: 'Subscriptions', value: 30 },
-  { name: 'Tips', value: 15 },
-  { name: 'Ads', value: 10 },
-];
 
 const COLORS = ['#667eea', '#764ba2', '#f093fb', '#4facfe'];
 

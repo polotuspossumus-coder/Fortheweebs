@@ -80,23 +80,7 @@ const CreatorRevenueAnalytics = () => {
     }
   };
 
-  const generateMockData = (range) => {
-    const days = range === '7d' ? 7 : range === '30d' ? 30 : range === '90d' ? 90 : 365;
-    
-    const revenueGrowth = Array.from({ length: days }, (_, i) => ({
-      date: new Date(Date.now() - (days - i) * 24 * 60 * 60 * 1000).toLocaleDateString(),
-      value: Math.floor(Math.random() * 5000) + 1000
-    }));
-
-    const subscribersGrowth = Array.from({ length: days }, (_, i) => ({
-      date: new Date(Date.now() - (days - i) * 24 * 60 * 60 * 1000).toLocaleDateString(),
-      value: Math.floor(Math.random() * 500) + 100
-    }));
-
-    const engagementGrowth = Array.from({ length: days }, (_, i) => ({
-      date: new Date(Date.now() - (days - i) * 24 * 60 * 60 * 1000).toLocaleDateString(),
-      value: Math.floor(Math.random() * 10000) + 2000
-    }));
+  // Removed unused generateMockData function - production uses real data only
 
     return {
       revenue: {

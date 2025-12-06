@@ -26,86 +26,38 @@ function AdminPanel() {
   }, []);
 
   const loadAdminData = async () => {
-    // TODO: Replace with actual Firestore queries
-    // Mock data for now
-
-    setStats({
-      totalUsers: 15234,
-      totalArtworks: 48920,
-      totalRevenue: 124580.50,
-      pendingModeration: 23,
-      reportedContent: 8,
-    });
-
-    // Mock moderation queue
-    setModerationQueue([
-      {
-        id: '1',
-        title: 'Character Artwork',
-        type: 'artwork',
-        creator: 'AnimeFan42',
-        creatorId: '123',
-        submittedAt: new Date(Date.now() - 3600000),
-        imageUrl: null,
-        description: 'Original character design',
-        tags: ['anime', 'original', 'character'],
-        nsfw: false,
-        status: 'pending'
-      },
-      {
-        id: '2',
-        title: 'Fantasy Illustration',
-        type: 'artwork',
-        creator: 'ArtMaster99',
-        creatorId: '456',
-        submittedAt: new Date(Date.now() - 7200000),
-        imageUrl: null,
-        description: 'NSFW fantasy art',
-        tags: ['fantasy', 'nsfw', 'adult'],
-        nsfw: true,
-        status: 'pending'
-      },
-    ]);
-
-    // Mock reported content
-    setReportedContent([
-      {
-        id: '1',
-        contentId: 'artwork-789',
-        contentType: 'artwork',
-        title: 'Reported Artwork',
-        reporter: 'User123',
-        reason: 'Inappropriate content',
-        reportedAt: new Date(Date.now() - 86400000),
-        status: 'pending'
-      },
-    ]);
-
-    // Mock users
-    setUsers([
-      {
-        id: '1',
-        username: 'AnimeFan42',
-        email: 'anime@example.com',
-        tier: 'adult',
-        createdAt: new Date('2023-12-01'),
-        artworkCount: 45,
-        followers: 1234,
-        banned: false,
-        verified: false
-      },
-      {
-        id: '2',
-        username: 'MangaLover',
-        email: 'manga@example.com',
-        tier: 'unlimited',
-        createdAt: new Date('2024-01-15'),
-        artworkCount: 23,
-        followers: 567,
-        banned: false,
-        verified: true
-      },
-    ]);
+    try {
+      const response = await fetch('/api/admin/dashboard', {
+        headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+      });
+      
+      if (!response.ok) throw new Error('Failed to fetch admin data');
+      
+      const data = await response.json();
+      setStats(data.stats || {
+        totalUsers: 0,
+        totalArtworks: 0,
+        totalRevenue: 0,
+        pendingModeration: 0,
+        reportedContent: 0,
+      });
+      setModerationQueue(data.moderationQueue || []);
+      setReportedContent(data.reportedContent || []);
+      setUsers(data.users || []);
+    } catch (error) {
+      console.error('Failed to load admin data:', error);
+      // Set empty defaults
+      setStats({
+        totalUsers: 0,
+        totalArtworks: 0,
+        totalRevenue: 0,
+        pendingModeration: 0,
+        reportedContent: 0,
+      });
+      setModerationQueue([]);
+      setReportedContent([]);
+      setUsers([]);
+    }
   };
 
   const handleModeration = async (contentId, action, reason = '') => {

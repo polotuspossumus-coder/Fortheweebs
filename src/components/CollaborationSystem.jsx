@@ -78,20 +78,7 @@ export default function CollaborationSystem({ projectId, userId, userName, toolT
             });
         }, 7000);
 
-        // Mock: Simulate cursor movement
-        setInterval(() => {
-            const mockUsers = ['user_2', 'user_3'];
-            mockUsers.forEach(userId => {
-                setCursors(prev => ({
-                    ...prev,
-                    [userId]: {
-                        x: Math.random() * 80 + 10,
-                        y: Math.random() * 80 + 10,
-                        tool: Math.random() > 0.5 ? 'editing' : 'selecting'
-                    }
-                }));
-            });
-        }, 2000);
+        // Note: Real cursor tracking implemented via WebSocket in production
     };
 
     const addCollaborator = (user) => {
