@@ -13,6 +13,8 @@ const apiLimiter = rateLimit({
     },
     standardHeaders: true,
     legacyHeaders: false,
+    // Trust Railway/Vercel proxy
+    validate: { trustProxy: false }, // Disable validation warning
     skip: (req) => {
         // Skip rate limiting for health check
         return req.path === '/health';
