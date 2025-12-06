@@ -1,18 +1,30 @@
 /**
- * VIP Access System - First 100 Users Get LIFETIME FREE ACCESS
+ * VIP Access System - 100 Lifetime VIP Slots
  * 
- * First 100 VIPs get:
- * - ALL features forever (no subscriptions, no creator payments, nothing)
- * - After 100 slots filled: New users pay $1000 for VIP but still pay creator subscriptions
+ * TIER 1 - Owner's Freebies (Slots 1-14):
+ * - Pay: $0 (FREE)
+ * - Get: EVERYTHING free forever (no payments, no subscriptions, nothing)
  * 
- * Current VIP count: 14/100
- * Remaining FREE slots: 86
+ * TIER 2 - Paid Lifetime VIPs (Slots 15-100):
+ * - Pay: $1,000 ONE TIME
+ * - Get: EVERYTHING free forever (same access as freebies)
+ * - Never pay creator subscriptions or anything else
+ * 
+ * TIER 3 - Regular Paid VIPs (Slots 101+):
+ * - Pay: $1,000 ONE TIME  
+ * - Get: Platform features unlocked
+ * - Still pay creator subscriptions (not included)
+ * 
+ * Current status:
+ * - Freebies filled: 14/14 (COMPLETE)
+ * - Paid Lifetime VIP slots remaining: 86/86
+ * - After 100 total VIPs, new users are Tier 3 (pay creators)
  */
 
 // OWNER - Only person with admin/owner access
 export const OWNER_EMAIL = 'polotuspossumus@gmail.com';
 
-// LIFETIME VIPs - First 100 users, everything free forever
+// TIER 1: Owner's Freebies - Never pay anything
 export const LIFETIME_VIP_EMAILS = [
   'shellymontoya82@gmail.com',
   'chesed04@aol.com',
@@ -29,6 +41,15 @@ export const LIFETIME_VIP_EMAILS = [
   'cleonwilliams1973@gmail.com',
   'eliahmontoya05@gmail.com'
 ];
+
+// TIER 2: Paid Lifetime VIPs ($1000, everything free after)
+// TODO: Track in database - 86 slots available
+// After 100 total VIPs (14 free + 86 paid), new users are Tier 3
+
+// Maximum lifetime VIP slots (free + paid)
+export const MAX_LIFETIME_VIP_SLOTS = 100;
+export const FREEBIE_SLOTS_FILLED = 14;
+export const PAID_LIFETIME_SLOTS_REMAINING = 86;
 
 /**
  * Check if email is the owner
