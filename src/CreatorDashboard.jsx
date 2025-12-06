@@ -171,12 +171,12 @@ export const CreatorDashboard = ({ userId, ipAddress = "127.0.0.1", tier = "free
         <TabsTrigger value="arvr">🎭 AR/VR Studio</TabsTrigger>
         <TabsTrigger value="photo">📸 Photo Tools</TabsTrigger>
         <TabsTrigger value="design">🎨 Graphic Design</TabsTrigger>
-        <TabsTrigger value="mythic" style={{ 
+        {isVipUser && <TabsTrigger value="mythic" style={{ 
           background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
           color: 'white',
           border: '2px solid #FFD700',
           fontWeight: 'bold'
-        }}>🌟 MYTHIC LAYER</TabsTrigger>
+        }}>🌟 MYTHIC LAYER</TabsTrigger>}
         {isAdminUser && <TabsTrigger value="experimental" style={{ 
           background: 'linear-gradient(135deg, #F44336 0%, #E91E63 100%)',
           color: 'white',
