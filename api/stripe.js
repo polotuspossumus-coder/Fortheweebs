@@ -22,20 +22,20 @@ const PRICE_IDS = {
 };
 
 /**
- * Check Sovereign Tier Availability
- * GET /api/check-sovereign-availability
+ * Check Elite Tier Availability
+ * GET /api/check-elite-availability
  */
-router.get('/check-sovereign-availability', async (req, res) => {
+router.get('/check-elite-availability', async (req, res) => {
     try {
-        const { data: sovereignUsers, error } = await supabase
+        const { data: eliteUsers, error } = await supabase
             .from('users')
             .select('id')
-            .eq('tier', 'sovereign')
+            .eq('tier', 'elite')
             .eq('subscription_status', 'active');
 
         if (error) throw error;
 
-        const currentCount = sovereignUsers?.length || 0;
+        const currentCount = eliteUsers?.length || 0;
         const maxCount = 1000;
         const available = currentCount < maxCount;
 
@@ -46,7 +46,7 @@ router.get('/check-sovereign-availability', async (req, res) => {
             spotsRemaining: maxCount - currentCount
         });
     } catch (error) {
-        console.error('Sovereign availability check error:', error);
+        console.error('Elite availability check error:', error);
         res.status(500).json({ error: error.message });
     }
 });
@@ -284,18 +284,18 @@ router.post('/stripe-webhook', express.raw({ type: 'application/json' }), async 
                 } else {
                     console.log(`✅ Successfully updated tier for user ${userId} to ${tier}`);
 
-                    // Check if Sovereign tier is full
-                    if (tier === 'sovereign') {
-                        const { data: sovereignUsers } = await supabase
+                    // Check if Elite tier is full
+                    if (tier === 'elite') {
+                        const { data: eliteUsers } = await supabase
                             .from('users')
                             .select('id')
-                            .eq('tier', 'sovereign')
+                            .eq('tier', 'elite')
                             .eq('subscription_status', 'active');
 
-                        if (sovereignUsers && sovereignUsers.length >= 1000) {
-                            console.log('🚨 SOVEREIGN TIER FULL (1000/1000) - No more spots available');
+                        if (eliteUsers && eliteUsers.length >= 1000) {
+                            console.log('🚨 ELITE TIER FULL (1000/1000) - No more spots available');
                         } else {
-                            console.log(`📊 Sovereign count: ${sovereignUsers?.length}/1000`);
+                            console.log(`📊 Elite count: ${eliteUsers?.length}/1000`);
                         }
                     }
                 }
