@@ -11,7 +11,7 @@
 ## 🔴 ACTION REQUIRED: Run Supabase Migration
 
 ### Step 1: Go to Supabase Dashboard
-**Link:** https://supabase.com/dashboard/project/YOUR_PROJECT_ID/sql/new
+**Link:** <https://supabase.com/dashboard/project/YOUR_PROJECT_ID/sql/new>
 
 (Replace `YOUR_PROJECT_ID` with your actual Supabase project ID)
 
@@ -23,7 +23,7 @@ C:\Users\polot\fortheweebs\Fortheweebs\supabase\migrations\20241206000001_multi_
 ```
 
 Or copy from here:
-👉 https://github.com/polotuspossumus-coder/Fortheweebs/blob/main/supabase/migrations/20241206000001_multi_account_system.sql
+👉 <https://github.com/polotuspossumus-coder/Fortheweebs/blob/main/supabase/migrations/20241206000001_multi_account_system.sql>
 
 ### Step 3: Run the Migration
 1. Paste the SQL into Supabase SQL Editor
@@ -49,11 +49,11 @@ After running the migration:
 
 1. **Deploy to Railway:**
    - Railway should auto-deploy from GitHub push
-   - Check: https://fortheweebs.up.railway.app/api/accounts/list
+   - Check: <https://fortheweebs.up.railway.app/api/accounts/list>
    - Should return: `{"success":true,"accounts":[],...}`
 
 2. **Test the UI:**
-   - Go to your site: https://fortheweebs.vercel.app
+   - Go to your site: <https://fortheweebs.vercel.app>
    - Login with your email: `polotuspossumus@gmail.com`
    - Click "👥 My Accounts" tab in dashboard
    - Try creating a sub-account
@@ -80,17 +80,17 @@ After running the migration:
 ## 🐛 If Something Breaks
 
 **Migration Error:**
-- Check Supabase logs: https://supabase.com/dashboard/project/YOUR_PROJECT_ID/logs/explorer
+- Check Supabase logs: <https://supabase.com/dashboard/project/YOUR_PROJECT_ID/logs/explorer>
 - Make sure you copied the ENTIRE SQL file
 
 **API Error:**
-- Check Railway logs: https://railway.app/project/YOUR_PROJECT_ID/service/YOUR_SERVICE_ID/logs
+- Check Railway logs: <https://railway.app/project/YOUR_PROJECT_ID/service/YOUR_SERVICE_ID/logs>
 - Verify environment variables are set (SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY)
 
 **UI Not Showing:**
 - Hard refresh browser (Ctrl+F5)
 - Check browser console for errors (F12)
-- Verify Vercel deployed latest code: https://vercel.com/YOUR_USERNAME/fortheweebs
+- Verify Vercel deployed latest code: <https://vercel.com/YOUR_USERNAME/fortheweebs>
 
 ---
 

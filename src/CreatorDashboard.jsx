@@ -177,7 +177,7 @@ export const CreatorDashboard = ({ userId, ipAddress = "127.0.0.1", tier = "free
           border: '2px solid #FFD700',
           fontWeight: 'bold'
         }}>🌟 MYTHIC LAYER</TabsTrigger>}
-        {isAdminUser && <TabsTrigger value="experimental" style={{ 
+        {isVipUser && <TabsTrigger value="experimental" style={{ 
           background: 'linear-gradient(135deg, #F44336 0%, #E91E63 100%)',
           color: 'white',
           border: '2px solid #FFC107'
