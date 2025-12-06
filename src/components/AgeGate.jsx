@@ -4,11 +4,19 @@ import { useState, useEffect } from 'react';
  * AGE VERIFICATION GATE (18+)
  * Required by Google Play and Apple App Store for mature content
  * Shows on first launch, stores verification in localStorage
+ * OWNER (polotuspossumus@gmail.com) bypasses this check
  */
 export default function AgeGate({ onVerified }) {
   const [show, setShow] = useState(false);
 
   useEffect(() => {
+    // Owner never sees age gate
+    const userEmail = localStorage.getItem('userEmail') || localStorage.getItem('ownerEmail');
+    if (userEmail === 'polotuspossumus@gmail.com') {
+      onVerified?.();
+      return;
+    }
+    
     // Check if user has already verified age
     const ageVerified = localStorage.getItem('ageVerified');
     if (!ageVerified) {

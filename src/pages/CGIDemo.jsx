@@ -118,7 +118,7 @@ export default function CGIDemo() {
             <div style={{ fontSize: '2rem', marginBottom: '12px' }}>🔒</div>
             <h3 style={{ margin: '0 0 8px 0', fontSize: '1.2rem' }}>Super Admin Only</h3>
             <p style={{ margin: 0, color: '#6c757d', fontSize: '14px', lineHeight: '1.5' }}>
-              Exclusive feature for $49.99/month tier. Upgrade to unlock professional CGI effects.
+              Exclusive feature for VIP tier ($1000 one-time). Upgrade to unlock professional CGI effects.
             </p>
           </div>
 

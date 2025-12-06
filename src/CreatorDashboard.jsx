@@ -491,7 +491,12 @@ export const OverlayPanel = () => {
 };
 
 export const OverviewPanel = ({ userId }) => {
+  const userEmail = localStorage.getItem('userEmail') || localStorage.getItem('ownerEmail');
+  const isOwner = userEmail === 'polotuspossumus@gmail.com';
+  
   const [showTutorial, setShowTutorial] = useState(() => {
+    // Owner never sees tutorial
+    if (isOwner) return false;
     // Check if user has dismissed tutorial
     return localStorage.getItem(`tutorial_dismissed_${userId}`) !== 'true';
   });

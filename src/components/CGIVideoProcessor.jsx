@@ -26,7 +26,7 @@ export default function CGIVideoProcessor({ onStreamReady, enableEffects = true 
         const { tier } = await response.json();
 
         if (tier !== 'super_admin') {
-          setError('CGI features require Super Admin ($49.99/month)');
+          setError('CGI features require VIP access ($1000 one-time)');
           return;
         }
       } catch (err) {

@@ -170,7 +170,7 @@ export default function VideoCall({ callId, participants = [] }) {
   // Toggle CGI effects
   const toggleCGI = () => {
     if (!isSuperAdmin) {
-      alert('CGI effects are only available for Super Admin tier ($49.99/month)');
+      alert('CGI effects are only available for VIP tier ($1000 one-time)');
       return;
     }
 
