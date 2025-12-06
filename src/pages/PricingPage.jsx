@@ -7,9 +7,9 @@ const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001/api';
 export default function PricingPage() {
   const { user } = useAuth();
   const [loading, setLoading] = useState(null);
-  const [sovereignSpots, setSovereignSpots] = useState(null);
+  const [eliteSpots, setEliteSpots] = useState(null);
 
-  // Check Sovereign availability on load
+  // Check Elite tier availability on load
   useEffect(() => {
     // Only check VIP status after user is loaded (not null or undefined)
     if (user !== null && user !== undefined) {
@@ -23,10 +23,10 @@ export default function PricingPage() {
       }
     }
 
-    fetch(`${API_URL}/check-sovereign-availability`)
+    fetch(`${API_URL}/check-elite-availability`)
       .then(r => r.json())
-      .then(data => setSovereignSpots(data.spotsRemaining))
-      .catch(err => console.error('Failed to check sovereign spots:', err));
+      .then(data => setEliteSpots(data.spotsRemaining))
+      .catch(err => console.error('Failed to check elite spots:', err));
   }, [user]);
 
   const handleCheckout = async (tier, oneTime = false) => {
@@ -76,19 +76,19 @@ export default function PricingPage() {
       </div>
 
       <div className="tiers-container">
-        {/* Tier 1: Sovereign */}
-        <div className="tier-card sovereign">
+        {/* Tier 1: Elite ($1000) */}
+        <div className="tier-card elite">
           <div className="tier-badge">LIMITED TO 1000</div>
           <div className="tier-icon">👑</div>
-          <h2>Sovereign</h2>
+          <h2>Elite</h2>
           <div className="price">
-            $1,000<span>/month</span>
+            $1,000<span> one-time</span>
           </div>
-          {sovereignSpots !== null && (
+          {eliteSpots !== null && (
             <div className="spots-remaining">
               <span className="urgent">
-                {sovereignSpots > 0 ? (
-                  <>Only {sovereignSpots} spots remaining!</>
+                {eliteSpots > 0 ? (
+                  <>Only {eliteSpots} spots remaining!</>
                 ) : (
                   <>SOLD OUT</>
                 )}
@@ -108,50 +108,25 @@ export default function PricingPage() {
             <li>✅ 1TB storage</li>
           </ul>
           <button
-            onClick={() => handleCheckout('sovereign')}
-            disabled={loading === 'sovereign' || sovereignSpots === 0}
-            className="btn-subscribe sovereign"
+            onClick={() => handleCheckout('elite')}
+            disabled={loading === 'elite' || eliteSpots === 0}
+            className="btn-subscribe elite"
           >
-            {loading === 'sovereign' ? 'Processing...' :
-             sovereignSpots === 0 ? 'SOLD OUT' : 'Become Sovereign'}
+            {loading === 'elite' ? 'Processing...' :
+             eliteSpots === 0 ? 'SOLD OUT' : 'Get Elite Access'}
           </button>
         </div>
 
-        {/* Tier 2: Full Unlock */}
-        <div className="tier-card full">
+        {/* Tier 2: VIP ($500) */}
+        <div className="tier-card vip">
           <div className="tier-icon">💎</div>
-          <h2>Full Unlock</h2>
-          <div className="price-options">
-            <div className="price-option">
-              <div className="price">
-                $500<span>/month</span>
-              </div>
-              <button
-                onClick={() => handleCheckout('full_monthly')}
-                disabled={loading === 'full_monthly'}
-                className="btn-subscribe"
-              >
-                {loading === 'full_monthly' ? 'Processing...' : 'Subscribe Monthly'}
-              </button>
-            </div>
-            <div className="divider">OR</div>
-            <div className="price-option">
-              <div className="price">
-                $500<span> lifetime</span>
-              </div>
-              <button
-                onClick={() => handleCheckout('full_lifetime', true)}
-                disabled={loading === 'full_lifetime'}
-                className="btn-subscribe lifetime"
-              >
-                {loading === 'full_lifetime' ? 'Processing...' : 'Buy Lifetime'}
-              </button>
-            </div>
+          <h2>VIP</h2>
+          <div className="price">
+            $500<span> one-time</span>
           </div>
           <ul className="features">
             <li>✅ All features (except CGI)</li>
-            <li>✅ Unlimited Mico AI (lifetime)</li>
-            <li>✅ Unlimited Mico AI (FREE)</li>
+            <li>✅ Unlimited Mico AI</li>
             <li>✅ 12 effect presets</li>
             <li>✅ Recording</li>
             <li>✅ Custom branding</li>
@@ -161,62 +136,69 @@ export default function PricingPage() {
             <li>❌ No CGI video effects</li>
             <li>❌ No video calls</li>
           </ul>
+          <button
+            onClick={() => handleCheckout('vip')}
+            disabled={loading === 'vip'}
+            className="btn-subscribe"
+          >
+            {loading === 'vip' ? 'Processing...' : 'Get VIP Access'}
+          </button>
         </div>
 
-        {/* Tier 3: Half Unlock */}
-        <div className="tier-card half">
+        {/* Tier 3: Premium ($250) */}
+        <div className="tier-card premium">
           <div className="tier-icon">⭐</div>
-          <h2>Half Unlock</h2>
+          <h2>Premium</h2>
           <div className="price">
-            $250<span>/month</span>
+            $250<span> one-time</span>
           </div>
           <ul className="features">
             <li>✅ 12 CGI effects (50%)</li>
             <li>✅ 6 effect presets</li>
-            <li>✅ Unlimited Mico AI (FREE)</li>
+            <li>✅ Unlimited Mico AI</li>
             <li>✅ Recording</li>
             <li>✅ Analytics</li>
             <li>✅ 100GB storage</li>
             <li>❌ No video calls</li>
           </ul>
           <button
-            onClick={() => handleCheckout('half')}
-            disabled={loading === 'half'}
+            onClick={() => handleCheckout('premium')}
+            disabled={loading === 'premium'}
             className="btn-subscribe"
           >
-            {loading === 'half' ? 'Processing...' : 'Get Half Unlock'}
+            {loading === 'premium' ? 'Processing...' : 'Get Premium Access'}
           </button>
         </div>
 
-        {/* Tier 4: Advanced */}
-        <div className="tier-card advanced">
+        {/* Tier 4: Enhanced ($100) */}
+        <div className="tier-card enhanced">
           <div className="tier-icon">🚀</div>
-          <h2>Advanced</h2>
+          <h2>Enhanced</h2>
           <div className="price">
-            $100<span>/month</span>
+            $100<span> one-time</span>
           </div>
           <ul className="features">
             <li>✅ 6 CGI effects</li>
             <li>✅ 3 effect presets</li>
-            <li>✅ Unlimited Mico AI (FREE)</li>
+            <li>✅ Unlimited Mico AI</li>
             <li>✅ Recording</li>
             <li>✅ 50GB storage</li>
           </ul>
           <button
-            onClick={() => handleCheckout('advanced')}
-            disabled={loading === 'advanced'}
+            onClick={() => handleCheckout('enhanced')}
+            disabled={loading === 'enhanced'}
             className="btn-subscribe"
           >
-            {loading === 'advanced' ? 'Processing...' : 'Get Advanced'}
+            {loading === 'enhanced' ? 'Processing...' : 'Get Enhanced Access'}
           </button>
         </div>
 
-        {/* Tier 5: Basic */}
-        <div className="tier-card basic">
+        {/* Tier 5: Standard ($50) */}
+        <div className="tier-card standard">
           <div className="tier-icon">✓</div>
-          <h2>Basic</h2>
+          <h2>Standard</h2>
           <div className="price">
-            $50<span>/month</span>
+            $50<span> one-time</span>
           </div>
           <ul className="features">
             <li>✅ 3 CGI effects</li>
@@ -225,33 +207,33 @@ export default function PricingPage() {
             <li>✅ 10 uploads/day</li>
           </ul>
           <button
-            onClick={() => handleCheckout('basic')}
-            disabled={loading === 'basic'}
+            onClick={() => handleCheckout('standard')}
+            disabled={loading === 'standard'}
             className="btn-subscribe"
           >
-            {loading === 'basic' ? 'Processing...' : 'Get Basic'}
+            {loading === 'standard' ? 'Processing...' : 'Get Standard Access'}
           </button>
         </div>
 
-        {/* Tier 6: Starter */}
-        <div className="tier-card starter">
-          <div className="tier-icon">🌱</div>
-          <h2>Starter</h2>
+        {/* Tier 6: Adult Content ($15/month subscription) */}
+        <div className="tier-card adult">
+          <div className="tier-icon">🔞</div>
+          <h2>Adult Content</h2>
           <div className="price">
-            <span className="setup-fee">$15 setup</span> + $5<span>/month</span>
+            $15<span>/month</span>
           </div>
           <ul className="features">
-            <li>✅ 1 CGI effect</li>
-            <li>✅ Basic tools</li>
-            <li>✅ 5GB storage</li>
-            <li>✅ 5 uploads/day</li>
+            <li>✅ Access adult content</li>
+            <li>✅ Age-verified creators</li>
+            <li>✅ Unlimited browsing</li>
+            <li>✅ Cancel anytime</li>
           </ul>
           <button
-            onClick={() => handleCheckout('starter')}
-            disabled={loading === 'starter'}
+            onClick={() => handleCheckout('adult')}
+            disabled={loading === 'adult'}
             className="btn-subscribe"
           >
-            {loading === 'starter' ? 'Processing...' : 'Get Started'}
+            {loading === 'adult' ? 'Processing...' : 'Subscribe to Adult'}
           </button>
         </div>
       </div>
@@ -305,7 +287,7 @@ export default function PricingPage() {
           box-shadow: 0 15px 50px rgba(0,0,0,0.25);
         }
 
-        .tier-card.sovereign {
+        .tier-card.elite {
           border: 4px solid #FFD700;
           background: linear-gradient(135deg, #fffaf0 0%, #ffffff 100%);
         }
@@ -448,14 +430,10 @@ export default function PricingPage() {
           transform: none;
         }
 
-        .btn-subscribe.sovereign {
+        .btn-subscribe.elite {
           background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
           color: #000;
           box-shadow: 0 6px 20px rgba(255,215,0,0.4);
-        }
-
-        .btn-subscribe.lifetime {
-          background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
         }
 
         @media (max-width: 768px) {

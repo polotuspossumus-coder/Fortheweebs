@@ -3,10 +3,18 @@
  * Used for feature gates throughout the app
  *
  * NOTE: Mico AI is FREE for EVERYONE - we don't monetize Microsoft Copilot's work
+ *
+ * TIER STRUCTURE (matching Stripe price IDs):
+ * - elite: $1000 one-time (was "sovereign")
+ * - vip: $500 one-time (was "full_monthly"/"full_lifetime")
+ * - premium: $250 one-time (was "half")
+ * - enhanced: $100 one-time (was "advanced")
+ * - standard: $50 one-time (was "basic")
+ * - adult: $15/month subscription (adult content access)
  */
 
 export const TIER_FEATURES = {
-  sovereign: {
+  elite: {
     // CGI Effects
     cgi_effects: true,
     cgi_effect_count: 24,
@@ -21,7 +29,7 @@ export const TIER_FEATURES = {
     mico_ai: true,
     mico_commands: 'unlimited',
     mico_file_ops: true,
-    mico_cgi_control: true, // Only Sovereign can control CGI via Mico
+    mico_cgi_control: true, // Only Elite can control CGI via Mico
 
     // Premium Features
     priority_support: true,
@@ -37,12 +45,12 @@ export const TIER_FEATURES = {
     storage_gb: 1000,
 
     // Display
-    display_name: 'Sovereign',
+    display_name: 'Elite',
     display_badge: '👑',
     display_color: '#FFD700'
   },
 
-  full_monthly: {
+  vip: {
     // CGI Effects
     cgi_effects: false,
     cgi_effect_count: 0,
@@ -65,45 +73,17 @@ export const TIER_FEATURES = {
     analytics: true,
 
     // Limits
-    max_video_length: 60, // minutes
-    max_uploads_per_day: 100,
-    storage_gb: 500,
-
-    // Display
-    display_name: 'Full Unlock',
-    display_badge: '💎',
-    display_color: '#667eea'
-  },
-
-  full_lifetime: {
-    // Same as full_monthly but lifetime access
-    cgi_effects: false,
-    cgi_effect_count: 0,
-    cgi_presets: 12,
-
-    video_calls: false,
-    recording: true,
-    screen_sharing: false,
-
-    mico_ai: true,
-    mico_commands: 'unlimited',
-    mico_file_ops: true,
-
-    priority_support: true,
-    custom_branding: true,
-    api_access: true,
-    analytics: true,
-
     max_video_length: 'unlimited',
     max_uploads_per_day: 'unlimited',
     storage_gb: 500,
 
-    display_name: 'Full Unlock (Lifetime)',
+    // Display
+    display_name: 'VIP',
     display_badge: '💎',
     display_color: '#667eea'
   },
 
-  half: {
+  premium: {
     // CGI Effects
     cgi_effects: true,
     cgi_effect_count: 12,
@@ -129,12 +109,12 @@ export const TIER_FEATURES = {
     storage_gb: 100,
 
     // Display
-    display_name: 'Half Unlock',
+    display_name: 'Premium',
     display_badge: '⭐',
     display_color: '#764ba2'
   },
 
-  advanced: {
+  enhanced: {
     // CGI Effects
     cgi_effects: true,
     cgi_effect_count: 6,
@@ -159,12 +139,12 @@ export const TIER_FEATURES = {
     storage_gb: 50,
 
     // Display
-    display_name: 'Advanced',
+    display_name: 'Enhanced',
     display_badge: '🚀',
     display_color: '#48bb78'
   },
 
-  basic: {
+  standard: {
     // CGI Effects
     cgi_effects: true,
     cgi_effect_count: 3,
@@ -185,15 +165,15 @@ export const TIER_FEATURES = {
     storage_gb: 10,
 
     // Display
-    display_name: 'Basic',
+    display_name: 'Standard',
     display_badge: '✓',
     display_color: '#4299e1'
   },
 
-  starter: {
-    // CGI Effects
-    cgi_effects: true,
-    cgi_effect_count: 1,
+  adult: {
+    // Adult content subscription - no CGI features
+    cgi_effects: false,
+    cgi_effect_count: 0,
     cgi_presets: 0,
 
     // Video Features
@@ -204,15 +184,18 @@ export const TIER_FEATURES = {
     // AI Features
     mico_ai: true,
 
+    // Adult Features
+    adult_content_access: true,
+
     // Limits
-    max_video_length: 5, // minutes
-    max_uploads_per_day: 5,
+    max_video_length: 0,
+    max_uploads_per_day: 0,
     storage_gb: 5,
 
     // Display
-    display_name: 'Starter',
-    display_badge: '🌱',
-    display_color: '#718096'
+    display_name: 'Adult Subscription',
+    display_badge: '🔞',
+    display_color: '#e53e3e'
   },
 
   free: {
@@ -303,7 +286,7 @@ export function getTierDisplay(tier) {
  * @returns {number} - Positive if A > B, negative if A < B, 0 if equal
  */
 export function compareTiers(tierA, tierB) {
-  const tierOrder = ['free', 'starter', 'basic', 'advanced', 'half', 'full_lifetime', 'full_monthly', 'sovereign'];
+  const tierOrder = ['free', 'adult', 'standard', 'enhanced', 'premium', 'vip', 'elite'];
   return tierOrder.indexOf(tierA) - tierOrder.indexOf(tierB);
 }
 
@@ -324,15 +307,14 @@ export function canUpgradeTo(currentTier, targetTier) {
  */
 export function getRecommendedUpgrade(currentTier) {
   const upgradePaths = {
-    free: 'starter',
-    starter: 'basic',
-    basic: 'advanced',
-    advanced: 'half',
-    half: 'full_monthly',
-    full_monthly: 'sovereign',
-    full_lifetime: 'sovereign'
+    free: 'standard',
+    adult: 'standard',
+    standard: 'enhanced',
+    enhanced: 'premium',
+    premium: 'vip',
+    vip: 'elite'
   };
-  return upgradePaths[currentTier] || 'sovereign';
+  return upgradePaths[currentTier] || 'elite';
 }
 
 /**
@@ -342,13 +324,12 @@ export function getRecommendedUpgrade(currentTier) {
  */
 export function getTierPricing(tier) {
   const pricing = {
-    sovereign: { amount: 1000, period: 'monthly', setup: 0 },
-    full_monthly: { amount: 500, period: 'monthly', setup: 0 },
-    full_lifetime: { amount: 500, period: 'lifetime', setup: 0 },
-    half: { amount: 250, period: 'monthly', setup: 0 },
-    advanced: { amount: 100, period: 'monthly', setup: 0 },
-    basic: { amount: 50, period: 'monthly', setup: 0 },
-    starter: { amount: 5, period: 'monthly', setup: 15 },
+    elite: { amount: 1000, period: 'one-time', setup: 0 },
+    vip: { amount: 500, period: 'one-time', setup: 0 },
+    premium: { amount: 250, period: 'one-time', setup: 0 },
+    enhanced: { amount: 100, period: 'one-time', setup: 0 },
+    standard: { amount: 50, period: 'one-time', setup: 0 },
+    adult: { amount: 15, period: 'monthly', setup: 0 },
     free: { amount: 0, period: 'free', setup: 0 }
   };
   return pricing[tier] || pricing.free;
