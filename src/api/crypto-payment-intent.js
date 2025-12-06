@@ -5,9 +5,12 @@
  * Ethereum: $2000 minimum (auto-converted to USD)
  * 
  * Upcharge is NON-NEGOTIABLE. We don't like crypto, but we'll help you offload it.
+ * 
+ * Multi-Account System: Sub-account payments route to parent account's crypto wallet
  */
 
 import Stripe from 'stripe';
+import { createClient } from '@supabase/supabase-js';
 
 // This would typically use a crypto payment processor like:
 // - Coinbase Commerce
@@ -22,7 +25,34 @@ export default async function handler(req, res) {
     }
 
     try {
-        const { userId, unlockType, cryptoType, amount } = req.body;
+        const { userId, unlockType, cryptoType, amount, accountId } = req.body;
+
+        // MULTI-ACCOUNT PAYMENT ROUTING
+        // If this is a sub-account, route payment to parent account's wallet
+        let paymentWallet = null;
+        if (accountId) {
+            const supabase = createClient(
+                process.env.VITE_SUPABASE_URL,
+                process.env.SUPABASE_SERVICE_ROLE_KEY
+            );
+            
+            const { data: account } = await supabase
+                .from('accounts')
+                .select('payment_routing_id, crypto_wallet_address')
+                .eq('id', accountId)
+                .single();
+            
+            if (account?.payment_routing_id) {
+                const { data: parentAccount } = await supabase
+                    .from('accounts')
+                    .select('crypto_wallet_address')
+                    .eq('id', account.payment_routing_id)
+                    .single();
+                
+                paymentWallet = parentAccount?.crypto_wallet_address;
+                console.log(`💰 Routing crypto payment: Sub-account ${accountId} → Parent wallet ${paymentWallet}`);
+            }
+        }
 
         // Validate crypto type and minimum amounts
         const cryptoRules = {

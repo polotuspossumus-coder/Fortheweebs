@@ -190,6 +190,7 @@ const routes = [
     { path: '/api', file: './api/user-tier', name: 'User Tier' },
     { path: '/api/auth', file: './api/auth', name: 'Authentication (JWT)' },
     { path: '/api/family-access', file: './api/family-access', name: 'Family Access' },
+    { path: '/api/accounts', file: './api/accounts', name: 'Multi-Account System' },
 
     // Admin & System
     { path: '/api/admin', file: './api/admin-stats', name: 'Admin Stats & Health' },

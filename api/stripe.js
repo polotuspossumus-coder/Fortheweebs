@@ -65,12 +65,34 @@ router.get('/check-elite-availability', async (req, res) => {
  */
 router.post('/create-checkout-session', async (req, res) => {
     try {
-        const { tier, userId, email, oneTime = false } = req.body;
+        const { tier, userId, email, oneTime = false, accountId } = req.body;
 
         // Validate tier
         const validTiers = ['elite', 'vip', 'premium', 'enhanced', 'standard', 'adult'];
         if (!validTiers.includes(tier)) {
             return res.status(400).json({ error: 'Invalid tier. Valid tiers: elite, vip, premium, enhanced, standard, adult' });
+        }
+
+        // MULTI-ACCOUNT PAYMENT ROUTING
+        // If this is a sub-account, route payment to parent account
+        let paymentRoutingAccount = null;
+        if (accountId) {
+            const { data: account } = await supabase
+                .from('accounts')
+                .select('payment_routing_id, stripe_customer_id')
+                .eq('id', accountId)
+                .single();
+            
+            if (account?.payment_routing_id) {
+                const { data: parentAccount } = await supabase
+                    .from('accounts')
+                    .select('stripe_customer_id')
+                    .eq('id', account.payment_routing_id)
+                    .single();
+                
+                paymentRoutingAccount = parentAccount;
+                console.log(`💰 Routing payment: Sub-account ${accountId} → Parent account ${account.payment_routing_id}`);
+            }
         }
 
         // Check Elite (1000 limit) availability
@@ -124,9 +146,16 @@ router.post('/create-checkout-session', async (req, res) => {
                 userId,
                 tier,
                 oneTime: oneTime.toString(),
-                platform: 'ForTheWeebs'
+                platform: 'ForTheWeebs',
+                accountId: accountId || 'main'
             }
         };
+
+        // PAYMENT ROUTING: Use parent account's Stripe customer if sub-account
+        if (paymentRoutingAccount?.stripe_customer_id) {
+            sessionConfig.customer = paymentRoutingAccount.stripe_customer_id;
+            console.log(`✅ Using parent Stripe customer: ${paymentRoutingAccount.stripe_customer_id}`);
+        }
 
         const session = await stripe.checkout.sessions.create(sessionConfig);
 
