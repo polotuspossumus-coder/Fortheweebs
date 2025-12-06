@@ -11,15 +11,14 @@ const supabase = createClient(
     process.env.VITE_SUPABASE_ANON_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY || 'dummy-key'
 );
 
-// STRIPE PRICE IDs - Replace with your actual IDs from Stripe Dashboard
+// STRIPE PRICE IDs - PRODUCTION READY
 const PRICE_IDS = {
-    sovereign: process.env.STRIPE_PRICE_SOVEREIGN || 'price_sovereign_placeholder',
-    full_monthly: process.env.STRIPE_PRICE_FULL_MONTHLY || 'price_full_monthly_placeholder',
-    full_lifetime: process.env.STRIPE_PRICE_FULL_LIFETIME || 'price_full_lifetime_placeholder',
-    half: process.env.STRIPE_PRICE_HALF || 'price_half_placeholder',
-    advanced: process.env.STRIPE_PRICE_ADVANCED || 'price_advanced_placeholder',
-    basic: process.env.STRIPE_PRICE_BASIC || 'price_basic_placeholder',
-    starter: process.env.STRIPE_PRICE_STARTER || 'price_starter_placeholder'
+    elite: process.env.STRIPE_PRICE_ELITE,           // $1,000 one-time
+    vip: process.env.STRIPE_PRICE_VIP,               // $500 one-time
+    premium: process.env.STRIPE_PRICE_PREMIUM,       // $250 one-time
+    enhanced: process.env.STRIPE_PRICE_ENHANCED,     // $100 one-time
+    standard: process.env.STRIPE_PRICE_STANDARD,     // $50 one-time
+    adult: process.env.STRIPE_PRICE_ADULT_CONTENT    // $15/month subscription
 };
 
 /**
@@ -69,44 +68,36 @@ router.post('/create-checkout-session', async (req, res) => {
         const { tier, userId, email, oneTime = false } = req.body;
 
         // Validate tier
-        const validTiers = ['sovereign', 'full_monthly', 'full_lifetime', 'half', 'advanced', 'basic', 'starter'];
+        const validTiers = ['elite', 'vip', 'premium', 'enhanced', 'standard', 'adult'];
         if (!validTiers.includes(tier)) {
-            return res.status(400).json({ error: 'Invalid tier' });
+            return res.status(400).json({ error: 'Invalid tier. Valid tiers: elite, vip, premium, enhanced, standard, adult' });
         }
 
-        // Check Sovereign availability
-        if (tier === 'sovereign') {
-            const { data: sovereignUsers } = await supabase
+        // Check Elite (1000 limit) availability
+        if (tier === 'elite') {
+            const { data: eliteUsers } = await supabase
                 .from('users')
                 .select('id')
-                .eq('tier', 'sovereign')
+                .eq('tier', 'elite')
                 .eq('subscription_status', 'active');
 
-            if (sovereignUsers && sovereignUsers.length >= 1000) {
+            if (eliteUsers && eliteUsers.length >= 1000) {
                 return res.status(400).json({
-                    error: 'Sovereign tier is full',
-                    message: 'All 1000 Sovereign spots are taken. Please select Full Unlock instead.',
+                    error: 'Elite tier is full',
+                    message: 'All 1000 Elite spots are taken. Please select VIP ($500) instead.',
                     spotsRemaining: 0
                 });
             }
         }
 
         // Determine price ID and mode
-        let priceId;
-        let mode;
+        const priceId = PRICE_IDS[tier];
+        const mode = tier === 'adult' ? 'subscription' : 'payment';  // Adult is monthly subscription, rest are one-time
 
-        if (tier === 'full_lifetime' || oneTime) {
-            priceId = PRICE_IDS.full_lifetime;
-            mode = 'payment';
-        } else {
-            priceId = PRICE_IDS[tier];
-            mode = 'subscription';
-        }
-
-        if (!priceId || priceId.includes('placeholder')) {
+        if (!priceId) {
             return res.status(500).json({
                 error: 'Stripe not configured',
-                message: 'Please add Stripe price IDs to environment variables. See STRIPE_PRICING_SETUP.md'
+                message: `Missing Stripe price ID for tier: ${tier}`
             });
         }
 
@@ -136,21 +127,6 @@ router.post('/create-checkout-session', async (req, res) => {
                 platform: 'ForTheWeebs'
             }
         };
-
-        // Add setup fee for Starter tier
-        if (tier === 'starter') {
-            sessionConfig.line_items.push({
-                price_data: {
-                    currency: 'usd',
-                    product_data: {
-                        name: 'Setup Fee',
-                        description: 'One-time setup fee for Starter tier'
-                    },
-                    unit_amount: 1500, // $15.00 in cents
-                },
-                quantity: 1,
-            });
-        }
 
         const session = await stripe.checkout.sessions.create(sessionConfig);
 
