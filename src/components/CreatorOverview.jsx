@@ -57,13 +57,16 @@ export default function CreatorOverview({ userId, userTier, isAdmin, isVip, crea
       totalRevenue: '0.00'
     }));
 
-    setRecentActivity([
-      { id: 1, type: 'upscale', name: 'Anime Portrait 4K', time: '5 mins ago', tool: 'Photo Tools', tab: 'photo' },
-      { id: 2, type: 'export', name: 'AMV Edit Final', time: '1 hour ago', tool: 'Video Editor', tab: 'video' },
-      { id: 3, type: 'create', name: 'Lo-Fi Beat #47', time: '3 hours ago', tool: 'Audio Production', tab: 'audio' },
-      { id: 4, type: 'mint', name: 'Cyberpunk City NFT', time: '1 day ago', tool: 'Mythic Layer', tab: 'mythic' },
-      { id: 5, type: 'collab', name: 'Joint Project w/ ArtistX', time: '2 days ago', tool: 'Experimental Lab', tab: 'experimental' }
-    ]);
+    // Load real activity from API
+    fetch('/api/user/recent-activity', {
+      headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+    })
+      .then(res => res.json())
+      .then(data => setRecentActivity(data.activities || []))
+      .catch(err => {
+        console.error('Failed to load activity:', err);
+        setRecentActivity([]);
+      });
 
     setQuickLaunchTools([
       { name: 'Zoom & Enhance', icon: '🔍', tab: 'photo', color: '#9C27B0' },
