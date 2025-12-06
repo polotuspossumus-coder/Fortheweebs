@@ -307,7 +307,7 @@ export default function CreatorOverview({ userId, userTier, isAdmin, isVip, crea
             {stats.totalCreations}
           </div>
           <div style={{ fontSize: '13px', opacity: 0.7 }}>
-            +{Math.floor(Math.random() * 20) + 5} this week
+            +0 this week
           </div>
         </div>
 
@@ -386,7 +386,7 @@ export default function CreatorOverview({ userId, userTier, isAdmin, isVip, crea
             ${stats.totalRevenue}
           </div>
           <div style={{ fontSize: '13px', opacity: 0.7 }}>
-            +${(Math.random() * 100).toFixed(2)} today
+            +$0.00 today
           </div>
         </div>
       </div>
@@ -549,10 +549,10 @@ export default function CreatorOverview({ userId, userTier, isAdmin, isVip, crea
           gap: '20px'
         }}>
           {[
-            { name: 'NFT Sales', amount: (Math.random() * 2000).toFixed(2), split: '65% yours', icon: '💎', color: '#9C27B0' },
-            { name: 'AI Mod Royalties', amount: (Math.random() * 500).toFixed(2), split: '90% yours', icon: '🤖', color: '#2196F3' },
-            { name: 'Crypto Tips', amount: (Math.random() * 300).toFixed(2), split: '95% yours', icon: '⚡', color: '#FF9800' },
-            { name: 'Subscriptions', amount: (Math.random() * 800).toFixed(2), split: '80% yours', icon: '⭐', color: '#4CAF50' }
+            { name: 'NFT Sales', amount: '0.00', split: '65% yours', icon: '💎', color: '#9C27B0' },
+            { name: 'AI Mod Royalties', amount: '0.00', split: '90% yours', icon: '🤖', color: '#2196F3' },
+            { name: 'Crypto Tips', amount: '0.00', split: '95% yours', icon: '⚡', color: '#FF9800' },
+            { name: 'Subscriptions', amount: '0.00', split: '80% yours', icon: '⭐', color: '#4CAF50' }
           ].map((source, i) => (
             <div key={i} style={{
               background: `linear-gradient(135deg, ${source.color}22 0%, ${source.color}11 100%)`,

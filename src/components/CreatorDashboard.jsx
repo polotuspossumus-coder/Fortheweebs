@@ -66,7 +66,7 @@ function CreatorDashboard({ userId }) {
         ? Array.from({ length: 30 }, (_, i) => `Day ${i + 1}`)
         : ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
-    const data = labels.map(() => Math.floor(Math.random() * 500));
+    const data = labels.map(() => 0);
 
     setEarningsData({
       labels,

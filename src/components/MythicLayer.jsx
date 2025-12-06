@@ -17,7 +17,7 @@ export default function MythicLayer({ userId, creatorName }) {
 
   const loadMythicData = async () => {
     // In production, load from database
-    setCreationCount(Math.floor(Math.random() * 500) + 50);
+    setCreationCount(0);
     setAvatar(generateMythicAvatar(creationCount));
   };
 
@@ -148,7 +148,7 @@ export default function MythicLayer({ userId, creatorName }) {
                 flex: 1
               }}>
                 <div style={{ fontSize: '28px', fontWeight: 'bold' }}>
-                  {[creationCount, Math.floor(Math.random() * 15) + 1, Math.floor(creationCount * 0.1), Math.floor(Math.random() * 20) + 5][i]}
+                  {[creationCount, 0, 0, 0][i]}
                 </div>
                 <div style={{ fontSize: '12px', opacity: 0.8 }}>{stat}</div>
               </div>
