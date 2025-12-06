@@ -357,7 +357,7 @@ router.post('/stripe-webhook', express.raw({ type: 'application/json' }), async 
             break;
         }
 
-        case 'checkout.session.expired':
+        case 'checkout.session.expired': {
             const expiredSession = event.data.object;
             console.log(`❌ Payment expired for session ${expiredSession.id}`);
 
@@ -370,8 +370,9 @@ router.post('/stripe-webhook', express.raw({ type: 'application/json' }), async 
                 })
                 .eq('session_id', expiredSession.id);
             break;
+        }
 
-        case 'payment_intent.payment_failed':
+        case 'payment_intent.payment_failed': {
             const failedPayment = event.data.object;
             console.log(`❌ Payment failed: ${failedPayment.id}`);
 
@@ -384,6 +385,7 @@ router.post('/stripe-webhook', express.raw({ type: 'application/json' }), async 
                     created_at: new Date().toISOString()
                 });
             break;
+        }
 
         default:
             console.log(`Unhandled event type: ${event.type}`);
