@@ -1,17 +1,18 @@
 /**
- * VIP Access System - Pro Tier Features (No Admin Access)
+ * VIP Access System - First 100 Users Get LIFETIME FREE ACCESS
  * 
- * VIPs get:
- * - Pro tier features ($1000 value)
- * - Skip payment
- * - NO admin access (owner only)
- * - NO owner privileges
+ * First 100 VIPs get:
+ * - ALL features forever (no subscriptions, no creator payments, nothing)
+ * - After 100 slots filled: New users pay $1000 for VIP but still pay creator subscriptions
+ * 
+ * Current VIP count: 14/100
+ * Remaining FREE slots: 86
  */
 
 // OWNER - Only person with admin/owner access
 export const OWNER_EMAIL = 'polotuspossumus@gmail.com';
 
-// VIPs - Get Pro tier features, no admin
+// LIFETIME VIPs - First 100 users, everything free forever
 export const LIFETIME_VIP_EMAILS = [
   'shellymontoya82@gmail.com',
   'chesed04@aol.com',
@@ -25,7 +26,8 @@ export const LIFETIME_VIP_EMAILS = [
   'Yeahitsmeangel@yahoo.com',
   'Atolbert66@gmail.com',
   'brookewhitley530@gmail.com',
-  'cleonwilliams1973@gmail.com'
+  'cleonwilliams1973@gmail.com',
+  'eliahmontoya05@gmail.com'
 ];
 
 /**
