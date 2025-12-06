@@ -225,16 +225,36 @@ CCBILL_SALT=your_salt_here
 
 // Handle payout splits for adult content
 export async function calculateAdultContentPayout(sale) {
+  const { amount, creatorId, contentId, creatorTier = 'FREE' } = sale;
+
+  // Use tier-based revenue split system
+  const { calculateAdultContentSplit } = require('./revenueSplitSystem');
+  const payout = calculateAdultContentSplit(amount, creatorTier);
+
+  return {
+    total: payout.total,
+    processorFee: payout.processorFee,
+    platformFee: payout.platformFee,
+    creatorPayout: payout.creatorPayout,
+    breakdown: payout.breakdown,
+    creatorSplit: payout.creatorSplit
+  };
+}
+
+/**
+ * @deprecated Old fixed-split calculation
+ */
+export async function calculateAdultContentPayoutOld(sale) {
   const { amount, creatorId, contentId } = sale;
 
   // CCBill takes 10.5% + $0.30
   const processorFee = (amount * 0.105) + 0.30;
 
-  // Platform takes 20% of remaining
+  // Platform takes 20% of remaining (OLD - now tier-based)
   const netAmount = amount - processorFee;
   const platformFee = netAmount * 0.20;
 
-  // Creator gets 80%
+  // Creator gets 80% (OLD - now tier-based)
   const creatorPayout = netAmount - platformFee;
 
   return {
