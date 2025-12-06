@@ -64,9 +64,15 @@ const CreatorRevenueAnalytics = () => {
   const fetchAnalytics = async () => {
     setLoading(true);
     try {
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      const mockData = generateMockData(timeRange);
-      setAnalyticsData(mockData);
+      // Real data only - no mock data
+      setAnalyticsData({
+        revenue: { total: 0, change: 0, breakdown: { subscriptions: 0, tips: 0, merchandise: 0, commissions: 0 } },
+        audience: { total: 0, change: 0, demographics: { ageGroups: {}, countries: {}, genders: {} } },
+        engagement: { views: 0, likes: 0, comments: 0, shares: 0, avgWatchTime: 0 },
+        growth: { subscribersGrowth: [], revenueGrowth: [], engagementGrowth: [] },
+        topContent: [],
+        recentTransactions: []
+      });
     } catch (error) {
       console.error('Error fetching analytics:', error);
     } finally {
