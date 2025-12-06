@@ -42,7 +42,7 @@ export const TIER_FEATURES = {
     // Limits
     max_video_length: 'unlimited',
     max_uploads_per_day: 'unlimited',
-    storage_gb: 1000,
+    storage_gb: 'unlimited',
 
     // Display
     display_name: 'Elite',
@@ -75,7 +75,7 @@ export const TIER_FEATURES = {
     // Limits
     max_video_length: 'unlimited',
     max_uploads_per_day: 'unlimited',
-    storage_gb: 500,
+    storage_gb: 'unlimited',
 
     // Display
     display_name: 'VIP',
@@ -104,9 +104,9 @@ export const TIER_FEATURES = {
     analytics: true,
 
     // Limits
-    max_video_length: 30, // minutes
-    max_uploads_per_day: 50,
-    storage_gb: 100,
+    max_video_length: 'unlimited',
+    max_uploads_per_day: 'unlimited',
+    storage_gb: 'unlimited',
 
     // Display
     display_name: 'Premium',
@@ -134,9 +134,9 @@ export const TIER_FEATURES = {
     analytics: false,
 
     // Limits
-    max_video_length: 15, // minutes
-    max_uploads_per_day: 25,
-    storage_gb: 50,
+    max_video_length: 'unlimited',
+    max_uploads_per_day: 'unlimited',
+    storage_gb: 'unlimited',
 
     // Display
     display_name: 'Enhanced',
@@ -160,9 +160,9 @@ export const TIER_FEATURES = {
     mico_commands: 'unlimited',
 
     // Limits
-    max_video_length: 10, // minutes
-    max_uploads_per_day: 10,
-    storage_gb: 10,
+    max_video_length: 'unlimited',
+    max_uploads_per_day: 'unlimited',
+    storage_gb: 'unlimited',
 
     // Display
     display_name: 'Standard',
@@ -188,9 +188,9 @@ export const TIER_FEATURES = {
     adult_content_access: true,
 
     // Limits
-    max_video_length: 0,
-    max_uploads_per_day: 0,
-    storage_gb: 5,
+    max_video_length: 'unlimited',
+    max_uploads_per_day: 'unlimited',
+    storage_gb: 'unlimited',
 
     // Display
     display_name: 'Adult Subscription',
@@ -213,9 +213,9 @@ export const TIER_FEATURES = {
     mico_ai: true,
 
     // Limits
-    max_video_length: 0,
-    max_uploads_per_day: 0,
-    storage_gb: 1,
+    max_video_length: 'unlimited',
+    max_uploads_per_day: 'unlimited',
+    storage_gb: 'unlimited',
 
     // Display
     display_name: 'Free',
