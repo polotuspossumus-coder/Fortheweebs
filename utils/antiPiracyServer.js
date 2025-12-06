@@ -694,26 +694,6 @@ module.exports = {
   reviewAppeal,
   calculatePiracyConfidence
 };
-  try {
-    const expiresAt = new Date(Date.now() + durationHours * 60 * 60 * 1000);
-    
-    await supabase
-      .from('user_bans')
-      .insert({
-        user_id: userId,
-        ban_type: 'TEMPORARY',
-        reason: reason,
-        duration_hours: durationHours,
-        expires_at: expiresAt.toISOString(),
-        is_active: true,
-        created_at: new Date().toISOString()
-      });
-    
-    console.warn(`🚫 User ${userId} temporarily banned: ${reason}`);
-  } catch (error) {
-    console.error('Error creating temporary ban:', error);
-  }
-}
 
 module.exports = {
   checkForPiracy,
