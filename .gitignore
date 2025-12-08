@@ -68,6 +68,10 @@ pids
 # Coverage directory used by tools like istanbul
 coverage/
 
+# Duplication detection reports
+jscpd-report/
+.jscpd/
+
 # Electron specific
 app/dist/
 

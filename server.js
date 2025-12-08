@@ -2,6 +2,28 @@ console.log('🚀 Starting ForTheWeebs API Server...');
 console.log('Node version:', process.version);
 console.log('Environment:', process.env.NODE_ENV);
 
+// MONKEY-PATCH: Catch who's calling process.exit()
+const originalExit = process.exit;
+process.exit = function(code) {
+    console.error('🚨 PROCESS.EXIT CALLED WITH CODE:', code);
+    console.error('📍 STACK TRACE:');
+    console.error(new Error().stack);
+    originalExit.call(process, code);
+};
+
+// GLOBAL ERROR LISTENERS
+process.on('uncaughtException', (error) => {
+    console.error('💥 UNCAUGHT EXCEPTION:', error);
+    console.error('Stack:', error.stack);
+    // Don't exit - keep running
+});
+
+process.on('unhandledRejection', (reason, promise) => {
+    console.error('⚠️ UNHANDLED REJECTION:', reason);
+    console.error('Promise:', promise);
+    // Don't exit - keep running
+});
+
 const express = require('express');
 const http = require('http');
 const cors = require('cors');
@@ -227,12 +249,22 @@ const routes = [
     { path: '/api/issues', file: './api/issues', name: 'Issues' },
 
     // New Feature APIs (Nov 26, 2025 Update)
-    { path: '/api/moderation', file: './api/moderation', name: 'Community Moderation System' },
+    // REMOVED DUPLICATE: { path: '/api/moderation', file: './api/moderation', name: 'Community Moderation System' },
     { path: '/api/merch', file: './api/merch', name: 'Merchandise Store' },
     { path: '/api/rewards', file: './api/rewards', name: 'Fan Rewards & Loyalty' },
     { path: '/api/collaboration', file: './api/collaboration', name: 'Collaboration Rooms' },
     { path: '/api/render', file: './api/render', name: 'Cloud Rendering' },
-    { path: '/api/analytics', file: './api/analytics', name: 'Creator Analytics' },
+    // REMOVED DUPLICATE: { path: '/api/analytics', file: './api/analytics', name: 'Creator Analytics' },
+    
+    // ===== PHASE 3: SOCIAL FEATURES (NO PHOTODNA REQUIRED) =====
+    { path: '/api/discovery', file: './api/discovery', name: '🔍 Creator Discovery (Search, Trending, Recommendations)' },
+    { path: '/api/community', file: './api/community', name: '🏘️ Community (Forums, Events, Discussions)' },
+    
+    // ===== PHASE 4: CREATOR ECONOMY (NO PHOTODNA REQUIRED) =====
+    { path: '/api/marketplace', file: './api/marketplace', name: '🛒 Marketplace (Asset Sales, Templates, Creator-to-Creator)' },
+    { path: '/api/partnerships', file: './api/partnerships', name: '🤝 Partnerships (Brand Deals, Sponsorships, Affiliates)' },
+    { path: '/api/education', file: './api/education', name: '🎓 Education (Courses, Tutorials, Mentorship, Certifications)' },
+    { path: '/api/revenue-optimizer', file: './api/revenue-optimizer', name: '💰 Revenue Optimizer (Forecasting, Pricing, A/B Tests, Insights)' },
     
     // Epic Features (Dec 3, 2025 - Mico's Vision)
     { path: '/api/epic', file: './api/epic-features', name: 'Epic Features (Style DNA, Proof, Scene Intel, XR Exports)' },
@@ -276,7 +308,64 @@ const routes = [
     { path: '/api/psd/export-psd', file: './api/psd-support', name: '💾 PSD Export (Photoshop Compatibility)' },
     { path: '/api/comic/generate-panels', file: './api/comic-panel-generator', name: '🎨 AI Comic Panel Generator (NO COMPETITOR HAS THIS)' },
     { path: '/api/comic/generate-speech-bubbles', file: './api/comic-panel-generator', name: '💬 AI Speech Bubble Generator' },
-    { path: '/api/templates', file: './api/template-marketplace', name: '📚 Template Marketplace (Canva Killer)' }
+    { path: '/api/templates', file: './api/template-marketplace', name: '📚 Template Marketplace (Canva Killer)' },
+    
+    // Image Processing
+    { path: '/api', file: './api/crop', name: '✂️ Auto-Crop & Image Processing' },
+    
+    // ===== INDUSTRY-CRUSHING AI FEATURES (Best on Market) =====
+    
+    // 🎨 PHOTO TOOLS (Photoshop/Lightroom Destroyers)
+    { path: '/api/ai/remove-background', file: './api/ai-background-removal', name: '🎭 AI Background Removal (Remove.bg $299/month → FREE)' },
+    { path: '/api/photo/enhance', file: './api/ai-photo-enhancer', name: '✨ AI Photo Enhancer (Photoshop/Lightroom Killer)' },
+    { path: '/api/photo/search', file: './api/ai-image-search', name: '🔍 AI Image Search & Organization (Google Photos Killer)' },
+    
+    // 🎬 VIDEO TOOLS (Premiere/Final Cut Annihilators)
+    { path: '/api/ai/upscale-video', file: './api/ai-video-upscale', name: '📺 AI Video Upscaling 4K+120fps (Topaz $299 → FREE)' },
+    { path: '/api/ai/clip-video', file: './api/ai-video-clipper', name: '✂️ Smart Video Clipper (OpusClip $129/month → FREE)' },
+    { path: '/api/video/effects', file: './api/ai-video-effects', name: '🎥 Hollywood Video Effects (Premiere/Final Cut Killer)' },
+    { path: '/api/ai/color-grade', file: './api/ai-color-grading', name: '🎨 AI Color Grading (DaVinci $295 → FREE)' },
+    { path: '/api/ai/generate-thumbnail', file: './api/ai-thumbnail', name: '🖼️ AI Thumbnail Generator (TubeBuddy $19/month → FREE)' },
+    
+    // 🎙️ AUDIO TOOLS (Studio-Grade Destroyers)
+    { path: '/api/ai/music-from-hum', file: './api/ai-music-from-hum', name: '🎶 AI Music from Humming (WORLD FIRST - No Competitor)' },
+    { path: '/api/ai/voice-clone', file: './api/ai-voice-cloning', name: '🎤 Voice Cloning + TTS (ElevenLabs $330/year → FREE)' },
+    { path: '/api/voice/isolate', file: './api/ai-voice-isolation', name: '🔇 Voice Isolation + Noise Removal (Krisp/iZotope Killer)' },
+    { path: '/api/podcast', file: './api/ai-podcast-studio', name: '🎙️ AI Podcast Studio (Riverside $924/year → FREE)' },
+    
+    // 📹 STREAMING & RECORDING (OBS/Streamlabs Obliteration)
+    { path: '/api/stream', file: './api/ai-live-streaming', name: '📡 Multi-Platform Streaming Studio (OBS/Streamlabs Killer)' },
+    { path: '/api/screen-recorder', file: './api/ai-screen-recorder', name: '🎥 Screen Recorder + Auto-Editor (Loom/Descript Killer)' },
+    { path: '/api/ai/motion-capture', file: './api/ai-motion-capture', name: '🕺 Webcam Motion Capture (Rokoko $2500 suit → Webcam)' },
+    { path: '/api/ai/create-avatar', file: './api/ai-avatar', name: '👤 Real-Time AI Avatar (Ready Player Me Killer)' },
+    
+    // 🤖 PRODUCTIVITY TOOLS (Workflow Automation)
+    { path: '/api/ai/subtitle-emoji', file: './api/ai-subtitle-emoji', name: '💬 AI Subtitles + Emoji (Rev $1.50/min → FREE)' },
+    { path: '/api/ai/write-script', file: './api/ai-script-writer', name: '📝 AI Script Writer (Viral Content Generator)' },
+    { path: '/api/meeting', file: './api/ai-meeting-summarizer', name: '📊 AI Meeting Summarizer (Fireflies/Otter/Grain Killer)' },
+    
+    // 💼 MARKETING & BUSINESS TOOLS (Agency-Crushing)
+    { path: '/api/ads', file: './api/ai-ad-generator', name: '📢 AI Ad Generator (AdCreative/Copy.ai/Jasper Killer)' },
+    { path: '/api/social', file: './api/ai-social-scheduler', name: '📅 Social Media Scheduler (Buffer/Hootsuite $1,332/year → FREE)' },
+    { path: '/api/meme', file: './api/ai-meme-generator', name: '😂 AI Meme Generator (Imgflip/Kapwing Killer)' },
+    { path: '/api/product-photo', file: './api/ai-product-photography', name: '📸 AI Product Photography (Pebblely $480/year → FREE)' },
+    
+    // 🌐 WEB & AUTOMATION TOOLS (SaaS Annihilators)
+    { path: '/api/website', file: './api/ai-website-builder', name: '🏗️ AI Website Builder (Webflow/Wix/Squarespace Killer)' },
+    { path: '/api/storage', file: './api/cloud-storage', name: '☁️ AI Cloud Storage (Dropbox $144/year → FREE)' },
+    { path: '/api/email', file: './api/email-marketing', name: '📧 Email Marketing (Mailchimp $348/year → FREE)' },
+    { path: '/api/forms', file: './api/form-builder', name: '📝 Form Builder (Typeform $300/year → FREE)' },
+    { path: '/api/seo', file: './api/ai-seo-optimizer', name: '🔍 SEO Optimizer (Ahrefs/SEMrush $1,188/year → FREE)' },
+    { path: '/api/copyright', file: './api/ai-copyright-protection', name: '🛡️ Copyright Protection (WORLD FIRST - Blockchain + AI)' },
+    { path: '/api/collab', file: './api/ai-collaboration-hub', name: '🤝 Collaboration Hub (Figma/Miro/Notion $420/year → FREE)' },
+    
+    // 🛡️ SECURITY & DETECTION (Unique Features)
+    { path: '/api/deepfake/detect', file: './api/ai-deepfake-detector', name: '🔍 Deepfake Detector & Watermark (INDUSTRY UNIQUE)' },
+    
+    // 💰 API MARKETPLACE (MONEY PRINTER)
+    { path: '/api/developer', file: './api/developer-portal', name: '🔑 API Key Management (Generate, Revoke, Rotate Keys)' },
+    { path: '/api/developer/dashboard', file: './api/developer-dashboard', name: '📊 Developer Dashboard (Analytics & Usage Stats)' },
+    { path: '/api/developer/billing', file: './api/api-billing', name: '💳 API Billing (Stripe Subscriptions & Overages)' }
 ];
 
 let loadedCount = 0;
@@ -333,20 +422,21 @@ app.use((req, res) => {
     res.status(404).json({ error: 'Not found' });
 });
 
-// Start server
-console.log('🎯 Attempting to start server on port', PORT);
-
-server.listen(PORT, '0.0.0.0', (err) => {
-    if (err) {
-        console.error('❌ Failed to start server:', err);
-        process.exit(1);
-    }
-    console.log(`✅ Server started successfully!`);
-    console.log('🔍 Server is listening and keeping process alive...');
-    setInterval(() => {
-        console.log('⏰ Keepalive ping:', new Date().toISOString());
-    }, 30000);
-    console.log(`
+// ============================================================================
+// ASYNC STARTUP - NO RACE CONDITIONS
+// ============================================================================
+async function startServer() {
+    return new Promise((resolve, reject) => {
+        console.log('🎯 Attempting to start server on port', PORT);
+        
+        server.listen(PORT, '0.0.0.0', (err) => {
+            if (err) {
+                console.error('❌ Failed to start server:', err);
+                reject(err);
+            } else {
+                console.log(`✅ Server started successfully!`);
+                console.log('🔍 Server is running and ready for requests...');
+                console.log(`
 ╔═══════════════════════════════════════════════════════════╗
 ║                                                           ║
 ║   🚀 ForTheWeebs API Server                              ║
@@ -373,20 +463,50 @@ server.listen(PORT, '0.0.0.0', (err) => {
 ║   - POST /api/mico/tool/*                🧠               ║
 ║                                                           ║
 ╚═══════════════════════════════════════════════════════════╝
-  `);
-});
+                `);
+                resolve();
+            }
+        });
+    });
+}
+
+// Start server and keep alive
+(async () => {
+    try {
+        await startServer();
+        console.log('✅ Server is running on http://localhost:3001');
+        console.log('🔵 About to set interval...');
+        
+        // Heartbeat to keep process alive
+        const timer = setInterval(() => {
+            console.log('💓 Server alive');
+        }, 10000);
+        
+        console.log('✅ Interval set:', timer);
+        
+    } catch (error) {
+        console.error('❌ Fatal error:', error);
+        console.error('Stack:', error.stack);
+        process.exit(1);
+    }
+})();
+
+// DO NOT ADD ANY CODE HERE - Node.js will exit if main script finishes!
 
 // Handle unhandled promise rejections
 process.on('unhandledRejection', (reason, promise) => {
-    console.error('Unhandled Rejection at:', promise, 'reason:', reason);
+    console.error('⚠️ Unhandled Rejection at:', promise);
+    console.error('Reason:', reason);
+    // Don't crash - just log it
 });
 
 // Handle uncaught exceptions
 process.on('uncaughtException', (error) => {
-    console.error('💥 Uncaught Exception:', error);
-    console.error('Stack:', error.stack);
-    // Don't exit immediately - log and continue
-    // process.exit(1);
+    console.error('💥 Uncaught Exception:', error.message);
+    if (error.stack) {
+        console.error('Stack:', error.stack);
+    }
+    // Don't exit - keep server running
 });
 
 // Graceful shutdown
@@ -398,4 +518,14 @@ process.on('SIGTERM', () => {
     });
 });
 
-module.exports = app;
+// Don't handle SIGINT - let it work normally
+// process.on('SIGINT', () => {
+//     console.log('\n👋 Shutting down gracefully...');
+//     server.close(() => {
+//         console.log('✅ Server closed');
+//         process.exit(0);
+//     });
+// });
+
+// Don't export - we're running as standalone server, not a module
+// module.exports = app;
