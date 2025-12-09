@@ -6,7 +6,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useAuth } from './AuthSupabase.jsx';
 import { checkTierAccess } from '../utils/tierAccess';
-import { supabase } from '../lib/supabaseClient';
+import { supabase } from '../../lib/supabaseClient';
 
 export default function UserMenu() {
   const { user, logout } = useAuth();
