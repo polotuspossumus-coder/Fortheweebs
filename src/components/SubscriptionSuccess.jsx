@@ -35,7 +35,7 @@ export const SubscriptionSuccess = () => {
           <ul>
             <li>✨ Access to all exclusive subscriber-only content</li>
             <li>👥 Create 3 additional creator profiles</li>
-            <li>💰 0% platform fees - Keep 100% of your earnings</li>
+            <li>💰 0% platform fees - Keep 100% of earnings (only Stripe ~2.9%)</li>
             <li>🎨 CGI effects and AR filters for posts, calls, and streams</li>
             <li>🔐 Admin superpowers and moderation tools</li>
             <li>🎯 Priority support and feature access</li>

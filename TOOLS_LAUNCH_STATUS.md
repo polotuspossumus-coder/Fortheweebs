@@ -58,6 +58,7 @@
 ## 🤖 AI-POWERED TOOLS - FULLY OPERATIONAL
 
 ### Audio Tools (7 endpoints)
+
 | Tool | API Endpoint | Status | Competitor Cost |
 |------|--------------|--------|-----------------|
 | Stem Separation | `/api/audio/stem-split` | ✅ | iZotope $399 |
@@ -71,6 +72,7 @@
 **File**: `api/audio-production.js` (357 lines) ✅
 
 ### VR/AR Tools (6 endpoints)
+
 | Tool | API Endpoint | Status | Competitor Cost |
 |------|--------------|--------|-----------------|
 | Text-to-3D | `/api/vr/generate-3d` | ✅ | Unity $200/mo |

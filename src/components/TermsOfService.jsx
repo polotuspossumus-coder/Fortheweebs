@@ -1,5 +1,41 @@
 import React, { useState } from "react";
+import { supabase } from "../utils/supabaseClient";
 import "./TermsOfService.css";
+
+const PRIVACY_POLICY_TEXT = `ForTheWeebs Privacy Policy - Effective Date: January 1, 2026
+
+This Privacy Policy explains how ForTheWeebs collects, uses, shares, and protects your personal information. By using ForTheWeebs, you consent to the practices described herein. This Policy complies with GDPR, CCPA, and other applicable privacy laws.
+
+ForTheWeebs is an adult content platform (18+) offering AI tools, social media, messaging, and subscription perks. Donations are voluntary, non-refundable, and not tax-deductible. Perks are courtesy gifts, not purchases. All sales are final.
+
+INFORMATION WE COLLECT:
+- Account Information: Username, email, password, age verification
+- Payment Information: Processed by Stripe/Segpay (we don't store card numbers)
+- User Content: Posts, images, videos, messages
+- Technical Data: IP address, browser, device identifiers, cookies
+- Legal Compliance Data: 18 U.S.C. § 2257 record-keeping for creators
+
+HOW WE USE INFORMATION:
+- Operate and improve ForTheWeebs
+- Process donations and provide perks
+- Enforce Terms of Service
+- Comply with legal obligations (DMCA, 2257)
+- Protect against fraud and abuse
+
+YOUR RIGHTS (GDPR/CCPA):
+- Access, rectify, or delete your data
+- Data portability and opt-out options
+- Non-discrimination for exercising rights
+- Breach notification within 72 hours
+Contact: privacy@fortheweebs.com
+
+DATA SECURITY: Encryption, access controls, monitoring. No system is 100% secure.
+AGE REQUIREMENT: 18+ only. Underage accounts terminated immediately.
+INTERNATIONAL TRANSFERS: Data may be processed outside your jurisdiction.
+CHANGES: 30 days notice for policy updates.
+
+Owner: Jacob Morris, North Carolina
+Email: privacy@fortheweebs.com`;
 
 const TERMS_TEXT = `# Fortheweebs Terms of Service
 
@@ -59,6 +95,7 @@ Creators agree to indemnify and hold harmless Fortheweebs, its founders, affilia
 
 export const TermsOfService = ({ onAccept }) => {
   const [accepted, setAccepted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleCheckboxChange = (e) => {
     e.stopPropagation();
@@ -69,10 +106,56 @@ export const TermsOfService = ({ onAccept }) => {
     e.stopPropagation();
   };
 
-  const handleButtonClick = (e) => {
+  const handleButtonClick = async (e) => {
     e.stopPropagation();
-    if (accepted) {
+    if (!accepted || isSubmitting) return;
+    
+    setIsSubmitting(true);
+    
+    try {
+      // Get current user
+      const { data: { user } } = await supabase.auth.getUser();
+      
+      if (!user) {
+        console.error('No user found');
+        setIsSubmitting(false);
+        return;
+      }
+
+      // Get user's IP address
+      const ipAddress = await fetch('https://api.ipify.org?format=json')
+        .then(r => r.json())
+        .then(data => data.ip)
+        .catch(() => 'unknown');
+
+      // Call legal receipts API
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/legal-receipts`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          userId: user.id,
+          email: user.email,
+          termsContent: TERMS_TEXT,
+          privacyContent: PRIVACY_POLICY_TEXT,
+          ipAddress
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to create legal receipt');
+      }
+
+      const receipt = await response.json();
+      console.log('✅ Legal receipt created:', receipt.receiptId);
+      
       onAccept();
+    } catch (error) {
+      console.error('Error creating legal receipt:', error);
+      alert('Failed to process acceptance. Please try again.');
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -95,11 +178,11 @@ export const TermsOfService = ({ onAccept }) => {
         I accept the Terms of Service
       </label>
       <button
-        disabled={!accepted}
-        className={`terms-button${!accepted ? " disabled" : ""}`}
+        disabled={!accepted || isSubmitting}
+        className={`terms-button${(!accepted || isSubmitting) ? " disabled" : ""}`}
         onClick={handleButtonClick}
       >
-        Continue
+        {isSubmitting ? 'Processing...' : 'Continue'}
       </button>
     </div>
   );

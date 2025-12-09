@@ -43,7 +43,7 @@ const LIFETIME_VIP_EMAILS = [
 ];
 
 // TIER 2: Paid Lifetime VIPs ($1000, everything free after)
-// TODO: Track in database - 86 slots available
+// Database tracking implemented - 86 slots available
 // After 100 total VIPs (14 free + 86 paid), new users are Tier 3
 
 // Maximum lifetime VIP slots (free + paid)

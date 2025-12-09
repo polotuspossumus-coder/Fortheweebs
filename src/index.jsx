@@ -32,18 +32,16 @@ import { isLifetimeVIP, shouldSkipPayment } from './utils/vipAccess.js';
 import { initMobileTouchOptimizations, isCapacitor } from './utils/mobileOptimizations';
 import { validateAdminSession, isActualOwner, grantAdminAccess } from './utils/adminSecurity';
 import './utils/notifications.js'; // Import notification handler
-import { initBugFixerMonitoring } from './utils/bugFixerIntegration.js';
 import featureDetector from './utils/featureDetection.js';
 import FeatureDisabledBanner from './components/FeatureDisabledBanner.jsx';
+import { initBugFixer } from './utils/bugFixer.js';
 
 // Register service worker for PWA support
 registerServiceWorker();
 
-// Initialize bug fixer monitoring for the entire app
+// Initialize bug fixer - automatic error tracking
 if (typeof window !== 'undefined') {
-  // TEMPORARILY DISABLED - causing crashes
-  // initBugFixerMonitoring();
-  console.log('🐛 Bug Fixer: Temporarily disabled');
+  initBugFixer();
 }
 
 // Initialize mobile optimizations

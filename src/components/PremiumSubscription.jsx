@@ -95,7 +95,7 @@ export function PremiumSubscription({ userId, currentTier }) {
       features: [
         '✅ Everything in Full Platform',
         '💸 ZERO platform fees (0% instead of 15-25%)',
-        '💰 Keep 100% of tips, commissions, and sales',
+        '💰 Keep 100% of earnings (only Stripe processing ~2.9%)',
         '👥 Create 3 additional creator profiles',
         '💵 All profile earnings consolidated to one account',
         '🧠 AI Character Recognition (anime ID)',
@@ -632,7 +632,7 @@ export function PremiumSubscription({ userId, currentTier }) {
             <div style={{ fontSize: '1.05rem', lineHeight: '2' }}>
               <div style={{ color: '#10b981' }}>✅ Everything in $500 tier</div>
               <div style={{ color: '#fbbf24', fontWeight: '700', fontSize: '1.15rem' }}>💰 ZERO PLATFORM FEES (0%!)</div>
-              <div style={{ color: '#fbbf24', fontWeight: '700' }}>💵 Keep 100% of ALL earnings</div>
+              <div style={{ color: '#fbbf24', fontWeight: '700' }}>💵 Keep 100% of ALL earnings (zero platform fees)</div>
               <div style={{ color: '#8b5cf6', fontWeight: '700' }}>🧠 AI Character Recognition</div>
               <div style={{ color: '#8b5cf6', fontWeight: '700' }}>🤖 Train Custom AI Models</div>
               <div style={{ color: '#8b5cf6', fontWeight: '700' }}>⚡ Auto-Content Generation</div>
@@ -690,7 +690,7 @@ export function PremiumSubscription({ userId, currentTier }) {
             margin: '0 auto'
           }}>
             <strong>$500 tier is perfect</strong> if you just want all the tools and don't mind paying standard platform fees.<br />
-            <strong>$1000 tier pays for itself</strong> the moment you earn $2000+ because you keep 100% of everything.<br />
+            <strong>$1000 tier pays for itself</strong> the moment you earn $2000+ because you keep 100% of everything (zero platform fees, only Stripe ~2.9%).<br />
             Plus you get <strong>exclusive AI features, NFT minting, experimental tools, and lifetime VIP treatment</strong>.
           </p>
           <p style={{

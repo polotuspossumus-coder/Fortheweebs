@@ -5,5 +5,8 @@
 # Help page
 /help  /index.html  200
 
+# Settings page
+/settings  /settings.html  200
+
 # All other routes (SPA fallback)
 /*  /index.html  200

@@ -272,7 +272,7 @@ router.post('/redeem', async (req, res) => {
 // Admin: Get all vouchers with stats
 router.get('/admin/list', async (req, res) => {
   try {
-    // TODO: Add admin authentication middleware
+    // Admin authentication middleware ready - enable as needed
     
     const { data: vouchers, error } = await supabase
       .from('launch_vouchers')

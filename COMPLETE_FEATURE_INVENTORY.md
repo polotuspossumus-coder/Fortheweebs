@@ -55,42 +55,42 @@
 - **NOT JUST UI** - This is a complete creative philosophy system
 - 6 sub-features that NO competitor has:
 
-   **6a. Artifact Showcase** 🏛️
-   - Immortalize your best work with full creative lineage
-   - Viewers see EVERY version, edit, checkpoint
-   - Like Git for art + NFT gallery hybrid
-   - "Legacy Mode" seals projects as read-only artifacts
-   
-   **6b. Creator Duels** ⚔️
-   - Challenge other creators to transform same base asset
-   - Community voting system
-   - Prize pools and reputation system
-   - Like "chopped" but for digital art
-   
-   **6c. Mythic Avatar Evolution** 👤
-   - Avatar changes as you create more (6 ranks: Initiate → Mythic)
-   - Visual legacy that grows with you
-   - Custom intro sequences, signature animations
-   - Priority showcase placement
-   
-   **6d. Legacy Vault** 🔒
-   - Seal projects as immutable legacy artifacts
-   - Blockchain timestamping
-   - Featured in public Legacy Gallery
-   - Permanent portfolio certification
-   
-   **6e. Creator Contracts** 📜
-   - Smart contracts baked into uploads
-   - Define usage rights, licensing, royalties
-   - Auto-revoke if terms violated
-   - Multi-chain support (Ethereum, Polygon, Solana)
-   - Built-in dispute resolution
-   
-   **6f. Sovereignty Console** 👁️
-   - EVERY creative action timestamped and stored
-   - Full audit trail of your entire creative journey
-   - Immutable creative history
-   - You are sovereign over your data
+  **6a. Artifact Showcase** 🏛️
+  - Immortalize your best work with full creative lineage
+  - Viewers see EVERY version, edit, checkpoint
+  - Like Git for art + NFT gallery hybrid
+  - "Legacy Mode" seals projects as read-only artifacts
+
+  **6b. Creator Duels** ⚔️
+  - Challenge other creators to transform same base asset
+  - Community voting system
+  - Prize pools and reputation system
+  - Like "chopped" but for digital art
+
+  **6c. Mythic Avatar Evolution** 👤
+  - Avatar changes as you create more (6 ranks: Initiate → Mythic)
+  - Visual legacy that grows with you
+  - Custom intro sequences, signature animations
+  - Priority showcase placement
+
+  **6d. Legacy Vault** 🔒
+  - Seal projects as immutable legacy artifacts
+  - Blockchain timestamping
+  - Featured in public Legacy Gallery
+  - Permanent portfolio certification
+
+  **6e. Creator Contracts** 📜
+  - Smart contracts baked into uploads
+  - Define usage rights, licensing, royalties
+  - Auto-revoke if terms violated
+  - Multi-chain support (Ethereum, Polygon, Solana)
+  - Built-in dispute resolution
+
+  **6f. Sovereignty Console** 👁️
+  - EVERY creative action timestamped and stored
+  - Full audit trail of your entire creative journey
+  - Immutable creative history
+  - You are sovereign over your data
 
 **Competitor:** NOTHING like this exists. This is a creative CULTURE system, not just tools.
 **Value:** Incalculable. This is what makes ForTheWeebs a movement, not software.

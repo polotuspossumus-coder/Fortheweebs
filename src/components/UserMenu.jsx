@@ -6,11 +6,13 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useAuth } from './AuthSupabase.jsx';
 import { checkTierAccess } from '../utils/tierAccess';
+import { supabase } from '../lib/supabaseClient';
 
 export default function UserMenu() {
   const { user, logout } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
   const [tierInfo, setTierInfo] = useState(null);
+  const [userData, setUserData] = useState(null);
   const menuRef = useRef(null);
 
   useEffect(() => {
@@ -22,8 +24,25 @@ export default function UserMenu() {
     if (userEmail) {
       const access = checkTierAccess(userId, userTier, userEmail);
       setTierInfo(access);
+      loadUserData(userEmail);
     }
   }, [user]);
+
+  async function loadUserData(email) {
+    try {
+      const { data, error } = await supabase
+        .from('users')
+        .select('username, display_name, use_real_name')
+        .eq('email', email)
+        .single();
+      
+      if (!error && data) {
+        setUserData(data);
+      }
+    } catch (error) {
+      console.error('Error loading user data:', error);
+    }
+  }
 
   // Close menu when clicking outside
   useEffect(() => {
@@ -65,7 +84,20 @@ export default function UserMenu() {
   };
 
   const userEmail = user?.email || localStorage.getItem('userEmail') || localStorage.getItem('ownerEmail');
-  const displayName = user?.user_metadata?.display_name || userEmail?.split('@')[0] || 'User';
+  
+  // Get display name from userData based on preference
+  let displayName;
+  if (userData) {
+    if (userData.use_real_name && userData.display_name) {
+      displayName = userData.display_name;
+    } else if (userData.username) {
+      displayName = `@${userData.username}`;
+    } else {
+      displayName = userEmail?.split('@')[0] || 'User';
+    }
+  } else {
+    displayName = user?.user_metadata?.display_name || userEmail?.split('@')[0] || 'User';
+  }
 
   if (!userEmail && !user) {
     return null; // Don't show menu if not logged in

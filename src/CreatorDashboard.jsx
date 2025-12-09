@@ -51,7 +51,6 @@ import { getUserBalance } from "./utils/toolUnlockSystem";
 import { ProfileCreator } from "./components/ProfileCreator";
 import { AIVideoGenerator } from "./components/AIVideoGenerator";
 import { ProPhotoEditor } from "./components/ProPhotoEditor";
-import { AIBugFixer } from "./components/AIBugFixer";
 import { LanguageSelector } from "./components/LanguageSelector";
 import { t } from "./utils/i18n";
 import DeviceManager from "./components/DeviceManager";

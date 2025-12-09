@@ -132,17 +132,17 @@ async function handlePaymentSuccess(paymentIntent) {
     }
 
     if (type === 'commission') {
-      // Record commission purchase
-      const platformFee = parseFloat(paymentIntent.metadata.platformFee) / 100;
-      const creatorAmount = parseFloat(paymentIntent.metadata.creatorAmount) / 100;
+      // Record commission purchase - CREATOR GETS 100% (zero platform fee)
+      // Stripe processing fee (~2.9%) is automatically deducted by Stripe
+      const fullAmount = paymentIntent.amount / 100;
 
       await supabase.from('commission_orders').insert({
         commission_id: commissionId,
         buyer_id: buyerId,
         creator_id: creatorId,
-        total_amount: paymentIntent.amount / 100,
-        platform_fee: platformFee,
-        creator_amount: creatorAmount,
+        total_amount: fullAmount,
+        platform_fee: 0, // ZERO platform fee - creator keeps 100%
+        creator_amount: fullAmount,
         status: 'pending',
         payment_status: 'paid',
         payment_intent_id: paymentIntent.id,
@@ -150,7 +150,7 @@ async function handlePaymentSuccess(paymentIntent) {
         updated_at: new Date().toISOString()
       });
 
-      // Update creator balance (85% after platform fee)
+      // Update creator balance (100% - creator keeps everything)
       const { data: creator } = await supabase
         .from('users')
         .select('balance')
@@ -160,12 +160,12 @@ async function handlePaymentSuccess(paymentIntent) {
       await supabase
         .from('users')
         .update({
-          balance: (creator?.balance || 0) + creatorAmount,
+          balance: (creator?.balance || 0) + fullAmount,
           updated_at: new Date().toISOString()
         })
         .eq('id', creatorId);
 
-      console.log(`✅ Commission purchase recorded: $${creatorAmount} to creator ${creatorId}`);
+      console.log(`✅ Commission purchase recorded: $${fullAmount} to creator ${creatorId} (100% payout)`);
     }
   } catch (error) {
     console.error('Error handling payment success:', error);

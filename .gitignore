@@ -9,6 +9,9 @@ dist/
 release-build/
 electron-dist/
 
+# Google Cloud Vision API Key (NEVER COMMIT THIS!)
+config/google-vision-key.json
+
 # Compiled TypeScript in API routes (causes Vercel conflicts)
 api/**/*.js
 api/**/*.js.map

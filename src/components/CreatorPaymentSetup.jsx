@@ -173,7 +173,8 @@ export function CreatorPaymentSetup() {
           <li>✅ Accept cards, crypto (BTC/ETH), Cash App, ACH</li>
           <li>✅ Tax forms (1099-K) generated automatically</li>
           <li>✅ Full payment history & analytics</li>
-          <li>✅ No monthly fees - only pay when you earn</li>
+          <li>✅ Keep 100% of earnings (Stripe processing ~2.9% only)</li>
+          <li>✅ Zero platform fees on tier purchases ($50-$1000)</li>
         </ul>
       </div>
 

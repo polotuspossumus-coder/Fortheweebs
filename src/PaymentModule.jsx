@@ -144,7 +144,7 @@ export default function PaymentModule({ onPaymentComplete }) {
         '🎵 Full audio production',
         '🤖 AI content generator',
         '📝 GPT-4 text generation',
-        '💰 Keep 95% profits'
+        '💰 Keep 100% profits (no platform fee)'
       ],
       color: '#8b5cf6'
     },
@@ -160,7 +160,7 @@ export default function PaymentModule({ onPaymentComplete }) {
         '🎭 AR filters & effects',
         '🎨 Full 3D modeling suite',
         '🤖 AI video generation',
-        '💰 Keep 100% profits',
+        '💰 Keep 100% profits (no platform fee)',
         '⚡ VIP support'
       ],
       color: '#667eea',

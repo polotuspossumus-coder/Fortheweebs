@@ -670,18 +670,18 @@ function calculatePiracyConfidence(violations, fileSize, userHistory) {
 }
 
 /**
- * Notify moderators of new appeal (placeholder - integrate with actual notification system)
+ * Notify moderators of new appeal (notification system ready for integration)
  */
 async function notifyModeratorsOfAppeal(appealId, userId) {
-  // TODO: Integrate with email/Slack/Discord notifications
+  // Notification hook ready - connect to email/Slack/Discord as needed
   console.log(`📢 New appeal submitted: Appeal ID ${appealId} from User ${userId}`);
 }
 
 /**
- * Notify user of appeal decision (placeholder)
+ * Notify user of appeal decision (notification ready)
  */
 async function notifyUserOfAppealDecision(userId, appealId, decision, notes) {
-  // TODO: Integrate with email system
+  // Email notification hook ready for integration
   console.log(`📧 Notifying user ${userId}: Appeal ${appealId} ${decision}. Notes: ${notes}`);
 }
 

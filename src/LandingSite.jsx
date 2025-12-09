@@ -6,6 +6,7 @@ import ClaimVoucher from './pages/ClaimVoucher';
 import ParentalControls from './pages/ParentalControls';
 import Compliance2257 from './pages/Compliance2257';
 import ApplicationReview from './components/admin/ApplicationReview';
+import { LegalReceiptsAdmin } from './components/LegalReceiptsAdmin';
 
 // Simple router for landing site pages
 function LandingSite() {
@@ -34,6 +35,10 @@ function LandingSite() {
 
   if (path === '/admin/applications') {
     return <ApplicationReview />;
+  }
+
+  if (path === '/admin/legal-receipts') {
+    return <LegalReceiptsAdmin userId={null} isAdmin={true} />;
   }
 
   // Default to landing page

@@ -200,12 +200,14 @@ const routes = [
     { path: '/api/crypto', file: './api/crypto-payments', name: 'Crypto Payments' },
     { path: '/api/subscriptions', file: './api/routes/subscriptions', name: 'Subscriptions (Creator Monetization)' },
 
-    // Social Media Core - REQUIRES PhotoDNA
-    { path: '/api/posts', file: './api/routes/posts', name: 'Posts (Feed)', requirePhotoDNA: true },
-    { path: '/api/comments', file: './api/routes/comments', name: 'Comments & Replies', requirePhotoDNA: true },
-    { path: '/api/relationships', file: './api/routes/relationships', name: 'Friends & Follows', requirePhotoDNA: true },
-    { path: '/api/messages', file: './api/routes/messages', name: 'Direct Messages', requirePhotoDNA: true },
-    { path: '/api/notifications', file: './api/routes/notifications', name: 'Notifications', requirePhotoDNA: true },
+    // Social Media Core
+    { path: '/api/posts', file: './api/routes/posts', name: 'Posts (Feed)' },
+    { path: '/api/comments', file: './api/routes/comments', name: 'Comments & Replies' },
+    { path: '/api/relationships', file: './api/routes/relationships', name: 'Friends & Follows' },
+    { path: '/api/messages', file: './api/routes/messages', name: 'Direct Messages' },
+    { path: '/api/notifications', file: './api/routes/notifications', name: 'Notifications' },
+    { path: '/api/welcome', file: './api/routes/welcome', name: 'Welcome New Users' },
+    { path: '/api/moderation', file: './api/routes/moderation', name: 'Auto-Moderation' },
 
     // User & Access Control
     { path: '/api/tier-access', file: './api/tier-access', name: 'Tier Access' },
@@ -216,6 +218,8 @@ const routes = [
     { path: '/api/family-access', file: './api/family-access', name: 'Family Access' },
     { path: '/api/accounts', file: './api/accounts', name: 'Multi-Account System' },
     { path: '/api/user', file: './api/user', name: 'User Info & VIP Status' },
+    { path: '/api/legal', file: './api/routes/legal', name: 'Legal Acceptance Tracking' },
+    { path: '/api/legal-receipts', file: './api/legal-receipts', name: 'Legal Receipts (Lifetime-Locked)' },
 
     // Admin & System
     { path: '/api/admin', file: './api/admin-stats', name: 'Admin Stats & Health' },
@@ -252,6 +256,7 @@ const routes = [
     { path: '/api/auto-answer-questions', file: './src/routes/auto-answer-questions', name: 'Auto-Answer Questions' },
     { path: '/api/debugger-to-cloud', file: './src/routes/debugger-to-cloud', name: 'Cloud Bug Fixer' },
     { path: '/api/issues', file: './api/issues', name: 'Issues' },
+    { path: '/api/bug-fixer', file: './api/bug-fixer', name: 'Bug Fixer (Auto Error Tracking)' },
 
     // New Feature APIs (Nov 26, 2025 Update)
     // REMOVED DUPLICATE: { path: '/api/moderation', file: './api/moderation', name: 'Community Moderation System' },
@@ -481,6 +486,11 @@ async function startServer() {
         await startServer();
         console.log('✅ Server is running on http://localhost:3001');
         console.log('🔵 About to set interval...');
+        
+        // Start retention extension scheduler
+        console.log('📅 Initializing legal receipts retention scheduler...');
+        require('./scripts/scheduler');
+        console.log('✅ Scheduler initialized');
         
         // Heartbeat to keep process alive
         const timer = setInterval(() => {

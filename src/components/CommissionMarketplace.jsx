@@ -139,7 +139,7 @@ function CommissionMarketplace({ userId, isCreator }) {
       <div className="marketplace-header">
         <h1>🎨 Commission Marketplace</h1>
         <p className="marketplace-subtitle">
-          Hire creators for custom artwork • Platform takes 15%, you keep 85%
+          Hire creators for custom artwork • Creators keep 100% (only Stripe processing ~2.9%)
         </p>
       </div>
 
@@ -275,7 +275,7 @@ function CommissionMarketplace({ userId, isCreator }) {
                   value={newCommission.price}
                   onChange={e => setNewCommission({ ...newCommission, price: e.target.value })}
                 />
-                <small>You receive 85% (${(newCommission.price * 0.85).toFixed(2)})</small>
+                <small>You receive 100% (${parseFloat(newCommission.price || 0).toFixed(2)}) - Stripe takes ~2.9%</small>
               </div>
 
               <div className="form-group">

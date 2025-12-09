@@ -1,12 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './CreatorApplication.css';
-import {
-  reportBugToFixer,
-  withBugReporting,
-  MONITORED_SYSTEMS,
-  SEVERITY
-} from '../utils/bugFixerIntegration';
 
 const CreatorApplication = () => {
   const navigate = useNavigate();

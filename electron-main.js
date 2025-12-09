@@ -8,29 +8,29 @@ let mainWindow;
 let pinWindow;
 let settingsWindow;
 let serverProcess;
-const LOCAL_PORT = 3001;
+
+// Production Vercel URL (primary)
 const VERCEL_URL = 'https://fortheweebs-2cpc9wi0r-jacobs-projects-eac77986.vercel.app';
+const LOCAL_PORT = 3001;
 
-// Auth modes: 'none', 'pin', 'username', 'both'
-let authMode = 'none'; // Default: no PIN required
-
-// Hash PIN for secure storage
+// Security: Hashed PIN storage (SHA-256)
 function hashPin(pin) {
   return crypto.createHash('sha256').update(pin).digest('hex');
 }
 
-// Check if internet is available
+// Network check: Test internet connectivity
 function checkInternet() {
   return new Promise((resolve) => {
-    const testSocket = net.connect({ host: 'google.com', port: 80 });
-    testSocket.on('connect', () => {
+    const testSocket = net.connect({ host: 'google.com', port: 80 }, () => {
       testSocket.destroy();
       resolve(true);
     });
+    
     testSocket.on('error', () => {
       testSocket.destroy();
       resolve(false);
     });
+    
     testSocket.setTimeout(2000, () => {
       testSocket.destroy();
       resolve(false);
@@ -38,14 +38,13 @@ function checkInternet() {
   });
 }
 
-// Start local Express server for offline mode
+// Local Express server for offline mode
 function startLocalServer() {
   return new Promise((resolve, reject) => {
     const serverPath = app.isPackaged 
       ? path.join(process.resourcesPath, 'app', 'server.js')
       : path.join(__dirname, 'server.js');
     
-    // Use system Node.js with full path lookup
     const nodePath = process.platform === 'win32' 
       ? process.env.NODE_PATH || 'C:\\Program Files\\nodejs\\node.exe'
       : process.env.NODE_PATH || 'node';
@@ -53,26 +52,24 @@ function startLocalServer() {
     serverProcess = spawn(nodePath, [serverPath], {
       env: { ...process.env, PORT: LOCAL_PORT },
       stdio: ['ignore', 'pipe', 'pipe'],
-      shell: true  // Use shell to find node in PATH
+      shell: true
     });
 
     serverProcess.stdout.on('data', (data) => {
-      console.log(`Server: ${data}`);
-      if (data.toString().includes('Server running')) {
-        resolve();
-      }
+      console.log(`[Server] ${data}`);
+      if (data.toString().includes('Server running')) resolve();
     });
 
     serverProcess.stderr.on('data', (data) => {
-      console.error(`Server Error: ${data}`);
+      console.error(`[Server Error] ${data}`);
     });
 
     serverProcess.on('error', (err) => {
-      console.error('Failed to start server:', err);
+      console.error('[Server Failed]', err);
       reject(err);
     });
 
-    // Fallback resolve after 5 seconds
+    // Fallback timeout
     setTimeout(resolve, 5000);
   });
 }
@@ -209,21 +206,22 @@ function createPinWindow() {
   pinWindow.loadURL(`data:text/html;charset=utf-8,${encodeURIComponent(pinHtml)}`);
 }
 
-// Create main application window
+// Main application window
 async function createMainWindow() {
   mainWindow = new BrowserWindow({
     width: 1280,
     height: 800,
     icon: path.join(__dirname, 'public/icon-512.png'),
-    show: false, // Don't show until PIN verified
+    show: false,
     webPreferences: {
       nodeIntegration: false,
       contextIsolation: true,
+      sandbox: true
     }
   });
 
-  // Always try online first (Vercel)
-  console.log('🌐 Loading from Vercel');
+  // Primary: Load from Vercel production
+  console.log('🌐 Loading ForTheWeebs from production...');
   mainWindow.loadURL(VERCEL_URL);
 
   mainWindow.on('closed', () => {
@@ -279,25 +277,22 @@ ipcMain.handle('get-auth-mode', async () => {
 app.whenReady().then(async () => {
   await createMainWindow();
   
-  // Check if PIN is required
+  // Check authentication mode
   const { session } = require('electron');
   const authModeCookie = await session.defaultSession.cookies.get({ name: 'authMode' });
-  authMode = authModeCookie.length > 0 ? authModeCookie[0].value : 'none';
+  const authMode = authModeCookie.length > 0 ? authModeCookie[0].value : 'none';
   
   if (authMode === 'pin' || authMode === 'both') {
     createPinWindow();
   } else {
-    // No PIN required, show main window immediately
     mainWindow.show();
   }
   
-  // Create application menu with settings
+  // Application menu with settings
   const template = [
     {
       label: 'File',
-      submenu: [
-        { role: 'quit' }
-      ]
+      submenu: [{ role: 'quit' }]
     },
     {
       label: 'Settings',
@@ -309,6 +304,7 @@ app.whenReady().then(async () => {
       ]
     }
   ];
+  
   const menu = Menu.buildFromTemplate(template);
   Menu.setApplicationMenu(menu);
 });
