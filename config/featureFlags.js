@@ -5,8 +5,15 @@
 
 class FeatureFlags {
   constructor() {
-    // Check if PhotoDNA API key is configured
+    // Check if CSAM detection is configured (PhotoDNA OR alternatives)
     this.hasPhotoDNA = !!process.env.PHOTODNA_API_KEY && process.env.PHOTODNA_API_KEY !== 'your_photodna_key_here';
+    this.hasGoogleVision = !!process.env.GOOGLE_VISION_API_KEY && process.env.GOOGLE_VISION_API_KEY !== 'your_google_vision_key_here';
+    this.hasAWSRekognition = !!process.env.AWS_REKOGNITION_KEY && process.env.AWS_REKOGNITION_KEY !== 'your_aws_key_here';
+    this.hasAzureModerator = !!process.env.AZURE_MODERATOR_KEY && process.env.AZURE_MODERATOR_KEY !== 'your_azure_key_here';
+    this.hasClarifai = !!process.env.CLARIFAI_API_KEY && process.env.CLARIFAI_API_KEY !== 'your_clarifai_key_here';
+    
+    // ANY CSAM detection service enables social features
+    this.hasCSAMDetection = this.hasPhotoDNA || this.hasGoogleVision || this.hasAWSRekognition || this.hasAzureModerator || this.hasClarifai;
 
     // Check if other required keys exist
     this.hasOpenAI = !!process.env.OPENAI_API_KEY;
@@ -15,19 +22,21 @@ class FeatureFlags {
   }
 
   /**
-   * Social Media Features - REQUIRES PhotoDNA
+   * Social Media Features - REQUIRES CSAM Detection
    * These features allow user-generated content and must have CSAM detection
+   * Accepts: PhotoDNA, Google Vision, AWS Rekognition, Azure Moderator, or Clarifai
    */
   get socialMediaEnabled() {
-    return this.hasPhotoDNA && this.hasSupabase;
+    return this.hasCSAMDetection && this.hasSupabase;
   }
 
   /**
-   * Creator Economy Features - REQUIRES PhotoDNA + Stripe
+   * Creator Economy Features - REQUIRES CSAM Detection + Stripe
    * Adult content monetization requires CSAM protection
+   * Accepts: PhotoDNA, Google Vision, AWS Rekognition, Azure Moderator, or Clarifai
    */
   get creatorEconomyEnabled() {
-    return this.hasPhotoDNA && this.hasStripe && this.hasSupabase;
+    return this.hasCSAMDetection && this.hasStripe && this.hasSupabase;
   }
 
   /**
@@ -54,8 +63,8 @@ class FeatureFlags {
     if (!this.socialMediaEnabled) {
       disabled.push({
         feature: 'Social Media Platform',
-        reason: !this.hasPhotoDNA
-          ? 'PhotoDNA API key required for CSAM detection'
+        reason: !this.hasCSAMDetection
+          ? 'CSAM detection API key required (Google Vision, AWS Rekognition, Azure Moderator, Clarifai, or PhotoDNA)'
           : 'Supabase not configured',
         endpoint: '/api/posts',
         status: 'BLOCKED'
@@ -65,8 +74,8 @@ class FeatureFlags {
     if (!this.creatorEconomyEnabled) {
       disabled.push({
         feature: 'Creator Economy',
-        reason: !this.hasPhotoDNA
-          ? 'PhotoDNA API key required for CSAM detection'
+        reason: !this.hasCSAMDetection
+          ? 'CSAM detection API key required (Google Vision, AWS Rekognition, Azure Moderator, Clarifai, or PhotoDNA)'
           : !this.hasStripe
           ? 'Stripe API key not configured'
           : 'Supabase not configured',
@@ -88,7 +97,23 @@ class FeatureFlags {
       creatorTools: this.creatorToolsEnabled ? 'ENABLED' : 'DISABLED',
       aiModeration: this.aiModerationEnabled ? 'ENABLED' : 'DISABLED',
       apiKeys: {
-        photoDNA: this.hasPhotoDNA ? '✅' : '❌ REQUIRED FOR LAUNCH',
+  /**
+   * Get configuration status report
+   */
+  getConfigStatus() {
+    return {
+      ready: this.socialMediaEnabled && this.creatorEconomyEnabled,
+      social: this.socialMediaEnabled,
+      economy: this.creatorEconomyEnabled,
+      tools: this.creatorToolsEnabled,
+      ai: this.aiModerationEnabled,
+      keys: {
+        csamDetection: this.hasCSAMDetection ? '✅' : '❌ REQUIRED FOR LAUNCH (Any of: Google Vision, AWS Rekognition, Azure Moderator, Clarifai, PhotoDNA)',
+        photoDNA: this.hasPhotoDNA ? '✅' : '❌ (Optional - use alternatives instead)',
+        googleVision: this.hasGoogleVision ? '✅' : '❌ (Recommended - 1,000 free/month)',
+        awsRekognition: this.hasAWSRekognition ? '✅' : '❌ (Recommended - 5,000 free/month)',
+        azureModerator: this.hasAzureModerator ? '✅' : '❌ (Recommended - 5,000 free/month)',
+        clarifai: this.hasClarifai ? '✅' : '❌ (Optional - 1,000 free/month)',
         openAI: this.hasOpenAI ? '✅' : '⚠️ Optional',
         stripe: this.hasStripe ? '✅' : '⚠️ Optional',
         supabase: this.hasSupabase ? '✅' : '❌ REQUIRED'
@@ -97,15 +122,15 @@ class FeatureFlags {
   }
 
   /**
-   * Middleware to block social media endpoints until PhotoDNA is configured
+   * Middleware to block social media endpoints until CSAM detection is configured
    */
   requirePhotoDNA(req, res, next) {
     if (!this.socialMediaEnabled) {
       return res.status(503).json({
         error: 'Social media features not available',
-        reason: 'PhotoDNA API key required for CSAM detection',
-        message: 'This feature will be enabled once PhotoDNA is configured',
-        setup: 'Add PHOTODNA_API_KEY to your .env file',
+        reason: 'CSAM detection API key required',
+        message: 'Add any of these to your .env file: GOOGLE_VISION_API_KEY, AWS_REKOGNITION_KEY, AZURE_MODERATOR_KEY, CLARIFAI_API_KEY, or PHOTODNA_API_KEY',
+        setup: 'See PHOTODNA-ALTERNATIVES.md for setup instructions (5 minutes)',
         disabledFeatures: this.getDisabledFeatures()
       });
     }
@@ -113,7 +138,7 @@ class FeatureFlags {
   }
 
   /**
-   * Middleware to block creator economy until PhotoDNA + Stripe configured
+   * Middleware to block creator economy until CSAM detection + Stripe configured
    */
   requireCreatorEconomy(req, res, next) {
     if (!this.creatorEconomyEnabled) {
@@ -121,7 +146,7 @@ class FeatureFlags {
         error: 'Creator economy features not available',
         reason: this.getDisabledFeatures().find(f => f.feature === 'Creator Economy')?.reason,
         message: 'This feature will be enabled once all requirements are met',
-        setup: 'Add PHOTODNA_API_KEY and STRIPE_SECRET_KEY to your .env file'
+        setup: 'Add CSAM detection key (Google Vision, AWS, Azure, Clarifai, or PhotoDNA) and STRIPE_SECRET_KEY to your .env file'
       });
     }
     next();
