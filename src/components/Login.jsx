@@ -16,8 +16,37 @@ export default function Login({ onLogin }) {
   const [show2FA, setShow2FA] = useState(false);
   const [twoFACode, setTwoFACode] = useState('');
   const [userEmail, setUserEmail] = useState('');
+  const [showForgotPassword, setShowForgotPassword] = useState(false);
+  const [resetEmail, setResetEmail] = useState('');
+  const [resetSuccess, setResetSuccess] = useState(false);
 
   const OWNER_PASSWORD = 'Scorpio#96';
+
+  const handlePasswordReset = async (e) => {
+    e.preventDefault();
+    setError('');
+    setLoading(true);
+
+    try {
+      const { supabase } = await import('../lib/supabase');
+      const { error } = await supabase.auth.resetPasswordForEmail(resetEmail, {
+        redirectTo: `${window.location.origin}/reset-password`
+      });
+
+      if (error) {
+        setError(error.message);
+        setLoading(false);
+        return;
+      }
+
+      setResetSuccess(true);
+      setLoading(false);
+    } catch (err) {
+      console.error('Password reset error:', err);
+      setError('Unable to send reset email. Please try again later.');
+      setLoading(false);
+    }
+  };
 
   const handle2FAVerification = async (e) => {
     e.preventDefault();
@@ -152,10 +181,88 @@ export default function Login({ onLogin }) {
         <div className="login-header">
           <div className="login-icon">🚀</div>
           <h2>ForTheWeebs Login</h2>
-          <p>{show2FA ? 'Enter your verification code' : 'Welcome back! Sign in to your account'}</p>
+          <p>{show2FA ? 'Enter your verification code' : showForgotPassword ? 'Reset your password' : 'Welcome back! Sign in to your account'}</p>
         </div>
 
-        {show2FA ? (
+        {showForgotPassword ? (
+          <form onSubmit={handlePasswordReset} className="login-form">
+            {resetSuccess ? (
+              <div style={{ textAlign: 'center', padding: '20px' }}>
+                <div style={{ fontSize: '48px', marginBottom: '16px' }}>✅</div>
+                <h3 style={{ color: '#10b981', marginBottom: '12px' }}>Check your email!</h3>
+                <p style={{ opacity: 0.8, marginBottom: '20px' }}>
+                  We've sent a password reset link to <strong>{resetEmail}</strong>
+                </p>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setShowForgotPassword(false);
+                    setResetSuccess(false);
+                    setResetEmail('');
+                  }}
+                  className="login-btn"
+                >
+                  ← Back to login
+                </button>
+              </div>
+            ) : (
+              <>
+                <div className="form-group">
+                  <label htmlFor="resetEmail">Email Address</label>
+                  <input
+                    id="resetEmail"
+                    type="email"
+                    value={resetEmail}
+                    onChange={(e) => setResetEmail(e.target.value)}
+                    placeholder="Enter your email"
+                    required
+                    autoFocus
+                  />
+                  <p style={{ fontSize: '0.85rem', opacity: 0.7, marginTop: '8px' }}>
+                    We'll send you a link to reset your password
+                  </p>
+                </div>
+
+                {error && (
+                  <div className="error-message">
+                    <span className="error-icon">⚠️</span>
+                    {error}
+                  </div>
+                )}
+
+                <button type="submit" className="login-btn" disabled={loading}>
+                  {loading ? (
+                    <>
+                      <span className="spinner"></span>
+                      Sending reset link...
+                    </>
+                  ) : (
+                    <>
+                      📧 Send reset link
+                    </>
+                  )}
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => {
+                    setShowForgotPassword(false);
+                    setError('');
+                  }}
+                  style={{
+                    marginTop: '10px',
+                    background: 'transparent',
+                    color: '#667eea',
+                    border: 'none',
+                    cursor: 'pointer'
+                  }}
+                >
+                  ← Back to login
+                </button>
+              </>
+            )}
+          </form>
+        ) : show2FA ? (
           <form onSubmit={handle2FAVerification} className="login-form">
             <div className="form-group">
               <label htmlFor="twoFACode">Verification Code</label>
@@ -273,16 +380,30 @@ export default function Login({ onLogin }) {
         </form>
         )}
 
-        <div className="login-footer">
-          <p className="hint">
-            Don't have an account? <a href="/" style={{ color: '#667eea', fontWeight: 600 }}>Sign up</a>
-          </p>
-          <p className="hint" style={{ marginTop: '10px' }}>
-            <a href="/forgot-password" style={{ color: '#667eea', fontSize: '0.9rem' }}>Forgot password?</a>
-            {' • '}
-            <a href="/account-recovery" style={{ color: '#667eea', fontSize: '0.9rem' }}>Recover account</a>
-          </p>
-        </div>
+        {!showForgotPassword && !show2FA && (
+          <div className="login-footer">
+            <p className="hint">
+              Don't have an account? <a href="/" style={{ color: '#667eea', fontWeight: 600 }}>Sign up</a>
+            </p>
+            <p className="hint" style={{ marginTop: '10px' }}>
+              <button
+                onClick={() => setShowForgotPassword(true)}
+                style={{
+                  background: 'none',
+                  border: 'none',
+                  color: '#667eea',
+                  fontSize: '0.9rem',
+                  cursor: 'pointer',
+                  textDecoration: 'underline'
+                }}
+              >
+                Forgot password?
+              </button>
+              {' • '}
+              <a href="/account-recovery" style={{ color: '#667eea', fontSize: '0.9rem' }}>Recover account</a>
+            </p>
+          </div>
+        )}
       </div>
     </div>
   );

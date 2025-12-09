@@ -25,6 +25,8 @@ import MicoDevPanel from "./components/MicoDevPanel.jsx";
 import QuickAccessWidget from "./components/QuickAccessWidget.jsx";
 import UserMenu from "./components/UserMenu.jsx";
 import Login from "./components/Login.jsx";
+import ResetPassword from "./components/ResetPassword.jsx";
+import VerifyEmail from "./components/VerifyEmail.jsx";
 import { registerServiceWorker } from "./utils/registerServiceWorker.js";
 import { autoLoginOwner, isDeviceTrusted } from "./utils/deviceAuth.js";
 import { requireOwner, isOwner } from "./utils/ownerAuth.js";
@@ -93,6 +95,16 @@ function AppFlow() {
   const [step, setStep] = useState(() => {
     // Check for URL parameters first
     const params = new URLSearchParams(window.location.search);
+
+    // PASSWORD RESET ROUTE CHECK
+    if (window.location.pathname === '/reset-password') {
+      return 'reset-password';
+    }
+
+    // EMAIL VERIFICATION ROUTE CHECK
+    if (window.location.pathname === '/verify-email') {
+      return 'verify-email';
+    }
     
     // PERSISTENT AUTH CHECK - if "stay logged in" is active and valid
     const persistentAuth = localStorage.getItem('persistentAuth');
@@ -320,6 +332,12 @@ function AppFlow() {
                   // After successful login, go to dashboard
                   setStep(3);
                 }} />
+              )}
+              {step === 'reset-password' && (
+                <ResetPassword />
+              )}
+              {step === 'verify-email' && (
+                <VerifyEmail />
               )}
               {step === 0 && (<div style={{ padding: '40px', maxWidth: '800px', margin: '0 auto' }}><h1 style={{ marginBottom: '30px' }}>📜 Terms & Privacy</h1><LegalDocumentsList userId={userId} /><button onClick={handleLegalAccepted} style={{ marginTop: 24, padding: '16px 32px', fontSize: '1.1rem', fontWeight: 600, cursor: 'pointer', background: '#667eea', color: 'white', border: 'none', borderRadius: '8px' }}>Accept & Continue →</button><div style={{ marginTop: '20px', textAlign: 'center' }}><p style={{ color: '#666', fontSize: '14px' }}>Already have an account? <button onClick={() => setStep('login')} style={{ background: 'none', border: 'none', color: '#667eea', cursor: 'pointer', textDecoration: 'underline', fontSize: '14px', fontWeight: 600 }}>Sign In</button></p></div></div>)}
               {step === 1 && (<div style={{ padding: '40px', maxWidth: '800px', margin: '0 auto' }}><h1 style={{ marginBottom: '30px' }}>✨ Create Your Account</h1>{referralCode && (<div style={{ background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)', padding: '16px', borderRadius: '12px', marginBottom: '24px', textAlign: 'center' }}><div style={{ fontSize: '2rem', marginBottom: '8px' }}>🎉</div><div style={{ color: 'white', fontWeight: 700, fontSize: '1.2rem' }}>You've been referred!</div><div style={{ color: 'rgba(255,255,255,0.9)', marginTop: '8px' }}>Code: <strong>{referralCode}</strong></div><div style={{ color: 'rgba(255,255,255,0.85)', marginTop: '4px', fontSize: '0.9rem' }}>You'll get special bonuses when you sign up!</div></div>)}<CreatorSignup /><button onClick={handleSignupComplete} style={{ marginTop: 24, padding: '16px 32px', fontSize: '1.1rem', fontWeight: 600, cursor: 'pointer', background: '#667eea', color: 'white', border: 'none', borderRadius: '8px' }}>Continue to Pricing →</button><div style={{ marginTop: '20px', textAlign: 'center' }}><p style={{ color: '#666', fontSize: '14px' }}>Already have an account? <button onClick={() => setStep('login')} style={{ background: 'none', border: 'none', color: '#667eea', cursor: 'pointer', textDecoration: 'underline', fontSize: '14px', fontWeight: 600 }}>Sign In</button></p></div></div>)}

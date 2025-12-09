@@ -12,6 +12,26 @@ export class ErrorBoundary extends React.Component {
 
   componentDidCatch(error, errorInfo) {
     console.error('Error caught by boundary:', error, errorInfo);
+
+    // Log error to server for monitoring in production
+    if (typeof window !== 'undefined' && window.location.hostname !== 'localhost') {
+      try {
+        fetch('/api/log-error', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            error: error?.toString(),
+            stack: error?.stack,
+            componentStack: errorInfo?.componentStack,
+            url: window.location.href,
+            userAgent: navigator.userAgent,
+            timestamp: new Date().toISOString()
+          })
+        }).catch(err => console.error('Failed to log error:', err));
+      } catch (err) {
+        console.error('Error logging failed:', err);
+      }
+    }
   }
 
   render() {

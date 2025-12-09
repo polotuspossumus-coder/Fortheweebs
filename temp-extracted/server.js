@@ -67,11 +67,9 @@ console.log('📡 Port:', PORT);
 const securityHeaders = require('./utils/securityHeaders');
 app.use(securityHeaders);
 
-// Rate Limiting (general + tier-based)
+// Rate Limiting
 const { apiLimiter } = require('./utils/apiRateLimiter');
-const { rateLimitByTier } = require('./api/rate-limiter.js');
-app.use('/api', apiLimiter); // General rate limiting
-app.use('/api', rateLimitByTier); // Tier-based rate limiting
+app.use('/api', apiLimiter);
 
 // DATA PRIVACY ENFORCEMENT - WE NEVER SELL USER DATA
 const { dataPrivacyMiddleware } = require('./utils/dataPrivacyEnforcement');
@@ -243,9 +241,6 @@ const routes = [
     { path: '/api/governance', file: './api/governance', name: 'Mico Governance (Notary + Policy Overrides)' },
     { path: '/api/queue', file: './api/routes/queue', name: 'Queue Control (Sovereign)' },
     { path: '/api/metrics', file: './api/routes/metrics', name: 'Governance Metrics' },
-
-w    // AI ORCHESTRATOR - Multi-Agent System
-    { path: '/api/orchestrator', file: './api/ai-orchestrator', name: 'AI Orchestrator (Multi-Agent Coordination)' },
 
     // Developer Tools
     { path: '/api/auto-implement-suggestions', file: './src/routes/auto-implement-suggestions', name: 'Auto-Implement Suggestions' },
