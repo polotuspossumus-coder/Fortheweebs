@@ -244,7 +244,7 @@ const routes = [
     { path: '/api/queue', file: './api/routes/queue', name: 'Queue Control (Sovereign)' },
     { path: '/api/metrics', file: './api/routes/metrics', name: 'Governance Metrics' },
 
-w    // AI ORCHESTRATOR - Multi-Agent System
+    // AI ORCHESTRATOR - Multi-Agent System
     { path: '/api/orchestrator', file: './api/ai-orchestrator', name: 'AI Orchestrator (Multi-Agent Coordination)' },
 
     // Developer Tools
