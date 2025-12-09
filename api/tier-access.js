@@ -1,4 +1,5 @@
 const { createClient } = require('@supabase/supabase-js');
+const { isOwner, isLifetimeVIP } = require('../utils/vipAccess');
 
 const supabase = createClient(
   process.env.VITE_SUPABASE_URL,
@@ -18,9 +19,33 @@ const TIER_LEVELS = {
  * Check if user has access to content based on tier unlocks or subscription
  * @param {string} userId - User UUID
  * @param {number} requiredTierLevel - Minimum tier level required (1-5)
+ * @param {string} userEmail - User's email (optional but recommended)
  * @returns {Promise<{hasAccess: boolean, accessType: string, tierLevel: number}>}
  */
-async function checkUserAccess(userId, requiredTierLevel = 1) {
+async function checkUserAccess(userId, requiredTierLevel = 1, userEmail = null) {
+  // 0. OWNER AND VIP BYPASS - CHECK FIRST
+  if (userEmail) {
+    if (isOwner(userEmail)) {
+      return {
+        hasAccess: true,
+        accessType: 'owner',
+        tierLevel: 999, // Max level
+        tierName: 'Owner',
+        tierAmount: 0
+      };
+    }
+    
+    if (isLifetimeVIP(userEmail)) {
+      return {
+        hasAccess: true,
+        accessType: 'lifetime_vip',
+        tierLevel: 999, // Max level
+        tierName: 'Lifetime VIP',
+        tierAmount: 0
+      };
+    }
+  }
+
   // 1. Check for sovereign tier unlocks first (highest priority)
   const { data: tierUnlocks } = await supabase
     .from('tier_unlocks')
@@ -83,10 +108,21 @@ function getTierLevelFromAmount(amount) {
 
 /**
  * Check if user can access monetized content
- * Sovereign users bypass this, subscribers need to pay per view
+ * Owner and VIPs bypass all payments, sovereign users bypass too
  */
-async function checkMonetizedContentAccess(userId, contentId, contentPrice) {
-  const access = await checkUserAccess(userId);
+async function checkMonetizedContentAccess(userId, contentId, contentPrice, userEmail = null) {
+  // Owner and VIP bypass
+  if (userEmail) {
+    if (isOwner(userEmail) || isLifetimeVIP(userEmail)) {
+      return {
+        canAccess: true,
+        needsPayment: false,
+        reason: 'owner_or_vip'
+      };
+    }
+  }
+
+  const access = await checkUserAccess(userId, 1, userEmail);
 
   // Sovereign users get free access to monetized content
   if (access.accessType === 'sovereign') {

@@ -2,7 +2,7 @@
   "name": "fortheweebs",
   "version": "2.1.0",
   "description": "Sovereign creator-first platform with full AI production suite, creator economy, and education",
-  "main": "index.js",
+  "main": "electron-main.js",
   "scripts": {
     "dev": "vite",
     "dev:server": "nodemon server.js",
@@ -20,6 +20,8 @@
     "check:duplicates:ci": "jscpd --config .jscpd.json . --reporters json,console",
     "test": "vitest",
     "analyze": "node scripts/analyze-bundle.js",
+    "electron": "npm run build && electron .",
+    "electron:build": "npm run build && electron-builder --win --x64",
     "android:build": "npm run build && npx cap sync android && npx cap copy android",
     "android:open": "npx cap open android",
     "android:run": "npm run android:build && npx cap run android",
@@ -52,6 +54,8 @@
     "@typescript-eslint/eslint-plugin": "^8.48.1",
     "@typescript-eslint/parser": "^8.48.1",
     "@vitejs/plugin-react": "^5.1.0",
+    "electron": "^39.2.6",
+    "electron-builder": "^26.0.12",
     "esbuild": "^0.25.12",
     "eslint": "^8.56.0",
     "fabric": "^6.9.0",
@@ -63,7 +67,7 @@
     "terser": "^5.44.1",
     "tone": "^15.1.22",
     "typescript": "^5.9.3",
-    "vite": "^7.2.2",
+    "vite": "^7.2.7",
     "vitest": "^4.0.8"
   },
   "dependencies": {
@@ -120,5 +124,33 @@
     "stripe": "^19.3.1",
     "three": "^0.181.2",
     "ws": "^8.18.3"
+  },
+  "build": {
+    "appId": "com.fortheweebs.app",
+    "productName": "ForTheWeebs",
+    "directories": {
+      "output": "electron-dist"
+    },
+    "files": [
+      "dist/**/*",
+      "electron-main.js",
+      "electron-preload.js",
+      "server.js",
+      "api/**/*",
+      "utils/**/*",
+      "config/**/*",
+      "lib/**/*",
+      "node_modules/**/*",
+      ".env"
+    ],
+    "win": {
+      "target": "nsis",
+      "icon": "public/icon-512.png",
+      "signAndEditExecutable": false
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true
+    }
   }
 }

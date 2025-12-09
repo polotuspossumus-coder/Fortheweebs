@@ -58,22 +58,28 @@ export default function Login({ onLogin }) {
     const isOwnerLogin = isActualOwner(input) && password === OWNER_PASSWORD;
 
     if (isOwnerLogin) {
-      // Grant admin access - centralized and secure
-      const success = grantAdminAccess(input, input);
+      // OWNER LOGIN - Direct localStorage, no backend needed
+      console.log('👑 Owner login successful');
       
-      if (!success) {
-        setError('Security validation failed');
-        setLoading(false);
-        return;
-      }
+      // Grant full admin access
+      localStorage.setItem('ownerEmail', OWNER_EMAIL);
+      localStorage.setItem('userEmail', OWNER_EMAIL);
+      localStorage.setItem('userId', 'owner');
+      localStorage.setItem('userTier', 'OWNER');
+      localStorage.setItem('adminAuthenticated', 'true');
+      localStorage.setItem('ownerVerified', 'true');
+      localStorage.setItem('hasOnboarded', 'true');
+      localStorage.setItem('legalAccepted', 'true');
+      localStorage.setItem('tosAccepted', 'true');
+      localStorage.setItem('privacyAccepted', 'true');
 
       // Check if owner has 2FA enabled
       const twoFAEnabled = localStorage.getItem('twoFA_enabled') === 'true';
       if (twoFAEnabled) {
-        setUserEmail(input);
+        setUserEmail(OWNER_EMAIL);
         const code = generateTwoFactorCode();
-        storeTwoFactorCode(input, code);
-        await sendTwoFactorCode(input, code);
+        storeTwoFactorCode(OWNER_EMAIL, code);
+        await sendTwoFactorCode(OWNER_EMAIL, code);
         setShow2FA(true);
         setLoading(false);
         return;
@@ -85,44 +91,38 @@ export default function Login({ onLogin }) {
         localStorage.setItem('authExpiry', Date.now() + (30 * 24 * 60 * 60 * 1000)); // 30 days
       }
 
-      // Success - redirect to dashboard
-      setTimeout(() => {
-        if (onLogin) {
-          onLogin();
-        } else {
-          window.location.href = '/';
-        }
-      }, 500);
+      // Success - redirect to dashboard immediately
+      setLoading(false);
+      if (onLogin) {
+        onLogin();
+      } else {
+        window.location.href = '/';
+      }
     } else {
-      // Regular user login - call your backend API
+      // REGULAR USER LOGIN
+      // Try Supabase first (if available), then fall back to showing signup
       try {
-        const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:3001'}/api/auth/login`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ username: input, password })
+        // Import Supabase auth dynamically
+        const { supabase } = await import('../lib/supabase');
+        
+        const { data, error } = await supabase.auth.signInWithPassword({
+          email: input,
+          password: password
         });
 
-        const data = await response.json();
+        if (error) {
+          setError('Invalid email or password. If you don\'t have an account, please sign up.');
+          setLoading(false);
+          return;
+        }
 
-        if (response.ok && data.token) {
+        if (data.user) {
           // Store user session
-          localStorage.setItem('authToken', data.token);
+          localStorage.setItem('authToken', data.session.access_token);
           localStorage.setItem('userId', data.user.id);
-          localStorage.setItem('username', data.user.username);
           localStorage.setItem('userEmail', data.user.email);
-          localStorage.setItem('userTier', data.user.tier || 'FREE');
-
-          // Check if user has 2FA enabled
-          const twoFAEnabled = localStorage.getItem('twoFA_enabled') === 'true';
-          if (twoFAEnabled) {
-            setUserEmail(data.user.email);
-            const code = generateTwoFactorCode();
-            storeTwoFactorCode(data.user.email, code);
-            await sendTwoFactorCode(data.user.email, code);
-            setShow2FA(true);
-            setLoading(false);
-            return;
-          }
+          localStorage.setItem('userTier', 'FREE');
+          localStorage.setItem('hasOnboarded', 'true');
 
           // Set persistent auth if "Stay logged in" is checked
           if (stayLoggedIn) {
@@ -131,20 +131,16 @@ export default function Login({ onLogin }) {
           }
 
           // Redirect to dashboard
-          setTimeout(() => {
-            if (onLogin) {
-              onLogin();
-            } else {
-              window.location.href = '/';
-            }
-          }, 500);
-        } else {
-          setError(data.message || 'Invalid username or password');
           setLoading(false);
+          if (onLogin) {
+            onLogin();
+          } else {
+            window.location.href = '/';
+          }
         }
       } catch (err) {
         console.error('Login error:', err);
-        setError('Unable to connect to server. Please try again.');
+        setError('Unable to log in. Server may be offline. Owner: use correct password. Others: Sign up first.');
         setLoading(false);
       }
     }

@@ -7,6 +7,7 @@ yarn-error.log*
 # Build outputs
 dist/
 release-build/
+electron-dist/
 
 # Compiled TypeScript in API routes (causes Vercel conflicts)
 api/**/*.js

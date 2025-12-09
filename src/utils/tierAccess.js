@@ -12,7 +12,7 @@
  * 8. FREE - Family friendly, safe
  */
 
-import { isLifetimeVIP } from './vipAccess';
+import { isLifetimeVIP, isOwner as checkIsOwner } from '../../utils/vipAccess';
 
 export const TIERS = {
   OWNER: 'OWNER',
@@ -26,10 +26,15 @@ export const TIERS = {
   FREE: 'FREE'
 };
 
+// Owner email for hardcoded checks
+const OWNER_EMAIL = 'polotuspossumus@gmail.com';
+
 export const checkTierAccess = (userId, userTier, userEmail) => {
-  const isOwner = userId === 'owner' || userEmail === localStorage.getItem('ownerEmail');
+  // Check owner first - polotuspossumus@gmail.com gets EVERYTHING
+  const isOwner = checkIsOwner(userEmail) || userId === 'owner' || userEmail === OWNER_EMAIL || userTier === TIERS.OWNER;
+  
   // Check for VIP - includes LIFETIME_VIP, platinum tier, and isLifetimeVIP() check
-  const isVIP = userTier === TIERS.VIP || userTier === 'platinum' || isLifetimeVIP(userEmail);
+  const isVIP = userTier === TIERS.VIP || userTier === 'platinum' || isLifetimeVIP(userEmail) || userTier === 'LIFETIME_VIP';
 
   // VIPs automatically get PREMIUM_1000 tier benefits + admin powers
   const effectiveTier = isOwner ? TIERS.OWNER : (isVIP ? TIERS.PREMIUM_1000 : (userTier || TIERS.FREE));

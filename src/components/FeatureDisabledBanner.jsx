@@ -5,6 +5,13 @@ import './FeatureDisabledBanner.css';
  * Banner shown when features are disabled pending API keys
  */
 export default function FeatureDisabledBanner({ features }) {
+  // OWNER BYPASS - Never show banner to owner
+  const ownerEmail = localStorage.getItem('ownerEmail');
+  const userId = localStorage.getItem('userId');
+  if (ownerEmail === 'polotuspossumus@gmail.com' || userId === 'owner') {
+    return null; // Owner doesn't need to see this
+  }
+
   if (!features || features.loading) {
     return null;
   }

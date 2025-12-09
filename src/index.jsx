@@ -23,6 +23,7 @@ import EngagementTracker from "./components/EngagementTracker.jsx";
 import MicoAssistant from "./components/MicoAssistant.jsx";
 import MicoDevPanel from "./components/MicoDevPanel.jsx";
 import QuickAccessWidget from "./components/QuickAccessWidget.jsx";
+import UserMenu from "./components/UserMenu.jsx";
 import Login from "./components/Login.jsx";
 import { registerServiceWorker } from "./utils/registerServiceWorker.js";
 import { autoLoginOwner, isDeviceTrusted } from "./utils/deviceAuth.js";
@@ -307,6 +308,7 @@ function AppFlow() {
               <A11ySkipLink />
               <ToastContainer />
               <FeatureDisabledBanner features={features} />
+              {(step === 3 || localStorage.getItem('userId')) && <UserMenu />}
               <InstallPWA />
               <CommandPalette />
               <QuickActions />
@@ -315,7 +317,8 @@ function AppFlow() {
               <HelpButton />
               {step === 'login' && (
                 <Login onLogin={() => {
-                  window.location.reload();
+                  // After successful login, go to dashboard
+                  setStep(3);
                 }} />
               )}
               {step === 0 && (<div style={{ padding: '40px', maxWidth: '800px', margin: '0 auto' }}><h1 style={{ marginBottom: '30px' }}>📜 Terms & Privacy</h1><LegalDocumentsList userId={userId} /><button onClick={handleLegalAccepted} style={{ marginTop: 24, padding: '16px 32px', fontSize: '1.1rem', fontWeight: 600, cursor: 'pointer', background: '#667eea', color: 'white', border: 'none', borderRadius: '8px' }}>Accept & Continue →</button><div style={{ marginTop: '20px', textAlign: 'center' }}><p style={{ color: '#666', fontSize: '14px' }}>Already have an account? <button onClick={() => setStep('login')} style={{ background: 'none', border: 'none', color: '#667eea', cursor: 'pointer', textDecoration: 'underline', fontSize: '14px', fontWeight: 600 }}>Sign In</button></p></div></div>)}

@@ -63,6 +63,7 @@ function isOwner(email) {
 
 /**
  * Check if an email has lifetime VIP access (Pro tier features only)
+ * Owner ALWAYS has VIP access + all VIP emails
  * @param {string} email - User's email address
  * @returns {boolean} - True if VIP, false otherwise
  */
@@ -70,6 +71,12 @@ function isLifetimeVIP(email) {
   if (!email) return false;
   
   const normalizedEmail = email.toLowerCase().trim();
+  
+  // OWNER ALWAYS HAS VIP ACCESS
+  if (normalizedEmail === OWNER_EMAIL.toLowerCase().trim()) {
+    return true;
+  }
+  
   return LIFETIME_VIP_EMAILS.some(vipEmail => 
     vipEmail.toLowerCase().trim() === normalizedEmail
   );

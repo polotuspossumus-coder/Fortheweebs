@@ -37,6 +37,7 @@ const grantVIPAccess = (user) => {
   if (email === 'polotuspossumus@gmail.com') {
     // Owner gets full admin access
     localStorage.setItem('ownerEmail', 'polotuspossumus@gmail.com');
+    localStorage.setItem('userEmail', 'polotuspossumus@gmail.com'); // CRITICAL: Set userEmail for tier checks
     localStorage.setItem('userId', 'owner');
     localStorage.setItem('adminAuthenticated', 'true');
     localStorage.setItem('ownerVerified', 'true');
@@ -44,10 +45,11 @@ const grantVIPAccess = (user) => {
     localStorage.setItem('legalAccepted', 'true');
     localStorage.setItem('tosAccepted', 'true');
     localStorage.setItem('privacyAccepted', 'true');
-    localStorage.setItem('userTier', 'LIFETIME_VIP');
-    console.log('👑 Owner access granted');
+    localStorage.setItem('userTier', 'OWNER'); // Use OWNER tier, not LIFETIME_VIP
+    console.log('👑 Owner access granted - ALL PAYWALLS REMOVED');
   } else if (isVIPEmail(email)) {
     // VIP users get full access but no admin
+    localStorage.setItem('userEmail', email); // CRITICAL: Set userEmail for tier checks
     localStorage.setItem('userId', user.id);
     localStorage.setItem('hasOnboarded', 'true');
     localStorage.setItem('legalAccepted', 'true');
