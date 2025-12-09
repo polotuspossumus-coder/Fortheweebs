@@ -12,7 +12,7 @@
  * 8. FREE - Family friendly, safe
  */
 
-import { isLifetimeVIP, isOwner as checkIsOwner } from '../../utils/vipAccess';
+import { isLifetimeVIP, isOwner as checkIsOwner } from '../../utils/vipAccess.js';
 
 export const TIERS = {
   OWNER: 'OWNER',

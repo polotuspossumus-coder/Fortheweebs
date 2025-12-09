@@ -18,31 +18,71 @@ export default defineConfig({
   build: {
     outDir: 'dist',
     emptyOutDir: true,
-    minify: 'terser', // Better minification than esbuild
+    minify: 'terser',
     sourcemap: false,
     target: 'es2015',
-    chunkSizeWarningLimit: 800, // Warn if chunks exceed 800KB
+    chunkSizeWarningLimit: 1000,
     cssCodeSplit: true,
     rollupOptions: {
       input: {
         main: './index.html'
       },
       output: {
-        // NO manualChunks - prevents React duplication
         entryFileNames: 'assets/[name].[hash].js',
         chunkFileNames: 'assets/[name].[hash].js',
-        assetFileNames: 'assets/[name].[hash].[ext]'
+        assetFileNames: 'assets/[name].[hash].[ext]',
+        // Manual chunks for better caching
+        manualChunks: (id) => {
+          // Vendor chunks
+          if (id.includes('node_modules')) {
+            if (id.includes('react') || id.includes('react-dom')) {
+              return 'react-vendor';
+            }
+            if (id.includes('@supabase')) {
+              return 'supabase-vendor';
+            }
+            if (id.includes('three') || id.includes('@react-three')) {
+              return 'three-vendor';
+            }
+            if (id.includes('@stripe')) {
+              return 'stripe-vendor';
+            }
+            if (id.includes('@tensorflow')) {
+              return 'tf-vendor';
+            }
+            return 'vendor';
+          }
+          // Component chunks
+          if (id.includes('src/components/')) {
+            if (id.includes('admin/')) {
+              return 'admin-components';
+            }
+            if (id.includes('CGI') || id.includes('effects/')) {
+              return 'cgi-components';
+            }
+            if (id.includes('VR') || id.includes('AR')) {
+              return 'vrar-components';
+            }
+          }
+        }
       }
     },
     terserOptions: {
       compress: {
-        drop_console: true, // Remove console.logs in production
+        drop_console: true,
         drop_debugger: true,
-        pure_funcs: ['console.log', 'console.info'], // Remove specific console calls
-        passes: 2 // More aggressive compression
+        pure_funcs: ['console.log', 'console.info', 'console.debug'],
+        passes: 3, // More aggressive
+        unsafe_arrows: true,
+        unsafe_methods: true,
+        unsafe_proto: true,
+        unsafe_regexp: true
       },
       mangle: {
-        safari10: true // Safari 10 compatibility
+        safari10: true
+      },
+      format: {
+        comments: false // Remove all comments
       }
     }
   },
