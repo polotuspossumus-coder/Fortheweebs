@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { Settings } from './components/Settings';
-import { supabase } from './lib/supabaseClient';
+import { supabase } from './lib/supabase';
 
 function SettingsPage() {
   const [userId, setUserId] = React.useState(null);

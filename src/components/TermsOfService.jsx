@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { supabase } from "../../lib/supabaseClient";
+import { supabase } from "../lib/supabase";
 import "./TermsOfService.css";
 
 const PRIVACY_POLICY_TEXT = `ForTheWeebs Privacy Policy - Effective Date: January 1, 2026

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { supabase } from '../supabaseClient';
+import { supabase } from '../lib/supabase';
 
 /**
  * CollaborativeCanvas - Real-time multiplayer editing (Figma-style)
