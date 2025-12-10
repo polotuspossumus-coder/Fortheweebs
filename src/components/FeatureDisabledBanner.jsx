@@ -5,23 +5,8 @@ import './FeatureDisabledBanner.css';
  * Banner shown when features are disabled pending API keys
  */
 export default function FeatureDisabledBanner({ features }) {
-  // OWNER BYPASS - Never show banner to owner
-  const ownerEmail = localStorage.getItem('ownerEmail');
-  const userId = localStorage.getItem('userId');
-  if (ownerEmail === 'polotuspossumus@gmail.com' || userId === 'owner') {
-    return null; // Owner doesn't need to see this
-  }
-
-  if (!features || features.loading) {
-    return null;
-  }
-
-  const hasSocialMedia = features.socialMedia;
-  const hasCreatorEconomy = features.creatorEconomy;
-
-  if (hasSocialMedia && hasCreatorEconomy) {
-    return null; // All features enabled
-  }
+  // ALL USERS GET FULL ACCESS - Never show disabled banner
+  return null;
 
   const disabledFeatures = [];
   if (!hasSocialMedia) disabledFeatures.push('Social Media Platform');
@@ -90,24 +75,8 @@ export default function FeatureDisabledBanner({ features }) {
  * Inline feature blocker for specific components
  */
 export function FeatureBlocker({ feature, features, children }) {
-  if (!features || features.loading) {
-    return (
-      <div className="feature-loading">
-        <div className="spinner">⏳</div>
-        <p>Loading features...</p>
-      </div>
-    );
-  }
-
-  const isEnabled = feature === 'socialMedia'
-    ? features.socialMedia
-    : feature === 'creatorEconomy'
-    ? features.creatorEconomy
-    : true;
-
-  if (isEnabled) {
-    return children;
-  }
+  // ALL USERS GET FULL ACCESS - Feature locks disabled
+  return children;
 
   const disabledItem = features.disabled?.find(d =>
     d.feature.toLowerCase().includes(feature.toLowerCase())
