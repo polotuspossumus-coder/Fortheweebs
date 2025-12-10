@@ -162,6 +162,7 @@ export const CreatorDashboard = ({ userId, ipAddress = "127.0.0.1", tier = "free
     <Tabs value={activeTab} onValueChange={setActiveTab} defaultValue="overview" className="dashboard-tabs">
       <TabsList>
         <TabsTrigger value="overview">📊 Overview</TabsTrigger>
+        <TabsTrigger value="social">🌟 Social Feed</TabsTrigger>
         {isVipUser && <TabsTrigger value="accounts">👥 My Accounts</TabsTrigger>}
         <TabsTrigger value="settings">⚙️ Settings</TabsTrigger>
         <TabsTrigger value="help">❓ FAQ & Help</TabsTrigger>
@@ -200,6 +201,9 @@ export const CreatorDashboard = ({ userId, ipAddress = "127.0.0.1", tier = "free
           creatorName={ownerEmail?.split('@')[0] || 'Creator'}
           onNavigate={setActiveTab}
         />
+      </TabsContent>
+      <TabsContent value="social">
+        <SocialFeed userId={userId} userTier={currentTier} />
       </TabsContent>
       <TabsContent value="video">
         <ToolLockGate userId={userId} toolId="video">

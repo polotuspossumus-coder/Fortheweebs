@@ -36,6 +36,13 @@ export function PaymentGate({ requiredTier, currentTier, children, userId }) {
 
   // Check if user has required tier
   const hasAccess = () => {
+    // Owner always has access to everything
+    const ownerEmail = localStorage.getItem('ownerEmail') || localStorage.getItem('userEmail');
+    const storedUserId = localStorage.getItem('userId');
+    if (ownerEmail === 'polotuspossumus@gmail.com' || storedUserId === 'owner') {
+      return true;
+    }
+    
     if (requiredTier === 'CREATOR') {
       return currentTier === 'CREATOR' || currentTier === 'SUPER_ADMIN';
     }

@@ -6,7 +6,12 @@ import { isToolUnlocked, TOOL_PRICES, TOOL_NAMES } from '../utils/toolUnlockSyst
  * Wrap any tool component with this to enforce unlock requirement
  */
 export function ToolLockGate({ userId, toolId, children }) {
-  const isUnlocked = isToolUnlocked(userId, toolId);
+  // Owner always has full access - no paywalls
+  const ownerEmail = localStorage.getItem('ownerEmail') || localStorage.getItem('userEmail');
+  const storedUserId = localStorage.getItem('userId');
+  const isOwner = ownerEmail === 'polotuspossumus@gmail.com' || storedUserId === 'owner';
+  
+  const isUnlocked = isToolUnlocked(userId, toolId) || isOwner;
 
   if (isUnlocked) {
     return <>{children}</>;
