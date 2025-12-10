@@ -34,6 +34,8 @@ import { TradingCardDesigner } from "./components/TradingCardDesigner";
 import { TipsAndDonations } from "./components/TipsAndDonations";
 import CommissionMarketplace from "./components/CommissionMarketplace";
 import { PremiumSubscription } from "./components/PremiumSubscription";
+import Marketplace from "./components/Marketplace";
+import MerchStore from "./components/MerchStore";
 import NotificationBadge from "./notifications/NotificationBadge";
 import MessageBadge from "./messaging/MessageBadge";
 import MessagingSystem from "./messaging/MessagingSystem";
