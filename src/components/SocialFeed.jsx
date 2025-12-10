@@ -256,6 +256,12 @@ export const SocialFeed = ({ userId, userTier }) => {
         >
           📡 Live Streams
         </button>
+        <button 
+          className={`feed-nav-btn ${activeTab === 'discover' ? 'active' : ''}`}
+          onClick={() => setActiveTab('discover')}
+        >
+          🔍 Discover
+        </button>
       </div>
 
       {/* Feed Tab */}
@@ -591,6 +597,208 @@ export const SocialFeed = ({ userId, userTier }) => {
             <button className="coming-soon-btn">Live Streaming Coming Soon</button>
           </div>
         </div>
+      )}
+
+      {/* Discover Tab */}
+      {activeTab === 'discover' && (
+        <FeatureBlocker feature="socialMedia" features={features}>
+        <div className="discover-content">
+          <h2>🔍 Discover Creators</h2>
+          
+          {/* Search Bar */}
+          <div className="search-section">
+            <div className="search-bar">
+              <input
+                type="text"
+                placeholder="🔍 Search for users, creators, or content..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                onKeyPress={async (e) => {
+                  if (e.key === 'Enter' && searchQuery.trim()) {
+                    try {
+                      setLoading(true);
+                      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/social/search?q=${encodeURIComponent(searchQuery)}`);
+                      if (response.ok) {
+                        const data = await response.json();
+                        setSearchResults(data.users || []);
+                      }
+                    } catch (err) {
+                      console.error('Search error:', err);
+                    } finally {
+                      setLoading(false);
+                    }
+                  }
+                }}
+              />
+              <button 
+                className="search-btn"
+                onClick={async () => {
+                  if (!searchQuery.trim()) return;
+                  try {
+                    setLoading(true);
+                    const response = await fetch(`${import.meta.env.VITE_API_URL}/api/social/search?q=${encodeURIComponent(searchQuery)}`);
+                    if (response.ok) {
+                      const data = await response.json();
+                      setSearchResults(data.users || []);
+                    }
+                  } catch (err) {
+                    console.error('Search error:', err);
+                  } finally {
+                    setLoading(false);
+                  }
+                }}
+              >
+                Search
+              </button>
+            </div>
+          </div>
+
+          {/* Search Results */}
+          {searchResults.length > 0 && (
+            <div className="search-results">
+              <h3>Search Results</h3>
+              <div className="creators-grid">
+                {searchResults.map(creator => (
+                  <div key={creator.id} className="creator-card">
+                    <div className="creator-avatar">
+                      <img src={creator.avatar || '/default-avatar.png'} alt={creator.username} />
+                      {creator.is_verified && <span className="verified-badge">✓</span>}
+                    </div>
+                    <h4>@{creator.username}</h4>
+                    {creator.display_name && <p className="display-name">{creator.display_name}</p>}
+                    {creator.bio && <p className="creator-bio">{creator.bio}</p>}
+                    <div className="creator-stats">
+                      <span>👥 {creator.followers || 0} followers</span>
+                      <span>📝 {creator.posts || 0} posts</span>
+                    </div>
+                    <button 
+                      className="follow-btn"
+                      onClick={async () => {
+                        try {
+                          await fetch(`${import.meta.env.VITE_API_URL}/api/social/follow/${creator.id}`, {
+                            method: 'POST'
+                          });
+                          alert(`Now following @${creator.username}!`);
+                        } catch (err) {
+                          console.error('Follow error:', err);
+                        }
+                      }}
+                    >
+                      + Follow
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Featured Creators */}
+          <div className="featured-section">
+            <h3>⭐ Featured Creators</h3>
+            <p className="section-desc">Popular creators on ForTheWeebs</p>
+            <div className="creators-grid">
+              {loading ? (
+                <p>⏳ Loading creators...</p>
+              ) : (
+                <>
+                  <div className="creator-card">
+                    <div className="creator-avatar">
+                      <img src="/default-avatar.png" alt="Creator" />
+                      <span className="verified-badge">✓</span>
+                    </div>
+                    <h4>@anime_artist_pro</h4>
+                    <p className="creator-bio">Professional anime illustrator & character designer</p>
+                    <div className="creator-stats">
+                      <span>👥 12.5K followers</span>
+                      <span>📝 847 posts</span>
+                    </div>
+                    <button className="follow-btn">+ Follow</button>
+                  </div>
+                  
+                  <div className="creator-card">
+                    <div className="creator-avatar">
+                      <img src="/default-avatar.png" alt="Creator" />
+                      <span className="verified-badge">✓</span>
+                    </div>
+                    <h4>@manga_studio_official</h4>
+                    <p className="creator-bio">Manga creator, tutorials & commissions</p>
+                    <div className="creator-stats">
+                      <span>👥 8.2K followers</span>
+                      <span>📝 523 posts</span>
+                    </div>
+                    <button className="follow-btn">+ Follow</button>
+                  </div>
+
+                  <div className="creator-card">
+                    <div className="creator-avatar">
+                      <img src="/default-avatar.png" alt="Creator" />
+                    </div>
+                    <h4>@cosplay_queen</h4>
+                    <p className="creator-bio">Cosplayer, photographer, convention guide</p>
+                    <div className="creator-stats">
+                      <span>👥 6.7K followers</span>
+                      <span>📝 391 posts</span>
+                    </div>
+                    <button className="follow-btn">+ Follow</button>
+                  </div>
+                </>
+              )}
+            </div>
+          </div>
+
+          {/* Trending Topics */}
+          <div className="trending-section">
+            <h3>🔥 Trending Now</h3>
+            <div className="trending-topics">
+              <button className="topic-tag">#AnimeArt</button>
+              <button className="topic-tag">#MangaDrawing</button>
+              <button className="topic-tag">#Cosplay</button>
+              <button className="topic-tag">#DigitalArt</button>
+              <button className="topic-tag">#CharacterDesign</button>
+              <button className="topic-tag">#FanArt</button>
+              <button className="topic-tag">#ComicArt</button>
+              <button className="topic-tag">#3DModeling</button>
+            </div>
+          </div>
+
+          {/* Categories */}
+          <div className="categories-section">
+            <h3>📂 Browse by Category</h3>
+            <div className="categories-grid">
+              <button className="category-card">
+                <span className="category-icon">🎨</span>
+                <span className="category-name">Artists</span>
+                <span className="category-count">2.4K creators</span>
+              </button>
+              <button className="category-card">
+                <span className="category-icon">📚</span>
+                <span className="category-name">Writers</span>
+                <span className="category-count">1.2K creators</span>
+              </button>
+              <button className="category-card">
+                <span className="category-icon">📸</span>
+                <span className="category-name">Photographers</span>
+                <span className="category-count">890 creators</span>
+              </button>
+              <button className="category-card">
+                <span className="category-icon">🎬</span>
+                <span className="category-name">Video Creators</span>
+                <span className="category-count">1.5K creators</span>
+              </button>
+              <button className="category-card">
+                <span className="category-icon">🎮</span>
+                <span className="category-name">Game Devs</span>
+                <span className="category-count">670 creators</span>
+              </button>
+              <button className="category-card">
+                <span className="category-icon">🎭</span>
+                <span className="category-name">Cosplayers</span>
+                <span className="category-count">2.1K creators</span>
+              </button>
+            </div>
+          </div>
+        </div>
+        </FeatureBlocker>
       )}
 
       {/* Premium Upsell for Non-Premium Users */}
