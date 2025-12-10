@@ -260,6 +260,7 @@ const routes = [
 
     // New Feature APIs (Nov 26, 2025 Update)
     // REMOVED DUPLICATE: { path: '/api/moderation', file: './api/moderation', name: 'Community Moderation System' },
+    { path: '/api/social', file: './api/social', name: 'Social Feed & Discovery' },
     { path: '/api/merch', file: './api/merch', name: 'Merchandise Store' },
     { path: '/api/rewards', file: './api/rewards', name: 'Fan Rewards & Loyalty' },
     { path: '/api/collaboration', file: './api/collaboration', name: 'Collaboration Rooms' },

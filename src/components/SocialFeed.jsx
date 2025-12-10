@@ -22,7 +22,10 @@ import { FeatureBlocker } from './FeatureDisabledBanner';
 export const SocialFeed = ({ userId, userTier }) => {
   const [posts, setPosts] = useState([]);
   const [newPostContent, setNewPostContent] = useState('');
-  const [activeTab, setActiveTab] = useState('feed'); // feed, messages, calls, streams
+  const [activeTab, setActiveTab] = useState('feed'); // feed, discover, search
+  const [searchQuery, setSearchQuery] = useState('');
+  const [searchResults, setSearchResults] = useState([]);
+  const [discoverCreators, setDiscoverCreators] = useState([]);
   const [showCGITools, setShowCGITools] = useState(false);
   const [showMonetizeDialog, setShowMonetizeDialog] = useState(false);
   const [friends, setFriends] = useState([]);
@@ -53,31 +56,26 @@ export const SocialFeed = ({ userId, userTier }) => {
     const loadFeed = async () => {
       try {
         setLoading(true);
-        // Load posts from API
-        const feedData = await api.posts.getFeed(50, 0);
-        setPosts(feedData.posts || []);
+        
+        // Load posts from backend API
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/api/social/feed?limit=50&offset=0`);
+        if (response.ok) {
+          const feedData = await response.json();
+          setPosts(feedData.posts || []);
+        } else {
+          // No posts yet - show empty feed
+          setPosts([]);
+        }
 
-        // Load relationships from API
-        const [friendsData, followersData, subscriptionsData] = await Promise.all([
-          api.relationships.getFriends().catch(() => ({ friends: [] })),
-          api.relationships.getFollowers().catch(() => ({ followers: [] })),
-          api.subscriptions.getMySubscriptions().catch(() => ({ subscriptions: [] }))
-        ]);
-
-        setFriends(friendsData.friends || []);
-        setFollowers(followersData.followers || []);
-        setSubscriptions(subscriptionsData.subscriptions || []);
+        setFriends([]);
+        setFollowers([]);
+        setSubscriptions([]);
         setError(null);
       } catch (err) {
-        console.error('Failed to load feed:', err);
-        setError('Failed to load feed. Please refresh.');
-
-        // Fallback to localStorage
-        const savedPosts = JSON.parse(localStorage.getItem('socialPosts') || '[]');
-        setPosts(savedPosts);
-        setFriends(JSON.parse(localStorage.getItem('userFriends') || '[]'));
-        setFollowers(JSON.parse(localStorage.getItem('userFollowers') || '[]'));
-        setSubscriptions(JSON.parse(localStorage.getItem('userSubscriptions') || '[]'));
+        console.error('Feed load error:', err);
+        // Don't show error for empty feed
+        setPosts([]);
+        setError(null);
       } finally {
         setLoading(false);
       }
