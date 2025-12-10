@@ -32,7 +32,8 @@ class FeatureFlags {
     // Check if other required keys exist
     this.hasOpenAI = !!process.env.OPENAI_API_KEY;
     this.hasStripe = !!process.env.STRIPE_SECRET_KEY;
-    this.hasSupabase = !!process.env.SUPABASE_SERVICE_ROLE_KEY;
+    // Accept either SUPABASE_SERVICE_ROLE_KEY or SUPABASE_SERVICE_KEY
+    this.hasSupabase = !!(process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SERVICE_KEY);
   }
 
   /**
@@ -99,6 +100,18 @@ class FeatureFlags {
     }
 
     return disabled;
+  }
+
+  /**
+   * Get feature status (simpler version for health checks)
+   */
+  getStatus() {
+    return {
+      socialMedia: this.socialMediaEnabled,
+      creatorEconomy: this.creatorEconomyEnabled,
+      creatorTools: this.creatorToolsEnabled,
+      aiModeration: this.aiModerationEnabled
+    };
   }
 
   /**

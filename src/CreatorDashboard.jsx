@@ -171,6 +171,8 @@ export const CreatorDashboard = ({ userId, ipAddress = "127.0.0.1", tier = "free
         <TabsTrigger value="arvr">🎭 AR/VR Studio</TabsTrigger>
         <TabsTrigger value="photo">📸 Photo Tools</TabsTrigger>
         <TabsTrigger value="design">🎨 Graphic Design</TabsTrigger>
+        <TabsTrigger value="merch">🛍️ Merch Store</TabsTrigger>
+        <TabsTrigger value="marketplace">🏪 Marketplace</TabsTrigger>
         {isVipUser && <TabsTrigger value="mythic" style={{ 
           background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
           color: 'white',
@@ -444,6 +446,17 @@ export const CreatorDashboard = ({ userId, ipAddress = "127.0.0.1", tier = "free
       </TabsContent>
       <TabsContent value="merch">
         <MerchStore userId={userId} />
+      </TabsContent>
+      <TabsContent value="marketplace">
+        <div style={{ padding: '20px' }}>
+          <h2 style={{ fontSize: '32px', fontWeight: 'bold', marginBottom: '10px' }}>
+            🏪 Creator Marketplace
+          </h2>
+          <p style={{ fontSize: '16px', color: '#888', marginBottom: '30px' }}>
+            Buy and sell assets, templates, presets, and more
+          </p>
+          <Marketplace />
+        </div>
       </TabsContent>
       <TabsContent value="rewards">
         <FanRewardsSystem userId={userId} />
