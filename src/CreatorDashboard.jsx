@@ -73,7 +73,6 @@ import VoiceChatRoom from "./components/VoiceChatRoom";
 import CreatorRevenueAnalytics from "./components/CreatorRevenueAnalytics";
 import LiveStreamingStudio from "./components/LiveStreamingStudio";
 import CommunityModTools from "./components/CommunityModTools";
-import MerchStore from "./components/MerchStore";
 import FanRewardsSystem from "./components/FanRewardsSystem";
 import ExperimentalLab from "./components/ExperimentalLab";
 import MythicLayer from "./components/MythicLayer";
