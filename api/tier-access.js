@@ -1,5 +1,12 @@
 const { createClient } = require('@supabase/supabase-js');
-const { isOwner, isLifetimeVIP } = require('../utils/vipAccess');
+
+// Dynamic import for ES modules (vipAccess)
+let isOwner, isLifetimeVIP;
+(async () => {
+  const vipModule = await import('../utils/vipAccess.js');
+  isOwner = vipModule.isOwner;
+  isLifetimeVIP = vipModule.isLifetimeVIP;
+})();
 
 const supabase = createClient(
   process.env.VITE_SUPABASE_URL,

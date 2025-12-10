@@ -134,23 +134,8 @@ function isVIP(email) {
   return isLifetimeVIP(email);
 }
 
-// ES6 exports for frontend
+// ES module exports for both browser and Node.js
 export {
-  OWNER_EMAIL,
-  LIFETIME_VIP_EMAILS,
-  MAX_LIFETIME_VIP_SLOTS,
-  FREEBIE_SLOTS_FILLED,
-  PAID_LIFETIME_SLOTS_REMAINING,
-  isOwner,
-  isLifetimeVIP,
-  isUserVIP,
-  getVIPTier,
-  shouldSkipPayment,
-  isVIP
-};
-
-// CommonJS exports for Node.js backend
-module.exports = {
   OWNER_EMAIL,
   LIFETIME_VIP_EMAILS,
   MAX_LIFETIME_VIP_SLOTS,
