@@ -444,6 +444,16 @@
   color: #333;
 }
 
+.post-actions button.liked {
+  color: #e74c3c;
+  font-weight: 600;
+}
+
+.post-actions button.saved {
+  color: #667eea;
+  font-weight: 600;
+}
+
 /* Messages/Calls/Streams Content */
 .messages-content,
 .calls-content,

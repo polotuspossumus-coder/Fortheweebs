@@ -78,6 +78,7 @@ import ExperimentalLab from "./components/ExperimentalLab";
 import MythicLayer from "./components/MythicLayer";
 import CreatorOverview from "./components/CreatorOverview";
 import QuickCreateFAB from "./components/QuickCreateFAB";
+import { CreatorAnalytics } from "./components/CreatorAnalytics";
 
 export const CreatorDashboard = ({ userId, ipAddress = "127.0.0.1", tier = "free" }) => {
   // STRICT ADMIN CHECK - Only polotuspossumus@gmail.com
@@ -163,6 +164,7 @@ export const CreatorDashboard = ({ userId, ipAddress = "127.0.0.1", tier = "free
     <Tabs value={activeTab} onValueChange={setActiveTab} defaultValue="overview" className="dashboard-tabs">
       <TabsList>
         <TabsTrigger value="overview">📊 Overview</TabsTrigger>
+        <TabsTrigger value="analytics">📈 Analytics</TabsTrigger>
         <TabsTrigger value="social">🌟 Social Feed</TabsTrigger>
         {isVipUser && <TabsTrigger value="accounts">👥 My Accounts</TabsTrigger>}
         <TabsTrigger value="settings">⚙️ Settings</TabsTrigger>
@@ -204,6 +206,9 @@ export const CreatorDashboard = ({ userId, ipAddress = "127.0.0.1", tier = "free
           creatorName={ownerEmail?.split('@')[0] || 'Creator'}
           onNavigate={setActiveTab}
         />
+      </TabsContent>
+      <TabsContent value="analytics">
+        <CreatorAnalytics userId={userId} creatorId={userId} />
       </TabsContent>
       <TabsContent value="social">
         <SocialFeed userId={userId} userTier={currentTier} />

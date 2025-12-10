@@ -40,6 +40,10 @@ export const SocialFeed = ({ userId, userTier }) => {
   const [commentsMap, setCommentsMap] = useState({});
   const [newCommentText, setNewCommentText] = useState('');
   const [features, setFeatures] = useState(featureDetector.getFeatures());
+  const [hasMore, setHasMore] = useState(true);
+  const [offset, setOffset] = useState(0);
+  const [likedPosts, setLikedPosts] = useState(new Set());
+  const [savedPosts, setSavedPosts] = useState(new Set());
 
   // Get user's tier access
   const userEmail = localStorage.getItem('ownerEmail') || localStorage.getItem('userEmail');
@@ -57,14 +61,15 @@ export const SocialFeed = ({ userId, userTier }) => {
       try {
         setLoading(true);
         
-        // Load posts from backend API
-        const response = await fetch(`${import.meta.env.VITE_API_URL}/api/social/feed?limit=50&offset=0`);
+        // Load posts from backend API with pagination
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/api/social/feed?limit=20&offset=0`);
         if (response.ok) {
           const feedData = await response.json();
           setPosts(feedData.posts || []);
+          setHasMore(feedData.posts?.length >= 20);
         } else {
-          // No posts yet - show empty feed
           setPosts([]);
+          setHasMore(false);
         }
 
         setFriends([]);
@@ -73,7 +78,6 @@ export const SocialFeed = ({ userId, userTier }) => {
         setError(null);
       } catch (err) {
         console.error('Feed load error:', err);
-        // Don't show error for empty feed
         setPosts([]);
         setError(null);
       } finally {
@@ -83,6 +87,47 @@ export const SocialFeed = ({ userId, userTier }) => {
 
     loadFeed();
   }, []);
+
+  // Infinite scroll handler
+  const loadMorePosts = async () => {
+    if (loading || !hasMore) return;
+    
+    try {
+      setLoading(true);
+      const newOffset = offset + 20;
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/social/feed?limit=20&offset=${newOffset}`);
+      
+      if (response.ok) {
+        const feedData = await response.json();
+        const newPosts = feedData.posts || [];
+        setPosts([...posts, ...newPosts]);
+        setOffset(newOffset);
+        setHasMore(newPosts.length >= 20);
+      }
+    } catch (err) {
+      console.error('Load more error:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Scroll detection for infinite scroll
+  useEffect(() => {
+    const handleScroll = () => {
+      if (activeTab !== 'feed') return;
+      
+      const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+      const scrollHeight = document.documentElement.scrollHeight;
+      const clientHeight = document.documentElement.clientHeight;
+      
+      if (scrollTop + clientHeight >= scrollHeight - 500 && !loading && hasMore) {
+        loadMorePosts();
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [activeTab, loading, hasMore, offset, posts]);
 
   const createPost = async () => {
     if (!newPostContent.trim()) return;
@@ -220,12 +265,82 @@ export const SocialFeed = ({ userId, userTier }) => {
     }
   };
 
-  const likePost = (postId) => {
-    const updatedPosts = posts.map(post => 
-      post.id === postId ? { ...post, likes: post.likes + 1 } : post
-    );
-    setPosts(updatedPosts);
-    localStorage.setItem('socialPosts', JSON.stringify(updatedPosts));
+  const likePost = async (postId) => {
+    try {
+      // Optimistic update
+      const wasLiked = likedPosts.has(postId);
+      const updatedPosts = posts.map(post => 
+        post.id === postId ? { 
+          ...post, 
+          likes: wasLiked ? (post.likes || 0) - 1 : (post.likes || 0) + 1,
+          isLiked: !wasLiked
+        } : post
+      );
+      setPosts(updatedPosts);
+      
+      // Update liked state
+      const newLiked = new Set(likedPosts);
+      if (wasLiked) {
+        newLiked.delete(postId);
+      } else {
+        newLiked.add(postId);
+      }
+      setLikedPosts(newLiked);
+      localStorage.setItem('likedPosts', JSON.stringify([...newLiked]));
+
+      // Send to backend
+      await fetch(`${import.meta.env.VITE_API_URL}/api/social/post/${postId}/like`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' }
+      });
+    } catch (err) {
+      console.error('Like error:', err);
+    }
+  };
+
+  const sharePost = async (postId) => {
+    try {
+      const post = posts.find(p => p.id === postId);
+      if (navigator.share) {
+        await navigator.share({
+          title: `Post by @${post.author?.username || 'creator'}`,
+          text: post.content?.substring(0, 100),
+          url: `${window.location.origin}/post/${postId}`
+        });
+      } else {
+        // Fallback: copy link
+        await navigator.clipboard.writeText(`${window.location.origin}/post/${postId}`);
+        alert('✅ Link copied to clipboard!');
+      }
+      
+      // Track share
+      const updatedPosts = posts.map(p => 
+        p.id === postId ? { ...p, shares: (p.shares || 0) + 1 } : p
+      );
+      setPosts(updatedPosts);
+      
+      await fetch(`${import.meta.env.VITE_API_URL}/api/social/post/${postId}/share`, {
+        method: 'POST'
+      });
+    } catch (err) {
+      console.error('Share error:', err);
+    }
+  };
+
+  const savePost = (postId) => {
+    const wasSaved = savedPosts.has(postId);
+    const newSaved = new Set(savedPosts);
+    
+    if (wasSaved) {
+      newSaved.delete(postId);
+      alert('🗑️ Removed from saved');
+    } else {
+      newSaved.add(postId);
+      alert('💾 Post saved!');
+    }
+    
+    setSavedPosts(newSaved);
+    localStorage.setItem('savedPosts', JSON.stringify([...newSaved]));
   };
 
   return (
@@ -462,13 +577,24 @@ export const SocialFeed = ({ userId, userTier }) => {
                 )}
                 
                 <div className="post-actions">
-                  <button onClick={() => handleLike(post.id)}>
-                    ❤️ {post.likesCount || 0}
+                  <button 
+                    onClick={() => likePost(post.id)}
+                    className={likedPosts.has(post.id) ? 'liked' : ''}
+                  >
+                    {likedPosts.has(post.id) ? '❤️' : '🤍'} {post.likes || 0}
                   </button>
                   <button onClick={() => toggleComments(post.id)}>
                     💬 {post.commentsCount || 0}
                   </button>
-                  <button>🔁 Share</button>
+                  <button onClick={() => sharePost(post.id)}>
+                    🔁 {post.shares || 0}
+                  </button>
+                  <button 
+                    onClick={() => savePost(post.id)}
+                    className={savedPosts.has(post.id) ? 'saved' : ''}
+                  >
+                    {savedPosts.has(post.id) ? '📕' : '📖'} Save
+                  </button>
                 </div>
 
                 {/* Comments Section */}
