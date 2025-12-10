@@ -1,5 +1,6 @@
 import React, { useState, useRef } from 'react';
 import './VideoEditorPro.css';
+import { saveFileWithDialog, FILE_TYPES } from '../utils/fileSaveDialog';
 
 /**
  * VideoEditorPro - Destroys Final Cut + Premiere Pro
@@ -145,12 +146,18 @@ export default function VideoEditorPro() {
         alert('🤖 AI Auto-Edit: Analyzing footage... Removing silence... Adding B-roll suggestions... Syncing to beat... Done!');
     };
 
-    const exportVideo = (format) => {
+    const exportVideo = async (format) => {
         if (!project || timeline.length === 0) {
             alert('Create a project and add clips first!');
             return;
         }
-        alert(`Exporting as ${format.toUpperCase()}... Rendering at ${project.resolution.name}... Done!`);
+        
+        // TODO: Implement actual video rendering
+        alert(`🚧 Video export coming soon!\n\nWill export as ${format.toUpperCase()} at ${project.resolution.name} with native Save As dialog.`);
+        
+        // When implemented:
+        // const blob = await renderVideo(timeline, format);
+        // await saveFileWithDialog(blob, `video-${Date.now()}.${format}`, { types: [FILE_TYPES.VIDEO] });
     };
 
     const togglePlay = () => {

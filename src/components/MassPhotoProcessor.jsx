@@ -1,5 +1,6 @@
 import React, { useState, useRef } from 'react';
 import JSZip from 'jszip';
+import { saveFileWithDialog, saveMultipleFilesWithDialog, FILE_TYPES, isFileSystemAccessSupported } from '../utils/fileSaveDialog';
 
 /**
  * MassPhotoProcessor - Handle 12,000+ images
@@ -577,51 +578,62 @@ export function MassPhotoProcessor({ userId }) {
             return;
         }
 
-        // Ask user to confirm
-        const confirmed = confirm(`📦 Download ${successfulResults.length} processed images as ZIP file?\n\nThis may take a moment for large batches.`);
-        if (!confirmed) return;
-
         try {
-            console.log('Creating ZIP...');
+            // Ask user: Save as folder or ZIP?
+            const choice = isFileSystemAccessSupported()
+                ? confirm(
+                    `💾 Choose save method:\n\n` +
+                    `OK = Save to folder (choose location)\n` +
+                    `Cancel = Download as ZIP file\n\n` +
+                    `${successfulResults.length} images ready to save`
+                  )
+                : false;
 
-            // Create ZIP file
-            const zip = new JSZip();
+            if (choice) {
+                // OPTION 1: Save to folder with native folder picker
+                const files = successfulResults.map((result, index) => ({
+                    name: `processed_${index + 1}_${result.name.split('.')[0]}.${params.outputFormat}`,
+                    blob: result.blob
+                }));
 
-            successfulResults.forEach((result, index) => {
-                const filename = `processed_${index + 1}_${result.name.split('.')[0]}.${params.outputFormat}`;
-                console.log(`Adding to ZIP: ${filename}`);
-                zip.file(filename, result.blob);
-            });
+                const saved = await saveMultipleFilesWithDialog(files, `processed_photos_${Date.now()}`);
+                
+                if (saved) {
+                    alert(`✅ Saved ${files.length} processed images to your chosen folder!`);
+                }
+            } else {
+                // OPTION 2: Download as ZIP
+                console.log('Creating ZIP...');
+                const zip = new JSZip();
 
-            console.log('Generating ZIP blob...');
-            // Generate ZIP and download
-            const zipBlob = await zip.generateAsync({
-                type: 'blob',
-                compression: 'DEFLATE',
-                compressionOptions: { level: 6 }
-            });
+                successfulResults.forEach((result, index) => {
+                    const filename = `processed_${index + 1}_${result.name.split('.')[0]}.${params.outputFormat}`;
+                    console.log(`Adding to ZIP: ${filename}`);
+                    zip.file(filename, result.blob);
+                });
 
-            console.log('ZIP size:', zipBlob.size, 'bytes');
-            console.log('Creating download link...');
+                console.log('Generating ZIP blob...');
+                const zipBlob = await zip.generateAsync({
+                    type: 'blob',
+                    compression: 'DEFLATE',
+                    compressionOptions: { level: 6 }
+                });
 
-            const url = URL.createObjectURL(zipBlob);
-            const link = document.createElement('a');
-            link.href = url;
-            link.download = `processed_photos_${Date.now()}.zip`;
-            document.body.appendChild(link);
-            link.click();
-
-            setTimeout(() => {
-                document.body.removeChild(link);
-                URL.revokeObjectURL(url);
-            }, 100);
-
-            alert(`✅ Downloaded ${successfulResults.length} processed images in ZIP file!`);
+                console.log('ZIP size:', zipBlob.size, 'bytes');
+                
+                // Use native Save As dialog for ZIP
+                const suggestedName = `processed_photos_${Date.now()}.zip`;
+                const saved = await saveFileWithDialog(zipBlob, suggestedName, { types: [FILE_TYPES.ZIP] });
+                
+                if (saved) {
+                    alert(`✅ Saved ${successfulResults.length} processed images in ZIP file!`);
+                }
+            }
         } catch (error) {
             console.error('❌ Download error:', error);
 
             // Fallback: download individually
-            const fallback = confirm(`❌ ZIP download failed: ${error.message}\n\nWould you like to download images individually instead?`);
+            const fallback = confirm(`❌ Save failed: ${error.message}\n\nWould you like to download images individually instead?`);
 
             if (fallback) {
                 successfulResults.forEach((result, index) => {
@@ -642,7 +654,7 @@ export function MassPhotoProcessor({ userId }) {
         }
     };
 
-    const downloadReport = () => {
+    const downloadReport = async () => {
         const report = [
             '=== MASS PHOTO PROCESSING REPORT ===',
             `Date: ${new Date().toLocaleString()}`,
@@ -659,12 +671,9 @@ export function MassPhotoProcessor({ userId }) {
         ].join('\n');
 
         const blob = new Blob([report], { type: 'text/plain' });
-        const url = URL.createObjectURL(blob);
-        const link = document.createElement('a');
-        link.href = url;
-        link.download = `photo-processing-report-${Date.now()}.txt`;
-        link.click();
-        URL.revokeObjectURL(url);
+        const suggestedName = `photo-processing-report-${Date.now()}.txt`;
+        
+        await saveFileWithDialog(blob, suggestedName, { types: [FILE_TYPES.TEXT] });
     };
 
     return (

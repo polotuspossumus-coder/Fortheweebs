@@ -1,4 +1,5 @@
 import React, { useState, useRef } from 'react';
+import { saveFileWithDialog, FILE_TYPES } from '../utils/fileSaveDialog';
 
 /**
  * VRRecordingStudio - Record and stream VR/AR content
@@ -77,13 +78,10 @@ export default function VRRecordingStudio() {
         }
       };
 
-      mediaRecorderRef.current.onstop = () => {
+      mediaRecorderRef.current.onstop = async () => {
         const blob = new Blob(chunks, { type: 'video/webm' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `vr-recording-${Date.now()}.webm`;
-        a.click();
+        const suggestedName = `vr-recording-${Date.now()}.webm`;
+        await saveFileWithDialog(blob, suggestedName, { types: [FILE_TYPES.VIDEO] });
       };
 
       mediaRecorderRef.current.start();

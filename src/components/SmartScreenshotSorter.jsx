@@ -1,4 +1,5 @@
 import React, { useState, useRef } from 'react';
+import { saveMultipleFilesWithDialog } from '../utils/fileSaveDialog';
 
 /**
  * SmartScreenshotSorter - AI-powered screenshot organizer
@@ -512,13 +513,28 @@ export function SmartScreenshotSorter({ userId, onProcessComplete }) {
         return merged;
     };
 
-    const downloadAll = () => {
-        results.processed.forEach((img, index) => {
-            const link = document.createElement('a');
-            link.download = `wallpaper-${index + 1}.jpg`;
-            link.href = img.processedSrc;
-            link.click();
-        });
+    const downloadAll = async () => {
+        if (results.processed.length === 0) {
+            alert('No images to download!');
+            return;
+        }
+
+        // Convert data URLs to blobs
+        const files = await Promise.all(
+            results.processed.map(async (img, index) => {
+                const response = await fetch(img.processedSrc);
+                const blob = await response.blob();
+                return {
+                    name: `wallpaper-${index + 1}.jpg`,
+                    blob
+                };
+            })
+        );
+
+        const saved = await saveMultipleFilesWithDialog(files, `wallpapers_${Date.now()}`);
+        if (saved) {
+            alert(`✅ Saved ${files.length} wallpapers!`);
+        }
     };
 
     const saveToCloud = () => {

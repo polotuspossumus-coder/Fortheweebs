@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import './PhotoEditorPro.css';
+import { saveFileWithDialog, FILE_TYPES } from '../utils/fileSaveDialog';
 
 /**
  * PhotoEditorPro - Professional photo editor for 99% of use cases
@@ -213,12 +214,13 @@ export default function PhotoEditorPro() {
         alert('🤖 AI Enhancement: Analyzing image... Auto-correcting colors, sharpening, noise reduction... Done!');
     };
 
-    const exportImage = (format) => {
+    const exportImage = async (format) => {
         if (!canvasRef.current) return;
-        const link = document.createElement('a');
-        link.download = `edited-image.${format}`;
-        link.href = canvasRef.current.toDataURL(`image/${format}`);
-        link.click();
+        
+        canvasRef.current.toBlob(async (blob) => {
+            const suggestedName = `edited-image.${format}`;
+            await saveFileWithDialog(blob, suggestedName, { types: [FILE_TYPES.IMAGE] });
+        }, `image/${format}`);
     };
 
     return (

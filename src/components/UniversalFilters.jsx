@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { saveFileWithDialog, FILE_TYPES } from '../utils/fileSaveDialog';
 import * as faceapi from '@vladmandic/face-api';
 
 /**
@@ -317,9 +318,9 @@ export default function UniversalFilters({
     
     // Return filtered image
     if (onFilterApply) {
-      canvas.toBlob(blob => {
+      canvas.toBlob(async (blob) => {
         const url = URL.createObjectURL(blob);
-        onFilterApply(url, filter.id);
+        onFilterApply(url, filter.id, blob);
       });
     }
     

@@ -3,6 +3,7 @@ import { Canvas, useFrame } from '@react-three/fiber';
 import { OrbitControls, Grid, TransformControls, PerspectiveCamera, useGLTF } from '@react-three/drei';
 import * as THREE from 'three';
 import './VRARStudio.css';
+import { saveFileWithDialog, FILE_TYPES } from '../utils/fileSaveDialog';
 
 /**
  * VRARStudio - Professional 3D/VR/AR Studio
@@ -274,7 +275,7 @@ export default function VRARStudio() {
     }
   };
 
-  const exportProject = (format) => {
+  const exportProject = async (format) => {
     if (!project) return;
 
     const sceneData = {
@@ -285,12 +286,8 @@ export default function VRARStudio() {
     };
 
     const blob = new Blob([JSON.stringify(sceneData, null, 2)], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `${project.name}_${format}.json`;
-    a.click();
-    URL.revokeObjectURL(url);
+    const suggestedName = `${project.name}_${format}.json`;
+    await saveFileWithDialog(blob, suggestedName, { types: [FILE_TYPES.TEXT] });
   };
 
   const preview360 = () => {
