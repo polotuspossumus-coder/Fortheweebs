@@ -29,10 +29,12 @@ cron.schedule(CRON_SCHEDULE, async () => {
 console.log(`⏰ Cron job scheduled: ${CRON_SCHEDULE} (Annually on January 1st at midnight)`);
 console.log('💡 To test immediately, run: node scripts/extend-receipt-retention.js\n');
 
-// Keep process alive
-process.on('SIGINT', () => {
-  console.log('\n👋 Scheduler shutting down gracefully...');
-  process.exit(0);
-});
+// Only exit if this is run standalone (not imported by server.js)
+if (require.main === module) {
+  process.on('SIGINT', () => {
+    console.log('\n👋 Scheduler shutting down gracefully...');
+    process.exit(0);
+  });
+}
 
 module.exports = { CRON_SCHEDULE };
