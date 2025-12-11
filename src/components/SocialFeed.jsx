@@ -498,12 +498,88 @@ export const SocialFeed = ({ userId, userTier }) => {
 
             {showCGITools && access.hasCGI.basic && (
               <div className="cgi-tools-panel">
-                <h4>🎨 CGI Tools</h4>
-                <div className="cgi-options">
-                  <button>🌈 Background Effects</button>
-                  <button>✨ Filters</button>
-                  <button>👻 AR Stickers</button>
-                  <button>🎭 Face Filters</button>
+                <h4>🎨 CGI Tools & Effects</h4>
+                <div className="cgi-categories">
+                  <div className="effect-category">
+                    <h5>🌈 Background Effects</h5>
+                    <div className="cgi-options">
+                      <button className="effect-btn" onClick={() => setNewPostContent(newPostContent + ' [Effect: Starry Night Sky]')}>⭐ Starry Night</button>
+                      <button className="effect-btn" onClick={() => setNewPostContent(newPostContent + ' [Effect: Cherry Blossom]')}>🌸 Cherry Blossom</button>
+                      <button className="effect-btn" onClick={() => setNewPostContent(newPostContent + ' [Effect: Neon City]')}>🌃 Neon City</button>
+                      <button className="effect-btn" onClick={() => setNewPostContent(newPostContent + ' [Effect: Beach Sunset]')}>🏖️ Beach Sunset</button>
+                      <button className="effect-btn" onClick={() => setNewPostContent(newPostContent + ' [Effect: Northern Lights]')}>✨ Northern Lights</button>
+                      <button className="effect-btn" onClick={() => setNewPostContent(newPostContent + ' [Effect: Space Galaxy]')}>🌌 Space Galaxy</button>
+                    </div>
+                  </div>
+                  
+                  <div className="effect-category">
+                    <h5>✨ Filters & Color Grading</h5>
+                    <div className="cgi-options">
+                      <button className="effect-btn" onClick={() => setNewPostContent(newPostContent + ' [Filter: Anime Style]')}>🎌 Anime Style</button>
+                      <button className="effect-btn" onClick={() => setNewPostContent(newPostContent + ' [Filter: Vintage Film]')}>📽️ Vintage Film</button>
+                      <button className="effect-btn" onClick={() => setNewPostContent(newPostContent + ' [Filter: Cyberpunk Neon]')}>⚡ Cyberpunk</button>
+                      <button className="effect-btn" onClick={() => setNewPostContent(newPostContent + ' [Filter: Soft Glow]')}>💫 Soft Glow</button>
+                      <button className="effect-btn" onClick={() => setNewPostContent(newPostContent + ' [Filter: High Contrast]')}>🎯 High Contrast</button>
+                      <button className="effect-btn" onClick={() => setNewPostContent(newPostContent + ' [Filter: Black & White]')}>⚪ B&W</button>
+                      <button className="effect-btn" onClick={() => setNewPostContent(newPostContent + ' [Filter: Sepia Tone]')}>🟫 Sepia</button>
+                      <button className="effect-btn" onClick={() => setNewPostContent(newPostContent + ' [Filter: Retro Waves]')}>🌊 Retro Waves</button>
+                    </div>
+                  </div>
+
+                  <div className="effect-category">
+                    <h5>👻 AR Stickers & Elements</h5>
+                    <div className="cgi-options">
+                      <button className="effect-btn" onClick={() => setNewPostContent(newPostContent + ' [AR: Cute Cat Ears]')}>🐱 Cat Ears</button>
+                      <button className="effect-btn" onClick={() => setNewPostContent(newPostContent + ' [AR: Sparkles]')}>✨ Sparkles</button>
+                      <button className="effect-btn" onClick={() => setNewPostContent(newPostContent + ' [AR: Hearts]')}>💕 Hearts</button>
+                      <button className="effect-btn" onClick={() => setNewPostContent(newPostContent + ' [AR: Stars]')}>⭐ Stars</button>
+                      <button className="effect-btn" onClick={() => setNewPostContent(newPostContent + ' [AR: Butterfly Wings]')}>🦋 Butterfly Wings</button>
+                      <button className="effect-btn" onClick={() => setNewPostContent(newPostContent + ' [AR: Angel Halo]')}>😇 Angel Halo</button>
+                      <button className="effect-btn" onClick={() => setNewPostContent(newPostContent + ' [AR: Devil Horns]')}>😈 Devil Horns</button>
+                      <button className="effect-btn" onClick={() => setNewPostContent(newPostContent + ' [AR: Crown]')}>👑 Crown</button>
+                    </div>
+                  </div>
+
+                  <div className="effect-category">
+                    <h5>🎭 Face Filters</h5>
+                    <div className="cgi-options">
+                      <button className="effect-btn" onClick={() => setNewPostContent(newPostContent + ' [Face: Beauty Filter]')}>💅 Beauty Filter</button>
+                      <button className="effect-btn" onClick={() => setNewPostContent(newPostContent + ' [Face: Big Eyes]')}>👁️ Big Eyes</button>
+                      <button className="effect-btn" onClick={() => setNewPostContent(newPostContent + ' [Face: Smooth Skin]')}>✨ Smooth Skin</button>
+                      <button className="effect-btn" onClick={() => setNewPostContent(newPostContent + ' [Face: Rosy Cheeks]')}>🌹 Rosy Cheeks</button>
+                      <button className="effect-btn" onClick={() => setNewPostContent(newPostContent + ' [Face: Glitter Makeup]')}>💎 Glitter Makeup</button>
+                      <button className="effect-btn" onClick={() => setNewPostContent(newPostContent + ' [Face: Fantasy Makeup]')}>🎨 Fantasy Makeup</button>
+                    </div>
+                  </div>
+
+                  <div className="effect-category">
+                    <h5>🌟 Special Effects</h5>
+                    <div className="cgi-options">
+                      <button className="effect-btn" onClick={() => setNewPostContent(newPostContent + ' [Effect: Light Rays]')}>☀️ Light Rays</button>
+                      <button className="effect-btn" onClick={() => setNewPostContent(newPostContent + ' [Effect: Particle Burst]')}>💥 Particle Burst</button>
+                      <button className="effect-btn" onClick={() => setNewPostContent(newPostContent + ' [Effect: Motion Blur]')}>💨 Motion Blur</button>
+                      <button className="effect-btn" onClick={() => setNewPostContent(newPostContent + ' [Effect: Hologram]')}>🔷 Hologram</button>
+                      <button className="effect-btn" onClick={() => setNewPostContent(newPostContent + ' [Effect: Glitch]')}>📺 Glitch</button>
+                      <button className="effect-btn" onClick={() => setNewPostContent(newPostContent + ' [Effect: Bokeh]')}>🔆 Bokeh</button>
+                      <button className="effect-btn" onClick={() => setNewPostContent(newPostContent + ' [Effect: Lens Flare]')}>🌟 Lens Flare</button>
+                      <button className="effect-btn" onClick={() => setNewPostContent(newPostContent + ' [Effect: Rain]')}>🌧️ Rain</button>
+                      <button className="effect-btn" onClick={() => setNewPostContent(newPostContent + ' [Effect: Snow]')}>❄️ Snow</button>
+                      <button className="effect-btn" onClick={() => setNewPostContent(newPostContent + ' [Effect: Fire]')}>🔥 Fire</button>
+                    </div>
+                  </div>
+
+                  {access.hasCGI.full && (
+                    <div className="effect-category premium-category">
+                      <h5>💎 Premium CGI (Your Tier Only)</h5>
+                      <div className="cgi-options">
+                        <button className="effect-btn premium" onClick={() => setNewPostContent(newPostContent + ' [Premium: 3D Model Import]')}>🎲 3D Model Import</button>
+                        <button className="effect-btn premium" onClick={() => setNewPostContent(newPostContent + ' [Premium: Custom Shader]')}>⚡ Custom Shader</button>
+                        <button className="effect-btn premium" onClick={() => setNewPostContent(newPostContent + ' [Premium: AI Enhancement]')}>🤖 AI Enhancement</button>
+                        <button className="effect-btn premium" onClick={() => setNewPostContent(newPostContent + ' [Premium: Real-time Tracking]')}>📍 Real-time Tracking</button>
+                        <button className="effect-btn premium" onClick={() => setNewPostContent(newPostContent + ' [Premium: Scene Composition]')}>🎬 Scene Composition</button>
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
             )}

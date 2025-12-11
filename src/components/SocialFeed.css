@@ -228,15 +228,50 @@
 /* CGI Tools Panel */
 .cgi-tools-panel {
   margin-top: 16px;
-  padding: 16px;
+  padding: 20px;
   background: linear-gradient(135deg, rgba(102, 126, 234, 0.05) 0%, rgba(118, 75, 162, 0.05) 100%);
   border: 2px solid #667eea;
-  border-radius: 8px;
+  border-radius: 12px;
+  max-height: 500px;
+  overflow-y: auto;
 }
 
 .cgi-tools-panel h4 {
-  margin: 0 0 12px 0;
+  margin: 0 0 16px 0;
   color: #667eea;
+  font-size: 18px;
+  text-align: center;
+}
+
+.cgi-categories {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.effect-category {
+  background: white;
+  padding: 16px;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+.effect-category h5 {
+  margin: 0 0 12px 0;
+  font-size: 15px;
+  color: #333;
+  border-bottom: 2px solid #f0f0f0;
+  padding-bottom: 8px;
+}
+
+.premium-category {
+  background: linear-gradient(135deg, rgba(255, 215, 0, 0.1) 0%, rgba(255, 165, 0, 0.1) 100%);
+  border: 2px solid #FFD700;
+}
+
+.premium-category h5 {
+  color: #FF8C00;
+  border-bottom-color: #FFD700;
 }
 
 .cgi-options {
@@ -245,19 +280,38 @@
   flex-wrap: wrap;
 }
 
-.cgi-options button {
-  padding: 8px 16px;
+.cgi-options button,
+.effect-btn {
+  padding: 10px 14px;
   background: white;
   border: 2px solid #667eea;
-  border-radius: 6px;
+  border-radius: 8px;
   color: #667eea;
   font-weight: 600;
+  font-size: 13px;
   cursor: pointer;
   transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
 }
 
-.cgi-options button:hover {
+.cgi-options button:hover,
+.effect-btn:hover {
   background: #667eea;
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+.effect-btn.premium {
+  border-color: #FFD700;
+  color: #FF8C00;
+  background: linear-gradient(135deg, #FFF9E6 0%, #FFE4B5 100%);
+}
+
+.effect-btn.premium:hover {
+  background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
   color: white;
 }
 
