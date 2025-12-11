@@ -20,20 +20,29 @@ export async function POST(request) {
       }), { status: 400, headers: { 'Content-Type': 'application/json' } });
     }
 
-    // Create commission (TODO: Save to database)
-    const commission = {
-      id: `comm_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
-      creatorId: userId,
-      title,
-      description: description || '',
-      price,
-      turnaroundDays: turnaroundDays || 7,
-      slots: slots || 1,
-      tags: tags || [],
-      examples: examples || [],
-      createdAt: new Date().toISOString(),
-      status: 'active'
-    };
+    // Create commission in database
+    const { data: commission, error: dbError } = await supabase
+      .from('commissions')
+      .insert({
+        creator_id: userId,
+        title,
+        description: description || '',
+        price_cents: price * 100,
+        turnaround_days: turnaroundDays || 7,
+        slots_available: slots || 1,
+        tags: tags || [],
+        sample_images: examples || []
+      })
+      .select()
+      .single();
+
+    if (dbError) {
+      console.error('Database error:', dbError);
+      return new Response(JSON.stringify({
+        error: 'Database error',
+        details: dbError.message
+      }), { status: 500, headers: { 'Content-Type': 'application/json' } });
+    }
 
     console.log('Commission created:', commission);
 
@@ -58,11 +67,31 @@ export async function POST(request) {
 
 export async function GET(request) {
   try {
-    // TODO: Fetch from database
-    // For now, return empty array (replace mock data)
+    const { searchParams } = new URL(request.url);
+    const creatorId = searchParams.get('creatorId');
+
+    let query = supabase
+      .from('commissions')
+      .select('*')
+      .eq('is_active', true)
+      .order('created_at', { ascending: false });
+
+    if (creatorId) {
+      query = query.eq('creator_id', creatorId);
+    }
+
+    const { data: commissions, error: fetchError } = await query;
+
+    if (fetchError) {
+      return new Response(JSON.stringify({
+        error: 'Database error',
+        details: fetchError.message
+      }), { status: 500, headers: { 'Content-Type': 'application/json' } });
+    }
+
     return new Response(JSON.stringify({
       success: true,
-      commissions: []
+      commissions
     }), {
       status: 200,
       headers: { 'Content-Type': 'application/json' }

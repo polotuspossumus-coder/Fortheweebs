@@ -1,9 +1,15 @@
 import { verify } from 'jsonwebtoken';
 import Anthropic from '@anthropic-ai/sdk';
+import { createClient } from '@supabase/supabase-js';
 
 const anthropic = new Anthropic({
   apiKey: process.env.ANTHROPIC_API_KEY
 });
+
+const supabase = createClient(
+  process.env.SUPABASE_URL,
+  process.env.SUPABASE_SERVICE_KEY
+);
 
 export async function POST(request) {
   try {
@@ -44,18 +50,31 @@ export async function POST(request) {
     const analysisTime = ((Date.now() - startTime) / 1000).toFixed(1);
 
     // Save to database
-    // TODO: Save suggestion to database with analysis results
-    //   await db.suggestions.create({
-    //     userId,
-    //     suggestion,
-    //     ...analysis,
-    //     createdAt: new Date()
-    //   });
+    const { data: savedSuggestion, error: dbError } = await supabase
+      .from('suggestions')
+      .insert({
+        user_id: userId,
+        email: user.email,
+        tier: user.tier || 'free',
+        suggestion,
+        category: analysis.category,
+        priority: analysis.priority,
+        verdict: analysis.status === 'approved' ? 'implement' : 'reject',
+        reasoning: analysis.reasoning,
+        estimated_hours: analysis.estimatedHours,
+        status: analysis.status === 'approved' ? 'approved_implementing' : 'rejected'
+      })
+      .select()
+      .single();
+
+    if (dbError) {
+      console.error('Error saving suggestion:', dbError);
+    }
 
     // If approved, trigger auto-build
-    if (analysis.status === 'approved') {
+    if (analysis.status === 'approved' && savedSuggestion) {
       // Trigger background job to build feature
-      triggerFeatureBuild(suggestion, analysis, userId);
+      triggerFeatureBuild(suggestion, analysis, userId, savedSuggestion.id);
     }
 
     return new Response(
@@ -158,7 +177,7 @@ Respond in JSON format:
   }
 }
 
-async function triggerFeatureBuild(suggestion, analysis, userId) {
+async function triggerFeatureBuild(suggestion, analysis, userId, suggestionId) {
   // This would trigger a background job/workflow to actually build the feature
 
   // Option 1: Create GitHub issue that triggers auto-build workflow
@@ -195,14 +214,16 @@ AI will attempt to build this feature automatically.`,
   }
 
   // Option 2: Add to build queue in database
-  // TODO: Implement database queue
-  //   await db.buildQueue.create({
-  //     userId,
-  //     suggestion,
-  //     analysis,
-  //     status: 'queued',
-  //     priority: analysis.complexity === 'Simple' ? 'high' : 'medium'
-  //   });
+  await supabase
+    .from('build_queue')
+    .insert({
+      suggestion_id: suggestionId,
+      user_id: userId,
+      files_to_create: analysis.filesToCreate || [],
+      files_to_modify: analysis.filesToModify || [],
+      dependencies: analysis.dependencies || [],
+      status: 'queued'
+    });
 
   // Option 3: Send to external build service
   // Could integrate with CI/CD, serverless functions, etc.
@@ -237,23 +258,23 @@ export async function GET(request) {
     const { searchParams } = new URL(request.url);
     const userId = searchParams.get('userId');
 
-    // TODO: Fetch from database
-    //   const suggestions = await db.suggestions.find({ userId }).sort({ createdAt: -1 });
+    // Fetch from database
+    const { data: suggestions, error: fetchError } = await supabase
+      .from('suggestions')
+      .select('*')
+      .eq('user_id', userId)
+      .order('created_at', { ascending: false });
 
-    // Mock data for now
-    const suggestions = [
-      {
-        id: 1,
-        userId,
-        title: 'Multi-platform streaming',
-        description: 'Stream to Twitch and YouTube simultaneously',
-        status: 'completed',
-        feasibilityScore: 95,
-        createdAt: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
-        upvotes: 42,
-        deployedUrl: '/streaming'
-      }
-    ];
+    if (fetchError) {
+      console.error('Database error fetching suggestions:', fetchError);
+      return new Response(
+        JSON.stringify({ error: 'Database error', suggestions: [] }),
+        {
+          status: 500,
+          headers: { 'Content-Type': 'application/json' }
+        }
+      );
+    }
 
     return new Response(
       JSON.stringify({ suggestions }),

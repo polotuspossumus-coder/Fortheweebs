@@ -1,6 +1,13 @@
 // Verify payment and unlock tool
 // Called after successful Stripe payment
 
+import { createClient } from '@supabase/supabase-js';
+
+const supabase = createClient(
+  process.env.SUPABASE_URL,
+  process.env.SUPABASE_SERVICE_KEY
+);
+
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
@@ -38,28 +45,31 @@ export default async function handler(req, res) {
       });
     }
 
-    // TODO: Save unlock to database
-    // For now, we'll let the frontend handle localStorage
-    // In production, save to database here:
-    /*
+    // Save unlock to database
     const { data, error } = await supabase
       .from('tool_unlocks')
       .insert({
         user_id: userId,
         tool_id: toolId,
         payment_method: 'card',
-        amount: paymentIntent.amount / 100,
-        stripe_payment_intent_id: paymentIntentId,
-        unlocked_at: new Date().toISOString()
-      });
-    */
+        amount_paid_cents: paymentIntent.amount,
+        stripe_payment_intent_id: paymentIntentId
+      })
+      .select()
+      .single();
+
+    if (error) {
+      console.error('Database error saving tool unlock:', error);
+      // Continue anyway - frontend has localStorage backup
+    }
 
     return res.status(200).json({
       success: true,
       message: 'Tool unlocked successfully',
       toolId,
       userId,
-      amount: paymentIntent.amount / 100
+      amount: paymentIntent.amount / 100,
+      unlockId: data?.id
     });
   } catch (error) {
     console.error('Unlock verification error:', error);

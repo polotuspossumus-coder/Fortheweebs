@@ -7,6 +7,13 @@ import Stripe from 'stripe';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || 'sk_test_PLACEHOLDER');
 
+import { createClient } from '@supabase/supabase-js';
+
+const supabase = createClient(
+  process.env.SUPABASE_URL,
+  process.env.SUPABASE_SERVICE_KEY
+);
+
 export async function POST(request) {
   try {
     const { creatorId, amount, message, currency = 'usd' } = await request.json();
@@ -37,7 +44,22 @@ export async function POST(request) {
       description: `Tip for creator ${creatorId}`
     });
 
-    // Store tip in database (TODO: Add database integration)
+    // Store tip in database
+    const { error: dbError } = await supabase
+      .from('tips')
+      .insert({
+        from_user_id: userId,
+        creator_id: creatorId,
+        amount_cents: amount * 100,
+        message: message || null,
+        stripe_payment_intent_id: paymentIntent.id,
+        status: 'pending'
+      });
+
+    if (dbError) {
+      console.error('Error saving tip to database:', dbError);
+    }
+
     console.log('Tip payment intent created:', {
       paymentIntentId: paymentIntent.id,
       creatorId,
