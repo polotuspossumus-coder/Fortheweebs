@@ -15,12 +15,18 @@ if (!supabaseUrl || !supabaseAnonKey) {
 
 console.log('🔌 Supabase initializing...', supabaseUrl ? 'URL present' : 'URL missing');
 
-export const supabase = supabaseUrl && supabaseAnonKey 
-  ? createClient(supabaseUrl, supabaseAnonKey, {
+// Create a single instance to prevent multiple GoTrueClient warnings
+let supabaseInstance = null;
+
+export const supabase = (() => {
+  if (!supabaseInstance && supabaseUrl && supabaseAnonKey) {
+    supabaseInstance = createClient(supabaseUrl, supabaseAnonKey, {
       auth: {
         autoRefreshToken: true,
         persistSession: true,
         detectSessionInUrl: true
       }
-    })
-  : null;
+    });
+  }
+  return supabaseInstance;
+})();

@@ -300,6 +300,11 @@ CREATE POLICY "Users can update own profile"
   ON public.profiles FOR UPDATE
   USING (auth.uid() = user_id);
 
+-- Users can insert their own profile
+CREATE POLICY "Users can create own profile"
+  ON public.profiles FOR INSERT
+  WITH CHECK (auth.uid() = user_id);
+
 -- Everyone can read public posts
 CREATE POLICY "Public posts viewable by everyone"
   ON public.posts FOR SELECT

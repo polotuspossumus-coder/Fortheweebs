@@ -272,6 +272,9 @@ const routes = [
     { path: '/api/debugger-to-cloud', file: './src/routes/debugger-to-cloud', name: 'Cloud Bug Fixer' },
     { path: '/api/issues', file: './api/issues', name: 'Issues' },
     { path: '/api/bug-fixer', file: './api/bug-fixer', name: 'Bug Fixer (Auto Error Tracking)' },
+    
+    // User Activity
+    { path: '/api/user', file: './api/user-activity', name: 'User Activity' },
 
     // New Feature APIs (Nov 26, 2025 Update)
     // REMOVED DUPLICATE: { path: '/api/moderation', file: './api/moderation', name: 'Community Moderation System' },
