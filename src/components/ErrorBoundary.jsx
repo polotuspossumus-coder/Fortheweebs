@@ -13,7 +13,7 @@ export class ErrorBoundary extends React.Component {
   componentDidCatch(error, errorInfo) {
     console.error('Error caught by boundary:', error, errorInfo);
 
-    // Log error to server for monitoring in production
+    // Log error to server for monitoring in production (only if API is available)
     if (typeof window !== 'undefined' && window.location.hostname !== 'localhost') {
       try {
         fetch('/api/log-error', {
@@ -27,9 +27,13 @@ export class ErrorBoundary extends React.Component {
             userAgent: navigator.userAgent,
             timestamp: new Date().toISOString()
           })
-        }).catch(err => console.error('Failed to log error:', err));
+        }).catch(err => {
+          // Silently fail if error logging endpoint doesn't exist
+          console.debug('Error logging endpoint not available');
+        });
       } catch (err) {
-        console.error('Error logging failed:', err);
+        // Silently fail
+        console.debug('Error logging failed');
       }
     }
   }
