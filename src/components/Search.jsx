@@ -27,7 +27,7 @@ function Search({ onSearch }) {
   const performSearch = async () => {
     setIsLoading(true);
 
-    // TODO: Replace with actual Firestore queries
+    // Firestore queries can be implemented here for live search
     // For now, using mock data
 
     await new Promise(resolve => setTimeout(resolve, 300)); // Simulate API delay

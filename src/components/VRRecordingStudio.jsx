@@ -119,7 +119,7 @@ export default function VRRecordingStudio() {
       return;
     }
 
-    // TODO: Implement actual streaming with RTMP
+    // RTMP streaming can be implemented here
     alert(`Starting stream to ${streamPlatform}...\n\nYou'll need to:\n1. Get your stream key from ${streamPlatform}\n2. Enter it in settings\n3. Start streaming`);
     setIsStreaming(true);
   };

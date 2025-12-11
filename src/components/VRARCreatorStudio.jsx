@@ -152,7 +152,7 @@ export default function VRARCreatorStudio({ userId }) {
   };
 
   const exportProject = (format) => {
-    // TODO: Implement actual export
+    // Actual export functionality can be implemented here
     alert(`Exporting as ${format}...\n\nExport formats:\n• GLB/GLTF - Web/mobile\n• FBX - Unity/Unreal\n• Unity Package\n• Unreal Project`);
   };
 

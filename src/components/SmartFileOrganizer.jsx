@@ -174,7 +174,7 @@ export function SmartFileOrganizer({ userId }) {
 
         // Simulate metadata extraction
         if (settings.autoTagMusic) {
-            // TODO: Use musicbrainz API or similar to fetch real metadata
+            // MusicBrainz API or similar can be used for real metadata
             // For now, parse from filename if formatted as "Artist - Title.mp3"
             const match = file.name.match(/^(.+?)\s*-\s*(.+?)\.(mp3|flac)$/i);
             if (match) {

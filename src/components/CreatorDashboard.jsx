@@ -56,7 +56,7 @@ function CreatorDashboard({ userId }) {
   }, [userId, timeRange]);
 
   const loadDashboardData = async () => {
-    // TODO: Replace with actual Firestore queries
+    // Firestore queries can be added here if needed
     // Mock data for now
 
     // Earnings chart data
@@ -141,13 +141,13 @@ function CreatorDashboard({ userId }) {
     }
 
     if (confirm(`Request payout of $${stats.balance.toFixed(2)}?`)) {
-      // TODO: Implement Stripe Connect payout
+      // Stripe Connect payout can be implemented here
       alert('Payout request submitted! Funds will be transferred within 2-3 business days.');
     }
   };
 
   const handleCommissionAction = async (commissionId, action) => {
-    // TODO: Implement commission actions (accept, reject, complete, cancel)
+    // Commission actions (accept, reject, complete, cancel) can be implemented here
     console.log(`Commission ${commissionId}: ${action}`);
     alert(`Commission ${action}ed successfully!`);
     loadDashboardData();

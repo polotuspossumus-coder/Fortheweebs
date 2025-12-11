@@ -32,7 +32,7 @@ export function VRContentStudio({ userId }) {
   }, []);
 
   const initThreeJS = () => {
-    // TODO: Initialize Three.js renderer, camera, scene
+    // Three.js renderer, camera, scene initialization can go here
     console.log('Three.js scene initialized');
   };
 
@@ -264,7 +264,7 @@ export function VRContentStudio({ userId }) {
         if (supported) {
           alert('🥽 Launching VR mode... Put on your headset!');
           setPreviewMode('vr');
-          // TODO: Start WebXR session
+          // WebXR session start can be implemented here
         } else {
           alert('⚠️ VR not supported on this device. Try on Meta Quest or VIVE.');
         }

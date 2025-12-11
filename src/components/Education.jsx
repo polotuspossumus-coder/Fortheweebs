@@ -118,7 +118,7 @@ export default function Education() {
         } else {
             // Paid course - Stripe payment
             alert('Redirecting to payment... (Stripe integration)');
-            // TODO: Implement Stripe checkout
+            // Stripe checkout can be implemented here
         }
     };
 

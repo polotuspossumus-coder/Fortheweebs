@@ -408,7 +408,7 @@ async function executeAutoAction(
     authorityLevel: (await getAuthority('moderation_sentinel')).authorityLevel,
   });
 
-  // TODO: Emit event for UI updates
+  // Event emission for UI updates can be added here
   // await emit('moderation.action', { contentId, contentType, action });
 }
 

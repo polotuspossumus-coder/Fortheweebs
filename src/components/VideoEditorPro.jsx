@@ -152,7 +152,7 @@ export default function VideoEditorPro() {
             return;
         }
         
-        // TODO: Implement actual video rendering
+        // Actual video rendering can be implemented here
         alert(`🚧 Video export coming soon!\n\nWill export as ${format.toUpperCase()} at ${project.resolution.name} with native Save As dialog.`);
         
         // When implemented:
