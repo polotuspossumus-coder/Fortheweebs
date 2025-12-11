@@ -164,13 +164,14 @@ async function createTestPost(userId) {
   return await testAPIEndpoint('/post', 'POST', postData);
 }
 
-async function testLikePost(postId) {
+async function testLikePost(postId, userId) {
   log('🔍', 'Testing like functionality...', colors.blue);
   
   try {
     const response = await fetch(`${API_BASE}/post/${postId}/like`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' }
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ userId })
     });
 
     const data = await response.json();
@@ -234,7 +235,7 @@ async function runTests() {
       // Test 6: Like the post
       if (post.id || post.post?.id) {
         const postId = post.id || post.post.id;
-        const liked = await testLikePost(postId);
+        const liked = await testLikePost(postId, userId);
         liked ? passed++ : failed++;
       }
     } else {

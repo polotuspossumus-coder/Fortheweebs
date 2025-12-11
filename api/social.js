@@ -32,9 +32,24 @@ router.get('/feed', async (req, res) => {
             return res.json({ posts: [], count: 0 });
         }
 
+        // Format posts to match frontend expectations
+        const formattedPosts = posts.map(post => ({
+            id: post.id,
+            userId: post.author_id,
+            userName: 'User',
+            avatar: '👤',
+            content: post.content,
+            visibility: post.visibility,
+            mediaUrl: post.media_urls?.[0] || null,
+            timestamp: post.created_at,
+            likesCount: post.likes,
+            commentsCount: post.comments_count,
+            sharesCount: post.shares
+        }));
+
         res.json({
-            posts: posts || [],
-            count: posts?.length || 0
+            posts: formattedPosts || [],
+            count: formattedPosts?.length || 0
         });
     } catch (error) {
         console.error('Feed error:', error);
@@ -132,22 +147,23 @@ router.get('/search', async (req, res) => {
  */
 router.post('/post', async (req, res) => {
     try {
-        const { userId, content, visibility = 'public', mediaUrl = null } = req.body;
+        const { userId, content, visibility = 'PUBLIC', mediaUrl = null } = req.body;
 
         if (!userId || !content) {
             return res.status(400).json({ error: 'Missing required fields: userId and content' });
         }
 
-        // Create post object
+        // Create post object matching actual database schema
         const postData = {
-            user_id: userId,
+            author_id: userId, // Schema uses author_id, not user_id
             content: content,
-            visibility: visibility.toLowerCase(),
-            media_url: mediaUrl,
+            visibility: visibility.toUpperCase(), // Schema expects uppercase
+            media_urls: mediaUrl ? [mediaUrl] : [], // Schema uses array
             created_at: new Date().toISOString(),
-            likes_count: 0,
+            likes: 0, // Schema uses 'likes' not 'likes_count'
             comments_count: 0,
-            shares_count: 0
+            shares: 0, // Schema uses 'shares' not 'shares_count'
+            views: 0
         };
 
         // Try to insert into database
@@ -162,6 +178,7 @@ router.post('/post', async (req, res) => {
             // Return mock post if database fails
             const mockPost = {
                 id: Date.now(),
+                user_id: userId,
                 ...postData,
                 userName: 'User',
                 avatar: '👤',
@@ -173,11 +190,24 @@ router.post('/post', async (req, res) => {
         // Format response to match frontend expectations
         const formattedPost = {
             id: post.id,
-            userId: post.user_id,
+            userId: post.author_id,
             userName: 'User',
             avatar: '👤',
             content: post.content,
             visibility: post.visibility,
+            mediaUrl: post.media_urls?.[0] || null,
+            timestamp: post.created_at,
+            likesCount: post.likes,
+            commentsCount: post.comments_count,
+            sharesCount: post.shares
+        };
+
+        res.json({ post: formattedPost });
+    } catch (error) {
+        console.error('Post creation error:', error);
+        res.status(500).json({ error: error.message });
+    }
+});
             timestamp: post.created_at,
             likes: post.likes_count || 0,
             commentsCount: post.comments_count || 0,
