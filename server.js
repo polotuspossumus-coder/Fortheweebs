@@ -375,7 +375,7 @@ const routes = [
     
     // 💼 MARKETING & BUSINESS TOOLS (Agency-Crushing)
     { path: '/api/ads', file: './api/ai-ad-generator', name: '📢 AI Ad Generator (AdCreative/Copy.ai/Jasper Killer)' },
-    { path: '/api/social', file: './api/ai-social-scheduler', name: '📅 Social Media Scheduler (Buffer/Hootsuite $1,332/year → FREE)' },
+    { path: '/api/social-scheduler', file: './api/ai-social-scheduler', name: '📅 Social Media Scheduler (Buffer/Hootsuite $1,332/year → FREE)' },
     { path: '/api/meme', file: './api/ai-meme-generator', name: '😂 AI Meme Generator (Imgflip/Kapwing Killer)' },
     { path: '/api/product-photo', file: './api/ai-product-photography', name: '📸 AI Product Photography (Pebblely $480/year → FREE)' },
     
