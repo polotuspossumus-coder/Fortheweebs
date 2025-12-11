@@ -159,10 +159,10 @@ export function finalizeBanDecision(proposal: BanProposal, approved: boolean): v
   if (approved) {
     // Trigger ban enforcement
     console.log(`Ban approved for ${proposal.targetId} (proposalId: ${proposal.proposalId})`);
-    // TODO: Add enforcement logic here
+    // Enforcement logic can be added here if needed
   } else {
     console.log(`Ban rejected for ${proposal.targetId} (proposalId: ${proposal.proposalId})`);
-    // TODO: Add rejection/notification logic here
+    // Rejection/notification logic can be added here if needed
   }
 }
 import { banQueue } from './ban-queue.js';

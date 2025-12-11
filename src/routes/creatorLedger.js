@@ -6,7 +6,8 @@ router.get("/creator/:id/codex", (req, res) => {
   res.json({ entries });
 });
 // --- Tier Badges Utility ---
-// TODO: Move to src/utils/creatorBadges.js for reuse
+// Badge system for creator achievements and milestones
+// Can be moved to src/utils/creatorBadges.js for better reuse
 const tierBadges = {
   Founding25: {
     label: "Founding Creator",

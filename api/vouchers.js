@@ -2,6 +2,7 @@
 const express = require('express');
 const router = express.Router();
 const { createClient } = require('@supabase/supabase-js');
+const { SESClient, SendEmailCommand } = require('@aws-sdk/client-ses');
 const crypto = require('crypto');
 
 // Initialize Supabase client
@@ -10,6 +11,16 @@ const supabase = createClient(
   process.env.SUPABASE_SERVICE_KEY || process.env.VITE_SUPABASE_ANON_KEY
 );
 
+// Initialize SES
+const sesClient = new SESClient({
+  region: process.env.AWS_REGION || 'us-east-2',
+  credentials: {
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
+  }
+});
+
+const FROM_EMAIL = process.env.FROM_EMAIL || 'noreply@fortheweebs.com';
 const TOTAL_VOUCHERS = 100;
 
 // Helper function to generate voucher code
@@ -28,30 +39,80 @@ function generateFingerprint(req) {
 
 // Helper function to send voucher email
 async function sendVoucherEmail(email, voucherCode, voucherType) {
-  // TODO: Integrate with email service
-  console.log('Sending voucher email:', { email, voucherCode, voucherType });
-  
   const discountText = voucherType === '15percent' 
     ? '15% off any subscription tier'
     : '25% off the $1,000 elite tier';
   
-  // Example email content
-  const emailContent = {
-    to: email,
-    subject: `Your ForTheWeebs Launch Voucher: ${voucherCode}`,
-    html: `
-      <h2>Your Exclusive Launch Voucher!</h2>
-      <p>Congratulations! You're one of the first 100 visitors to fortheweebs.com.</p>
-      <p><strong>Your Voucher Code:</strong> <code style="font-size: 1.5em; color: #e94560;">${voucherCode}</code></p>
-      <p><strong>Discount:</strong> ${discountText}</p>
-      <p>Use this code when creating your subscription to claim your discount.</p>
-      <p>This voucher expires in 30 days.</p>
-      <a href="https://fortheweebs.com/signup">Sign Up Now</a>
-    `
+  const params = {
+    Source: `FORTHEWEEBS Launch Vouchers <${FROM_EMAIL}>`,
+    Destination: {
+      ToAddresses: [email]
+    },
+    Message: {
+      Subject: {
+        Data: `🎉 Your ForTheWeebs Launch Voucher: ${voucherCode}`,
+        Charset: 'UTF-8'
+      },
+      Body: {
+        Html: {
+          Data: `
+            <!DOCTYPE html>
+            <html>
+              <head>
+                <style>
+                  body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+                  .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+                  .header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px; text-align: center; border-radius: 10px 10px 0 0; }
+                  .voucher-code { background: white; color: #e94560; padding: 20px; border-radius: 8px; font-family: monospace; font-size: 24px; text-align: center; margin: 20px 0; font-weight: bold; }
+                  .content { background: #f8f9fa; padding: 30px; border-radius: 0 0 10px 10px; }
+                  .button { display: inline-block; padding: 12px 30px; background: #667eea; color: white; text-decoration: none; border-radius: 6px; margin: 10px 0; }
+                  .footer { text-align: center; color: #666; font-size: 12px; margin-top: 30px; }
+                </style>
+              </head>
+              <body>
+                <div class="container">
+                  <div class="header">
+                    <h1>🎊 Your Exclusive Launch Voucher!</h1>
+                  </div>
+                  <div class="content">
+                    <p>Congratulations! You're one of the first 100 visitors to <strong>ForTheWeebs.com</strong>.</p>
+                    
+                    <div class="voucher-code">${voucherCode}</div>
+                    
+                    <p><strong>Your Discount:</strong> ${discountText}</p>
+                    
+                    <p>Use this code when creating your subscription to claim your exclusive early-adopter discount.</p>
+                    
+                    <p><strong>⏰ Expires in 30 days</strong></p>
+                    
+                    <div style="text-align: center; margin: 30px 0;">
+                      <a href="https://fortheweebs.com/signup" class="button">Sign Up Now</a>
+                    </div>
+                    
+                    <div class="footer">
+                      <p>FORTHEWEEBS - Creator-First Platform</p>
+                      <p>You're receiving this because you visited our launch page.</p>
+                    </div>
+                  </div>
+                </div>
+              </body>
+            </html>
+          `,
+          Charset: 'UTF-8'
+        }
+      }
+    }
   };
-  
-  // In production, integrate with SendGrid/AWS SES/etc.
-  return { success: true };
+
+  try {
+    const command = new SendEmailCommand(params);
+    await sesClient.send(command);
+    console.log('Voucher email sent successfully:', { email, voucherCode });
+    return { success: true };
+  } catch (error) {
+    console.error('Error sending voucher email:', error);
+    return { success: false, error: error.message };
+  }
 }
 
 // Check voucher availability

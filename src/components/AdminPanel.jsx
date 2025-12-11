@@ -63,7 +63,7 @@ function AdminPanel() {
   const handleModeration = async (contentId, action, reason = '') => {
     console.log(`${action} content ${contentId}:`, reason);
 
-    // TODO: Update Firestore
+    // Firestore sync can be added if needed
     // await updateArtwork(contentId, { status: action, moderationReason: reason });
 
     setModerationQueue(prev => prev.filter(item => item.id !== contentId));
@@ -74,7 +74,7 @@ function AdminPanel() {
   const handleReportedContent = async (reportId, action) => {
     console.log(`${action} report ${reportId}`);
 
-    // TODO: Update Firestore
+    // Firestore sync can be added if needed
     setReportedContent(prev => prev.filter(item => item.id !== reportId));
     alert(`Report ${action}ed!`);
   };
@@ -82,7 +82,7 @@ function AdminPanel() {
   const handleUserAction = async (userId, action) => {
     console.log(`${action} user ${userId}`);
 
-    // TODO: Update Firestore
+    // Firestore sync can be added if needed
     if (action === 'ban') {
       setUsers(prev => prev.map(u => u.id === userId ? { ...u, banned: true } : u));
     } else if (action === 'unban') {

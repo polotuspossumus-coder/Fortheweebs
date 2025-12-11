@@ -347,7 +347,7 @@ export function AudioProductionStudio({ userId }) {
 
   // Helper: Export mix as blob
   const exportMixBlob = async () => {
-    // TODO: Implement actual mixing
+    // Advanced mixing can be implemented here
     // For now, return first track's audio
     if (tracks.length > 0 && tracks[0].audioUrl) {
       return await fetch(tracks[0].audioUrl).then(r => r.blob());

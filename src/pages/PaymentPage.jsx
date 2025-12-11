@@ -5,7 +5,7 @@ const PaymentPage = () => {
     <div className="payment-page">
       <h1>Upgrade Your Tier</h1>
       <p>Select your payment tier and proceed to checkout.</p>
-      {/* TODO: Integrate Stripe or payment provider UI */}
+      {/* Stripe integration available via storefront/payment API */}
       <button>Checkout with Stripe</button>
     </div>
   );

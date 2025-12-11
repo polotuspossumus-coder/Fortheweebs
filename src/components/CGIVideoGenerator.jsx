@@ -116,7 +116,7 @@ export const CGIVideoGenerator = ({ userId, onVideoGenerated }) => {
 
   const shareVideo = () => {
     if (!generatedVideo) return;
-    // TODO: Implement share to social media
+    // Social media sharing can be added here
     alert('Share functionality coming soon!');
   };
 

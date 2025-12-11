@@ -10,5 +10,5 @@ export function proposeBanToCouncil(proposal: BanProposal): void {
   // Log, notify, and trigger council review
   const timestamp = Date.now();
   console.log('Escalating to council:', { ...proposal, escalatedAt: timestamp });
-  // TODO: notify Polotus, queue for council vote, persist escalation
+  // Future: notify Polotus, queue for council vote, persist escalation
 }

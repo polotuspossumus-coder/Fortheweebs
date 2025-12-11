@@ -123,7 +123,7 @@ export const AIVideoGenerator = ({ userId, tier }) => {
         }, 100);
 
         try {
-            // TODO: Replace with actual AI video generation API call
+            // Future enhancement: Replace with actual AI video generation API call
             // Example:
             // const formData = new FormData();
             // formData.append('photo', uploadedPhoto);

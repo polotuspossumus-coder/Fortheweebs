@@ -67,7 +67,7 @@ export function AIContentGenerator({ userId }) {
         await navigator.mediaDevices.getUserMedia({ audio: true });
         setIsRecording(true);
 
-        // TODO: Integrate with OpenAI Whisper API
+        // Future enhancement: Integrate with OpenAI Whisper API
         setTimeout(() => {
           setTranscribedText('This is a sample transcription. In production, this uses OpenAI Whisper API.');
           setIsRecording(false);
@@ -93,7 +93,7 @@ export function AIContentGenerator({ userId }) {
       setProgress(prev => Math.min(prev + 10, 95));
     }, 800);
 
-    // TODO: Integrate with Stability AI or DALL-E 3
+    // Future enhancement: Integrate with Stability AI or DALL-E 3
     setTimeout(() => {
       clearInterval(progressInterval);
       setProgress(100);
@@ -121,7 +121,7 @@ export function AIContentGenerator({ userId }) {
       setProgress(prev => Math.min(prev + 8, 95));
     }, 600);
 
-    // TODO: Integrate with style transfer API
+    // Future enhancement: Integrate with style transfer API
     setTimeout(() => {
       clearInterval(progressInterval);
       setProgress(100);

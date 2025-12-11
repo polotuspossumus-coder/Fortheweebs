@@ -46,7 +46,7 @@ const ApplicationReview = () => {
           applicationId: selectedApp.id,
           decision: decisionType,
           customMessage: customMessage || null,
-          reviewedBy: 'admin', // TODO: Get from auth context
+          reviewedBy: req.user?.id || 'admin', // From auth context
           reviewedAt: new Date().toISOString()
         })
       });

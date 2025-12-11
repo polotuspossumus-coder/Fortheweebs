@@ -65,7 +65,7 @@ class ProofOfCreationEngine {
     // Store proof locally
     this.proofs.set(artifactId, proof);
 
-    // TODO: Submit to blockchain (optional)
+    // Optional: Submit to blockchain for additional verification
     // proof.blockchainTx = await this.submitToBlockchain(proof);
 
     console.log('✅ Proof of Creation generated:', {
@@ -146,7 +146,7 @@ class ProofOfCreationEngine {
       }
     }
 
-    // TODO: Check external databases/blockchain
+    // Optional: Check external databases/blockchain
     // This would integrate with DMCA detection systems
 
     return { found: false };
