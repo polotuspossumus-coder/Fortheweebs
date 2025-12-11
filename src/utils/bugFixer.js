@@ -3,7 +3,7 @@
  * Monitors the entire app for errors and automatically reports them
  */
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001';
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 
 /**
  * Capture screenshot of current page (simplified - no external dependencies)

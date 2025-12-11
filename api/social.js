@@ -260,6 +260,165 @@ router.delete('/unfollow', async (req, res) => {
     }
 });
 
+/**
+ * POST /api/social/post/:postId/like
+ * Like a post
+ */
+router.post('/post/:postId/like', async (req, res) => {
+    try {
+        const { postId } = req.params;
+        const { userId } = req.body;
+
+        if (!userId) {
+            return res.status(400).json({ error: 'userId required' });
+        }
+
+        // Check if already liked
+        const { data: existing } = await supabase
+            .from('likes')
+            .select('id')
+            .eq('user_id', userId)
+            .eq('post_id', postId)
+            .single();
+
+        if (existing) {
+            return res.json({ success: true, message: 'Already liked' });
+        }
+
+        // Insert like
+        const { error } = await supabase
+            .from('likes')
+            .insert({
+                user_id: userId,
+                post_id: postId,
+                created_at: new Date().toISOString()
+            });
+
+        if (error) throw error;
+
+        res.json({ success: true });
+    } catch (error) {
+        console.error('Like error:', error);
+        res.status(500).json({ error: error.message });
+    }
+});
+
+/**
+ * DELETE /api/social/post/:postId/like
+ * Unlike a post
+ */
+router.delete('/post/:postId/like', async (req, res) => {
+    try {
+        const { postId } = req.params;
+        const { userId } = req.body;
+
+        if (!userId) {
+            return res.status(400).json({ error: 'userId required' });
+        }
+
+        const { error } = await supabase
+            .from('likes')
+            .delete()
+            .eq('user_id', userId)
+            .eq('post_id', postId);
+
+        if (error) throw error;
+
+        res.json({ success: true });
+    } catch (error) {
+        console.error('Unlike error:', error);
+        res.status(500).json({ error: error.message });
+    }
+});
+
+/**
+ * POST /api/social/post/:postId/save
+ * Save a post (bookmark)
+ */
+router.post('/post/:postId/save', async (req, res) => {
+    try {
+        const { postId } = req.params;
+        const { userId } = req.body;
+
+        if (!userId) {
+            return res.status(400).json({ error: 'userId required' });
+        }
+
+        // Check if already saved
+        const { data: existing } = await supabase
+            .from('saves')
+            .select('id')
+            .eq('user_id', userId)
+            .eq('post_id', postId)
+            .single();
+
+        if (existing) {
+            return res.json({ success: true, message: 'Already saved' });
+        }
+
+        // Insert save
+        const { error } = await supabase
+            .from('saves')
+            .insert({
+                user_id: userId,
+                post_id: postId,
+                created_at: new Date().toISOString()
+            });
+
+        if (error) throw error;
+
+        res.json({ success: true });
+    } catch (error) {
+        console.error('Save error:', error);
+        res.status(500).json({ error: error.message });
+    }
+});
+
+/**
+ * DELETE /api/social/post/:postId/save
+ * Unsave a post
+ */
+router.delete('/post/:postId/save', async (req, res) => {
+    try {
+        const { postId } = req.params;
+        const { userId } = req.body;
+
+        if (!userId) {
+            return res.status(400).json({ error: 'userId required' });
+        }
+
+        const { error } = await supabase
+            .from('saves')
+            .delete()
+            .eq('user_id', userId)
+            .eq('post_id', postId);
+
+        if (error) throw error;
+
+        res.json({ success: true });
+    } catch (error) {
+        console.error('Unsave error:', error);
+        res.status(500).json({ error: error.message });
+    }
+});
+
+/**
+ * POST /api/social/post/:postId/share
+ * Track post share (analytics)
+ */
+router.post('/post/:postId/share', async (req, res) => {
+    try {
+        const { postId } = req.params;
+
+        // Increment shares_count in posts table (if we add that column)
+        // For now, just acknowledge the share
+        res.json({ success: true, message: 'Share tracked' });
+    } catch (error) {
+        console.error('Share error:', error);
+        res.status(500).json({ error: error.message });
+    }
+});
+
 // Global error handler for all routes
 router.use((error, req, res, next) => {
     console.error('Social API Error:', error);

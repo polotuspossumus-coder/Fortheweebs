@@ -3,7 +3,7 @@ import { useAuth } from '../contexts/AuthContext';
 import { TIERS, getTierName, getTierPrice } from '../utils/tierAccess';
 import { hasVIPAccess, isOwner } from '../utils/vipHelper';
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001/api';
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api';
 
 export default function PricingPage() {
   const { user } = useAuth();
