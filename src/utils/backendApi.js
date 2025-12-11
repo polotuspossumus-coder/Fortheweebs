@@ -1,5 +1,5 @@
 // Backend API Client for ForTheWeebs
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000';
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001';
 
 // Helper to get auth token
 const getAuthToken = () => localStorage.getItem('authToken');
@@ -32,7 +32,7 @@ const apiRequest = async (endpoint, options = {}) => {
 // Auth API
 export const auth = {
   async signup(email, username, password) {
-    const data = await apiRequest('/auth/signup', {
+    const data = await apiRequest('/api/auth/signup', {
       method: 'POST',
       body: JSON.stringify({ email, username, password }),
     });
@@ -43,7 +43,7 @@ export const auth = {
   },
 
   async login(emailOrUsername, password) {
-    const data = await apiRequest('/auth/login', {
+    const data = await apiRequest('/api/auth/login', {
       method: 'POST',
       body: JSON.stringify({ emailOrUsername, password }),
     });
@@ -54,7 +54,7 @@ export const auth = {
   },
 
   async getMe() {
-    return apiRequest('/auth/me');
+    return apiRequest('/api/auth/me');
   },
 
   logout() {
@@ -65,37 +65,37 @@ export const auth = {
 // Relationships API
 export const relationships = {
   async follow(targetUserId) {
-    return apiRequest('/relationships/follow', {
+    return apiRequest('/api/relationships/follow', {
       method: 'POST',
       body: JSON.stringify({ targetUserId })
     });
   },
 
   async unfollow(targetUserId) {
-    return apiRequest(`/relationships/follow/${targetUserId}`, { method: 'DELETE' });
+    return apiRequest(`/api/relationships/follow/${targetUserId}`, { method: 'DELETE' });
   },
 
   async getFollowers() {
-    return apiRequest('/relationships/followers');
+    return apiRequest('/api/relationships/followers');
   },
 
   async getFollowing() {
-    return apiRequest('/relationships/following');
+    return apiRequest('/api/relationships/following');
   },
 
   async sendFriendRequest(targetUserId) {
-    return apiRequest('/relationships/friend-request', {
+    return apiRequest('/api/relationships/friend-request', {
       method: 'POST',
       body: JSON.stringify({ targetUserId })
     });
   },
 
   async acceptFriendRequest(targetUserId) {
-    return apiRequest(`/relationships/friend-request/${targetUserId}/accept`, { method: 'POST' });
+    return apiRequest(`/api/relationships/friend-request/${targetUserId}/accept`, { method: 'POST' });
   },
 
   async removeFriend(friendId) {
-    return apiRequest(`/relationships/friend/${friendId}`, { method: 'DELETE' });
+    return apiRequest(`/api/relationships/friend/${friendId}`, { method: 'DELETE' });
   },
 
   async getFriends() {
@@ -139,30 +139,30 @@ export const subscriptions = {
 // Posts API
 export const posts = {
   async create(postData) {
-    return apiRequest('/posts/create', {
+    return apiRequest('/api/posts', {
       method: 'POST',
       body: JSON.stringify(postData),
     });
   },
 
   async getFeed(limit = 50, offset = 0) {
-    return apiRequest(`/posts/feed?limit=${limit}&offset=${offset}`);
+    return apiRequest(`/api/posts/feed?limit=${limit}&offset=${offset}`);
   },
 
   async getPost(postId) {
-    return apiRequest(`/posts/${postId}`);
+    return apiRequest(`/api/posts/${postId}`);
   },
 
   async like(postId) {
-    return apiRequest(`/posts/${postId}/like`, { method: 'POST' });
+    return apiRequest(`/api/posts/${postId}/like`, { method: 'POST' });
   },
 
   async share(postId) {
-    return apiRequest(`/posts/${postId}/share`, { method: 'POST' });
+    return apiRequest(`/api/posts/${postId}/share`, { method: 'POST' });
   },
 
   async delete(postId) {
-    return apiRequest(`/posts/${postId}`, { method: 'DELETE' });
+    return apiRequest(`/api/posts/${postId}`, { method: 'DELETE' });
   },
 };
 
