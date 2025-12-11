@@ -41,7 +41,6 @@ import MessageBadge from "./messaging/MessageBadge";
 import MessagingSystem from "./messaging/MessagingSystem";
 import AdvancedSearch from "./components/AdvancedSearch";
 import ModerationDashboard from "./components/ModerationDashboard";
-import AnalyticsDashboard from "./components/AnalyticsDashboard";
 import MicoDevPanel from "./components/MicoDevPanel";
 import FAQ from "./components/FAQ";
 import AccountSettings from "./components/AccountSettings";
@@ -164,7 +163,6 @@ export const CreatorDashboard = ({ userId, ipAddress = "127.0.0.1", tier = "free
     <Tabs value={activeTab} onValueChange={setActiveTab} defaultValue="overview" className="dashboard-tabs">
       <TabsList>
         <TabsTrigger value="overview">📊 Overview</TabsTrigger>
-        <TabsTrigger value="analytics">📈 Analytics</TabsTrigger>
         <TabsTrigger value="social">🌟 Social Feed</TabsTrigger>
         {isVipUser && <TabsTrigger value="accounts">👥 My Accounts</TabsTrigger>}
         <TabsTrigger value="settings">⚙️ Settings</TabsTrigger>
@@ -409,11 +407,6 @@ export const CreatorDashboard = ({ userId, ipAddress = "127.0.0.1", tier = "free
       {userId === "owner" && (
         <TabsContent value="moderation">
           <ModerationDashboard />
-        </TabsContent>
-      )}
-      {userId === "owner" && (
-        <TabsContent value="analytics">
-          <AnalyticsDashboard />
         </TabsContent>
       )}
       {userId === "owner" && (

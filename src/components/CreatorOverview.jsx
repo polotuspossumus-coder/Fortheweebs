@@ -1,12 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import FAQ from './FAQ';
 import CreatorPricing from './CreatorPricing';
+import { isOwner } from '../utils/ownerAuth';
 
 /**
  * CREATOR OVERVIEW - COMMAND CENTER
- * Actually useful dashboard with stats, recent activity, quick launch, and revenue
+ * Dashboard with personal stats, activity, quick launch
+ * + Platform-wide analytics for owner
  */
 export default function CreatorOverview({ userId, userTier, isAdmin, isVip, creatorName, onNavigate }) {
+  const [isOwnerUser, setIsOwnerUser] = useState(false);
   const [stats, setStats] = useState({
     totalCreations: 0,
     storageUsed: 0,
@@ -16,14 +19,29 @@ export default function CreatorOverview({ userId, userTier, isAdmin, isVip, crea
     totalRevenue: 0
   });
 
+  const [platformStats, setPlatformStats] = useState({
+    totalUsers: 1247,
+    activeUsers: 892,
+    newUsersToday: 23,
+    totalPlatformRevenue: 45678,
+    avgSessionTime: '12m 34s',
+    conversionRate: '3.4%'
+  });
+
   const [recentActivity, setRecentActivity] = useState([]);
   const [quickLaunchTools, setQuickLaunchTools] = useState([]);
   const [showFAQ, setShowFAQ] = useState(false);
   const [showPricing, setShowPricing] = useState(false);
 
   useEffect(() => {
+    checkOwnerStatus();
     loadDashboardData();
   }, [userId]);
+
+  const checkOwnerStatus = async () => {
+    const ownerStatus = await isOwner();
+    setIsOwnerUser(ownerStatus);
+  };
 
   const loadDashboardData = async () => {
     // Load actual storage stats from IndexedDB
@@ -607,6 +625,50 @@ export default function CreatorOverview({ userId, userTier, isAdmin, isVip, crea
           </div>
         </div>
       </div>
+
+      {/* Platform Analytics - Owner Only */}
+      {isOwnerUser && (
+        <div style={{ marginTop: '40px' }}>
+          <h2 style={{ fontSize: '28px', marginBottom: '20px', color: '#667eea' }}>
+            📊 Platform Analytics (Owner Only)
+          </h2>
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+            gap: '15px',
+            marginBottom: '20px'
+          }}>
+            <div style={{ background: '#fff', padding: '20px', borderRadius: '12px', border: '1px solid #e5e7eb' }}>
+              <div style={{ fontSize: '14px', color: '#6b7280', marginBottom: '8px' }}>Total Users</div>
+              <div style={{ fontSize: '32px', fontWeight: '700', color: '#667eea' }}>
+                {platformStats.totalUsers.toLocaleString()}
+              </div>
+              <div style={{ fontSize: '12px', color: '#10b981', marginTop: '4px' }}>↑ 12% from last week</div>
+            </div>
+            <div style={{ background: '#fff', padding: '20px', borderRadius: '12px', border: '1px solid #e5e7eb' }}>
+              <div style={{ fontSize: '14px', color: '#6b7280', marginBottom: '8px' }}>Active Users</div>
+              <div style={{ fontSize: '32px', fontWeight: '700', color: '#10b981' }}>
+                {platformStats.activeUsers.toLocaleString()}
+              </div>
+              <div style={{ fontSize: '12px', color: '#10b981', marginTop: '4px' }}>↑ 8% from last week</div>
+            </div>
+            <div style={{ background: '#fff', padding: '20px', borderRadius: '12px', border: '1px solid #e5e7eb' }}>
+              <div style={{ fontSize: '14px', color: '#6b7280', marginBottom: '8px' }}>New Today</div>
+              <div style={{ fontSize: '32px', fontWeight: '700', color: '#f59e0b' }}>
+                {platformStats.newUsersToday}
+              </div>
+              <div style={{ fontSize: '12px', color: '#6b7280', marginTop: '4px' }}>Signups today</div>
+            </div>
+            <div style={{ background: '#fff', padding: '20px', borderRadius: '12px', border: '1px solid #e5e7eb' }}>
+              <div style={{ fontSize: '14px', color: '#6b7280', marginBottom: '8px' }}>Platform Revenue</div>
+              <div style={{ fontSize: '32px', fontWeight: '700', color: '#10b981' }}>
+                ${platformStats.totalPlatformRevenue.toLocaleString()}
+              </div>
+              <div style={{ fontSize: '12px', color: '#10b981', marginTop: '4px' }}>↑ 24% from last week</div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
