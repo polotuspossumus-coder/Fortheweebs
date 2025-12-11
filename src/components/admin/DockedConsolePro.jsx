@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import './DockedConsolePro.css';
 
-const API_BASE = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000';
+const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:3001';
 
 const DockedConsolePro = () => {
   const [artifacts, setArtifacts] = useState([]);

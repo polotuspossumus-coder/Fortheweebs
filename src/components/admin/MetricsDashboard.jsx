@@ -14,7 +14,7 @@ import './MetricsDashboard.css';
 
 ChartJS.register(LineElement, CategoryScale, LinearScale, PointElement, ArcElement, Tooltip, Legend);
 
-const API_BASE = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000';
+const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:3001';
 
 const MetricsDashboard = () => {
   const [dashboard, setDashboard] = useState(null);
