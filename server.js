@@ -208,7 +208,8 @@ try {
 // API Routes - Load individually with error handling
 const routes = [
     // Payment & Monetization
-    { path: '/api', file: './api/stripe', name: 'Stripe' },
+    { path: '/api', file: './api/stripe', name: 'Stripe (Non-Adult Payments)' },
+    { path: '/api/segpay', file: './api/segpay', name: 'Segpay (Adult Content Payments)' },
     { path: '/api/stripe-connect', file: './api/stripe-connect', name: 'Stripe Connect' },
     { path: '/api/stripe-webhooks', file: './api/stripe-webhooks', name: 'Stripe Webhooks' },
     { path: '/api/webhooks/ccbill', file: './api/ccbill-webhook', name: 'CCBill Webhooks (Adult Content)' },
