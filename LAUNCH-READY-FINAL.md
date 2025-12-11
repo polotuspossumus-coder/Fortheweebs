@@ -95,7 +95,7 @@ ForTheWeebs is now a **fully-featured creator platform** ready to compete with a
 ## 🚢 Deployment Status
 
 ### ✅ Backend (Railway)
-- **URL**: https://fortheweebs-production.up.railway.app
+- **URL**: <https://fortheweebs-production.up.railway.app>
 - **Status**: 🟢 Running
 - **Routes**: 109/126 loaded (17 optional features skipped)
 - **Key APIs**:
@@ -106,7 +106,7 @@ ForTheWeebs is now a **fully-featured creator platform** ready to compete with a
   - ✅ 123 total routes
 
 ### ✅ Frontend (Vercel)
-- **URL**: https://fortheweebs-4s4spg4m2-jacobs-projects-eac77986.vercel.app
+- **URL**: <https://fortheweebs-4s4spg4m2-jacobs-projects-eac77986.vercel.app>
 - **Status**: 🟢 Live
 - **Auto-Deploy**: Every GitHub push
 - **Features**: All UI components deployed
@@ -227,9 +227,9 @@ You're ready! Everything works!
 3. **ANNOUNCE YOUR LAUNCH** 🚀
 
 ### Your Platform URLs:
-- **Live Site**: https://fortheweebs-4s4spg4m2-jacobs-projects-eac77986.vercel.app
-- **API**: https://fortheweebs-production.up.railway.app
-- **Local Dev**: http://localhost:3002
+- **Live Site**: <https://fortheweebs-4s4spg4m2-jacobs-projects-eac77986.vercel.app>
+- **API**: <https://fortheweebs-production.up.railway.app>
+- **Local Dev**: <http://localhost:3002>
 
 ---
 
