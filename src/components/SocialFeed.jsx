@@ -134,17 +134,23 @@ export const SocialFeed = ({ userId, userTier }) => {
 
     try {
       setLoading(true);
-      const newPost = await api.posts.create({
-        body: newPostContent,
-        visibility: contentVisibility,
-        isPaid: isPaidContent,
-        priceCents: isPaidContent ? priceCents : undefined,
-        hasCGI: access.hasCGI.full && showCGITools,
+      
+      // Get user ID from localStorage or generate temp one
+      const currentUserId = localStorage.getItem('userId') || `user_${Date.now()}`;
+      
+      const response = await api.posts.create({
+        userId: currentUserId,
+        content: newPostContent,
+        visibility: contentVisibility.toLowerCase(),
+        mediaUrl: null
       });
 
+      // API returns { post: data }, extract the post
+      const newPost = response.post || response;
       setPosts([newPost, ...posts]);
       setNewPostContent('');
       setError(null);
+      setShowMonetizeDialog(false);
     } catch (err) {
       console.error('Failed to create post:', err);
       setError('Failed to create post. Please try again.');
