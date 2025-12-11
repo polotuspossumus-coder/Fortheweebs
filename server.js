@@ -449,6 +449,38 @@ if (blockedCount > 0) {
     console.log(`💡 Add PHOTODNA_API_KEY to .env to enable social media features`);
 }
 
+// ============================================================================
+// DIRECT POST ENDPOINT - Workaround for Express router mounting issue
+// ============================================================================
+app.post('/api/social/post', express.json(), async (req, res) => {
+    try {
+        const { userId, content, visibility = 'public', mediaUrl = null } = req.body;
+
+        if (!userId || !content) {
+            return res.status(400).json({ error: 'Missing required fields: userId and content' });
+        }
+
+        const mockPost = {
+            id: Date.now(),
+            userId,
+            userName: 'User',
+            avatar: '👤',
+            content,
+            visibility: visibility.toLowerCase(),
+            mediaUrl,
+            timestamp: new Date().toISOString(),
+            likes: 0,
+            commentsCount: 0,
+            shares: 0
+        };
+
+        console.log(`✅ [DIRECT POST] Created post ${mockPost.id} by ${userId}`);
+        res.json({ post: mockPost });
+    } catch (error) {
+        console.error('❌ [DIRECT POST] Error:', error);
+        res.status(500).json({ error: error.message });
+    }
+});
 
 // Error handling middleware
 app.use((err, req, res, next) => {
