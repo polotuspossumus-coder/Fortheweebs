@@ -3,10 +3,25 @@
 -- This will enable posts, follows, likes, comments, and creator subscriptions
 
 -- ============================================================================
+-- DROP EXISTING TABLES (if any) - Start fresh
+-- ============================================================================
+
+DROP TABLE IF EXISTS public.creator_earnings CASCADE;
+DROP TABLE IF EXISTS public.post_views CASCADE;
+DROP TABLE IF EXISTS public.subscriptions CASCADE;
+DROP TABLE IF EXISTS public.subscription_tiers CASCADE;
+DROP TABLE IF EXISTS public.saves CASCADE;
+DROP TABLE IF EXISTS public.follows CASCADE;
+DROP TABLE IF EXISTS public.comments CASCADE;
+DROP TABLE IF EXISTS public.likes CASCADE;
+DROP TABLE IF EXISTS public.posts CASCADE;
+DROP TABLE IF EXISTS public.profiles CASCADE;
+
+-- ============================================================================
 -- USERS & PROFILES
 -- ============================================================================
 
-CREATE TABLE IF NOT EXISTS public.profiles (
+CREATE TABLE public.profiles (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE UNIQUE,
   username TEXT UNIQUE NOT NULL,
