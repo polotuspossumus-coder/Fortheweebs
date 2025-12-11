@@ -148,6 +148,21 @@ app.get('/api/artifacts/stream', sseRoute);
 // Feature flags
 const { featureFlags } = require('./config/featureFlags');
 
+// Root route - API info
+app.get('/', (req, res) => {
+    res.json({
+        name: 'ForTheWeebs API',
+        version: '2.1.0',
+        status: 'running',
+        documentation: '/health',
+        endpoints: {
+            health: '/health',
+            api: '/api/*'
+        },
+        message: 'Welcome to ForTheWeebs Creator Platform API'
+    });
+});
+
 // Health check with feature status
 app.get('/health', (req, res) => {
     res.json({
