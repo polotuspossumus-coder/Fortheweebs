@@ -143,7 +143,7 @@ export function VRARMarketplace({ userId }) {
         alignItems: 'center',
         marginBottom: '30px'
       }}>
-        <div style={{ fontSize: '18px', opacity: 0.8' }}>
+        <div style={{ fontSize: '18px', opacity: 0.8 }}>
           Showing <strong>1,247</strong> items
         </div>
 

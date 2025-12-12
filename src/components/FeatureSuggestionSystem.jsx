@@ -386,7 +386,7 @@ function SuggestionCard({ suggestion }) {
         display: 'flex',
         gap: '20px',
         fontSize: '13px',
-        opacity: 0.7'
+        opacity: 0.7
       }}>
         <span>📅 {new Date(suggestion.createdAt).toLocaleDateString()}</span>
         <span>👍 {suggestion.upvotes || 0} upvotes</span>

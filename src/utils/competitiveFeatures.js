@@ -431,10 +431,10 @@ designed specifically for anime creators. No desktop software needed, works in y
     competitive_moat: [
       'Anime-specific focus (competitors are generic)',
       'All-in-one platform (competitors are single-purpose)',
-      'Built-in monetization (competitors don't help creators make money)',
+      'Built-in monetization (competitors don\'t help creators make money)',
       'Legal protection (DMCA, anti-piracy built-in)',
-      'Community marketplace (network effects)',
-    ],
+      'Community marketplace (network effects)'
+    ]
   };
 }
 

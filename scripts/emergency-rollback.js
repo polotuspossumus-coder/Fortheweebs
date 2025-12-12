@@ -76,7 +76,7 @@ async function main() {
       }
       break;
 
-    case '2':
+    case '2': {
       // Rollback to specific commit
       const commitHash = await question('\nEnter commit hash: ');
       console.log(`\n⚠️  This will reset to commit ${commitHash}`);
@@ -87,8 +87,9 @@ async function main() {
         console.log(`✅ Rolled back to ${commitHash}`);
       }
       break;
+    }
 
-    case '3':
+    case '3': {
       // Restore from backup branch
       const backupList = exec('git branch -a | grep backup | cat -n');
       console.log('\n📦 Backup branches:\n' + backupList);
@@ -104,8 +105,9 @@ async function main() {
         console.log('To replace main: git checkout main && git reset --hard main-restored');
       }
       break;
+    }
 
-    case '4':
+    case '4': {
       // Restore from D: drive backup
       console.log('\n🔍 Scanning D: drive for backups...');
       const backups = exec('ls -lh /d/*.tar.gz 2>/dev/null || echo "No backups found"');
@@ -117,6 +119,7 @@ async function main() {
       console.log('4. npm install --legacy-peer-deps');
       console.log('5. npm run build');
       break;
+    }
 
     case '5':
       console.log('\n✅ Cancelled');

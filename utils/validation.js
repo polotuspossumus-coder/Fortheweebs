@@ -49,7 +49,7 @@ function validateSuggestion(payload, ip) {
       }
       break;
       
-    case 'content':
+    case 'content': {
       if (!change.content_key || !ALLOWLISTS.cms.includes(change.content_key)) {
         errors.push('Content key not in allowlist');
       }
@@ -67,8 +67,9 @@ function validateSuggestion(payload, ip) {
         softBan(ip, 60 * 60 * 1000); // 1 hour ban for attempting XSS
       }
       break;
+    }
       
-    case 'config':
+    case 'config': {
       if (!change.config_key || !ALLOWLISTS.config.includes(change.config_key)) {
         errors.push('Config key not in allowlist');
       }
@@ -84,6 +85,7 @@ function validateSuggestion(payload, ip) {
         }
       }
       break;
+    }
   }
   
   // Validate reason

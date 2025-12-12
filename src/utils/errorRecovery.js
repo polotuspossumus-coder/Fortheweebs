@@ -169,12 +169,13 @@ export async function recoverFromError(error, context = {}) {
         }
         break;
 
-      case 'refresh_token':
+      case 'refresh_token': {
         const tokenRefreshed = await refreshAuthToken();
         if (tokenRefreshed && context.retryFn) {
           return await context.retryFn();
         }
         break;
+      }
 
       case 'redirect':
         if (context.redirectTo) {

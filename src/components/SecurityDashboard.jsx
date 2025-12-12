@@ -59,11 +59,8 @@ export default function SecurityDashboard() {
           </div>
           <div className="score-details">
             <p>{securityHeaders?.missing?.length || 0} security headers missing</p>
-            <p>{moderationStats?.byser: {
-            CRITICAL: moderationStats?.bySeverity?.CRITICAL || 0,
-            HIGH: moderationStats?.bySeverity?.HIGH || 0,
-          }}
-          Fraud Risk: {fraudStats?.byRiskLevel?.critical || 0} critical</p>
+            <p>Critical: {moderationStats?.bySeverity?.CRITICAL || 0}, High: {moderationStats?.bySeverity?.HIGH || 0}</p>
+            <p>Fraud Risk: {fraudStats?.byRiskLevel?.critical || 0} critical</p>
           </div>
         </div>
       </div>

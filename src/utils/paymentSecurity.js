@@ -478,7 +478,7 @@ async function analyzeBehavior(paymentData) {
 
   } catch (error) {
     console.error('Error analyzing behavior:', error);
-    return { factors, [], score: 0 };
+    return { factors: [], score: 0 };
   }
 }
 

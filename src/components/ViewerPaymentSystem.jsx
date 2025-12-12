@@ -256,7 +256,7 @@ export const ViewerPaymentSystem = ({ userId, userType, tier, subscriptions = []
                     }}>
                       $15/month
                     </div>
-                    <p style={{ fontSize: '1.2rem', opacity: 0.9', marginBottom: '30px' }}>
+                    <p style={{ fontSize: '1.2rem', opacity: 0.9, marginBottom: '30px' }}>
                       Unlock access to all adult-rated content across the platform
                     </p>
                     <button
