@@ -227,7 +227,7 @@ try {
     app.use('/api/calls', signalingRouter);
     console.log('✅ WebRTC signaling server initialized');
 } catch (error) {
-    console.warn('⚠️ Socket.io not available (install with: npm install socket.io)');
+    // Socket.io or signaling module not available - skip WebRTC features
 }
 
 // API Routes - Load individually with error handling

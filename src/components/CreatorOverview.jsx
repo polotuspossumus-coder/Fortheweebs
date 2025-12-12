@@ -13,7 +13,7 @@ export default function CreatorOverview({ userId, userTier, isAdmin, isVip, crea
   const [stats, setStats] = useState({
     totalCreations: 0,
     storageUsed: 0,
-    storageTotal: 5000, // 5GB default
+    storageTotal: Infinity, // Unlimited storage
     mythicRank: 'Initiate',
     weeklyStreak: 0,
     totalRevenue: 0
@@ -364,7 +364,7 @@ export default function CreatorOverview({ userId, userTier, isAdmin, isVip, crea
               }} />
             </div>
             <span style={{ fontSize: '12px', opacity: 0.7 }}>
-              {stats.storageTotal / 1000}GB
+              ∞ Unlimited
             </span>
           </div>
         </div>

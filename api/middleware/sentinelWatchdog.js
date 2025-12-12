@@ -9,9 +9,13 @@ const OWNER_EMAIL = 'polotuspossumus@gmail.com';
 // Load artifact logger dynamically to avoid circular dependencies
 let artifactLogger;
 try {
-  artifactLogger = require('../agents/artifactLogger');
+  artifactLogger = require('../../agents/artifactLogger');
 } catch (error) {
-  console.warn('⚠️ Artifact logger not available for Sentinel');
+  // Use stub fallback silently
+  artifactLogger = {
+    log: () => ({ id: 'stub', timestamp: new Date().toISOString() }),
+    getAll: () => []
+  };
 }
 
 // Import metrics tracking
