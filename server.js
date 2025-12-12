@@ -2,28 +2,6 @@ console.log('🚀 Starting ForTheWeebs API Server...');
 console.log('Node version:', process.version);
 console.log('Environment:', process.env.NODE_ENV);
 
-// MONKEY-PATCH: Catch who's calling process.exit()
-const originalExit = process.exit;
-process.exit = function(code) {
-    console.error('🚨 PROCESS.EXIT CALLED WITH CODE:', code);
-    console.error('📍 STACK TRACE:');
-    console.error(new Error().stack);
-    originalExit.call(process, code);
-};
-
-// GLOBAL ERROR LISTENERS
-process.on('uncaughtException', (error) => {
-    console.error('💥 UNCAUGHT EXCEPTION:', error);
-    console.error('Stack:', error.stack);
-    // Don't exit - keep running
-});
-
-process.on('unhandledRejection', (reason, promise) => {
-    console.error('⚠️ UNHANDLED REJECTION:', reason);
-    console.error('Promise:', promise);
-    // Don't exit - keep running
-});
-
 const express = require('express');
 const http = require('http');
 const cors = require('cors');
@@ -31,6 +9,33 @@ const crypto = require('crypto');
 require('dotenv').config();
 
 console.log('✅ Express and dotenv loaded');
+
+// ============================================================================
+// SOVEREIGN SELF-HEALING SYSTEM - Boot Phase
+// ============================================================================
+const { validateConfig } = require('./utils/configValidation');
+const { installCrashHandlers, ensureArtifactDir } = require('./utils/server-safety');
+const { startMemoryMonitor } = require('./utils/memory');
+const { metricsMiddleware } = require('./utils/observability');
+
+// Validate configuration at boot
+try {
+  validateConfig();
+} catch (error) {
+  console.error('❌ CRITICAL: Configuration validation failed:', error.message);
+  process.exit(1);
+}
+
+// Install crash handlers (replaces old error listeners)
+installCrashHandlers();
+
+// Ensure artifact directory exists
+ensureArtifactDir();
+
+// Start memory monitoring
+startMemoryMonitor();
+
+console.log('✅ Self-healing system initialized');
 
 // ============================================================================
 // ENVIRONMENT VARIABLE VALIDATION
@@ -64,8 +69,12 @@ app.set('trust proxy', true);
 console.log('📡 Port:', PORT);
 
 // Security Headers
-const securityHeaders = require('./utils/securityHeaders');
+const { securityHeaders, wafFilter } = require('./utils/networkProtection');
 app.use(securityHeaders);
+
+// WAF protection on public routes (before rate limiting)
+app.use('/userfix', wafFilter);
+app.use('/api', wafFilter);
 
 // Rate Limiting (general + tier-based)
 const { apiLimiter } = require('./utils/apiRateLimiter');
@@ -99,12 +108,21 @@ app.use((req, res, next) => {
 // Middleware
 const cookieParser = require('cookie-parser');
 app.use(cookieParser());
+
+// Trust first proxy (Railway/Vercel) - must be before rate limiting
+app.set('trust proxy', 1);
+
+// Metrics collection middleware (must be early)
+app.use(metricsMiddleware);
+
 app.use(cors({
-    origin: process.env.VITE_APP_URL || 'http://localhost:3002',
+    origin: ['https://fortheweebs.vercel.app', 'http://localhost:3003', 'http://localhost:3002'],
     credentials: true
 }));
 
-// For Stripe webhook (raw body)
+// CRITICAL: Raw body parsing for webhooks BEFORE JSON parsing
+app.use('/webhooks/stripe', express.raw({ type: 'application/json' }));
+app.use('/webhooks/coinbase', express.raw({ type: 'application/json' }));
 app.use('/api/stripe-webhook', express.raw({ type: 'application/json' }));
 
 // For all other routes (JSON)
@@ -184,6 +202,13 @@ app.get('/api/features/status', (req, res) => {
     });
 });
 
+// Explicit metrics endpoint (Prometheus format)
+app.get('/metrics', (req, res) => {
+  const { metricsCollector } = require('./utils/observability');
+  res.set('Content-Type', 'text/plain; charset=utf-8');
+  res.send(metricsCollector.getMetrics());
+});
+
 // Socket.io setup for WebRTC signaling
 let io;
 try {
@@ -192,7 +217,7 @@ try {
 
     io = new Server(server, {
         cors: {
-            origin: process.env.VITE_APP_URL || 'http://localhost:3002',
+            origin: ['https://fortheweebs.vercel.app', 'http://localhost:3003', 'http://localhost:3002'],
             methods: ['GET', 'POST'],
             credentials: true
         }
@@ -207,13 +232,17 @@ try {
 
 // API Routes - Load individually with error handling
 const routes = [
-    // Payment & Monetization
-    { path: '/api', file: './api/stripe', name: 'Stripe (Non-Adult Payments)' },
-    { path: '/api/segpay', file: './api/segpay', name: 'Segpay (Adult Content Payments)' },
-    { path: '/api/stripe-connect', file: './api/stripe-connect', name: 'Stripe Connect' },
-    { path: '/api/stripe-webhooks', file: './api/stripe-webhooks', name: 'Stripe Webhooks' },
-    { path: '/api/webhooks/ccbill', file: './api/ccbill-webhook', name: 'CCBill Webhooks (Adult Content)' },
-    { path: '/api/crypto', file: './api/crypto-payments', name: 'Crypto Payments' },
+    // ===== SOVEREIGN SELF-HEALING SYSTEM =====
+    { path: '/api/health', file: './api/health', name: '🩹 Self-Healing Health (Liveness/Readiness/Artifacts)' },
+    { path: '/bugfixer', file: './api/bugfixer/console', name: '🔧 Bug Fixer Console (Diagnostics/Remediation/Auto-Heal)' },
+    { path: '/userfix/feedback', file: './api/userfix/feedback', name: '📝 User Feedback & Bug Reports' },
+    { path: '/userfix/auto', file: './api/userfix/autonomousSuggestions', name: '🤖 Autonomous Suggestions (Auto-Apply)' },
+    { path: '/webhooks', file: './api/routes/webhooks', name: '🔗 Payment Webhooks (Stripe/Coinbase)' },
+    
+    // Payment & Monetization - HYBRID SYSTEM
+    { path: '/api/crypto', file: './api/coinbase', name: '💎 Crypto Payments (BTC, ETH, USDC) - Adult Content' },
+    { path: '/api/stripe-connect', file: './api/stripe-connect', name: '💳 Stripe Connect - Non-Adult Creators Only' },
+    { path: '/api/payment-router', file: './api/payment-router', name: '🔀 Payment Router (AI-Powered SFW/Adult Detection)' },
     { path: '/api/subscriptions', file: './api/routes/subscriptions', name: 'Subscriptions (Creator Monetization)' },
 
     // Social Media Core
@@ -549,8 +578,20 @@ async function startServer() {
 (async () => {
     try {
         await startServer();
-        console.log('✅ Server is running on http://localhost:3001');
-        console.log('🔵 About to set interval...');
+        console.log(`✅ Server is running on http://localhost:${PORT}`);
+        
+        // ===== SOVEREIGN SELF-HEALING SYSTEM - Post-Startup =====
+        const { metricsCollector } = require('./utils/observability');
+        const { startSLOMonitor } = require('./api/userfix/autoRevert');
+        const { startNightlyUpload } = require('./api/bugfixer/upload');
+        
+        // Start SLO monitoring and auto-revert
+        startSLOMonitor(metricsCollector);
+        console.log('✅ SLO monitor started');
+        
+        // Start nightly artifact uploads
+        startNightlyUpload();
+        console.log('✅ Nightly artifact upload scheduled');
         
         // Start retention extension scheduler
         console.log('📅 Initializing legal receipts retention scheduler...');
@@ -559,10 +600,11 @@ async function startServer() {
         
         // Heartbeat to keep process alive
         const timer = setInterval(() => {
-            console.log('💓 Server alive');
-        }, 10000);
+            const metrics = metricsCollector.getMetrics();
+            console.log(`💓 Server alive | Requests: ${metrics.requests.total} | Errors: ${metrics.requests.errors} | Memory: ${metrics.memory.heapUsedMB}MB`);
+        }, 60000); // Every minute
         
-        console.log('✅ Interval set:', timer);
+        console.log('✅ Heartbeat started');
         
     } catch (error) {
         console.error('❌ Fatal error:', error);

@@ -1,0 +1,17 @@
+{
+  "type": "shutdown",
+  "timestamp": "2025-12-12T01:28:58.010Z",
+  "appVersion": "unknown",
+  "pid": 10044,
+  "data": {
+    "signal": "SIGINT",
+    "memory": {
+      "heapUsedMB": 59,
+      "heapTotalMB": 61,
+      "rssMB": 114,
+      "isHealthy": true,
+      "threshold": 512
+    }
+  },
+  "sha256": "a72e454d9c81c215d0537b51d51fd7247381fb7d49a36047ce2d60033dc56627"
+}

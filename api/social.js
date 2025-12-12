@@ -208,16 +208,9 @@ router.post('/post', async (req, res) => {
         res.status(500).json({ error: error.message });
     }
 });
-            timestamp: post.created_at,
-            likes: post.likes_count || 0,
-            commentsCount: post.comments_count || 0,
-            shares: post.shares_count || 0
-        };
 
-        res.json({ post: formattedPost });
-    } catch (error) {
-        console.error('Post creation error:', error);
-        // Return mock post as fallback
+/**
+ * POST /api/social/follow
         const mockPost = {
             id: Date.now(),
             userId: req.body.userId,

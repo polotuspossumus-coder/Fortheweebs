@@ -6,7 +6,7 @@
 const { createClient } = require('@supabase/supabase-js');
 require('dotenv').config();
 
-const API_BASE = 'http://localhost:3000/api/social';
+const API_BASE = (process.env.API_URL || 'http://localhost:3001') + '/api/social';
 
 // Colors for console
 const colors = {

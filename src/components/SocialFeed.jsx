@@ -150,8 +150,8 @@ export const SocialFeed = ({ userId, userTier }) => {
         body: JSON.stringify({
           userId: currentUserId,
           content: newPostContent,
-          visibility: contentVisibility.toLowerCase(),
-          mediaUrl: null
+          visibility: contentVisibility.toUpperCase(),
+          media: []
         })
       });
 
@@ -184,7 +184,7 @@ export const SocialFeed = ({ userId, userTier }) => {
       setPriceCents(500);
     } catch (err) {
       console.error('Failed to create post:', err);
-      setError('✅ Post created locally! (Database connection pending)');
+      setError('❌ Failed to create post: ' + err.message);
 
       // Still show the post even if API fails
       const newPost = {
@@ -923,72 +923,50 @@ export const SocialFeed = ({ userId, userTier }) => {
             </div>
           )}
 
-          {/* Featured Creators */}
+          {/* Real Creators (from database) */}
           <div className="featured-section">
-            <h3>⭐ Featured Creators</h3>
-            <p className="section-desc">Popular creators on ForTheWeebs</p>
+            <h3>⭐ Active Creators</h3>
+            <p className="section-desc">Real people on ForTheWeebs - no fake profiles</p>
             <div className="creators-grid">
               {loading ? (
-                <p>⏳ Loading creators...</p>
+                <p>⏳ Loading real creators from database...</p>
+              ) : discoverCreators.length > 0 ? (
+                discoverCreators.map(creator => (
+                  <div key={creator.user_id} className="creator-card">
+                    <div className="creator-avatar">
+                      {creator.avatar || '👤'}
+                    </div>
+                    <h4>@{creator.username}</h4>
+                    {creator.display_name && <p className="display-name">{creator.display_name}</p>}
+                    {creator.bio && <p className="creator-bio">{creator.bio}</p>}
+                    <div className="creator-stats">
+                      <span>👥 {creator.follower_count || 0} followers</span>
+                      <span>📝 {creator.post_count || 0} posts</span>
+                    </div>
+                    <button 
+                      className="follow-btn"
+                      onClick={async () => {
+                        try {
+                          await fetch(`${import.meta.env.VITE_API_URL}/api/social/follow/${creator.user_id}`, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ userId: localStorage.getItem('userId') })
+                          });
+                          alert(`Now following @${creator.username}!`);
+                        } catch (err) {
+                          console.error('Follow error:', err);
+                        }
+                      }}
+                    >
+                      + Follow
+                    </button>
+                  </div>
+                ))
               ) : (
-                <>
-                  <div className="creator-card">
-                    <div className="creator-avatar">
-                      <img src="/default-avatar.png" alt="Creator" />
-                      <span className="verified-badge">✓</span>
-                    </div>
-                    <h4>@anime_artist_pro</h4>
-                    <p className="creator-bio">Professional anime illustrator & character designer</p>
-                    <div className="creator-stats">
-                      <span>👥 12.5K followers</span>
-                      <span>📝 847 posts</span>
-                    </div>
-                    <button className="follow-btn">+ Follow</button>
-                  </div>
-                  
-                  <div className="creator-card">
-                    <div className="creator-avatar">
-                      <img src="/default-avatar.png" alt="Creator" />
-                      <span className="verified-badge">✓</span>
-                    </div>
-                    <h4>@manga_studio_official</h4>
-                    <p className="creator-bio">Manga creator, tutorials & commissions</p>
-                    <div className="creator-stats">
-                      <span>👥 8.2K followers</span>
-                      <span>📝 523 posts</span>
-                    </div>
-                    <button className="follow-btn">+ Follow</button>
-                  </div>
-
-                  <div className="creator-card">
-                    <div className="creator-avatar">
-                      <img src="/default-avatar.png" alt="Creator" />
-                    </div>
-                    <h4>@cosplay_queen</h4>
-                    <p className="creator-bio">Cosplayer, photographer, convention guide</p>
-                    <div className="creator-stats">
-                      <span>👥 6.7K followers</span>
-                      <span>📝 391 posts</span>
-                    </div>
-                    <button className="follow-btn">+ Follow</button>
-                  </div>
-                </>
+                <div className="empty-state">
+                  <p>✨ Be the first creator! Start posting to show up here.</p>
+                </div>
               )}
-            </div>
-          </div>
-
-          {/* Trending Topics */}
-          <div className="trending-section">
-            <h3>🔥 Trending Now</h3>
-            <div className="trending-topics">
-              <button className="topic-tag">#AnimeArt</button>
-              <button className="topic-tag">#MangaDrawing</button>
-              <button className="topic-tag">#Cosplay</button>
-              <button className="topic-tag">#DigitalArt</button>
-              <button className="topic-tag">#CharacterDesign</button>
-              <button className="topic-tag">#FanArt</button>
-              <button className="topic-tag">#ComicArt</button>
-              <button className="topic-tag">#3DModeling</button>
             </div>
           </div>
 

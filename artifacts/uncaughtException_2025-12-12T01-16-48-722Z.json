@@ -1,0 +1,18 @@
+{
+  "type": "uncaughtException",
+  "timestamp": "2025-12-12T01:16:48.723Z",
+  "appVersion": "unknown",
+  "pid": 32856,
+  "data": {
+    "message": "listen EADDRINUSE: address already in use 0.0.0.0:3001",
+    "stack": "Error: listen EADDRINUSE: address already in use 0.0.0.0:3001\n    at Server.setupListenHandle [as _listen2] (node:net:1940:16)\n    at listenInCluster (node:net:1997:12)\n    at node:net:2206:7\n    at process.processTicksAndRejections (node:internal/process/task_queues:90:21)",
+    "memory": {
+      "heapUsedMB": 60,
+      "heapTotalMB": 105,
+      "rssMB": 158,
+      "isHealthy": true,
+      "threshold": 512
+    }
+  },
+  "sha256": "853a03f0411f3134b4897d02dcc30f8876c2f06e88d2bdbd8d25c6fa55e806ba"
+}

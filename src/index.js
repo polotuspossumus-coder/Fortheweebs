@@ -1,6 +1,7 @@
 
 import React, { useState } from "react";
 import ReactDOM from "react-dom";
+import "./vendor-prefixes.css"; // Browser compatibility fixes
 import { LegalDocumentsList } from "./components/LegalDocumentsList.jsx";
 import CreatorSignup from "./CreatorSignup.jsx";
 import PaymentModule from "./PaymentModule.jsx";

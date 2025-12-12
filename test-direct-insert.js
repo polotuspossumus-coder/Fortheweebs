@@ -15,14 +15,15 @@ async function testDirectInsert() {
   console.log('\n🔍 DIRECT POST INSERTION TEST\n');
 
   const postData = {
-    user_id: 'c81cfb58-6006-495c-81b8-1adbe1366472',
-    content: 'Direct insertion test - bypassing API',
-    visibility: 'public',
-    media_url: null,
+    author_id: 'c81cfb58-6006-495c-81b8-1adbe1366472', // Schema uses author_id
+    content: 'Direct insertion test - SCHEMA FIXED!',
+    visibility: 'PUBLIC', // Schema expects uppercase
+    media_urls: [], // Schema uses array
     created_at: new Date().toISOString(),
-    likes_count: 0,
+    likes: 0, // Schema uses 'likes' not 'likes_count'
     comments_count: 0,
-    shares_count: 0
+    shares: 0, // Schema uses 'shares' not 'shares_count'
+    views: 0
   };
 
   console.log('Attempting to insert post:', JSON.stringify(postData, null, 2));

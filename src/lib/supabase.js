@@ -25,6 +25,16 @@ export const supabase = (() => {
         autoRefreshToken: true,
         persistSession: true,
         detectSessionInUrl: true
+      },
+      global: {
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+          'Prefer': 'return=representation'
+        }
+      },
+      db: {
+        schema: 'public'
       }
     });
   }

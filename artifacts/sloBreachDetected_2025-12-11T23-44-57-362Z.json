@@ -1,0 +1,41 @@
+{
+  "type": "sloBreachDetected",
+  "timestamp": "2025-12-11T23:44:57.362Z",
+  "appVersion": "unknown",
+  "pid": 15232,
+  "data": {
+    "breaches": [
+      {
+        "type": "error_rate",
+        "value": "75.00",
+        "threshold": 1
+      },
+      {
+        "type": "latency_p95",
+        "value": 2011,
+        "threshold": 500
+      }
+    ],
+    "consecutiveCount": 2,
+    "metrics": {
+      "uptime": 122,
+      "requests": {
+        "total": 4,
+        "errors": 3,
+        "errorRate": "75.00"
+      },
+      "latency": {
+        "p50": 1152,
+        "p95": 2011,
+        "p99": 2011
+      },
+      "memory": {
+        "heapUsedMB": 55,
+        "heapTotalMB": 59,
+        "rssMB": 112,
+        "isHealthy": true
+      }
+    }
+  },
+  "sha256": "d8409950c65031e40fda2854926f514df07a2033989484bd146283230d68d858"
+}

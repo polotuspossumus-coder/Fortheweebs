@@ -1,0 +1,14 @@
+{
+  "type": "configValidationWarnings",
+  "timestamp": "2025-12-11T23:32:32.707Z",
+  "appVersion": "unknown",
+  "pid": 37640,
+  "data": {
+    "warnings": [
+      "Optional env var missing: GOOGLE_VISION_KEY",
+      "Optional env var missing: ARTIFACT_BUCKET",
+      "Optional env var missing: APP_VERSION"
+    ]
+  },
+  "sha256": "37a94e42a574b4fa85142fa31c491639ab0dc1b1e3ba6df4692f8a54344c86ab"
+}
