@@ -82,6 +82,7 @@
     "@ffmpeg/ffmpeg": "^0.12.15",
     "@ffmpeg/util": "^0.12.2",
     "@google-cloud/vision": "^5.3.4",
+    "@grpc/grpc-js": "^1.14.3",
     "@octokit/rest": "^21.0.2",
     "@radix-ui/react-switch": "^1.2.6",
     "@radix-ui/react-tabs": "^1.1.13",
