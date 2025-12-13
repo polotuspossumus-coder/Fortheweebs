@@ -175,16 +175,10 @@ router.post('/post', async (req, res) => {
 
         if (error) {
             console.error('Database insert error:', error);
-            // Return mock post if database fails
-            const mockPost = {
-                id: Date.now(),
-                user_id: userId,
-                ...postData,
-                userName: 'User',
-                avatar: '👤',
-                timestamp: postData.created_at
-            };
-            return res.json({ post: mockPost });
+            return res.status(500).json({
+                error: 'Failed to create post',
+                details: error.message
+            });
         }
 
         // Format response to match frontend expectations
@@ -296,6 +290,15 @@ router.post('/post/:postId/like', async (req, res) => {
             return res.status(400).json({ error: 'userId required' });
         }
 
+        // Validate UUID format to prevent database errors
+        const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+        if (!uuidRegex.test(postId)) {
+            return res.status(400).json({ error: 'Invalid post ID format' });
+        }
+        if (!uuidRegex.test(userId)) {
+            return res.status(400).json({ error: 'Invalid user ID format' });
+        }
+
         // Check if already liked
         const { data: existing } = await supabase
             .from('likes')
@@ -337,6 +340,15 @@ router.delete('/post/:postId/like', async (req, res) => {
 
         if (!userId) {
             return res.status(400).json({ error: 'userId required' });
+        }
+
+        // Validate UUID format to prevent database errors
+        const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+        if (!uuidRegex.test(postId)) {
+            return res.status(400).json({ error: 'Invalid post ID format' });
+        }
+        if (!uuidRegex.test(userId)) {
+            return res.status(400).json({ error: 'Invalid user ID format' });
         }
 
         const { error } = await supabase
