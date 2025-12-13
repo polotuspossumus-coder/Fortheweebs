@@ -18,7 +18,7 @@
 
 const express = require('express');
 const router = express.Router();
-const crypto = require('crypto');
+const crypto = require('node:crypto');
 
 // Paxum configuration
 const PAXUM_CONFIG = {
@@ -42,7 +42,7 @@ router.post('/create-checkout', async (req, res) => {
       userId,
       contentId,
       description,
-      userEmail,
+      // userEmail, - available if needed for email notifications
       isAdultContent = true
     } = req.body;
 
@@ -113,9 +113,7 @@ router.post('/create-checkout', async (req, res) => {
 router.post('/webhook', express.urlencoded({ extended: true }), async (req, res) => {
   try {
     const {
-      transaction_id,
-      transaction_amount,
-      transaction_currency,
+      // transaction_id, transaction_amount, transaction_currency - available for logging
       transaction_status,
       item_id,
       variables,

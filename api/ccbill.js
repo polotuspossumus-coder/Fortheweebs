@@ -15,7 +15,7 @@
 
 const express = require('express');
 const router = express.Router();
-const crypto = require('crypto');
+const crypto = require('node:crypto');
 
 // CCBill configuration
 const CCBILL_CONFIG = {
@@ -109,12 +109,7 @@ router.post('/webhook', express.raw({ type: 'application/x-www-form-urlencoded' 
     
     // Extract webhook data
     const {
-      subscriptionId,
-      transactionId,
-      clientAccnum,
-      clientSubacc,
-      timestamp,
-      formPrice,
+      // subscriptionId, transactionId, clientAccnum, clientSubacc, timestamp, formPrice - available if needed
       X_user_id: userId,
       X_content_id: contentId,
       X_description: description,

@@ -227,7 +227,7 @@ function AdminPanel() {
                     <div className="report-actions">
                       <button
                         className="view-content-button"
-                        onClick={() => window.location.href = `/${report.contentType}/${report.contentId}`}
+                        onClick={() => globalThis.location.href = `/${report.contentType}/${report.contentId}`}
                       >
                         View Content
                       </button>
@@ -303,19 +303,19 @@ function AdminPanel() {
                       </td>
                       <td>
                         <div className="user-actions">
-                          {!user.banned ? (
-                            <button
-                              className="ban-button"
-                              onClick={() => handleUserAction(user.id, 'ban')}
-                            >
-                              Ban
-                            </button>
-                          ) : (
+                          {user.banned ? (
                             <button
                               className="unban-button"
                               onClick={() => handleUserAction(user.id, 'unban')}
                             >
                               Unban
+                            </button>
+                          ) : (
+                            <button
+                              className="ban-button"
+                              onClick={() => handleUserAction(user.id, 'ban')}
+                            >
+                              Ban
                             </button>
                           )}
                           {!user.verified && (

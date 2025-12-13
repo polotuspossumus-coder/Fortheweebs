@@ -233,7 +233,7 @@ router.post('/follow', async (req, res) => {
             return res.status(400).json({ error: 'Missing required fields' });
         }
 
-        const { data, error } = await supabase
+        const { error } = await supabase
             .from('follows')
             .insert({
                 follower_id: followerId,
@@ -500,8 +500,7 @@ router.delete('/post/:postId/save', async (req, res) => {
  */
 router.post('/post/:postId/share', async (req, res) => {
     try {
-        const { postId } = req.params;
-
+        // postId available in req.params.postId if needed
         // Increment shares_count in posts table (if we add that column)
         // For now, just acknowledge the share
         res.json({ success: true, message: 'Share tracked' });

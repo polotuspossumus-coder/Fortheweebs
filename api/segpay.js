@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const crypto = require('crypto');
+const crypto = require('node:crypto');
 
 /**
  * Segpay Payment Integration for Adult Content
@@ -58,9 +58,9 @@ router.post('/create-checkout', async (req, res) => {
     purchaseData.signature = signature;
 
     // For now, return checkout URL (Segpay provides this after account setup)
-    // Once you have Segpay credentials, uncomment the API call below
+    // TODO: Once you have Segpay credentials, uncomment the API call below and remove temporary response
     
-    /*
+    /* TEMPLATE: Uncomment when Segpay is configured
     const response = await fetch(`${SEGPAY_API_BASE}/purchase`, {
       method: 'POST',
       headers: {
@@ -143,11 +143,11 @@ router.post('/webhook', express.raw({ type: 'application/json' }), async (req, r
  */
 router.get('/payment/:transactionId', async (req, res) => {
   try {
-    const { userId, transactionId } = req.params;
+    const { transactionId } = req.params;
 
     // Query Segpay API for transaction status
-    // Uncomment when Segpay is configured:
-    /*
+    // TODO: Uncomment when Segpay is configured and remove mock response below
+    /* TEMPLATE: Uncomment when Segpay is configured
     const response = await fetch(`${SEGPAY_API_BASE}/transaction/${transactionId}`, {
       headers: {
         'X-API-Key': SEGPAY_API_KEY
