@@ -717,7 +717,7 @@
 .cancel-edit-btn {
   padding: 8px 16px;
   background: rgba(255, 255, 255, 0.05);
-  border: 1px solid var(--border);
+  border: 1px solid var(--border-light);
   border-radius: 8px;
   color: var(--text-secondary);
   font-size: 13px;
@@ -728,7 +728,7 @@
 
 .cancel-edit-btn:hover {
   background: rgba(255, 255, 255, 0.1);
-  color: var(--text);
+  color: var(--text-primary);
 }
 
 .save-edit-btn {
@@ -747,6 +747,541 @@
 .save-edit-btn:hover {
   transform: translateY(-1px);
   box-shadow: 0 6px 16px rgba(102, 126, 234, 0.4);
+}
+
+/* ===== SIDEBAR COMPONENTS ===== */
+
+/* Left Sidebar Navigation */
+.sidebar-section {
+  background: var(--surface);
+  border-radius: 12px;
+  padding: 8px;
+  box-shadow: var(--shadow-sm);
+}
+
+.sidebar-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  border-radius: 8px;
+  color: var(--text-primary);
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.sidebar-item:hover {
+  background: var(--surface-hover);
+}
+
+.sidebar-icon {
+  font-size: 20px;
+  width: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sidebar-text {
+  flex: 1;
+}
+
+/* Right Sidebar Widgets */
+.sidebar-widget {
+  background: var(--surface);
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 16px;
+  box-shadow: var(--shadow-sm);
+}
+
+.widget-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.widget-header h3 {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.widget-see-all {
+  background: none;
+  border: none;
+  color: var(--primary-solid);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 6px;
+  transition: all 0.2s;
+}
+
+.widget-see-all:hover {
+  background: var(--surface-hover);
+}
+
+/* Friend Suggestions */
+.suggestions-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.suggestion-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.suggestion-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  flex-shrink: 0;
+}
+
+.suggestion-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.suggestion-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 2px;
+}
+
+.suggestion-mutuals {
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.suggestion-add-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--primary);
+  border: none;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.suggestion-add-btn:hover {
+  transform: scale(1.1);
+  box-shadow: var(--anime-glow);
+}
+
+/* Featured Creators */
+.featured-creators-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.featured-creator-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px;
+  border-radius: 8px;
+  transition: all 0.2s;
+}
+
+.featured-creator-item:hover {
+  background: var(--surface-hover);
+}
+
+.featured-creator-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  flex-shrink: 0;
+}
+
+.featured-creator-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.featured-creator-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 4px;
+}
+
+.featured-creator-stats {
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.featured-creator-subscribe {
+  padding: 6px 12px;
+  background: var(--primary);
+  border: none;
+  border-radius: 6px;
+  color: white;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.featured-creator-subscribe:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--anime-glow);
+}
+
+/* Trending Tags */
+.trending-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.trending-tag {
+  padding: 8px 12px;
+  background: var(--surface-hover);
+  border: 1px solid var(--border-light);
+  border-radius: 20px;
+  color: var(--text-primary);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.trending-tag:hover {
+  background: var(--primary);
+  color: white;
+  border-color: var(--primary-solid);
+  transform: translateY(-1px);
+}
+
+/* Premium Widget */
+.premium-widget {
+  background: linear-gradient(135deg, var(--primary-solid) 0%, var(--secondary) 100%);
+  border: none;
+  text-align: center;
+}
+
+.premium-widget h3 {
+  color: white;
+  margin-bottom: 8px;
+}
+
+.premium-widget p {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 14px;
+  margin-bottom: 12px;
+}
+
+.premium-upgrade-btn {
+  width: 100%;
+  padding: 10px;
+  background: white;
+  border: none;
+  border-radius: 8px;
+  color: var(--primary-solid);
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.premium-upgrade-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+/* ===== BLENDED CREATOR RECOMMENDATIONS (OnlyFans-style) ===== */
+
+.creator-recommendation-card {
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+  border: 2px solid var(--primary-solid);
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 16px;
+  box-shadow: var(--shadow-md);
+  transition: all 0.3s;
+}
+
+.creator-recommendation-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--anime-glow);
+}
+
+.recommendation-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.recommendation-badge {
+  background: var(--primary);
+  color: white;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.creator-recommendation-content {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.creator-rec-avatar {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: var(--primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32px;
+  flex-shrink: 0;
+  box-shadow: var(--anime-glow);
+}
+
+.creator-rec-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.creator-rec-name {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0 0 4px 0;
+}
+
+.creator-rec-bio {
+  font-size: 14px;
+  color: var(--text-secondary);
+  margin: 0 0 8px 0;
+  line-height: 1.4;
+}
+
+.creator-rec-stats {
+  display: flex;
+  gap: 16px;
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+.creator-rec-stats span {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.creator-rec-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.creator-rec-subscribe {
+  flex: 1;
+  padding: 12px 24px;
+  background: var(--primary);
+  border: none;
+  border-radius: 8px;
+  color: white;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+.creator-rec-subscribe:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--anime-glow);
+}
+
+.creator-rec-profile {
+  flex: 1;
+  padding: 12px 24px;
+  background: var(--surface-hover);
+  border: 1px solid var(--border-medium);
+  border-radius: 8px;
+  color: var(--text-primary);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.creator-rec-profile:hover {
+  background: var(--surface);
+  border-color: var(--primary-solid);
+  color: var(--primary-solid);
+  transform: translateY(-2px);
+}
+
+/* Friend Suggestion Card (blended into feed) */
+.friend-suggestion-card {
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(5, 150, 105, 0.1) 100%);
+  border: 2px solid #10b981;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 16px;
+  box-shadow: var(--shadow-md);
+  transition: all 0.3s;
+}
+
+.friend-suggestion-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(16, 185, 129, 0.3);
+}
+
+.friend-suggestion-content {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.friend-sug-avatar {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  flex-shrink: 0;
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+}
+
+.friend-sug-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.friend-sug-name {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0 0 4px 0;
+}
+
+.friend-sug-mutuals {
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+.friend-sug-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.friend-sug-add {
+  padding: 10px 20px;
+  background: #10b981;
+  border: none;
+  border-radius: 8px;
+  color: white;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.friend-sug-add:hover {
+  background: #059669;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
+}
+
+.friend-sug-remove {
+  padding: 8px 20px;
+  background: transparent;
+  border: 1px solid var(--border-light);
+  border-radius: 8px;
+  color: var(--text-secondary);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.friend-sug-remove:hover {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text-primary);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .creator-recommendation-card,
+  .friend-suggestion-card {
+    padding: 16px;
+  }
+  
+  .creator-recommendation-content {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .creator-rec-stats {
+    justify-content: center;
+  }
+  
+  .creator-rec-actions {
+    flex-direction: column;
+  }
+  
+  .creator-rec-subscribe,
+  .creator-rec-profile {
+    width: 100%;
+  }
+  
+  .friend-suggestion-content {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .friend-sug-actions {
+    width: 100%;
+  }
+  
+  .friend-sug-add,
+  .friend-sug-remove {
+    width: 100%;
+  }
 }
 
 /* Legacy support */
@@ -769,7 +1304,7 @@
 
 .post-action:hover {
   background: rgba(255, 255, 255, 0.05);
-  color: var(--text);
+  color: var(--text-primary);
 }
 
 .post-action:active {

@@ -45,6 +45,12 @@ export const SocialFeed = ({ userId, userTier }) => {
   const [offset, setOffset] = useState(0);
   const [likedPosts, setLikedPosts] = useState(new Set());
   const [savedPosts, setSavedPosts] = useState(new Set());
+  const [friendSuggestions, setFriendSuggestions] = useState([
+    { id: 1, name: 'AnimeArtist99', avatar: '🎨', mutualFriends: 5 },
+    { id: 2, name: 'CosplayQueen', avatar: '👗', mutualFriends: 3 },
+    { id: 3, name: 'GameDevPro', avatar: '🎮', mutualFriends: 7 },
+    { id: 4, name: 'MangaLover', avatar: '📚', mutualFriends: 2 }
+  ]);
 
   // Get user's tier access
   const userEmail = localStorage.getItem('ownerEmail') || localStorage.getItem('userEmail');
@@ -456,39 +462,59 @@ export const SocialFeed = ({ userId, userTier }) => {
 
   return (
     <div className="social-feed-container">
-      {/* Navigation Tabs */}
-      <div className="feed-nav">
-        <button 
-          className={`feed-nav-btn ${activeTab === 'feed' ? 'active' : ''}`}
-          onClick={() => setActiveTab('feed')}
-        >
-          📰 Feed
-        </button>
-        <button 
-          className={`feed-nav-btn ${activeTab === 'messages' ? 'active' : ''}`}
-          onClick={() => setActiveTab('messages')}
-        >
-          💬 Messages
-        </button>
-        <button 
-          className={`feed-nav-btn ${activeTab === 'calls' ? 'active' : ''}`}
-          onClick={() => setActiveTab('calls')}
-        >
-          📞 Calls
-        </button>
-        <button 
-          className={`feed-nav-btn ${activeTab === 'streams' ? 'active' : ''}`}
-          onClick={() => setActiveTab('streams')}
-        >
-          📡 Live Streams
-        </button>
-        <button 
-          className={`feed-nav-btn ${activeTab === 'discover' ? 'active' : ''}`}
-          onClick={() => setActiveTab('discover')}
-        >
-          🔍 Discover
-        </button>
+      {/* Left Sidebar - Quick Actions */}
+      <div className="feed-sidebar-left">
+        <div className="sidebar-section">
+          <div className="sidebar-item" onClick={() => setActiveTab('feed')}>
+            <span className="sidebar-icon">🏠</span>
+            <span className="sidebar-text">Home</span>
+          </div>
+          <div className="sidebar-item" onClick={() => setActiveTab('discover')}>
+            <span className="sidebar-icon">🔍</span>
+            <span className="sidebar-text">Discover Creators</span>
+          </div>
+          <div className="sidebar-item" onClick={() => setActiveTab('friends')}>
+            <span className="sidebar-icon">👥</span>
+            <span className="sidebar-text">Find Friends</span>
+          </div>
+          <div className="sidebar-item" onClick={() => setActiveTab('messages')}>
+            <span className="sidebar-icon">💬</span>
+            <span className="sidebar-text">Messages</span>
+          </div>
+          <div className="sidebar-item" onClick={() => setActiveTab('subscriptions')}>
+            <span className="sidebar-icon">💎</span>
+            <span className="sidebar-text">My Subscriptions</span>
+          </div>
+          <div className="sidebar-item" onClick={() => setActiveTab('saved')}>
+            <span className="sidebar-icon">📕</span>
+            <span className="sidebar-text">Saved</span>
+          </div>
+        </div>
       </div>
+
+      {/* Main Feed Area */}
+      <div className="feed-main">
+        {/* Navigation Tabs */}
+        <div className="feed-nav">
+          <button 
+            className={`feed-nav-btn ${activeTab === 'feed' ? 'active' : ''}`}
+            onClick={() => setActiveTab('feed')}
+          >
+            🏠 Feed
+          </button>
+          <button 
+            className={`feed-nav-btn ${activeTab === 'discover' ? 'active' : ''}`}
+            onClick={() => setActiveTab('discover')}
+          >
+            🔍 Discover
+          </button>
+          <button 
+            className={`feed-nav-btn ${activeTab === 'friends' ? 'active' : ''}`}
+            onClick={() => setActiveTab('friends')}
+          >
+            👥 Friends
+          </button>
+        </div>
 
       {/* Feed Tab */}
       {activeTab === 'feed' && (
@@ -699,15 +725,24 @@ export const SocialFeed = ({ userId, userTier }) => {
                 <p>Be the first to post something awesome</p>
               </div>
             )}
-            {posts.map(post => {
+            {posts.map((post, index) => {
               // Check if user can view this paid content
               const canViewPaidContent = !post.isPaidContent || 
                                         access.hasFreeContentAccess || 
                                         post.userId === userId ||
                                         subscriptions.some(sub => sub.creatorId === post.userId);
               
+              // Insert creator recommendation card every 4 posts (OnlyFans-style blending)
+              const shouldShowCreatorCard = (index + 1) % 4 === 0 && index < posts.length - 1;
+              const creatorToShow = discoverCreators[Math.floor(index / 4) % discoverCreators.length];
+              
+              // Insert friend suggestion card every 6 posts
+              const shouldShowFriendCard = (index + 1) % 6 === 0 && index < posts.length - 1 && friendSuggestions.length > 0;
+              const friendToShow = friendSuggestions[Math.floor(index / 6) % friendSuggestions.length];
+              
               return (
-              <div key={post.id} className="post-card">
+              <React.Fragment key={post.id}>
+              <div className="post-card">
                 <div className="post-header">
                   <span className="post-avatar">{post.avatar}</span>
                   <div className="post-meta">
@@ -830,6 +865,71 @@ export const SocialFeed = ({ userId, userTier }) => {
                   </div>
                 )}
               </div>
+              
+              {/* Blended Creator Recommendation Card (OnlyFans-style) */}
+              {shouldShowCreatorCard && creatorToShow && (
+                <div className="creator-recommendation-card">
+                  <div className="recommendation-header">
+                    <span className="recommendation-badge">⭐ Suggested Creator</span>
+                  </div>
+                  <div className="creator-recommendation-content">
+                    <div className="creator-rec-avatar">{creatorToShow.avatar || '👤'}</div>
+                    <div className="creator-rec-info">
+                      <h3 className="creator-rec-name">@{creatorToShow.username}</h3>
+                      <p className="creator-rec-bio">{creatorToShow.bio || 'Creator on ForTheWeebs'}</p>
+                      <div className="creator-rec-stats">
+                        <span>💎 {creatorToShow.follower_count || 0} subscribers</span>
+                        <span>📝 {creatorToShow.post_count || 0} posts</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="creator-rec-actions">
+                    <button 
+                      className="creator-rec-subscribe"
+                      onClick={() => subscribeToUser(creatorToShow.user_id, creatorToShow.username)}
+                    >
+                      💎 Subscribe
+                    </button>
+                    <button 
+                      className="creator-rec-profile"
+                      onClick={() => window.location.href = `/profile/${creatorToShow.username}`}
+                    >
+                      View Profile
+                    </button>
+                  </div>
+                </div>
+              )}
+              
+              {/* Blended Friend Suggestion Card */}
+              {shouldShowFriendCard && friendToShow && (
+                <div className="friend-suggestion-card">
+                  <div className="recommendation-header">
+                    <span className="recommendation-badge">👥 Suggested Friend</span>
+                  </div>
+                  <div className="friend-suggestion-content">
+                    <div className="friend-sug-avatar">{friendToShow.avatar}</div>
+                    <div className="friend-sug-info">
+                      <h3 className="friend-sug-name">{friendToShow.name}</h3>
+                      <p className="friend-sug-mutuals">
+                        {friendToShow.mutualFriends} mutual friends
+                      </p>
+                    </div>
+                    <div className="friend-sug-actions">
+                      <button 
+                        className="friend-sug-add"
+                        onClick={() => {
+                          addFriend(friendToShow.id, friendToShow.name);
+                          setFriendSuggestions(prev => prev.filter(s => s.id !== friendToShow.id));
+                        }}
+                      >
+                        ➕ Add Friend
+                      </button>
+                      <button className="friend-sug-remove">Remove</button>
+                    </div>
+                  </div>
+                </div>
+              )}
+              </React.Fragment>
               );
             })}
           </div>
@@ -1111,20 +1211,93 @@ export const SocialFeed = ({ userId, userTier }) => {
         </FeatureBlocker>
       )}
 
-      {/* Premium Upsell for Non-Premium Users */}
-      {!access.hasCGI.full && (
-        <div className="premium-upsell">
-          <h3>💎 Upgrade to $1,000 Tier</h3>
-          <p>Unlock CGI messages, video effects, and live streaming tools!</p>
-          <button onClick={() => {
-            const urlParams = new URLSearchParams(window.location.search);
-            urlParams.set('tab', 'premium');
-            window.location.search = urlParams.toString();
-          }}>
-            Unlock Premium Features
-          </button>
+      {/* Right Sidebar - Recommendations & Trending */}
+      <div className="feed-sidebar-right">
+        {/* Friend Suggestions */}
+        <div className="sidebar-widget">
+          <div className="widget-header">
+            <h3>👥 People You May Know</h3>
+            <button className="widget-see-all" onClick={() => setActiveTab('discover')}>See All</button>
+          </div>
+          <div className="suggestions-list">
+            {friendSuggestions.slice(0, 4).map((suggestion) => (
+              <div key={suggestion.id} className="suggestion-item">
+                <div className="suggestion-avatar">{suggestion.avatar}</div>
+                <div className="suggestion-info">
+                  <div className="suggestion-name">{suggestion.name}</div>
+                  <div className="suggestion-mutuals">{suggestion.mutualFriends} mutual friends</div>
+                </div>
+                <button 
+                  className="suggestion-add-btn"
+                  onClick={() => {
+                    addFriend(suggestion.id, suggestion.name);
+                    setFriendSuggestions(prev => prev.filter(s => s.id !== suggestion.id));
+                  }}
+                >
+                  ➕
+                </button>
+              </div>
+            ))}
+          </div>
         </div>
-      )}
+
+        {/* Featured Creators */}
+        <div className="sidebar-widget">
+          <div className="widget-header">
+            <h3>⭐ Featured Creators</h3>
+            <button className="widget-see-all">See All</button>
+          </div>
+          <div className="featured-creators-list">
+            {discoverCreators.slice(0, 5).map((creator) => (
+              <div key={creator.user_id} className="featured-creator-item">
+                <div className="featured-creator-avatar">
+                  {creator.avatar || '👤'}
+                </div>
+                <div className="featured-creator-info">
+                  <div className="featured-creator-name">@{creator.username}</div>
+                  <div className="featured-creator-stats">
+                    💎 {creator.follower_count || 0} subscribers
+                  </div>
+                </div>
+                <button className="featured-creator-subscribe">
+                  Subscribe
+                </button>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Trending Tags */}
+        <div className="sidebar-widget">
+          <div className="widget-header">
+            <h3>🔥 Trending Topics</h3>
+          </div>
+          <div className="trending-tags">
+            {['#AnimeArt', '#Cosplay', '#GameDev', '#Animation', '#Comics'].map((tag) => (
+              <button 
+                key={tag} 
+                className="trending-tag"
+                onClick={() => {
+                  setSearchQuery(tag);
+                  setActiveTab('discover');
+                }}
+              >
+                {tag}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Premium Upsell */}
+        {!access.hasCGI.full && (
+          <div className="sidebar-widget premium-widget">
+            <h3>💎 Unlock Premium</h3>
+            <p>Get CGI tools, video effects, and more!</p>
+            <button className="premium-upgrade-btn">Upgrade Now</button>
+          </div>
+        )}
+      </div>
+      </div>
     </div>
   );
 };
