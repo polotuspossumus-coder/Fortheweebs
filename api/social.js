@@ -12,11 +12,27 @@ const supabase = createClient(
     process.env.SUPABASE_SERVICE_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY || 'dummy-key'
 );
 
+// Helper to set CORS headers on every response
+function setCorsHeaders(req, res) {
+    const origin = req.headers.origin;
+    const allowedOrigins = [
+        'https://fortheweebs.vercel.app',
+        'https://fortheweebs-1u0c55wxe-jacobs-projects-eac77986.vercel.app',
+        'http://localhost:3003',
+        'http://localhost:3002'
+    ];
+    if (allowedOrigins.includes(origin)) {
+        res.header('Access-Control-Allow-Origin', origin);
+        res.header('Access-Control-Allow-Credentials', 'true');
+    }
+}
+
 /**
  * GET /api/social/feed
  * Get public feed posts
  */
 router.get('/feed', async (req, res) => {
+    setCorsHeaders(req, res);
     try {
         const { limit = 50, offset = 0 } = req.query;
 
@@ -63,6 +79,7 @@ router.get('/feed', async (req, res) => {
  * Discover creators to follow
  */
 router.get('/discover', async (req, res) => {
+    setCorsHeaders(req, res);
     try {
         const { limit = 20 } = req.query;
 
@@ -146,6 +163,7 @@ router.get('/search', async (req, res) => {
  * Create a new post
  */
 router.post('/post', async (req, res) => {
+    setCorsHeaders(req, res);
     try {
         const { userId, content, visibility = 'PUBLIC', mediaUrl = null } = req.body;
 
@@ -226,6 +244,7 @@ router.post('/post', async (req, res) => {
  * Follow a user
  */
 router.post('/follow', async (req, res) => {
+    setCorsHeaders(req, res);
     try {
         const { followerId, followingId } = req.body;
 
@@ -282,6 +301,7 @@ router.delete('/unfollow', async (req, res) => {
  * Like a post
  */
 router.post('/post/:postId/like', async (req, res) => {
+    setCorsHeaders(req, res);
     try {
         const { postId } = req.params;
         const { userId } = req.body;
@@ -371,6 +391,7 @@ router.delete('/post/:postId/like', async (req, res) => {
  * Save a post (bookmark)
  */
 router.post('/post/:postId/save', async (req, res) => {
+    setCorsHeaders(req, res);
     try {
         const { postId } = req.params;
         const { userId } = req.body;
@@ -442,6 +463,7 @@ router.delete('/post/:postId/save', async (req, res) => {
  * Track post share (analytics)
  */
 router.post('/post/:postId/share', async (req, res) => {
+    setCorsHeaders(req, res);
     try {
         const { postId } = req.params;
 
