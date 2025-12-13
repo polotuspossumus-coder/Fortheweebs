@@ -19,7 +19,7 @@ async function ensureArtifactDir() {
 // Write artifact with SHA-256 hash
 async function writeArtifact(type, data) {
   await ensureArtifactDir();
-  const timestamp = new Date().toISOString().replaceAll(':', '-').replaceAll('.', '-');
+  const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
   const filename = `${type}_${timestamp}.json`;
   const filepath = path.join(ARTIFACT_DIR, filename);
   

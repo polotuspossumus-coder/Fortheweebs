@@ -49,7 +49,7 @@ async function runSelfTest() {
     if (insertError) throw insertError;
     
     // Read
-    const { data: _data, error: selectError } = await supabase
+    const { data, error: selectError } = await supabase
       .from('ftw_reports')
       .select('*')
       .eq('metadata->>testId', testId)

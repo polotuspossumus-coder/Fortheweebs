@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-/* eslint-disable */
+/* eslint-disable no-unused-vars, @typescript-eslint/no-explicit-any */
 /**
  * Apply Supabase RLS Policy Fixes
  * Fixes 406 errors by updating Row Level Security policies

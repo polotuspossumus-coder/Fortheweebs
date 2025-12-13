@@ -1,4 +1,4 @@
-/* eslint-disable */
+/* eslint-disable no-unused-vars, @typescript-eslint/no-explicit-any */
 // src/mobile/offlineQueue.ts - Offline request queue for Capacitor
 // Optional Capacitor imports - gracefully degrade if not available
 let Capacitor: any = { isNativePlatform: () => false };

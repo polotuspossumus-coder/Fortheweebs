@@ -1,6 +1,6 @@
 // bugfixer/upload.js - Upload artifacts to Supabase Storage
-const fs = require('node:fs').promises;
-const path = require('node:path');
+const fs = require('fs').promises;
+const path = require('path');
 const { createClient } = require('@supabase/supabase-js');
 const { writeArtifact } = require('../../utils/server-safety');
 

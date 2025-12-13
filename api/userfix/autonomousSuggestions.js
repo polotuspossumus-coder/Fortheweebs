@@ -44,7 +44,6 @@ async function sandboxTest(change, repairType) {
             JSON.parse(change.content_value);
             sandboxResult.passed = true;
           } catch (e) {
-            console.error('JSON parse error in sandbox:', e.message);
             sandboxResult.errors.push('Invalid JSON');
           }
         } else {
@@ -54,8 +53,8 @@ async function sandboxTest(change, repairType) {
 
       case 'config': {
         // Test: Is config value valid?
-        const value = Number.parseFloat(change.config_value);
-        if (!Number.isNaN(value) && value > 0) {
+        const value = parseFloat(change.config_value);
+        if (!isNaN(value) && value > 0) {
           sandboxResult.passed = true;
         } else {
           sandboxResult.errors.push('Invalid config value');

@@ -1,4 +1,4 @@
-/* eslint-disable */
+/* eslint-disable no-unused-vars, @typescript-eslint/no-explicit-any */
 import React, { useState, useRef, useEffect } from 'react';
 import './PhotoEditorPro.css';
 import { saveFileWithDialog, FILE_TYPES } from '../utils/fileSaveDialog';

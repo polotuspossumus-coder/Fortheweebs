@@ -1,4 +1,4 @@
-/* eslint-disable */
+/* eslint-disable no-unused-vars, @typescript-eslint/no-explicit-any */
 import React, { useState, useRef } from 'react';
 
 export const AIVideoGenerator = ({ userId, tier }) => {

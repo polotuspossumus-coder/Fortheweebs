@@ -108,8 +108,13 @@ router.post('/webhook', express.raw({ type: 'application/x-www-form-urlencoded' 
     const webhookData = req.body;
     
     // Extract webhook data
-    const responseDigest = webhookData.responseDigest; // CCBill's verification hash
-    // Note: X_user_id, X_content_id, X_description available in webhookData if needed
+    const {
+      // subscriptionId, transactionId, clientAccnum, clientSubacc, timestamp, formPrice - available if needed
+      X_user_id: userId, // eslint-disable-line no-unused-vars
+      X_content_id: contentId, // eslint-disable-line no-unused-vars
+      X_description: description, // eslint-disable-line no-unused-vars
+      responseDigest // CCBill's verification hash
+    } = webhookData;
 
     // Verify webhook authenticity
     const isValid = verifyCCBillWebhook(webhookData, responseDigest);

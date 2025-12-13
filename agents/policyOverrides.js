@@ -1,4 +1,4 @@
-/* eslint-disable */
+/* eslint-disable no-unused-vars, @typescript-eslint/no-explicit-any */
 // Policy Overrides Agent - Stub implementation
 // Manages policy overrides with owner authentication
 

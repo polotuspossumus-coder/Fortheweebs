@@ -1,4 +1,4 @@
-/* eslint-disable */
+/* eslint-disable no-unused-vars, @typescript-eslint/no-explicit-any */
 /**
  * GitHub Bug Reporter
  * Automatically creates GitHub Issues from bug reports

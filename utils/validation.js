@@ -79,8 +79,8 @@ function validateSuggestion(payload, ip) {
       // Validate numeric bounds
       const bounds = CONFIG_BOUNDS[change.config_key];
       if (bounds) {
-        const value = Number.parseFloat(change.config_value);
-        if (Number.isNaN(value) || value < bounds.min || value > bounds.max) {
+        const value = parseFloat(change.config_value);
+        if (isNaN(value) || value < bounds.min || value > bounds.max) {
           errors.push(`Config value out of bounds (${bounds.min}-${bounds.max})`);
         }
       }
@@ -103,9 +103,9 @@ function validateSuggestion(payload, ip) {
 function sanitizeText(text) {
   if (!text) return '';
   return text
-    .replaceAll(/<script[^>]*>.*?<\/script>/gi, '')
-    .replaceAll(/javascript:/gi, '')
-    .replaceAll(/on\w+\s*=/gi, '')
+    .replace(/<script[^>]*>.*?<\/script>/gi, '')
+    .replace(/javascript:/gi, '')
+    .replace(/on\w+\s*=/gi, '')
     .trim();
 }
 

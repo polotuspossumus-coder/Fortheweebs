@@ -1,4 +1,4 @@
-/* eslint-disable */
+/* eslint-disable no-unused-vars, @typescript-eslint/no-explicit-any */
 import { useState, useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { TIERS, getTierName, getTierPrice } from '../utils/tierAccess';
