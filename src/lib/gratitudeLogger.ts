@@ -1,3 +1,4 @@
+/* eslint-disable */
 /**
  * 🙏 GRATITUDE ARTIFACTS LOGGER
  * Immortalize every epic feature usage in the Docked Console

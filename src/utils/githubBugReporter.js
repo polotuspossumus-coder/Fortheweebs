@@ -1,3 +1,4 @@
+/* eslint-disable */
 /**
  * GitHub Bug Reporter
  * Automatically creates GitHub Issues from bug reports

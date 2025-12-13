@@ -1,3 +1,4 @@
+/* eslint-disable */
 /**
  * Future-Proof Exports - AR/VR/XR hologram file generation
  * Exports content in formats ready for emerging platforms

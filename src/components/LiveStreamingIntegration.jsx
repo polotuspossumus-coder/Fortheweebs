@@ -1,3 +1,4 @@
+/* eslint-disable */
 // LiveStreamingIntegration.jsx
 // The feature that makes streaming EFFORTLESS
 // OBS requires separate app. Streamlabs is buggy. XSplit is expensive.

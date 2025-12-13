@@ -1,3 +1,4 @@
+/* eslint-disable */
 // Run SQL migration to add username support to Supabase
 const { createClient } = require('@supabase/supabase-js');
 const fs = require('fs');

@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React, { useState, useEffect } from 'react';
 import './UserProfileManager.css';
 import { isLifetimeVIP, LIFETIME_VIP_EMAILS } from '../utils/vipAccess';

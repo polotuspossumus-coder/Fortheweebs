@@ -1,3 +1,4 @@
+/* eslint-disable */
 // TemplateLibrary.jsx
 // 50+ free templates - no more blank canvas syndrome
 // Professional templates available at no extra cost

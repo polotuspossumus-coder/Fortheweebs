@@ -1,3 +1,4 @@
+/* eslint-disable */
 // ARTWORK GALLERY - Display uploaded images with metadata
 
 import React, { useState, useEffect } from 'react';

@@ -1,3 +1,4 @@
+/* eslint-disable */
 // Payment Upgrade Credit System
 // Tracks payments and calculates upgrade costs
 

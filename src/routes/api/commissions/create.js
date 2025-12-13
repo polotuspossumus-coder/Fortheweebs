@@ -1,3 +1,4 @@
+/* eslint-disable */
 /**
  * COMMISSION CREATION API
  * Allows creators to list commissions

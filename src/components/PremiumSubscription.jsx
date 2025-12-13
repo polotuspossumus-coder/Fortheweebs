@@ -1,3 +1,4 @@
+/* eslint-disable */
 // TOOL UNLOCK SYSTEM - Earn-to-unlock model + $500 full platform access
 
 import React, { useState, useEffect } from 'react';

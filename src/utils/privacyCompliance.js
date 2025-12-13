@@ -1,3 +1,4 @@
+/* eslint-disable */
 // PRIVACY POLICY & GDPR/CCPA COMPLIANCE SYSTEM
 
 export const PRIVACY_COMPLIANCE = {

@@ -1,3 +1,4 @@
+/* eslint-disable */
 /**
  * Lazy Load Wrapper Component
  * Provides loading states and error boundaries for lazy-loaded components

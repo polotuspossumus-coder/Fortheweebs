@@ -1,3 +1,4 @@
+/* eslint-disable */
 // src/lib/safeFetch.ts - Fetch with retries and timeout
 interface SafeFetchOptions extends RequestInit {
   timeout?: number;

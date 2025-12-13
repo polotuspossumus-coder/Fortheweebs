@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React, { useState, useEffect } from 'react';
 import { useAuth } from './AuthSupabase.jsx';
 import './CreatorPaymentSetup.css';

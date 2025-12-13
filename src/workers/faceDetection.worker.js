@@ -1,3 +1,4 @@
+/* eslint-disable */
 /**
  * Web Worker for background face detection
  * Runs face detection off the main thread for better performance

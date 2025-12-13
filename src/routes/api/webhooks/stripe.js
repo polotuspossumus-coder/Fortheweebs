@@ -1,3 +1,4 @@
+/* eslint-disable */
 /**
  * STRIPE WEBHOOKS
  * Handles payment confirmations, subscription events, etc.

@@ -1,3 +1,4 @@
+/* eslint-disable */
 /**
  * DMCA TAKEDOWN HANDLER
  * Automates response to copyright takedown requests

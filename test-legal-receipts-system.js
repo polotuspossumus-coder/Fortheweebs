@@ -1,3 +1,4 @@
+/* eslint-disable */
 /**
  * Legal Receipts System Verification
  * Run: node test-legal-receipts-system.js

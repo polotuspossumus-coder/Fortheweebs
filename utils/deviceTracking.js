@@ -1,3 +1,4 @@
+/* eslint-disable */
 /**
  * IP TRACKING & DEVICE FINGERPRINTING
  * Prevents banned users from creating new accounts

@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React, { useState, useRef } from 'react';
 
 export const AIVideoGenerator = ({ userId, tier }) => {

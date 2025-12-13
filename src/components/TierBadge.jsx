@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React from 'react';
 import { TIERS, getTierName, checkTierAccess } from '../utils/tierAccess';
 

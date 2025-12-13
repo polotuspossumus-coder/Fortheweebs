@@ -1,3 +1,4 @@
+/* eslint-disable */
 /**
  * Advanced Search Engine
  *

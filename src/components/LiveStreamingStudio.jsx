@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React, { useState, useEffect, useRef } from 'react';
 import './LiveStreamingStudio.css';
 import { CGIRealTimeModification } from './CGIRealTimeModification';

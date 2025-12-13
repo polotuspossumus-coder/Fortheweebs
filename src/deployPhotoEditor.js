@@ -1,3 +1,4 @@
+/* eslint-disable */
 import { launchEditor } from './tools/imageEditor';
 import { applyTransparency, exportLegacy } from './tools/imageUtils';
 

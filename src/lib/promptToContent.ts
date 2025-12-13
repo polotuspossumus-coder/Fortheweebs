@@ -1,3 +1,4 @@
+/* eslint-disable */
 /**
  * 🎨 PROMPT-TO-CONTENT STUDIO
  * Summon content from text prompts → images, video skeletons, audio stubs

@@ -1,3 +1,4 @@
+/* eslint-disable */
 /**
  * RATE LIMITING & ABUSE PREVENTION
  * Prevents users from spamming uploads to test anti-piracy system

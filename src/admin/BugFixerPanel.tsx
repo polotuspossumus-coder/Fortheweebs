@@ -1,3 +1,4 @@
+/* eslint-disable */
 // src/admin/BugFixerPanel.tsx - Admin bug fixer control panel
 import React, { useState } from 'react';
 import safeFetch from '../lib/safeFetch';

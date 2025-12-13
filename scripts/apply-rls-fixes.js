@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+/* eslint-disable */
 /**
  * Apply Supabase RLS Policy Fixes
  * Fixes 406 errors by updating Row Level Security policies

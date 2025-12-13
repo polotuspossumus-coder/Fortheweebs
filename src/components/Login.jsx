@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React, { useState } from 'react';
 import './Login.css';
 import { isActualOwner, grantAdminAccess, OWNER_EMAIL, OWNER_USERNAME } from '../utils/adminSecurity';

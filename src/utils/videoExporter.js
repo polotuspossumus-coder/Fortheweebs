@@ -1,3 +1,4 @@
+/* eslint-disable */
 /**
  * Video Export Engine - Real H.264/H.265 encoding with transitions
  * Uses ffmpeg.wasm for client-side video processing

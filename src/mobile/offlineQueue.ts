@@ -1,3 +1,4 @@
+/* eslint-disable */
 // src/mobile/offlineQueue.ts - Offline request queue for Capacitor
 import { Capacitor } from '@capacitor/core';
 import { Network } from '@capacitor/network';

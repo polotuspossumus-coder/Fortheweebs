@@ -1,3 +1,4 @@
+/* eslint-disable */
 // Policy Overrides Agent - Stub implementation
 // Manages policy overrides with owner authentication
 

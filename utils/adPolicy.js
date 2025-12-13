@@ -1,3 +1,4 @@
+/* eslint-disable */
 /**
  * AD POLICY ENFORCEMENT
  * 

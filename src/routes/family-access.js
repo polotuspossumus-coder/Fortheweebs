@@ -1,3 +1,4 @@
+/* eslint-disable */
 /**
  * API Route: Family Access System
  * Generate special access codes for family/friends

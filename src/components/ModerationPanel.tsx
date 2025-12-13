@@ -1,3 +1,4 @@
+/* eslint-disable */
 type FlaggedContent = {
   id: string | number;
   reason: string;

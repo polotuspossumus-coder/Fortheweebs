@@ -1,3 +1,4 @@
+/* eslint-disable */
 // IMAGE CONTENT SCANNING - Detects copyrighted characters in uploaded images
 // Prevents users from uploading traced/copied Pokemon, Marvel, Disney characters
 

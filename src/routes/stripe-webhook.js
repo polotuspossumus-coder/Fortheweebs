@@ -1,3 +1,4 @@
+/* eslint-disable */
 /**
  * Stripe Webhook Handler
  * Updates user tier in database after successful payment

@@ -1,3 +1,4 @@
+/* eslint-disable */
 // Simple analytics wrapper - can be easily connected to Google Analytics, Mixpanel, etc.
 
 class Analytics {

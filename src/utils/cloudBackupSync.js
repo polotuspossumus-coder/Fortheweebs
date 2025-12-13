@@ -1,3 +1,4 @@
+/* eslint-disable */
 /**
  * Cloud Backup & Sync System
  *

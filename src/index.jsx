@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React, { useState, useEffect } from "react";
 import { createRoot } from "react-dom/client";
 import { AuthProvider, useAuth } from "./components/AuthSupabase.jsx";

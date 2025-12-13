@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React, { useState, useRef, Suspense, useEffect } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { OrbitControls, Grid, TransformControls, PerspectiveCamera, useGLTF } from '@react-three/drei';

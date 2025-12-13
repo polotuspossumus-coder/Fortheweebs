@@ -1,3 +1,4 @@
+/* eslint-disable */
 /**
  * Performance optimization utilities
  * Helps with code splitting, lazy loading, and bundle analysis

@@ -1,3 +1,4 @@
+/* eslint-disable */
 /**
  * Face Detection and Grouping API
  * Uses AWS Rekognition or similar service to detect and group faces

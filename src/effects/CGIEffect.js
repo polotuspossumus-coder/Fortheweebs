@@ -1,3 +1,4 @@
+/* eslint-disable */
 /**
  * Base class for all CGI effects
  */

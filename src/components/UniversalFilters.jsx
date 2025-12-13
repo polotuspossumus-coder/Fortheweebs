@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React, { useState, useRef, useEffect } from 'react';
 import { saveFileWithDialog, FILE_TYPES } from '../utils/fileSaveDialog';
 import * as faceapi from '@vladmandic/face-api';

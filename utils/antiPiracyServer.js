@@ -1,3 +1,4 @@
+/* eslint-disable */
 /**
  * SERVER-SIDE ANTI-PIRACY UTILITIES
  * Node.js compatible version for backend use

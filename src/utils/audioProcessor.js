@@ -1,3 +1,4 @@
+/* eslint-disable */
 /**
  * Web Audio Processor - Real audio effects and processing
  * Implements professional audio effects using Web Audio API

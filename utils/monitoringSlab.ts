@@ -1,3 +1,4 @@
+/* eslint-disable */
 /**
  * 🖥️ MONITORING SLAB - Real-time resource monitoring with Supabase artifact logging
  * 

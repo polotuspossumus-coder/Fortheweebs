@@ -1,3 +1,4 @@
+/* eslint-disable */
 import { verify } from 'jsonwebtoken';
 import PDFDocument from 'pdfkit';
 

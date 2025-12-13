@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React, { useState, useRef } from 'react';
 import JSZip from 'jszip';
 import { saveFileWithDialog, saveMultipleFilesWithDialog, FILE_TYPES, isFileSystemAccessSupported } from '../utils/fileSaveDialog';

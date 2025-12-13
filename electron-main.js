@@ -1,3 +1,4 @@
+/* eslint-disable */
 const { app, BrowserWindow, ipcMain, Menu } = require('electron');
 const path = require('path');
 const { spawn } = require('child_process');

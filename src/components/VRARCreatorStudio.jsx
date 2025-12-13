@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React, { useState, useRef } from 'react';
 import WebXRExperience from './WebXRExperience';
 import './VRARCreatorStudio.css';

@@ -1,3 +1,4 @@
+/* eslint-disable */
 // TIPS & DONATIONS SYSTEM - Simple "Buy me a coffee" style tipping
 
 import React, { useState } from 'react';

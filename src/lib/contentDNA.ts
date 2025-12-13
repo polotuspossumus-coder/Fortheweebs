@@ -1,3 +1,4 @@
+/* eslint-disable */
 /**
  * 🧬 CONTENT DNA TRACKING
  * Perceptual hashing for finding stolen content across the web

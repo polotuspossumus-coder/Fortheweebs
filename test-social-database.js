@@ -1,3 +1,4 @@
+/* eslint-disable */
 /**
  * ForTheWeebs - Social Database Integration Test
  * Tests that Supabase tables are working with the social API

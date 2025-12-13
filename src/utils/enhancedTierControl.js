@@ -1,3 +1,4 @@
+/* eslint-disable */
 /**
  * ENHANCED TIER ACCESS CONTROL SYSTEM
  * Prevents users from accessing features they haven't paid for

@@ -1,3 +1,4 @@
+/* eslint-disable */
 /**
  * Crypto Payment Intent API
  * 

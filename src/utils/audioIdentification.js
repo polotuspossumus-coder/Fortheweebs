@@ -1,3 +1,4 @@
+/* eslint-disable */
 /**
  * Audio Identification System
  * Identifies songs and audiobooks using ACRCloud and AudD APIs

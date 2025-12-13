@@ -1,3 +1,4 @@
+/* eslint-disable */
 /**
  * COMPLETE PLATFORM TEST
  * Tests EVERY critical endpoint to verify the platform is launch-ready

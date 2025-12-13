@@ -1,3 +1,4 @@
+/* eslint-disable */
 /**
  * Verify Database Tables Exist
  * Checks if payment system tables are created

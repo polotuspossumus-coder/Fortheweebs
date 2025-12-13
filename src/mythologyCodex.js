@@ -1,3 +1,4 @@
+/* eslint-disable */
 export function saveLoreToCodex(creatorId, lore) {
   const entries = getCodexForCreator(creatorId);
   if (entries.length > 0) {

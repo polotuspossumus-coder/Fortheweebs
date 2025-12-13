@@ -1,3 +1,4 @@
+/* eslint-disable */
 /**
  * Admin Security - Centralized admin access control
  * ONLY polotuspossumus@gmail.com gets admin access

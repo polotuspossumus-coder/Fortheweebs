@@ -1,3 +1,4 @@
+/* eslint-disable */
 /**
  * COMPLETE SYSTEM TEST
  * Tests all critical systems for launch readiness

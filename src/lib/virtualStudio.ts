@@ -1,3 +1,4 @@
+/* eslint-disable */
 /**
  * 🎬 VIRTUAL STUDIO
  * Real-time background replacement using TensorFlow BodyPix

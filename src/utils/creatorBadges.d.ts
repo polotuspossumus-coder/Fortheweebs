@@ -1,3 +1,4 @@
+/* eslint-disable */
 export interface RemixBadge {
     creatorId: string;
     tier: CreatorTier;

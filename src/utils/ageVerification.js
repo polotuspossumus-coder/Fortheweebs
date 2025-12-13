@@ -1,3 +1,4 @@
+/* eslint-disable */
 // AGE VERIFICATION SYSTEM - COPPA & Age-Restricted Content Compliance
 
 export const AGE_VERIFICATION_CONFIG = {

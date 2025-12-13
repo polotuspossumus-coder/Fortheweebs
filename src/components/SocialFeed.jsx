@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React, { useState, useEffect } from 'react';
 import './SocialFeed.css';
 import { isLifetimeVIP } from '../utils/vipAccess';

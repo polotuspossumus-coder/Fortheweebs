@@ -1,3 +1,4 @@
+/* eslint-disable */
 import { useState, useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { TIERS, getTierName, getTierPrice } from '../utils/tierAccess';

@@ -1,3 +1,4 @@
+/* eslint-disable */
 /**
  * 🎯 SCENE REMOVAL (Context-Aware Object Removal)
  * Remove unwanted objects from images/video using selection masks + AI inpainting

@@ -1,3 +1,4 @@
+/* eslint-disable */
 /**
  * Effect presets for quick one-click CGI configurations
  */

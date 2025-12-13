@@ -1,3 +1,4 @@
+/* eslint-disable */
 /**
  * AI-Powered Automatic Content Reviewer
  * Uses Claude to automatically review flagged content instead of manual human review

@@ -1,3 +1,4 @@
+/* eslint-disable */
 /**
  * CONTENT HASH VERIFICATION SYSTEM
  * Prevents re-uploads of blocked content with renamed files

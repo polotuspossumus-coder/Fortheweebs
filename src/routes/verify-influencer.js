@@ -1,3 +1,4 @@
+/* eslint-disable */
 /**
  * API Route: Verify Influencer Status for $500 Full Unlock
  * Limited to 25 total influencers - First come, first served

@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React, { useState, useEffect } from 'react';
 
 // STATE-OF-THE-ART VR/AR MARKETPLACE

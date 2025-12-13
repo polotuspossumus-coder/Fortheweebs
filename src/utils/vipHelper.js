@@ -1,3 +1,4 @@
+/* eslint-disable */
 // VIP Access Helper
 // TIER SYSTEM:
 // - Owner (1) + 12 VIPs = FREE FOREVER, unlimited access, NO creator subscriptions

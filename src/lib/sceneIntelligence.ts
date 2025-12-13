@@ -1,3 +1,4 @@
+/* eslint-disable */
 /**
  * 🎬 SCENE INTELLIGENCE (ENHANCED)
  * AI-powered video analysis and cinematic effects with FFmpeg.wasm

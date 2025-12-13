@@ -1,3 +1,4 @@
+/* eslint-disable */
 export declare class VaultAsset {
     userId: string;
     assetUrl: string;

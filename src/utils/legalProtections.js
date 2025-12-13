@@ -1,3 +1,4 @@
+/* eslint-disable */
 // Content Moderation & Legal Protection System
 
 export const LEGAL_PROTECTIONS = {

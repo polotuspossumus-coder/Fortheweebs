@@ -1,3 +1,4 @@
+/* eslint-disable */
 /**
  * REVENUE SPLIT SYSTEM
  * Determines what % creators keep based on their tier

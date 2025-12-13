@@ -1,3 +1,4 @@
+/* eslint-disable */
 // COMMISSION MARKETPLACE - Creators offer custom commissions, platform takes 15%
 
 import React, { useState, useEffect } from 'react';

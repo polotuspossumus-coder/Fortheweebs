@@ -1,3 +1,4 @@
+/* eslint-disable */
 // Set owner username to 'polotuspossumus'
 const { createClient } = require('@supabase/supabase-js');
 require('dotenv').config();

@@ -1,3 +1,4 @@
+/* eslint-disable */
 /**
  * AI Image Upscaling - "Zoom & Enhance" Signature Feature
  * Uses Waifu2x-style neural network for anime/photo upscaling

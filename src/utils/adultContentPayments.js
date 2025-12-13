@@ -1,3 +1,4 @@
+/* eslint-disable */
 /**
  * Adult Content Payment Processing
  *

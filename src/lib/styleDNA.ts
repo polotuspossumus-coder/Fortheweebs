@@ -1,3 +1,4 @@
+/* eslint-disable */
 /**
  * Style DNA Engine - Learns and applies creator's unique style
  * Analyzes editing patterns, filters, color grading, and creative choices

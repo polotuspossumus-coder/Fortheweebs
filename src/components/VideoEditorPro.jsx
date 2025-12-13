@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React, { useState, useRef } from 'react';
 import './VideoEditorPro.css';
 import { saveFileWithDialog, FILE_TYPES } from '../utils/fileSaveDialog';

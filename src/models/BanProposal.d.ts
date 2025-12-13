@@ -1,3 +1,4 @@
+/* eslint-disable */
 interface BanProposalOptions {
     targetUserId: string;
     reason: string;

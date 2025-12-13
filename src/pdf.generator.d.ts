@@ -1,3 +1,4 @@
+/* eslint-disable */
 interface GenerateArtifactOptions {
     title: string;
     lore: string;

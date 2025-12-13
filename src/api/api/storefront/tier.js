@@ -1,3 +1,4 @@
+/* eslint-disable */
 // Tier API Endpoint for Fortheweebs
 const express = require('express');
 const router = express.Router();

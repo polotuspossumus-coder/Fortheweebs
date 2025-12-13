@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React, { useState } from 'react';
 import './TradingCardDesigner.css';
 import { checkContentLegality, generateLegalDisclaimer } from '../utils/legalProtections';

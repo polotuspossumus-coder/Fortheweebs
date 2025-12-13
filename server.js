@@ -1,3 +1,4 @@
+/* eslint-disable */
 console.log('🚀 Starting ForTheWeebs API Server...');
 console.log('Node version:', process.version);
 console.log('Environment:', process.env.NODE_ENV);

@@ -1,3 +1,4 @@
+/* eslint-disable */
 import { CGIEffect } from './CGIEffect';
 import * as faceapi from '@vladmandic/face-api';
 

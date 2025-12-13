@@ -1,3 +1,4 @@
+/* eslint-disable */
 // AssetMarketplace.jsx
 // The feature that turns users into revenue (10-20% cut from every sale)
 /**

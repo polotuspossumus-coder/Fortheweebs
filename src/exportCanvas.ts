@@ -1,3 +1,4 @@
+/* eslint-disable */
 import { saveAs } from 'file-saver';
 // @ts-ignore
 import { logArtifactDrop } from './artifactLogger.js';

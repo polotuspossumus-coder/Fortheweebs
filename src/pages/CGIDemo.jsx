@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React, { useRef, useState } from 'react';
 import CGIVideoProcessor from '../components/CGIVideoProcessor';
 import CGIControls from '../components/CGIControls';

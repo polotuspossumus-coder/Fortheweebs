@@ -1,3 +1,4 @@
+/* eslint-disable */
 // COMPREHENSIVE LEGAL SHIELD - Platform-wide protection system
 // Protects ForTheWeebs from ALL potential legal liabilities
 

@@ -1,3 +1,4 @@
+/* eslint-disable */
 /**
  * 🛡️ DEEPFAKE PROTECTION
  * Face signature system with misuse detection

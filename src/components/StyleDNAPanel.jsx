@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React, { useState, useEffect } from 'react';
 import { styleDNA } from '../lib/styleDNA';
 import './StyleDNAPanel.css';

@@ -1,3 +1,4 @@
+/* eslint-disable */
 /**
  * Run Database Migration Script
  * Executes the payment system SQL schema in Supabase

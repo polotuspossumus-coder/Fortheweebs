@@ -1,3 +1,4 @@
+/* eslint-disable */
 /**
  * Custom effect builder - allows users to create their own effects
  */

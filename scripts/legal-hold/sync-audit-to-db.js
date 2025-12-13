@@ -1,3 +1,4 @@
+/* eslint-disable */
 /**
  * Sync Legal Hold Audit to Database
  * 

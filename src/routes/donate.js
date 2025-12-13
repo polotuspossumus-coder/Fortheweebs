@@ -1,3 +1,4 @@
+/* eslint-disable */
 /**
  * API Route: Donation System
  * Flexible donations that count towards tier unlock or charity

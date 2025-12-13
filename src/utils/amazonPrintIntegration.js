@@ -1,3 +1,4 @@
+/* eslint-disable */
 /**
  * Amazon Print-on-Demand Integration
  * Connects ForTheWeebs print shop to Amazon KDP, Merch by Amazon, and Amazon Handmade

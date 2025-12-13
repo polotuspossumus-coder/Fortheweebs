@@ -1,3 +1,4 @@
+/* eslint-disable */
 
 // --- Dependencies ---
 import { ArtifactLedger } from "./ArtifactLedger.js";

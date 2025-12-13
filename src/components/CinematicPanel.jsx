@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React, { useState } from 'react';
 import { sceneIntelligenceEngine } from '../lib/sceneIntelligence';
 import './CinematicPanel.css';

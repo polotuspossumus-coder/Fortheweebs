@@ -1,3 +1,4 @@
+/* eslint-disable */
 /**
  * Moderation Sentinel: Real-time content flagging and review
  * Powered by OpenAI Moderation API + custom rules

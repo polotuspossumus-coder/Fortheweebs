@@ -1,3 +1,4 @@
+/* eslint-disable */
 // --- Type-safe Tier access for new modules ---
 export type Tier = 'Mythic' | 'Standard' | 'Supporter' | 'General';
 

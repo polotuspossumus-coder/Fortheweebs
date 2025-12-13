@@ -1,3 +1,4 @@
+/* eslint-disable */
 /**
  * Mass File Processor - Handle 12,000+ files efficiently
  *

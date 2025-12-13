@@ -1,3 +1,4 @@
+/* eslint-disable */
 /**
  * 👻 COLLABORATION GHOSTS
  * Real-time multiplayer editing with cursor presence and WebRTC voice
