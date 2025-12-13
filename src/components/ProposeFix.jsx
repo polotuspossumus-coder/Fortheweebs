@@ -1,8 +1,8 @@
-// src/components/ProposeFix.tsx - User fix proposal form
+// src/components/ProposeFix.jsx - User fix proposal form
 import React, { useState } from 'react';
 import safeFetch from '../lib/safeFetch';
 
-const ProposeFix: React.FC = () => {
+const ProposeFix = () => {
   const [repairType, setRepairType] = useState('flag');
   const [flagName, setFlagName] = useState('');
   const [flagActive, setFlagActive] = useState(true);
@@ -10,9 +10,9 @@ const ProposeFix: React.FC = () => {
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const apiUrl = (window as any).__VITE_API_URL__ || 'http://localhost:3001';
+  const apiUrl = window.__VITE_API_URL__ || 'http://localhost:3001';
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
 

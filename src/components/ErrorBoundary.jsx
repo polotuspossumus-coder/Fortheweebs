@@ -1,17 +1,8 @@
-// src/components/ErrorBoundary.tsx - React error boundary with crash reporting
-import React, { Component, ErrorInfo, ReactNode } from 'react';
+// src/components/ErrorBoundary.jsx - React error boundary with crash reporting
+import React, { Component } from 'react';
 
-interface Props {
-  children: ReactNode;
-}
-
-interface State {
-  hasError: boolean;
-  error: Error | null;
-}
-
-class ErrorBoundary extends Component<Props, State> {
-  constructor(props: Props) {
+class ErrorBoundary extends Component {
+  constructor(props) {
     super(props);
     this.state = {
       hasError: false,
@@ -19,23 +10,23 @@ class ErrorBoundary extends Component<Props, State> {
     };
   }
 
-  static getDerivedStateFromError(error: Error): State {
+  static getDerivedStateFromError(error) {
     return {
       hasError: true,
       error,
     };
   }
 
-  componentDidCatch(error: Error, errorInfo: ErrorInfo) {
+  componentDidCatch(error, errorInfo) {
     console.error('[ErrorBoundary] Caught error:', error, errorInfo);
     
     // Report crash to backend
     this.reportCrash(error, errorInfo);
   }
 
-  async reportCrash(error: Error, errorInfo: ErrorInfo) {
+  async reportCrash(error, errorInfo) {
     try {
-      const apiUrl = (window as any).__VITE_API_URL__ || 'http://localhost:3001';
+      const apiUrl = window.__VITE_API_URL__ || 'http://localhost:3001';
       
       await fetch(`${apiUrl}/userfix/feedback/report`, {
         method: 'POST',

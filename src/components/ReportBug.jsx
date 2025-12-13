@@ -1,16 +1,16 @@
-// src/components/ReportBug.tsx - User bug report form
+// src/components/ReportBug.jsx - User bug report form
 import React, { useState } from 'react';
 import safeFetch from '../lib/safeFetch';
 
-const ReportBug: React.FC = () => {
+const ReportBug = () => {
   const [message, setMessage] = useState('');
   const [severity, setSeverity] = useState('low');
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const apiUrl = (window as any).__VITE_API_URL__ || 'http://localhost:3001';
+  const apiUrl = window.__VITE_API_URL__ || 'http://localhost:3001';
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
 

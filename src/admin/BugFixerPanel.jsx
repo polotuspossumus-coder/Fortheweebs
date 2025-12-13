@@ -1,16 +1,16 @@
 /* eslint-disable */
-// src/admin/BugFixerPanel.tsx - Admin bug fixer control panel
+// src/admin/BugFixerPanel.jsx - Admin bug fixer control panel
 import React, { useState } from 'react';
 import safeFetch from '../lib/safeFetch';
 
-const BugFixerPanel: React.FC = () => {
+const BugFixerPanel = () => {
   const [token, setToken] = useState(localStorage.getItem('bugfixer_token') || '');
-  const [result, setResult] = useState<any>(null);
+  const [result, setResult] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  const apiUrl = (window as any).__VITE_API_URL__ || 'http://localhost:3001';
+  const apiUrl = window.__VITE_API_URL__ || 'http://localhost:3001';
 
-  const generateHMAC = async (payload: any) => {
+  const generateHMAC = async (payload) => {
     const timestamp = Date.now().toString();
     const nonce = Math.random().toString(36).substr(2, 9);
     
