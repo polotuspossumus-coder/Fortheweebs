@@ -97,14 +97,25 @@ router.get('/can-upgrade/:userId/:targetTier', async (req, res) => {
             });
         }
 
-        // Get calculation
-        const calcResponse = await fetch(`http://localhost:${process.env.API_PORT}/api/tier-upgrades/calculate/${userId}/${targetTier}`);
-        const calcData = await calcResponse.json();
+        // Get calculation (reuse logic instead of HTTP call to avoid localhost issues in production)
+        const { data: previousUnlocks, error: calcError } = await supabase
+            .from('tier_unlocks')
+            .select('tier_amount')
+            .eq('user_id', userId);
+
+        if (calcError) {
+            return res.status(500).json({ error: 'Failed to calculate upgrade price' });
+        }
+
+        const totalPaid = previousUnlocks?.reduce((sum, unlock) => sum + unlock.tier_amount, 0) || 0;
+        const targetPrice = TIER_PRICES[targetTier];
+        const amountDue = Math.max(0, targetPrice - totalPaid);
+        const creditApplied = totalPaid;
 
         res.json({
             canUpgrade: true,
-            amountDue: calcData.amountDue,
-            creditApplied: calcData.creditApplied
+            amountDue: amountDue / 100,
+            creditApplied: creditApplied / 100
         });
 
     } catch (error) {

@@ -21,7 +21,10 @@ module.exports = async (req, res) => {
   try {
     event = stripe.webhooks.constructEvent(req.body, sig, endpointSecret);
   } catch (err) {
-    console.error('Webhook signature verification failed:', err.message);
+    console.error('⚠️ Webhook signature verification failed:', err.message);
+    // Log to monitoring for debugging
+    console.error('Signature:', sig?.substring(0, 20) + '...');
+    console.error('Body length:', req.body?.length || 0);
     return res.status(400).send(`Webhook Error: ${err.message}`);
   }
 
@@ -58,8 +61,16 @@ module.exports = async (req, res) => {
 
     res.json({ received: true });
   } catch (error) {
-    console.error('Webhook handler error:', error);
-    res.status(500).json({ error: 'Webhook processing failed' });
+    console.error('💥 Webhook handler error:', error);
+    console.error('Event type:', event?.type);
+    console.error('Event ID:', event?.id);
+
+    // Return 500 so Stripe retries (important - don't lose payments!)
+    res.status(500).json({
+      error: 'Webhook processing failed',
+      eventId: event?.id,
+      message: error.message
+    });
   }
 };
 
@@ -94,26 +105,60 @@ async function handleCheckoutCompleted(session) {
  * Process sovereign tier unlock and cancel subscription
  */
 async function processSovereignUnlock(userId, customerId, tierName, tierAmount, paymentIntentId) {
-  console.log(`Processing sovereign unlock for user ${userId}: ${tierName} ($${tierAmount / 100})`);
+  console.log(`💎 Processing sovereign unlock for user ${userId}: ${tierName} ($${tierAmount / 100})`);
 
-  // 1. Record the tier unlock
-  const { error: unlockError } = await supabase
+  // CRITICAL: Check for duplicate payment to prevent double-charging
+  const { data: existingUnlock } = await supabase
     .from('tier_unlocks')
-    .upsert({
-      user_id: userId,
-      tier_name: tierName,
-      tier_amount: tierAmount,
-      stripe_payment_intent_id: paymentIntentId,
-      unlocked_at: new Date().toISOString(),
-      metadata: { sovereign: true }
-    }, {
-      onConflict: 'user_id,tier_name'
-    });
+    .select('*')
+    .eq('stripe_payment_intent_id', paymentIntentId)
+    .single();
+
+  if (existingUnlock) {
+    console.log(`⚠️ Payment ${paymentIntentId} already processed - skipping duplicate`);
+    return;
+  }
+
+  // 1. Record the tier unlock with retry logic
+  let retries = 3;
+  let unlockError = null;
+
+  while (retries > 0) {
+    const { error } = await supabase
+      .from('tier_unlocks')
+      .upsert({
+        user_id: userId,
+        tier_name: tierName,
+        tier_amount: tierAmount,
+        stripe_payment_intent_id: paymentIntentId,
+        unlocked_at: new Date().toISOString(),
+        metadata: { sovereign: true, retries: 3 - retries }
+      }, {
+        onConflict: 'user_id,tier_name'
+      });
+
+    if (!error) {
+      unlockError = null;
+      break;
+    }
+
+    unlockError = error;
+    retries--;
+    console.error(`⚠️ Tier unlock attempt failed (${retries} retries left):`, error.message);
+
+    if (retries > 0) {
+      await new Promise(resolve => setTimeout(resolve, 1000)); // Wait 1s before retry
+    }
+  }
 
   if (unlockError) {
-    console.error('Error recording tier unlock:', unlockError);
-    throw unlockError;
+    console.error('💥 CRITICAL: Failed to record tier unlock after 3 attempts:', unlockError);
+    // Log to external monitoring system here (Sentry, etc.)
+    throw new Error(`Failed to record payment: ${unlockError.message}`);
   }
+
+  console.log(`✅ Tier unlock recorded successfully`);
+}
 
   // 2. Get user's active subscription
   const { data: subscription } = await supabase
