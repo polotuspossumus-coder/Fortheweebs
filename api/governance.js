@@ -26,9 +26,9 @@ const metrics = require('./services/metrics');
 let governanceNotary, policyOverrides, artifactLogger;
 
 try {
-  governanceNotary = require('./agents/governanceNotary');
-  policyOverrides = require('./agents/policyOverrides');
-  artifactLogger = require('./agents/artifactLogger');
+  governanceNotary = require('../agents/governanceNotary');
+  policyOverrides = require('../agents/policyOverrides');
+  artifactLogger = require('../agents/artifactLogger');
 } catch (error) {
   console.error('Failed to load governance modules:', error.message);
   // Use stub implementations as fallback

@@ -115,9 +115,6 @@ app.use((req, res, next) => {
 const cookieParser = require('cookie-parser');
 app.use(cookieParser());
 
-// Trust first proxy (Railway/Vercel) - must be before rate limiting
-app.set('trust proxy', 1);
-
 // Metrics collection middleware (must be early)
 app.use(metricsMiddleware);
 
