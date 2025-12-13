@@ -41,7 +41,8 @@ export function AudioProductionStudio({ userId }) {
     setIsProcessing(true);
     try {
       // Convert audio URL to base64
-      const audioBlob = await fetch(track.audioUrl).then(r => r.blob());
+      const response = await fetch(track.audioUrl);
+      const audioBlob = await response.blob();
       const audioData = await blobToBase64(audioBlob);
 
       const response = await fetch(`${import.meta.env.VITE_API_URL}/api/audio/stem-split`, {

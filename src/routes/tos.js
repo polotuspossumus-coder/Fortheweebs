@@ -1,10 +1,9 @@
-// ...existing code...
 /**
  * Snitching Clause Update
  *
  * Illegal content is automatically screened, banned, and reported to authorities by the platform's automated systems. Users should not report other creators to the platform for illegal content, as such material is already handled and removed by automation. All other moderation is minimal and focused on legal compliance and user safety.
  */
-// ...existing code...
+
 /**
  * Additional Legal Protections
  *
@@ -16,7 +15,7 @@
  * 11. Account Termination: The platform may terminate accounts for any violation of terms, at its sole discretion.
  * 12. No Guarantee of Service: The platform does not guarantee uninterrupted or error-free service.
  */
-// ...existing code...
+
 /**
  * Terms of Service - Illegal Content Policy
  *
@@ -92,7 +91,6 @@
  *
  * Accounts will only be terminated for posting illegal content, as required by law. No account will be taken down for copyright violations; instead, any copyright complaints or takedown requests will be directed to the creator who posted the content. The creator is responsible for removing infringing material or facing the legal consequences. The platform acts solely as a conduit and does not mediate copyright disputes. All responsibility for copyright compliance rests with the content creator.
  */
-// ...existing code...
 
 let acceptanceLog = [];
 
