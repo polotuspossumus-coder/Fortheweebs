@@ -64,7 +64,7 @@ async function main() {
   const choice = await question('\nEnter your choice (1-5): ');
 
   switch (choice.trim()) {
-    case '1':
+    case '1': {
       // Rollback one commit
       console.log('\n⚠️  This will undo your last commit (you can redo it later)');
       const confirm1 = await question('Are you sure? (yes/no): ');
@@ -75,6 +75,7 @@ async function main() {
         console.log('Run "git commit" to recommit, or "git reset --hard HEAD" to discard changes');
       }
       break;
+    }
 
     case '2': {
       // Rollback to specific commit

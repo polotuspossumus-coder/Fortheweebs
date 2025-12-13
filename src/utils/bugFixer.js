@@ -9,13 +9,8 @@ const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
  * Capture screenshot of current page (simplified - no external dependencies)
  */
 async function captureScreenshot() {
-  try {
-    // Skip screenshot capture for now - can be added later with html2canvas
-    return null;
-  } catch (error) {
-    console.error('Screenshot capture failed:', error);
-    return null;
-  }
+  // Skip screenshot capture for now - can be added later with html2canvas
+  return null;
 }
 
 /**

@@ -105,8 +105,7 @@ export default function ClaudeNotificationCenter() {
           fontSize: '24px',
           cursor: 'pointer',
           boxShadow: '0 4px 20px rgba(0,0,0,0.3)',
-          transition: 'transform 0.2s',
-          position: 'relative'
+          transition: 'transform 0.2s'
         }}
         onMouseEnter={(e) => e.target.style.transform = 'scale(1.1)'}
         onMouseLeave={(e) => e.target.style.transform = 'scale(1)'}

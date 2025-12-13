@@ -67,7 +67,7 @@ export class ChromaKeyEffect extends CGIEffect {
     const data = imageData.data;
 
     switch (this.params.backgroundType) {
-      case 'blur':
+      case 'blur': {
         // Apply blur to background (simplified)
         const tempCanvas = document.createElement('canvas');
         tempCanvas.width = width;
@@ -75,9 +75,9 @@ export class ChromaKeyEffect extends CGIEffect {
         const tempCtx = tempCanvas.getContext('2d');
         tempCtx.filter = `blur(${this.params.blurAmount}px)`;
         tempCtx.drawImage(canvas, 0, 0);
-        
+
         const blurredData = tempCtx.getImageData(0, 0, width, height).data;
-        
+
         for (let i = 0; i < data.length; i += 4) {
           const alpha = mask[i / 4] / 255;
           data[i] = data[i] * alpha + blurredData[i] * (1 - alpha);
@@ -85,8 +85,9 @@ export class ChromaKeyEffect extends CGIEffect {
           data[i + 2] = data[i + 2] * alpha + blurredData[i + 2] * (1 - alpha);
         }
         break;
+      }
 
-      case 'color':
+      case 'color': {
         const bg = this.params.backgroundColor;
         for (let i = 0; i < data.length; i += 4) {
           const alpha = mask[i / 4] / 255;
@@ -95,15 +96,16 @@ export class ChromaKeyEffect extends CGIEffect {
           data[i + 2] = data[i + 2] * alpha + bg.b * (1 - alpha);
         }
         break;
+      }
 
-      case 'image':
+      case 'image': {
         if (this.backgroundImageElement) {
-          tempCanvas = document.createElement('canvas');
-          tempCanvas.width = width;
-          tempCanvas.height = height;
-          tempCtx = tempCanvas.getContext('2d');
-          tempCtx.drawImage(this.backgroundImageElement, 0, 0, width, height);
-          const bgData = tempCtx.getImageData(0, 0, width, height).data;
+          const tempCanvas2 = document.createElement('canvas');
+          tempCanvas2.width = width;
+          tempCanvas2.height = height;
+          const tempCtx2 = tempCanvas2.getContext('2d');
+          tempCtx2.drawImage(this.backgroundImageElement, 0, 0, width, height);
+          const bgData = tempCtx2.getImageData(0, 0, width, height).data;
           
           for (let i = 0; i < data.length; i += 4) {
             const alpha = mask[i / 4] / 255;
@@ -113,6 +115,7 @@ export class ChromaKeyEffect extends CGIEffect {
           }
         }
         break;
+      }
 
       case 'transparent':
         // Already handled by alpha channel

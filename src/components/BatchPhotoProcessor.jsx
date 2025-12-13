@@ -73,7 +73,7 @@ export function BatchPhotoProcessor({ userId }) {
           ctx.putImageData(imageData, 0, 0);
           break;
 
-        case 'crop':
+        case 'crop': {
           // Auto-crop whitespace
           let minX = canvas.width, minY = canvas.height, maxX = 0, maxY = 0;
           for (let y = 0; y < canvas.height; y++) {
@@ -101,6 +101,7 @@ export function BatchPhotoProcessor({ userId }) {
           croppedCtx.drawImage(canvas, minX, minY, width, height, 0, 0, width, height);
           resolve(croppedCanvas.toDataURL('image/png'));
           return;
+        }
 
         case 'restore':
           // Fix missing pixels
@@ -133,7 +134,7 @@ export function BatchPhotoProcessor({ userId }) {
           ctx.putImageData(imageData, 0, 0);
           break;
 
-        case 'resize':
+        case 'resize': {
           const resizedCanvas = document.createElement('canvas');
           resizedCanvas.width = 1920;
           resizedCanvas.height = 1080;
@@ -141,6 +142,7 @@ export function BatchPhotoProcessor({ userId }) {
           resizedCtx.drawImage(canvas, 0, 0, 1920, 1080);
           resolve(resizedCanvas.toDataURL('image/png'));
           return;
+        }
 
         case 'grayscale':
           for (let i = 0; i < data.length; i += 4) {

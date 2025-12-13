@@ -58,16 +58,16 @@ function securityHeaders(req, res, next) {
 const ATTACK_PATTERNS = [
   // SQL Injection
   /(\b(union|select|insert|update|delete|drop|create|alter|exec|execute|script|javascript|eval)\b)/i,
-  /(\'|\"|;|--|\*|\/\*|\*\/)/,
-  
+  /(['";]|--|\*|\/\*|\*\/)/,
+
   // XSS
   /(<script|<iframe|<object|<embed|<applet|javascript:|vbscript:|onload=|onerror=)/i,
-  
+
   // Path traversal
   /(\.\.\/|\.\.\\|\/etc\/passwd|\/proc\/|\/sys\/)/i,
-  
+
   // Command injection
-  /(\||&|;|\$\(|\`|>|<)/,
+  /(\||&|;|\$\(|`|>|<)/,
 ];
 
 function wafFilter(req, res, next) {

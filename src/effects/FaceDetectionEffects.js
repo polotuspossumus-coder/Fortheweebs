@@ -77,7 +77,7 @@ export class ARMaskEffect extends FaceDetectionEffect {
     });
   }
 
-  _process(imageData, ctx) {
+  _processSync(imageData, ctx) {
     if (!this.detections || this.detections.length === 0) {
       return imageData;
     }

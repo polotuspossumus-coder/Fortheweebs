@@ -361,7 +361,7 @@ export function escapeSQLInput(input) {
     .replace(/\0/g, '\\0')
     .replace(/\n/g, '\\n')
     .replace(/\r/g, '\\r')
-    .replace(/\x1a/g, '\\Z');
+    .replace(/[\x1a]/g, '\\Z'); // eslint-disable-line no-control-regex
 }
 
 /**

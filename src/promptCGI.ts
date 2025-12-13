@@ -1,8 +1,6 @@
 // promptCGI.ts
 // @ts-ignore
 import { generateCGIScene } from './aiEngine.js';
-// @ts-ignore
-import { generateCGIScene } from './aiEngine.js';
 
 export async function handlePromptToCGI(prompt: string, userTier: string) {
   if (userTier !== 'mythic' && userTier !== 'standard') throw new Error('CGI access restricted');

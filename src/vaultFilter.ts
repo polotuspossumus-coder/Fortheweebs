@@ -11,14 +11,6 @@ export function filterVault(
   });
 }
 
-type Asset = {
-  id: string | number;
-  title: string;
-  tier: 'general' | 'supporter' | 'legacy' | 'mythic';
-  // Add other fields as needed
-};
-
-// @ts-ignore
 // @ts-ignore
 import { CreatorTier, type Asset } from './tierAccess.js';
 

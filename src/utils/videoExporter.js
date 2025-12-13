@@ -272,7 +272,8 @@ class VideoExporter {
       // Read all extracted frames
       const frames = [];
       let frameIndex = 1;
-      
+
+      // eslint-disable-next-line no-constant-condition
       while (true) {
         try {
           const frameName = `frame_${String(frameIndex).padStart(4, '0')}.${format}`;

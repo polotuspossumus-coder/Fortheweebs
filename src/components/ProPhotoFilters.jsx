@@ -174,7 +174,7 @@ export function ProPhotoFilters({ userId }) {
         }
         break;
 
-      case 'spotlight':
+      case 'spotlight': {
         // Center focus vignette
         const width = imageData.width;
         const height = imageData.height;
@@ -195,6 +195,7 @@ export function ProPhotoFilters({ userId }) {
           }
         }
         break;
+      }
 
       case 'ultra':
         // Maximum detail HDR

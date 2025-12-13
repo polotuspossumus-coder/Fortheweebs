@@ -12,47 +12,47 @@ const path = require('path');
 
 console.log('🔍 Checking for React duplication...\n');
 
+function findNestedReact(dir, nodeModulesPath, nestedReactPaths, depth = 0) {
+  if (depth > 3) return; // Prevent infinite recursion
+
+  try {
+    const entries = fs.readdirSync(dir, { withFileTypes: true });
+
+    for (const entry of entries) {
+      if (entry.isDirectory()) {
+        const fullPath = path.join(dir, entry.name);
+
+        if (entry.name === 'react' && fullPath !== path.join(nodeModulesPath, 'react')) {
+          nestedReactPaths.push(fullPath);
+        } else if (entry.name === 'node_modules') {
+          findNestedReact(fullPath, nodeModulesPath, nestedReactPaths, depth + 1);
+        }
+      }
+    }
+  } catch (err) {
+    // Ignore permission errors
+  }
+}
+
 try {
   // Check npm list for react versions
   const reactList = execSync('npm list react --depth=0 2>&1', { encoding: 'utf8' });
   const reactDomList = execSync('npm list react-dom --depth=0 2>&1', { encoding: 'utf8' });
-  
+
   // Count occurrences
   const reactMatches = (reactList.match(/react@/g) || []).length;
   const reactDomMatches = (reactDomList.match(/react-dom@/g) || []).length;
-  
+
   console.log('React versions found:', reactMatches);
   console.log('React-DOM versions found:', reactDomMatches);
   console.log('\n' + reactList);
   console.log('\n' + reactDomList);
-  
+
   // Also check for multiple react directories
   const nodeModulesPath = path.join(__dirname, '..', 'node_modules');
   const nestedReactPaths = [];
-  
-  function findNestedReact(dir, depth = 0) {
-    if (depth > 3) return; // Prevent infinite recursion
-    
-    try {
-      const entries = fs.readdirSync(dir, { withFileTypes: true });
-      
-      for (const entry of entries) {
-        if (entry.isDirectory()) {
-          const fullPath = path.join(dir, entry.name);
-          
-          if (entry.name === 'react' && fullPath !== path.join(nodeModulesPath, 'react')) {
-            nestedReactPaths.push(fullPath);
-          } else if (entry.name === 'node_modules') {
-            findNestedReact(fullPath, depth + 1);
-          }
-        }
-      }
-    } catch (err) {
-      // Ignore permission errors
-    }
-  }
-  
-  findNestedReact(nodeModulesPath);
+
+  findNestedReact(nodeModulesPath, nodeModulesPath, nestedReactPaths);
   
   if (nestedReactPaths.length > 0) {
     console.error('\n❌ NESTED REACT INSTANCES DETECTED:');
