@@ -56,7 +56,7 @@
     "@vitejs/plugin-react": "^5.1.0",
     "electron": "^39.2.6",
     "electron-builder": "^26.0.12",
-    "esbuild": "^0.25.12",
+    "esbuild": "0.25.12",
     "eslint": "^8.56.0",
     "fabric": "^6.9.0",
     "file-saver": "^2.0.5",
