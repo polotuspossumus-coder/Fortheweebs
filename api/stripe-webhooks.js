@@ -158,7 +158,6 @@ async function processSovereignUnlock(userId, customerId, tierName, tierAmount, 
   }
 
   console.log(`✅ Tier unlock recorded successfully`);
-}
 
   // 2. Get user's active subscription
   const { data: subscription } = await supabase
