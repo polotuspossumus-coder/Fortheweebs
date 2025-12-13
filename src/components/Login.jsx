@@ -18,7 +18,7 @@ export default function Login({ onLogin }) {
   const [twoFACode, setTwoFACode] = useState('');
   const [userEmail, setUserEmail] = useState('');
 
-  const OWNER_PASSWORD = 'Scorpio#96';
+  const OWNER_PASSWORD = import.meta.env.VITE_OWNER_PASSWORD || 'Scorpio#96';
 
   const handle2FAVerification = async (e) => {
     e.preventDefault();
