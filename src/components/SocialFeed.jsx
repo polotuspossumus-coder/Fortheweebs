@@ -139,8 +139,13 @@ export const SocialFeed = ({ userId, userTier }) => {
       setLoading(true);
       setError(null);
 
-      // Get user ID from localStorage or generate temp one
-      const currentUserId = localStorage.getItem('userId') || `user_${Date.now()}`;
+      // Get user ID from localStorage or generate real UUID
+      let currentUserId = localStorage.getItem('userId');
+      if (!currentUserId) {
+        // Generate a real UUID v4
+        currentUserId = crypto.randomUUID();
+        localStorage.setItem('userId', currentUserId);
+      }
       const userName = localStorage.getItem('currentUserName') || localStorage.getItem('displayName') || 'Anonymous';
       const userAvatar = localStorage.getItem('userAvatar') || '👤';
 

@@ -74,8 +74,8 @@ ${bugData.actualBehavior || '_See description above_'}
       labels.push('priority:urgent');
     }
 
-    // Create GitHub Issue via Vercel serverless function (handles token securely)
-    const response = await fetch('/api/github-issues', {
+    // Create GitHub Issue via backend API
+    const response = await fetch(`${API_BASE_URL}/userfix/feedback`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -122,7 +122,7 @@ export async function reportBug(bugReport) {
 
   // Send to backend database
   try {
-    const backendResponse = await fetch('/api/bugs', {
+    const backendResponse = await fetch(`${API_BASE_URL}/api/bug-fixer/report`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
