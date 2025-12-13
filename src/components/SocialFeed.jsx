@@ -63,7 +63,8 @@ export const SocialFeed = ({ userId, userTier }) => {
         setLoading(true);
         
         // Load posts from backend API with pagination
-        const response = await fetch(`${import.meta.env.VITE_API_URL}/api/social/feed?limit=20&offset=0`);
+        const apiUrl = import.meta.env.VITE_API_URL || window.location.origin;
+        const response = await fetch(`${apiUrl}/api/social/feed?limit=20&offset=0`);
         if (response.ok) {
           const feedData = await response.json();
           setPosts(feedData.posts || []);
@@ -96,7 +97,8 @@ export const SocialFeed = ({ userId, userTier }) => {
     try {
       setLoading(true);
       const newOffset = offset + 20;
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/social/feed?limit=20&offset=${newOffset}`);
+      const apiUrl = import.meta.env.VITE_API_URL || window.location.origin;
+      const response = await fetch(`${apiUrl}/api/social/feed?limit=20&offset=${newOffset}`);
       
       if (response.ok) {
         const feedData = await response.json();
@@ -143,7 +145,8 @@ export const SocialFeed = ({ userId, userTier }) => {
       const userAvatar = localStorage.getItem('userAvatar') || '👤';
 
       // Call the correct API endpoint
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/social/post`, {
+      const apiUrl = import.meta.env.VITE_API_URL || window.location.origin;
+      const response = await fetch(`${apiUrl}/api/social/post`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -324,7 +327,8 @@ export const SocialFeed = ({ userId, userTier }) => {
       localStorage.setItem('likedPosts', JSON.stringify([...newLiked]));
 
       // Send to backend
-      await fetch(`${import.meta.env.VITE_API_URL}/api/social/post/${postId}/like`, {
+      const apiUrl = import.meta.env.VITE_API_URL || window.location.origin;
+      await fetch(`${apiUrl}/api/social/post/${postId}/like`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' }
       });
@@ -354,7 +358,8 @@ export const SocialFeed = ({ userId, userTier }) => {
       );
       setPosts(updatedPosts);
       
-      await fetch(`${import.meta.env.VITE_API_URL}/api/social/post/${postId}/share`, {
+      const apiUrl = import.meta.env.VITE_API_URL || window.location.origin;
+      await fetch(`${apiUrl}/api/social/post/${postId}/share`, {
         method: 'POST'
       });
     } catch (err) {
