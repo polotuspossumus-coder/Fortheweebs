@@ -1,24 +1,44 @@
 import React, { useState } from "react";
 
-// SECURE ADMIN CREDENTIALS - Load from environment variables
-const ADMIN_USERNAME = import.meta.env.VITE_ADMIN_USERNAME || "admin";
-const ADMIN_PASSWORD = import.meta.env.VITE_ADMIN_PASSWORD || "";
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001';
 
 export function AdminLogin({ onLoginSuccess }) {
-  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    if (username === ADMIN_USERNAME && password === ADMIN_PASSWORD) {
-      localStorage.setItem("adminAuthenticated", "true");
-      localStorage.setItem("adminUsername", username);
-      localStorage.setItem("adminLoginTime", Date.now().toString());
-      onLoginSuccess();
-    } else {
-      setError("❌ Invalid admin credentials");
-      setPassword("");
+    setLoading(true);
+    setError("");
+
+    try {
+      const response = await fetch(`${API_URL}/api/auth/owner`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, deviceId: navigator.userAgent }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok && data.token) {
+        localStorage.setItem("adminToken", data.token);
+        localStorage.setItem("adminEmail", data.email);
+        localStorage.setItem("adminRole", data.role);
+        localStorage.setItem("adminLoginTime", Date.now().toString());
+        onLoginSuccess();
+      } else {
+        setError(data.error || "❌ Invalid admin credentials");
+        setPassword("");
+      }
+    } catch (err) {
+      setError("❌ Connection error. Is the backend running?");
+      console.error('Admin login error:', err);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -53,12 +73,12 @@ export function AdminLogin({ onLoginSuccess }) {
         <form onSubmit={handleLogin}>
           <div style={{ marginBottom: '20px' }}>
             <label style={{ display: 'block', marginBottom: '8px', color: '#FFD700', fontWeight: 600 }}>
-              Username
+              Email
             </label>
             <input
-              type="text"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               style={{
                 width: '100%',
                 padding: '14px',
@@ -72,36 +92,15 @@ export function AdminLogin({ onLoginSuccess }) {
               }}
               onFocus={(e) => e.target.style.borderColor = '#FFD700'}
               onBlur={(e) => e.target.style.borderColor = '#444'}
-              placeholder="Enter admin username"
+              placeholder="polotuspossumus@gmail.com"
               autoFocus
               required
+              disabled={loading}
             />
           </div>
 
-          <div style={{ marginBottom: '28px' }}>
-            <label style={{ display: 'block', marginBottom: '8px', color: '#FFD700', fontWeight: 600 }}>
-              Password
-            </label>
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              style={{
-                width: '100%',
-                padding: '14px',
-                borderRadius: '8px',
-                border: '2px solid #444',
-                background: '#333',
-                color: '#fff',
-                fontSize: '1rem',
-                outline: 'none',
-                transition: 'border-color 0.3s'
-              }}
-              onFocus={(e) => e.target.style.borderColor = '#FFD700'}
-              onBlur={(e) => e.target.style.borderColor = '#444'}
-              placeholder="Enter admin password"
-              required
-            />
+          <div style={{ marginBottom: '20px', textAlign: 'center', color: '#888', fontSize: '0.9rem' }}>
+            No password required - JWT authentication via backend
           </div>
 
           {error && (
@@ -121,29 +120,34 @@ export function AdminLogin({ onLoginSuccess }) {
 
           <button
             type="submit"
+            disabled={loading}
             style={{
               width: '100%',
               padding: '16px',
-              background: 'linear-gradient(135deg, #FFD700, #FFA500)',
-              color: '#000',
+              background: loading ? '#666' : 'linear-gradient(135deg, #FFD700, #FFA500)',
+              color: loading ? '#aaa' : '#000',
               border: 'none',
               borderRadius: '8px',
               fontSize: '1.2rem',
               fontWeight: 800,
-              cursor: 'pointer',
+              cursor: loading ? 'not-allowed' : 'pointer',
               transition: 'transform 0.2s, box-shadow 0.2s',
               boxShadow: '0 4px 16px rgba(255, 215, 0, 0.4)'
             }}
             onMouseEnter={(e) => {
-              e.target.style.transform = 'translateY(-2px)';
-              e.target.style.boxShadow = '0 6px 20px rgba(255, 215, 0, 0.6)';
+              if (!loading) {
+                e.target.style.transform = 'translateY(-2px)';
+                e.target.style.boxShadow = '0 6px 20px rgba(255, 215, 0, 0.6)';
+              }
             }}
             onMouseLeave={(e) => {
-              e.target.style.transform = 'translateY(0)';
-              e.target.style.boxShadow = '0 4px 16px rgba(255, 215, 0, 0.4)';
+              if (!loading) {
+                e.target.style.transform = 'translateY(0)';
+                e.target.style.boxShadow = '0 4px 16px rgba(255, 215, 0, 0.4)';
+              }
             }}
           >
-            🚀 Login as Owner
+            {loading ? '⏳ Authenticating...' : '🚀 Login as Owner'}
           </button>
         </form>
 
@@ -182,8 +186,8 @@ export function AdminLogin({ onLoginSuccess }) {
 }
 
 export function checkAdminAuth() {
-  const adminAuth = localStorage.getItem("adminAuthenticated");
-  const adminUsername = localStorage.getItem("adminUsername");
+  const token = localStorage.getItem("adminToken");
+  const email = localStorage.getItem("adminEmail");
   const loginTime = localStorage.getItem("adminLoginTime");
 
   // Session expires after 24 hours
@@ -191,18 +195,24 @@ export function checkAdminAuth() {
   const isExpired = loginTime && (Date.now() - parseInt(loginTime)) > twentyFourHours;
 
   if (isExpired) {
-    localStorage.removeItem("adminAuthenticated");
-    localStorage.removeItem("adminUsername");
+    localStorage.removeItem("adminToken");
+    localStorage.removeItem("adminEmail");
+    localStorage.removeItem("adminRole");
     localStorage.removeItem("adminLoginTime");
     return false;
   }
 
-  return adminAuth === "true" && adminUsername === ADMIN_USERNAME;
+  return token && email;
 }
 
 export function logoutAdmin() {
-  localStorage.removeItem("adminAuthenticated");
-  localStorage.removeItem("adminUsername");
+  localStorage.removeItem("adminToken");
+  localStorage.removeItem("adminEmail");
+  localStorage.removeItem("adminRole");
   localStorage.removeItem("adminLoginTime");
   window.location.href = "/";
+}
+
+export function getAdminToken() {
+  return localStorage.getItem("adminToken");
 }
