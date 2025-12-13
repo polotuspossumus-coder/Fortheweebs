@@ -2,13 +2,11 @@
 const { writeArtifact } = require('./server-safety');
 
 function validateConfig() {
+  // Truly critical for server to start
   const required = [
-    'PORT',
-    'SUPABASE_URL',
-    'SUPABASE_SERVICE_KEY',
-    'BUGFIXER_TOKEN',
     'STRIPE_SECRET_KEY',
-    'COINBASE_API_KEY',
+    'OPENAI_API_KEY',
+    'JWT_SECRET'
   ];
   
   const missing = [];
@@ -20,8 +18,18 @@ function validateConfig() {
     }
   }
   
-  // Optional but recommended
-  const optional = ['GOOGLE_VISION_KEY', 'ARTIFACT_BUCKET', 'APP_VERSION'];
+  // Optional but recommended - server will work without these
+  const optional = [
+    'SUPABASE_URL',
+    'SUPABASE_SERVICE_KEY', 
+    'BUGFIXER_TOKEN',
+    'COINBASE_API_KEY',
+    'GOOGLE_VISION_KEY', 
+    'ARTIFACT_BUCKET', 
+    'APP_VERSION',
+    'ANTHROPIC_API_KEY',
+    'PHOTODNA_API_KEY'
+  ];
   for (const key of optional) {
     if (!process.env[key]) {
       warnings.push(`Optional env var missing: ${key}`);
