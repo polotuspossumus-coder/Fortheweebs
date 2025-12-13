@@ -1,17 +1,48 @@
-// Artifact Logger - Stub implementation
-// Logs important artifacts and governance decisions
+// Artifact Logger - Logs important artifacts and governance decisions with persistence
+const fs = require('fs').promises;
+const path = require('path');
+const crypto = require('crypto');
 
 class ArtifactLogger {
   constructor() {
     this.artifacts = [];
+    this.artifactsDir = path.join(process.cwd(), 'artifacts', 'logs');
+    this.indexFile = path.join(this.artifactsDir, 'index.json');
+    this.loadIndex();
+  }
+
+  /**
+   * Load artifact index from disk
+   */
+  async loadIndex() {
+    try {
+      const data = await fs.readFile(this.indexFile, 'utf8');
+      this.artifacts = JSON.parse(data);
+    } catch (err) {
+      // Index doesn't exist yet
+      this.artifacts = [];
+    }
+  }
+
+  /**
+   * Save artifact index to disk
+   */
+  async saveIndex() {
+    try {
+      await fs.mkdir(this.artifactsDir, { recursive: true });
+      await fs.writeFile(this.indexFile, JSON.stringify(this.artifacts, null, 2));
+    } catch (err) {
+      console.error('Failed to save artifact index:', err);
+    }
   }
 
   /**
    * Log an artifact
    */
-  log(type, data, metadata = {}) {
+  async log(type, data, metadata = {}) {
+    const id = crypto.randomBytes(16).toString('hex');
     const artifact = {
-      id: Math.random().toString(36).substring(2, 15),
+      id,
       type,
       data,
       metadata,
@@ -21,8 +52,15 @@ class ArtifactLogger {
     
     this.artifacts.push(artifact);
     
-    // Optional: Write to file system or external storage
-    console.log(`[ArtifactLogger] Logged: ${type}`);
+    // Write individual artifact file
+    const artifactFile = path.join(this.artifactsDir, `${id}.json`);
+    await fs.mkdir(this.artifactsDir, { recursive: true });
+    await fs.writeFile(artifactFile, JSON.stringify(artifact, null, 2));
+    
+    // Update index
+    await this.saveIndex();
+    
+    console.log(`[ArtifactLogger] Logged: ${type} (${id})`);
     
     return artifact;
   }

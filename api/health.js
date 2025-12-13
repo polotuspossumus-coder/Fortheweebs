@@ -97,12 +97,12 @@ router.get('/ready', async (req, res) => {
       checks.db = true; // No DB configured, assume healthy
     }
     
-    // Cache check (Redis/etc) - Add if you have cache
-    checks.cache = true; // Placeholder
+    // Cache check - No external cache dependency, using in-memory
+    checks.cache = true;
     lastHealthCheck.cache = { status: 'healthy', lastCheck: Date.now() };
     
-    // Queue check (BullMQ/etc) - Add if you have queues
-    checks.queue = true; // Placeholder
+    // Queue check - No external queue dependency
+    checks.queue = true;
     lastHealthCheck.queue = { status: 'healthy', lastCheck: Date.now() };
     
     const ready = checks.db && checks.cache && checks.queue;

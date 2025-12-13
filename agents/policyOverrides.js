@@ -68,11 +68,21 @@ class PolicyOverrides {
   }
 
   /**
-   * Get original policy value (stub)
+   * Get original policy value from policy definitions
    */
   getOriginalPolicy(policyId) {
-    // This would normally query the policy engine
-    return 'original_value_placeholder';
+    // Default policies
+    const policies = {
+      'rate-limit-free': 100,
+      'rate-limit-premium': 1000,
+      'max-upload-size': 52428800, // 50MB
+      'max-video-duration': 600, // 10 minutes
+      'watermark-required': true,
+      'nsfw-allowed': false,
+      'max-concurrent-jobs': 5
+    };
+    
+    return policies[policyId] !== undefined ? policies[policyId] : null;
   }
 }
 
