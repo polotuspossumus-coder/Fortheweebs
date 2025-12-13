@@ -1,6 +1,6 @@
 
 import React, { useState } from "react";
-import ReactDOM from "react-dom";
+import ReactDOM from "react-dom/client";
 import "./vendor-prefixes.css"; // Browser compatibility fixes
 import { LegalDocumentsList } from "./components/LegalDocumentsList.jsx";
 import CreatorSignup from "./CreatorSignup.jsx";
@@ -37,7 +37,5 @@ function AppFlow() {
   );
 }
 
-ReactDOM.render(
-  <AppFlow />,
-  document.getElementById("root")
-);
+const root = ReactDOM.createRoot(document.getElementById("root"));
+root.render(<AppFlow />);
