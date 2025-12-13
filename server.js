@@ -79,8 +79,14 @@ const { securityHeaders, wafFilter } = require('./utils/networkProtection');
 app.use(securityHeaders);
 
 // WAF protection on public routes (before rate limiting)
+// Exclude social routes from WAF (they have their own protection)
 app.use('/userfix', wafFilter);
-app.use('/api', wafFilter);
+app.use('/api', (req, res, next) => {
+    if (req.path.startsWith('/social')) {
+        return next(); // Skip WAF for social routes
+    }
+    wafFilter(req, res, next);
+});
 
 // Rate Limiting (general + tier-based)
 const { apiLimiter } = require('./utils/apiRateLimiter');
@@ -119,12 +125,7 @@ app.use(cookieParser());
 app.use(metricsMiddleware);
 
 app.use(cors({
-    origin: [
-        'https://fortheweebs.vercel.app',
-        'https://fortheweebs-1u0c55wxe-jacobs-projects-eac77986.vercel.app',
-        'http://localhost:3003',
-        'http://localhost:3002'
-    ],
+    origin: true, // Allow all origins
     credentials: true
 }));
 

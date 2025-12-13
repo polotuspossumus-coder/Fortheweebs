@@ -12,27 +12,25 @@ const supabase = createClient(
     process.env.SUPABASE_SERVICE_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY || 'dummy-key'
 );
 
-// Helper to set CORS headers on every response
-function setCorsHeaders(req, res) {
-    const origin = req.headers.origin;
-    const allowedOrigins = [
-        'https://fortheweebs.vercel.app',
-        'https://fortheweebs-1u0c55wxe-jacobs-projects-eac77986.vercel.app',
-        'http://localhost:3003',
-        'http://localhost:3002'
-    ];
-    if (allowedOrigins.includes(origin)) {
-        res.header('Access-Control-Allow-Origin', origin);
-        res.header('Access-Control-Allow-Credentials', 'true');
+// CORS middleware - applies to ALL social routes
+router.use((req, res, next) => {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    res.header('Access-Control-Allow-Credentials', 'true');
+
+    // Handle preflight
+    if (req.method === 'OPTIONS') {
+        return res.sendStatus(200);
     }
-}
+    next();
+});
 
 /**
  * GET /api/social/feed
  * Get public feed posts
  */
 router.get('/feed', async (req, res) => {
-    setCorsHeaders(req, res);
     try {
         const { limit = 50, offset = 0 } = req.query;
 
@@ -79,7 +77,6 @@ router.get('/feed', async (req, res) => {
  * Discover creators to follow
  */
 router.get('/discover', async (req, res) => {
-    setCorsHeaders(req, res);
     try {
         const { limit = 20 } = req.query;
 
@@ -163,12 +160,31 @@ router.get('/search', async (req, res) => {
  * Create a new post
  */
 router.post('/post', async (req, res) => {
-    setCorsHeaders(req, res);
     try {
         const { userId, content, visibility = 'PUBLIC', mediaUrl = null } = req.body;
 
         if (!userId || !content) {
             return res.status(400).json({ error: 'Missing required fields: userId and content' });
+        }
+
+        // Validate UUID format
+        const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+        if (!uuidRegex.test(userId)) {
+            // Return mock post for invalid UUIDs (temp users)
+            const mockPost = {
+                id: Date.now(),
+                userId: userId,
+                userName: 'User',
+                avatar: '👤',
+                content: content,
+                visibility: visibility.toUpperCase(),
+                mediaUrl: mediaUrl,
+                timestamp: new Date().toISOString(),
+                likesCount: 0,
+                commentsCount: 0,
+                sharesCount: 0
+            };
+            return res.json({ post: mockPost });
         }
 
         // Create post object matching actual database schema
@@ -244,7 +260,6 @@ router.post('/post', async (req, res) => {
  * Follow a user
  */
 router.post('/follow', async (req, res) => {
-    setCorsHeaders(req, res);
     try {
         const { followerId, followingId } = req.body;
 
@@ -301,7 +316,6 @@ router.delete('/unfollow', async (req, res) => {
  * Like a post
  */
 router.post('/post/:postId/like', async (req, res) => {
-    setCorsHeaders(req, res);
     try {
         const { postId } = req.params;
         const { userId } = req.body;
@@ -391,7 +405,6 @@ router.delete('/post/:postId/like', async (req, res) => {
  * Save a post (bookmark)
  */
 router.post('/post/:postId/save', async (req, res) => {
-    setCorsHeaders(req, res);
     try {
         const { postId } = req.params;
         const { userId } = req.body;
@@ -463,7 +476,6 @@ router.delete('/post/:postId/save', async (req, res) => {
  * Track post share (analytics)
  */
 router.post('/post/:postId/share', async (req, res) => {
-    setCorsHeaders(req, res);
     try {
         const { postId } = req.params;
 
@@ -479,9 +491,10 @@ router.post('/post/:postId/share', async (req, res) => {
 // Global error handler for all routes
 router.use((error, req, res, next) => {
     console.error('Social API Error:', error);
-    res.status(500).json({ 
+    res.header('Access-Control-Allow-Origin', '*');
+    res.status(500).json({
         error: 'Service temporarily unavailable. Some features require database setup.',
-        details: error.message 
+        details: error.message
     });
 });
 

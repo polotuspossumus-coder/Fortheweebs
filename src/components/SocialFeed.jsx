@@ -155,7 +155,7 @@ export const SocialFeed = ({ userId, userTier }) => {
           userId: currentUserId,
           content: newPostContent,
           visibility: contentVisibility.toUpperCase(),
-          media: []
+          mediaUrl: null
         })
       });
 
