@@ -77,6 +77,11 @@ router.post('/subscribe', async (req, res) => {
       ? plan.price_annual
       : plan.price_monthly;
 
+    // Ensure base URL has scheme
+    const baseUrl = process.env.VITE_APP_URL?.startsWith('http')
+      ? process.env.VITE_APP_URL
+      : `https://${process.env.VITE_APP_URL || 'fortheweebs.vercel.app'}`;
+
     // Create Stripe Checkout Session
     const session = await stripe.checkout.sessions.create({
       customer: customerId,
@@ -96,8 +101,8 @@ router.post('/subscribe', async (req, res) => {
         quantity: 1
       }],
       mode: 'subscription',
-      success_url: `${process.env.VITE_APP_URL}/developers/dashboard?success=true&session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${process.env.VITE_APP_URL}/developers/pricing?canceled=true`,
+      success_url: `${baseUrl}/developers/dashboard?success=true&session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${baseUrl}/developers/pricing?canceled=true`,
       metadata: {
         userId,
         keyId: keyId || '',

@@ -123,6 +123,11 @@ router.post('/create-checkout-session', async (req, res) => {
             });
         }
 
+        // Ensure base URL has scheme
+        const baseUrl = process.env.VITE_APP_URL?.startsWith('http')
+            ? process.env.VITE_APP_URL
+            : `https://${process.env.VITE_APP_URL || 'fortheweebs.vercel.app'}`;
+
         // Build session config
         const sessionConfig = {
             payment_method_types: [
@@ -138,8 +143,8 @@ router.post('/create-checkout-session', async (req, res) => {
                 },
             ],
             mode: mode,
-            success_url: `${process.env.VITE_APP_URL}/success?session_id={CHECKOUT_SESSION_ID}`,
-            cancel_url: `${process.env.VITE_APP_URL}/pricing`,
+            success_url: `${baseUrl}/success?session_id={CHECKOUT_SESSION_ID}`,
+            cancel_url: `${baseUrl}/pricing`,
             client_reference_id: userId,
             customer_email: email,
             metadata: {
