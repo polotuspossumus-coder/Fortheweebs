@@ -122,7 +122,12 @@ app.set('trust proxy', 1);
 app.use(metricsMiddleware);
 
 app.use(cors({
-    origin: ['https://fortheweebs.vercel.app', 'http://localhost:3003', 'http://localhost:3002'],
+    origin: [
+        'https://fortheweebs.vercel.app',
+        'https://fortheweebs-1u0c55wxe-jacobs-projects-eac77986.vercel.app',
+        'http://localhost:3003',
+        'http://localhost:3002'
+    ],
     credentials: true
 }));
 
