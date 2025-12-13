@@ -4,7 +4,6 @@ const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001';
 
 export function AdminLogin({ onLoginSuccess }) {
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -32,7 +31,6 @@ export function AdminLogin({ onLoginSuccess }) {
         onLoginSuccess();
       } else {
         setError(data.error || "❌ Invalid admin credentials");
-        setPassword("");
       }
     } catch (err) {
       setError("❌ Connection error. Is the backend running?");

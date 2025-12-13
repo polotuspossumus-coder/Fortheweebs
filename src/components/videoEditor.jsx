@@ -18,15 +18,9 @@ function Timeline({ tracks }: { tracks: Array<any> }) {
 }
 
 export function VideoEditor() {
-  const [tracks, setTracks] = useState<Array<{
-    type: 'video' | 'audio';
-    source: string;
-    start: number;
-    end: number | null;
-    effects: string[];
-  }>>([]);
+  const [tracks, setTracks] = useState([]);
 
-  function addTrack(type: 'video' | 'audio', source: string) {
+  function addTrack(type, source) {
     const newTrack = { type, source, start: 0, end: null, effects: [] };
     setTracks([...tracks, newTrack]);
   }
