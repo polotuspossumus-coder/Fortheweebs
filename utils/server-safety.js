@@ -73,7 +73,7 @@ function installCrashHandlers() {
     process.exit(1); // Railway/systemd will restart
   });
   
-  process.on('unhandledRejection', async (reason, promise) => {
+  process.on('unhandledRejection', async (reason) => {
     console.error('[ServerSafety] UNHANDLED REJECTION:', reason);
     await writeArtifact('unhandledRejection', {
       reason: reason?.toString() || 'Unknown',
