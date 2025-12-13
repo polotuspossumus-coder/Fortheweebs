@@ -2,11 +2,13 @@
 const { checkMemory } = require('./server-safety');
 
 class MetricsCollector {
+  requestCount = 0;
+  errorCount = 0;
+  requestDurations = [];
+  startTime = Date.now();
+  
   constructor() {
-    this.requestCount = 0;
-    this.errorCount = 0;
-    this.requestDurations = [];
-    this.startTime = Date.now();
+    // Initialization complete via class fields
   }
   
   recordRequest(duration) {

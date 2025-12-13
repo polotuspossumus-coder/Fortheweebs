@@ -1,5 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
 import './SocialFeatures.css';
 
 // Comment Section Component
@@ -37,12 +38,6 @@ export function CommentSection({ artworkId, comments: initialComments = [] }) {
     setComments(prev => [comment, ...prev]);
     setNewComment('');
     setIsSubmitting(false);
-
-    // await createComment({
-    //   artworkId,
-    //   userId: currentUser.uid,
-    //   text: newComment
-    // });
   };
 
   const handleDeleteComment = async (commentId) => {
@@ -145,7 +140,7 @@ export function SocialActions({
   };
 
   const handleShare = (platform) => {
-    const url = window.location.href;
+    const url = globalThis.location.href;
     const shareUrls = {
       twitter: `https://twitter.com/intent/tweet?url=${encodeURIComponent(url)}`,
       facebook: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`,
@@ -319,9 +314,17 @@ export function NotificationBell() {
                 <div
                   key={notification.id}
                   className={`notification-item ${notification.read ? 'read' : 'unread'}`}
+                  role="button"
+                  tabIndex={0}
                   onClick={() => {
                     markAsRead(notification.id);
-                    window.location.href = notification.link;
+                    globalThis.location.href = notification.link;
+                  }}
+                  onKeyPress={(e) => {
+                    if (e.key === 'Enter') {
+                      markAsRead(notification.id);
+                      globalThis.location.href = notification.link;
+                    }
                   }}
                 >
                   <div className="notification-icon">
@@ -379,7 +382,31 @@ export function FollowButton({ userId, initialFollowing = false, onFollowChange 
       onClick={handleFollow}
       disabled={isLoading}
     >
-      {isLoading ? '...' : isFollowing ? '✓ Following' : '+ Follow'}
+      {(() => {
+        if (isLoading) return '...';
+        if (isFollowing) return '✓ Following';
+        return '+ Follow';
+      })()}
     </button>
   );
 }
+
+// PropTypes validation
+CommentSection.propTypes = {
+  artworkId: PropTypes.string.isRequired,
+  comments: PropTypes.arrayOf(PropTypes.object)
+};
+
+SocialActions.propTypes = {
+  artworkId: PropTypes.string.isRequired,
+  initialLikes: PropTypes.number,
+  initialLiked: PropTypes.bool,
+  onLike: PropTypes.func,
+  onShare: PropTypes.func
+};
+
+FollowButton.propTypes = {
+  userId: PropTypes.string.isRequired,
+  initialFollowing: PropTypes.bool,
+  onFollowChange: PropTypes.func
+};

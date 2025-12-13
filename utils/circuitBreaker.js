@@ -3,7 +3,7 @@
  * Protects core by tripping on sustained failures and auto-recovering
  */
 
-const crypto = require('crypto');
+const crypto = require('node:crypto');
 
 class CircuitBreaker {
   constructor(name, options = {}) {

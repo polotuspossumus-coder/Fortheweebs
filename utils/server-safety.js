@@ -1,4 +1,4 @@
-/* eslint-disable */
+/* eslint-disable no-console, no-process-exit */
 // server-safety.js - Crash handlers with artifact logging
 const fs = require('fs').promises;
 const crypto = require('crypto');

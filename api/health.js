@@ -7,7 +7,7 @@
 const express = require('express');
 const router = express.Router();
 const { createClient } = require('@supabase/supabase-js');
-const crypto = require('crypto');
+const crypto = require('node:crypto');
 
 // Artifact logging for every health event
 const healArtifacts = [];
@@ -170,7 +170,7 @@ router.get('/health', async (req, res) => {
  * HEAL ARTIFACTS - Immutable audit log
  */
 router.get('/artifacts', (req, res) => {
-  const limit = parseInt(req.query.limit) || 100;
+  const limit = Number.parseInt(req.query.limit) || 100;
   const type = req.query.type; // Filter by type
   
   let artifacts = healArtifacts;

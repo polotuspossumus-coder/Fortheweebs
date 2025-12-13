@@ -73,7 +73,7 @@ async function createCharge(name, description, amount, currency, metadata, idemp
 
 // Verify Coinbase webhook signature
 function verifyWebhook(payload, signature) {
-  const crypto = require('crypto');
+  const crypto = require('node:crypto');
   const computedSignature = crypto
     .createHmac('sha256', process.env.COINBASE_WEBHOOK_SECRET)
     .update(payload)

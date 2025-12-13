@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
 import './SocialFeed.css';
-import { isLifetimeVIP } from '../utils/vipAccess';
 import { checkTierAccess } from '../utils/tierAccess';
 import api from '../utils/backendApi';
 import featureDetector from '../utils/featureDetection';
@@ -69,7 +69,7 @@ export const SocialFeed = ({ userId, userTier }) => {
         setLoading(true);
         
         // Load posts from backend API with pagination
-        const apiUrl = import.meta.env.VITE_API_URL || window.location.origin;
+        const apiUrl = import.meta.env.VITE_API_URL || globalThis.location.origin;
         const response = await fetch(`${apiUrl}/api/social/feed?limit=20&offset=0`);
         if (response.ok) {
           const feedData = await response.json();
@@ -103,7 +103,7 @@ export const SocialFeed = ({ userId, userTier }) => {
     try {
       setLoading(true);
       const newOffset = offset + 20;
-      const apiUrl = import.meta.env.VITE_API_URL || window.location.origin;
+      const apiUrl = import.meta.env.VITE_API_URL || globalThis.location.origin;
       const response = await fetch(`${apiUrl}/api/social/feed?limit=20&offset=${newOffset}`);
       
       if (response.ok) {
@@ -156,7 +156,7 @@ export const SocialFeed = ({ userId, userTier }) => {
       const userAvatar = localStorage.getItem('userAvatar') || '👤';
 
       // Call the correct API endpoint
-      const apiUrl = import.meta.env.VITE_API_URL || window.location.origin;
+      const apiUrl = import.meta.env.VITE_API_URL || globalThis.location.origin;
       const response = await fetch(`${apiUrl}/api/social/post`, {
         method: 'POST',
         headers: {
@@ -225,54 +225,6 @@ export const SocialFeed = ({ userId, userTier }) => {
     }
   };
 
-  const handleFollow = async (targetUserId) => {
-    try {
-      await api.relationships.follow(targetUserId);
-      await loadStats(); // Refresh counters
-    } catch (err) {
-      console.error('Follow failed:', err);
-    }
-  };
-
-  const handleAddFriend = async (targetUserId) => {
-    try {
-      await api.relationships.sendFriendRequest(targetUserId);
-      alert('Friend request sent!');
-    } catch (err) {
-      console.error('Friend request failed:', err);
-      alert(err.message || 'Failed to send friend request');
-    }
-  };
-
-  const handleSubscribe = async (creatorId) => {
-    try {
-      setLoading(true);
-      const { sessionUrl } = await api.subscriptions.createCheckout(creatorId, 'PREMIUM_1000', 100000);
-      window.location.href = sessionUrl; // Redirect to Stripe
-    } catch (err) {
-      console.error('Subscription failed:', err);
-      alert('Failed to start subscription. Please try again.');
-      setLoading(false);
-    }
-  };
-
-  const handleLike = async (postId) => {
-    try {
-      const result = await api.posts.like(postId);
-
-      // Refetch the post to get accurate counts
-      const updatedPost = await api.posts.getPost(postId);
-
-      // Update local state with fresh data
-      setPosts(posts.map(p =>
-        p.id === postId ? { ...updatedPost, liked: result.liked } : p
-      ));
-    } catch (err) {
-      console.error('Like failed:', err);
-      setError('Failed to like post');
-    }
-  };
-
   const toggleComments = async (postId) => {
     if (showCommentsForPost === postId) {
       // Close comments
@@ -338,7 +290,7 @@ export const SocialFeed = ({ userId, userTier }) => {
       localStorage.setItem('likedPosts', JSON.stringify([...newLiked]));
 
       // Send to backend
-      const apiUrl = import.meta.env.VITE_API_URL || window.location.origin;
+      const apiUrl = import.meta.env.VITE_API_URL || globalThis.location.origin;
       await fetch(`${apiUrl}/api/social/post/${postId}/like`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' }
@@ -355,11 +307,11 @@ export const SocialFeed = ({ userId, userTier }) => {
         await navigator.share({
           title: `Post by @${post.author?.username || 'creator'}`,
           text: post.content?.substring(0, 100),
-          url: `${window.location.origin}/post/${postId}`
+          url: `${globalThis.location.origin}/post/${postId}`
         });
       } else {
         // Fallback: copy link
-        await navigator.clipboard.writeText(`${window.location.origin}/post/${postId}`);
+        await navigator.clipboard.writeText(`${globalThis.location.origin}/post/${postId}`);
         alert('✅ Link copied to clipboard!');
       }
       
@@ -369,7 +321,7 @@ export const SocialFeed = ({ userId, userTier }) => {
       );
       setPosts(updatedPosts);
       
-      const apiUrl = import.meta.env.VITE_API_URL || window.location.origin;
+      const apiUrl = import.meta.env.VITE_API_URL || globalThis.location.origin;
       await fetch(`${apiUrl}/api/social/post/${postId}/share`, {
         method: 'POST'
       });
@@ -398,7 +350,7 @@ export const SocialFeed = ({ userId, userTier }) => {
     if (!confirm('Are you sure you want to delete this post?')) return;
     
     try {
-      const apiUrl = import.meta.env.VITE_API_URL || window.location.origin;
+      const apiUrl = import.meta.env.VITE_API_URL || globalThis.location.origin;
       const response = await fetch(`${apiUrl}/api/social/post/${postId}`, {
         method: 'DELETE',
         headers: { 'Content-Type': 'application/json' }
@@ -435,7 +387,7 @@ export const SocialFeed = ({ userId, userTier }) => {
     if (!editContent.trim()) return;
     
     try {
-      const apiUrl = import.meta.env.VITE_API_URL || window.location.origin;
+      const apiUrl = import.meta.env.VITE_API_URL || globalThis.location.origin;
       const response = await fetch(`${apiUrl}/api/social/post/${postId}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
@@ -465,27 +417,27 @@ export const SocialFeed = ({ userId, userTier }) => {
       {/* Left Sidebar - Quick Actions */}
       <div className="feed-sidebar-left">
         <div className="sidebar-section">
-          <div className="sidebar-item" onClick={() => setActiveTab('feed')}>
+          <div className="sidebar-item" role="button" tabIndex={0} onClick={() => setActiveTab('feed')} onKeyPress={(e) => e.key === 'Enter' && setActiveTab('feed')}>
             <span className="sidebar-icon">🏠</span>
             <span className="sidebar-text">Home</span>
           </div>
-          <div className="sidebar-item" onClick={() => setActiveTab('discover')}>
+          <div className="sidebar-item" role="button" tabIndex={0} onClick={() => setActiveTab('discover')} onKeyPress={(e) => e.key === 'Enter' && setActiveTab('discover')}>
             <span className="sidebar-icon">🔍</span>
             <span className="sidebar-text">Discover Creators</span>
           </div>
-          <div className="sidebar-item" onClick={() => setActiveTab('friends')}>
+          <div className="sidebar-item" role="button" tabIndex={0} onClick={() => setActiveTab('friends')} onKeyPress={(e) => e.key === 'Enter' && setActiveTab('friends')}>
             <span className="sidebar-icon">👥</span>
             <span className="sidebar-text">Find Friends</span>
           </div>
-          <div className="sidebar-item" onClick={() => setActiveTab('messages')}>
+          <div className="sidebar-item" role="button" tabIndex={0} onClick={() => setActiveTab('messages')} onKeyPress={(e) => e.key === 'Enter' && setActiveTab('messages')}>
             <span className="sidebar-icon">💬</span>
             <span className="sidebar-text">Messages</span>
           </div>
-          <div className="sidebar-item" onClick={() => setActiveTab('subscriptions')}>
+          <div className="sidebar-item" role="button" tabIndex={0} onClick={() => setActiveTab('subscriptions')} onKeyPress={(e) => e.key === 'Enter' && setActiveTab('subscriptions')}>
             <span className="sidebar-icon">💎</span>
             <span className="sidebar-text">My Subscriptions</span>
           </div>
-          <div className="sidebar-item" onClick={() => setActiveTab('saved')}>
+          <div className="sidebar-item" role="button" tabIndex={0} onClick={() => setActiveTab('saved')} onKeyPress={(e) => e.key === 'Enter' && setActiveTab('saved')}>
             <span className="sidebar-icon">📕</span>
             <span className="sidebar-text">Saved</span>
           </div>
@@ -532,8 +484,8 @@ export const SocialFeed = ({ userId, userTier }) => {
             
             {/* Content Visibility Selector */}
             <div className="visibility-selector">
-              <label>👁️ Who can see this:</label>
-              <select value={contentVisibility} onChange={(e) => setContentVisibility(e.target.value)}>
+              <label htmlFor="visibility-select">👁️ Who can see this:</label>
+              <select id="visibility-select" value={contentVisibility} onChange={(e) => setContentVisibility(e.target.value)}>
                 <option value="PUBLIC">🌍 Public (Everyone)</option>
                 <option value="FRIENDS">👥 Friends Only</option>
                 <option value="SUBSCRIBERS">💎 Subscribers Only</option>
@@ -578,7 +530,7 @@ export const SocialFeed = ({ userId, userTier }) => {
                   <h3>Ready to share?</h3>
                   <p>Choose how you want to share this post:</p>
                   
-                  <label className="monetize-option">
+                  <label className="monetize-option" aria-label="Post to feed for free">
                     <input
                       type="radio"
                       name="monetize"
@@ -591,7 +543,7 @@ export const SocialFeed = ({ userId, userTier }) => {
                     </div>
                   </label>
 
-                  <label className="monetize-option">
+                  <label className="monetize-option" aria-label="Monetized content">
                     <input
                       type="radio"
                       name="monetize"
@@ -606,11 +558,12 @@ export const SocialFeed = ({ userId, userTier }) => {
 
                   {isPaidContent && (
                     <div className="price-input">
-                      <label>Set Price:</label>
+                      <label htmlFor="price-input">Set Price:</label>
                       <input
+                        id="price-input"
                         type="number"
                         value={priceCents / 100}
-                        onChange={(e) => setPriceCents(Math.round(parseFloat(e.target.value) * 100))}
+                        onChange={(e) => setPriceCents(Math.round(Number.parseFloat(e.target.value) * 100))}
                         min="1"
                         step="0.01"
                         placeholder="0.00"
@@ -779,33 +732,39 @@ export const SocialFeed = ({ userId, userTier }) => {
                 </div>
                 
                 {/* Show content if user has access, otherwise show lock */}
-                {canViewPaidContent ? (
-                  editingPostId === post.id ? (
-                    <div className="post-content editing">
-                      <textarea
-                        value={editContent}
-                        onChange={(e) => setEditContent(e.target.value)}
-                        className="edit-textarea"
-                      />
-                      <div className="edit-actions">
-                        <button className="cancel-edit-btn" onClick={cancelEdit}>Cancel</button>
-                        <button className="save-edit-btn" onClick={() => saveEdit(post.id)}>Save</button>
+                {(() => {
+                  if (!canViewPaidContent) {
+                    return (
+                      <div className="post-content locked">
+                        <div className="locked-overlay">
+                          🔒 
+                          <p>Subscribe to view this content</p>
+                          <button onClick={() => subscribeToUser(post.userId, post.userName)}>
+                            Subscribe for ${(post.priceCents / 100).toFixed(2)}
+                          </button>
+                        </div>
                       </div>
-                    </div>
-                  ) : (
-                    <div className="post-content">{post.content}</div>
-                  )
-                ) : (
-                  <div className="post-content locked">
-                    <div className="locked-overlay">
-                      🔒 
-                      <p>Subscribe to view this content</p>
-                      <button onClick={() => subscribeToUser(post.userId, post.userName)}>
-                        Subscribe for ${(post.priceCents / 100).toFixed(2)}
-                      </button>
-                    </div>
-                  </div>
-                )}
+                    );
+                  }
+                  
+                  if (editingPostId === post.id) {
+                    return (
+                      <div className="post-content editing">
+                        <textarea
+                          value={editContent}
+                          onChange={(e) => setEditContent(e.target.value)}
+                          className="edit-textarea"
+                        />
+                        <div className="edit-actions">
+                          <button className="cancel-edit-btn" onClick={cancelEdit}>Cancel</button>
+                          <button className="save-edit-btn" onClick={() => saveEdit(post.id)}>Save</button>
+                        </div>
+                      </div>
+                    );
+                  }
+                  
+                  return <div className="post-content">{post.content}</div>;
+                })()}
                 
                 <div className="post-actions">
                   <button 
@@ -892,7 +851,7 @@ export const SocialFeed = ({ userId, userTier }) => {
                     </button>
                     <button 
                       className="creator-rec-profile"
-                      onClick={() => window.location.href = `/profile/${creatorToShow.username}`}
+                      onClick={() => globalThis.location.href = `/profile/${creatorToShow.username}`}
                     >
                       View Profile
                     </button>
@@ -1129,10 +1088,12 @@ export const SocialFeed = ({ userId, userTier }) => {
             <h3>⭐ Active Creators</h3>
             <p className="section-desc">Real people on ForTheWeebs - no fake profiles</p>
             <div className="creators-grid">
-              {loading ? (
-                <p>⏳ Loading real creators from database...</p>
-              ) : discoverCreators.length > 0 ? (
-                discoverCreators.map(creator => (
+              {(() => {
+                if (loading) {
+                  return <p>⏳ Loading real creators from database...</p>;
+                }
+                if (discoverCreators.length > 0) {
+                  return discoverCreators.map(creator => (
                   <div key={creator.user_id} className="creator-card">
                     <div className="creator-avatar">
                       {creator.avatar || '👤'}
@@ -1162,12 +1123,14 @@ export const SocialFeed = ({ userId, userTier }) => {
                       + Follow
                     </button>
                   </div>
-                ))
-              ) : (
-                <div className="empty-state">
-                  <p>✨ Be the first creator! Start posting to show up here.</p>
-                </div>
-              )}
+                  ));
+                }
+                return (
+                  <div className="empty-state">
+                    <p>✨ Be the first creator! Start posting to show up here.</p>
+                  </div>
+                );
+              })()}
             </div>
           </div>
 
@@ -1300,6 +1263,11 @@ export const SocialFeed = ({ userId, userTier }) => {
       </div>
     </div>
   );
+};
+
+SocialFeed.propTypes = {
+  userId: PropTypes.string,
+  userTier: PropTypes.string
 };
 
 export default SocialFeed;

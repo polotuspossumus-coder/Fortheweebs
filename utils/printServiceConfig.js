@@ -7,8 +7,8 @@
 const REVENUE_SPLITS = {
   // Apparel & Home Goods (Printful)
   apparel: {
-    platformFee: 0.10,      // 10% to ForTheWeebs (covers hosting, payment processing, support)
-    creatorProfit: 0.90,    // 90% to creator after print costs
+    platformFee: 0.1,      // 10% to ForTheWeebs (covers hosting, payment processing, support)
+    creatorProfit: 0.9,    // 90% to creator after print costs
     // Example: $30 shirt - $10 print cost = $20 profit → Creator: $18, Platform: $2
   },
   
@@ -70,7 +70,7 @@ const PRINT_SERVICES = {
       tshirt: { base: 9.95, suggested: 29.99 },
       hoodie: { base: 22.95, suggested: 49.99 },
       mug: { base: 7.95, suggested: 16.99 },
-      poster: { base: 6.50, suggested: 19.99 }
+      poster: { base: 6.5, suggested: 19.99 }
     }
   },
   
@@ -90,10 +90,10 @@ const PRINT_SERVICES = {
       'API integration'
     ],
     pricing: {
-      comic_24pg: { base: 4.50, suggested: 12.99 },    // 24-page comic
-      comic_32pg: { base: 5.50, suggested: 14.99 },    // 32-page comic
-      manga_100pg: { base: 8.50, suggested: 19.99 },   // 100-page manga
-      artbook_64pg: { base: 12.00, suggested: 29.99 }  // 64-page artbook
+      comic_24pg: { base: 4.5, suggested: 12.99 },    // 24-page comic
+      comic_32pg: { base: 5.5, suggested: 14.99 },    // 32-page comic
+      manga_100pg: { base: 8.5, suggested: 19.99 },   // 100-page manga
+      artbook_64pg: { base: 12, suggested: 29.99 }  // 64-page artbook
     }
   },
   
