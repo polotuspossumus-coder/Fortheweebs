@@ -518,6 +518,19 @@ app.post('/api/social/post', express.json(), async (req, res) => {
 
 // Error handling middleware
 app.use((err, req, res, next) => {
+    // Ensure CORS headers are present even on errors
+    const allowedOrigins = [
+        'https://fortheweebs.vercel.app',
+        'https://fortheweebs-1u0c55wxe-jacobs-projects-eac77986.vercel.app',
+        'http://localhost:3003',
+        'http://localhost:3002'
+    ];
+    const origin = req.headers.origin;
+    if (allowedOrigins.includes(origin)) {
+        res.header('Access-Control-Allow-Origin', origin);
+        res.header('Access-Control-Allow-Credentials', 'true');
+    }
+    
     console.error('Error:', err);
     res.status(err.status || 500).json({
         error: err.message || 'Internal server error',
@@ -527,6 +540,19 @@ app.use((err, req, res, next) => {
 
 // 404 handler
 app.use((req, res) => {
+    // Ensure CORS headers are present even on 404
+    const allowedOrigins = [
+        'https://fortheweebs.vercel.app',
+        'https://fortheweebs-1u0c55wxe-jacobs-projects-eac77986.vercel.app',
+        'http://localhost:3003',
+        'http://localhost:3002'
+    ];
+    const origin = req.headers.origin;
+    if (allowedOrigins.includes(origin)) {
+        res.header('Access-Control-Allow-Origin', origin);
+        res.header('Access-Control-Allow-Credentials', 'true');
+    }
+    
     res.status(404).json({ error: 'Not found' });
 });
 
