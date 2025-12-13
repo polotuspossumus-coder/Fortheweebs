@@ -1,0 +1,18 @@
+{
+  "type": "uncaughtException",
+  "timestamp": "2025-12-13T00:12:19.785Z",
+  "appVersion": "2.0.0",
+  "pid": 66148,
+  "data": {
+    "message": "Unexpected token ')'",
+    "stack": "C:\\Users\\polot\\Desktop\\FORTHEWEEBS\\api\\services\\notary.js:101\n    `);\n     ^\n\nSyntaxError: Unexpected token ')'\n    at wrapSafe (node:internal/modules/cjs/loader:1638:18)\n    at Module._compile (node:internal/modules/cjs/loader:1680:20)\n    at Object..js (node:internal/modules/cjs/loader:1839:10)\n    at Module.load (node:internal/modules/cjs/loader:1441:32)\n    at Function._load (node:internal/modules/cjs/loader:1263:12)\n    at TracingChannel.traceSync (node:diagnostics_channel:322:14)\n    at wrapModuleLoad (node:internal/modules/cjs/loader:237:24)\n    at Module.require (node:internal/modules/cjs/loader:1463:12)\n    at require (node:internal/modules/helpers:147:16)\n    at Object.<anonymous> (C:\\Users\\polot\\Desktop\\FORTHEWEEBS\\server.js:137:26)",
+    "memory": {
+      "heapUsedMB": 9,
+      "heapTotalMB": 17,
+      "rssMB": 45,
+      "isHealthy": true,
+      "threshold": 512
+    }
+  },
+  "sha256": "3c485f5e1e3d4b7779e4f306f92d7dae79d0759997bafe0d1204f78cc569dac6"
+}
