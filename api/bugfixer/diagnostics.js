@@ -47,7 +47,7 @@ async function runDiagnostics() {
       .select('id')
       .limit(1);
     
-    const { data, error } = await Promise.race([dbCheck, timeout]);
+    const { data: _data, error } = await Promise.race([dbCheck, timeout]);
     
     diagnostics.checks.database = {
       status: error ? 'fail' : 'pass',

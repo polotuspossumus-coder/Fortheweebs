@@ -1,5 +1,5 @@
 // utils/security.js - HMAC authentication and request signing
-const crypto = require('crypto');
+const crypto = require('node:crypto');
 
 const ADMIN_SECRET = process.env.BUGFIXER_TOKEN || 'not_configured';
 const MAX_REQUEST_AGE_MS = 5 * 60 * 1000; // 5 minutes
@@ -29,10 +29,10 @@ function verifyHMAC(req, res, next) {
   }
   
   // Check timestamp (prevent replay attacks)
-  const requestTime = parseInt(timestamp, 10);
+  const requestTime = Number.parseInt(timestamp, 10);
   const now = Date.now();
   
-  if (isNaN(requestTime) || Math.abs(now - requestTime) > MAX_REQUEST_AGE_MS) {
+  if (Number.isNaN(requestTime) || Math.abs(now - requestTime) > MAX_REQUEST_AGE_MS) {
     return res.status(401).json({ error: 'Request too old or invalid timestamp' });
   }
   

@@ -89,7 +89,7 @@ router.post('/heal', requireToken, async (req, res) => {
     healReceipt.steps.push({ step: 'diagnostics', result: diagnostics });
     
     // Step 2: Restart if degraded or unhealthy
-    if (diagnostics.overall !== 'healthy') {
+    if (diagnostics.overall === 'degraded' || diagnostics.overall === 'unhealthy') {
       healReceipt.steps.push({
         step: 'remediation',
         action: 'restart-app',
@@ -218,7 +218,7 @@ router.post('/batch/full-heal', requireToken, async (req, res) => {
     batchReceipt.steps.push({ step: 'selftest', result: selftest });
     
     // 5. Restart if still degraded
-    if (diagnostics.overall !== 'healthy') {
+    if (diagnostics.overall === 'degraded' || diagnostics.overall === 'unhealthy') {
       batchReceipt.steps.push({ step: 'restart-app', reason: 'System degraded after healing' });
       await writeArtifact('batchFullHeal', batchReceipt);
       await executeRemediation('restart-app');

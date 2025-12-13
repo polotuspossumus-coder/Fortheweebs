@@ -26,7 +26,7 @@ export const SocialFeed = ({ userId, userTier }) => {
   const [activeTab, setActiveTab] = useState('feed'); // feed, discover, search
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState([]);
-  const [discoverCreators, setDiscoverCreators] = useState([]);
+  const [discoverCreators] = useState([]);
   const [showCGITools, setShowCGITools] = useState(false);
   const [showMonetizeDialog, setShowMonetizeDialog] = useState(false);
   const [friends, setFriends] = useState([]);

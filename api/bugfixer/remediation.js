@@ -28,8 +28,8 @@ async function executeRemediation(action, params = {}) {
         
       case 'flush-cache':
         // Placeholder for Redis cache flush
-        if (global.redisClient) {
-          await global.redisClient.flushall();
+        if (globalThis.redisClient) {
+          await globalThis.redisClient.flushall();
           remediationReceipt.result = { message: 'Cache flushed' };
         } else {
           remediationReceipt.result = { message: 'No cache configured' };

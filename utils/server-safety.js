@@ -1,11 +1,11 @@
 /* eslint-disable no-console, no-process-exit */
 // server-safety.js - Crash handlers with artifact logging
-const fs = require('fs').promises;
-const crypto = require('crypto');
-const path = require('path');
+const fs = require('node:fs').promises;
+const crypto = require('node:crypto');
+const path = require('node:path');
 
 const ARTIFACT_DIR = process.env.ARTIFACT_DIR || './artifacts';
-const MEM_THRESH_MB = parseInt(process.env.MEM_THRESH_MB || '512', 10);
+const MEM_THRESH_MB = Number.parseInt(process.env.MEM_THRESH_MB || '512', 10);
 
 // Ensure artifact directory exists
 async function ensureArtifactDir() {
@@ -19,7 +19,7 @@ async function ensureArtifactDir() {
 // Write artifact with SHA-256 hash
 async function writeArtifact(type, data) {
   await ensureArtifactDir();
-  const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+  const timestamp = new Date().toISOString().replaceAll(':', '-').replaceAll('.', '-');
   const filename = `${type}_${timestamp}.json`;
   const filepath = path.join(ARTIFACT_DIR, filename);
   

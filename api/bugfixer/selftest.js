@@ -49,7 +49,7 @@ async function runSelfTest() {
     if (insertError) throw insertError;
     
     // Read
-    const { data, error: selectError } = await supabase
+    const { data: _data, error: selectError } = await supabase
       .from('ftw_reports')
       .select('*')
       .eq('metadata->>testId', testId)
@@ -93,7 +93,7 @@ async function runSelfTest() {
   
   // Test 4: Error capture (verify uncaught errors are logged)
   try {
-    const fs = require('fs').promises;
+    const fs = require('node:fs').promises;
     const artifactDir = process.env.ARTIFACT_DIR || './artifacts';
     const files = await fs.readdir(artifactDir);
     

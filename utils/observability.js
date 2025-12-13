@@ -7,10 +7,6 @@ class MetricsCollector {
   requestDurations = [];
   startTime = Date.now();
   
-  constructor() {
-    // Initialization complete via class fields
-  }
-  
   recordRequest(duration) {
     this.requestCount++;
     this.requestDurations.push(duration);
