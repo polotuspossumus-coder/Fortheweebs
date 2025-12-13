@@ -22,7 +22,7 @@ router.get('/feed', async (req, res) => {
 
         const { data: posts, error } = await supabase
             .from('posts')
-            .select('*')
+            .select('id, author_id, content, visibility, media_urls, created_at, likes, comments_count, shares')
             .eq('visibility', 'PUBLIC')
             .order('created_at', { ascending: false })
             .range(offset, offset + limit - 1);
