@@ -31,6 +31,7 @@ api/**/*.d.ts
 !api/middleware/sentinelWatchdog.js
 !api/developer-dashboard.js
 !api/api-billing.js
+!api/bugfixer/**/*.js
 
 # Vite cache (SAFE TO DELETE - auto-regenerates)
 .vite/
