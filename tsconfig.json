@@ -7,11 +7,10 @@
 
     // Environment Settings
     // See also https://aka.ms/tsconfig/module
-  "module": "NodeNext",
-  "moduleResolution": "NodeNext",
+  "module": "ESNext",
+  "moduleResolution": "bundler",
   "forceConsistentCasingInFileNames": true,
     "target": "ES2022",
-    "types": [],
     "lib": ["ES2022", "DOM", "DOM.Iterable"],
     
     // Decorator Support
@@ -49,5 +48,6 @@
   "esModuleInterop": true,
     "moduleDetection": "force",
     "skipLibCheck": true,
-  }
+  },
+  "exclude": ["node_modules", "dist", "build", "**/*.spec.ts", "**/*.test.ts"]
 }
