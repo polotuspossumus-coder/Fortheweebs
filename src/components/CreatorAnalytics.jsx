@@ -34,7 +34,8 @@ export const CreatorAnalytics = ({ userId, creatorId }) => {
   const loadAnalytics = async () => {
     try {
       // Load from backend API
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/creator/analytics/${creatorId || userId}`);
+      const apiUrl = (window).__VITE_API_URL__ || 'http://localhost:3001';
+      const response = await fetch(`${apiUrl}/api/creator/analytics/${creatorId || userId}`);
       if (response.ok) {
         const data = await response.json();
         setStats(prev => ({ ...prev, ...data.stats }));

@@ -17,10 +17,11 @@ async function takeHeapSnapshot() {
 }
 
 // Monitor memory periodically
+let memoryMonitorTimer = null;
 function startMemoryMonitor(intervalMs = 60000) {
   console.log('[Memory] Starting memory monitor...');
   
-  setInterval(async () => {
+  memoryMonitorTimer = setInterval(async () => {
     const memory = checkMemory();
     
     if (!memory.isHealthy) {
@@ -28,6 +29,10 @@ function startMemoryMonitor(intervalMs = 60000) {
       await takeHeapSnapshot();
     }
   }, intervalMs);
+  
+  // Cleanup on exit
+  process.on('SIGTERM', () => { if (memoryMonitorTimer) clearInterval(memoryMonitorTimer); });
+  process.on('SIGINT', () => { if (memoryMonitorTimer) clearInterval(memoryMonitorTimer); });
 }
 
 module.exports = {

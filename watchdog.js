@@ -94,7 +94,17 @@ console.log(`   Check interval: ${CHECK_INTERVAL}ms`);
 console.log(`   Max failures: ${MAX_FAILURES}`);
 console.log(`   Log file: ${WATCHDOG_LOG}`);
 
-setInterval(checkHealth, CHECK_INTERVAL);
+const watchdogTimer = setInterval(checkHealth, CHECK_INTERVAL);
 
 // Initial check
 checkHealth();
+
+// Cleanup on exit
+process.on('SIGTERM', () => {
+  clearInterval(watchdogTimer);
+  process.exit(0);
+});
+process.on('SIGINT', () => {
+  clearInterval(watchdogTimer);
+  process.exit(0);
+});

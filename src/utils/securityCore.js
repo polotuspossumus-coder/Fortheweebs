@@ -107,7 +107,14 @@ class RateLimiter {
 export const rateLimiter = new RateLimiter();
 
 // Clean up old rate limit entries every 5 minutes
-setInterval(() => rateLimiter.clearOld(), 5 * 60 * 1000);
+const rateLimitCleanupTimer = setInterval(() => rateLimiter.clearOld(), 5 * 60 * 1000);
+
+// Cleanup on page unload (browser context)
+if (typeof window !== 'undefined') {
+  window.addEventListener('beforeunload', () => {
+    clearInterval(rateLimitCleanupTimer);
+  });
+}
 
 /**
  * Secure Token Management

@@ -61,10 +61,11 @@ async function uploadArtifacts() {
 }
 
 // Nightly upload task
+let nightlyUploadTimer = null;
 function startNightlyUpload() {
   const NIGHTLY_HOUR = 3; // 3 AM
   
-  setInterval(async () => {
+  nightlyUploadTimer = setInterval(async () => {
     const now = new Date();
     if (now.getHours() === NIGHTLY_HOUR && now.getMinutes() === 0) {
 
@@ -76,6 +77,10 @@ function startNightlyUpload() {
       }
     }
   }, 60000); // Check every minute
+  
+  // Cleanup on exit
+  process.on('SIGTERM', () => { if (nightlyUploadTimer) clearInterval(nightlyUploadTimer); });
+  process.on('SIGINT', () => { if (nightlyUploadTimer) clearInterval(nightlyUploadTimer); });
 }
 
 module.exports = {

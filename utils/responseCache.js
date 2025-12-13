@@ -16,7 +16,11 @@ function cleanExpiredCache() {
 }
 
 // Clean cache every minute
-setInterval(cleanExpiredCache, 60000);
+const cacheCleanupTimer = setInterval(cleanExpiredCache, 60000);
+
+// Cleanup on exit
+process.on('SIGTERM', () => { clearInterval(cacheCleanupTimer); });
+process.on('SIGINT', () => { clearInterval(cacheCleanupTimer); });
 
 /**
  * Create caching middleware
