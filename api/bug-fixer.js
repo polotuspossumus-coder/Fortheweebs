@@ -69,20 +69,27 @@ async function reportBug(req, res) {
       .single();
 
     if (error) {
+      console.error('❌ [BugFixer] Supabase insert failed:', error);
       return res.status(500).json({
         success: false,
-        error: 'Failed to save bug report'
+        error: 'Failed to save bug report',
+        details: error.message
       });
     }
 
+    // Store reportId for self-healing trigger
+    res.locals.reportId = reportId;
+
+    console.log(`✅ [BugFixer] Bug report ${reportId} saved successfully`);
+    
     res.json({
       success: true,
       reportId,
-      message: 'Bug report submitted successfully',
+      message: 'Bug report submitted successfully. Auto-remediation will be attempted.',
       data
     });
   } catch (error) {
-    console.error('Bug report error:', error);
+    console.error('❌ [BugFixer] Bug report error:', error);
     res.status(500).json({
       success: false,
       error: error.message
@@ -302,8 +309,55 @@ async function resolveBug(req, res) {
   }
 }
 
-// POST /api/bug-fixer/report
-router.post('/report', reportBug);
+/**
+ * Auto-trigger self-healing when bug is reported
+ */
+async function triggerSelfHealing(reportId, errorMessage, errorStack, component) {
+  try {
+    // Try to trigger autonomous remediation
+    const remediationModule = require('./bugfixer/remediation');
+    if (remediationModule && remediationModule.attemptRemediationHints) {
+      const hints = await remediationModule.attemptRemediationHints({
+        error: errorMessage,
+        stack: errorStack,
+        component: component || 'unknown'
+      });
+      
+      console.log(`🔧 [BugFixer] Auto-remediation triggered for ${reportId}:`, hints);
+      return hints;
+    }
+  } catch (err) {
+    console.warn(`⚠️ [BugFixer] Could not trigger auto-remediation:`, err.message);
+  }
+  return null;
+}
+
+// POST /api/bug-fixer/report (with auto-healing integration)
+router.post('/report', async (req, res, next) => {
+  const { errorMessage, errorStack, component } = req.body;
+  
+  // First, report the bug
+  const originalJson = res.json.bind(res);
+  let reportId = null;
+  
+  // Intercept response to get reportId
+  res.json = function(data) {
+    if (data.reportId) {
+      reportId = data.reportId;
+    }
+    originalJson(data);
+    
+    // Trigger self-healing AFTER response is sent
+    if (reportId && errorMessage) {
+      triggerSelfHealing(reportId, errorMessage, errorStack, component).catch(err => {
+        console.error(`❌ [BugFixer] Self-healing failed for ${reportId}:`, err);
+      });
+    }
+  };
+  
+  // Call original reportBug function
+  await reportBug(req, res);
+});
 
 // POST /api/bug-fixer/analyze
 router.post('/analyze', analyzeBug);
@@ -319,8 +373,9 @@ router.get('/health', (req, res) => {
   res.json({
     success: true,
     status: 'operational',
+    selfHealing: true,
     endpoints: {
-      report: 'POST /api/bug-fixer/report',
+      report: 'POST /api/bug-fixer/report (triggers auto-remediation)',
       analyze: 'POST /api/bug-fixer/analyze',
       list: 'GET /api/bug-fixer/list',
       resolve: 'POST /api/bug-fixer/resolve'

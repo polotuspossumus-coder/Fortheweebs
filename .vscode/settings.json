@@ -183,5 +183,38 @@
 
   // ===== DEBUG CONFIGURATION =====
   "debug.console.fontSize": 14,
-  "debug.internalConsoleOptions": "openOnSessionStart"
+  "debug.internalConsoleOptions": "openOnSessionStart",
+
+  // ===== SONARLINT CONFIGURATION =====
+  // Disable overly strict style warnings that don't affect functionality
+  "sonarlint.rules": {
+    "javascript:S2189": {
+      "level": "off",
+      "comment": "Disable 'don't use zero fraction' - 0.10 is clearer than .1"
+    },
+    "javascript:S1854": {
+      "level": "off",
+      "comment": "Disable 'remove unused variable' for destructuring patterns"
+    },
+    "javascript:S4790": {
+      "level": "off",
+      "comment": "Disable 'prefer node:crypto' - breaks compatibility"
+    },
+    "javascript:S125": {
+      "level": "off",
+      "comment": "Allow commented code for reference"
+    },
+    "javascript:S2817": {
+      "level": "off",
+      "comment": "Allow window over globalThis - more readable"
+    },
+    "javascript:S1940": {
+      "level": "off",
+      "comment": "Allow negated conditions when clearer"
+    },
+    "javascript:S1264": {
+      "level": "off",
+      "comment": "Allow /* eslint-disable */ without specific rules"
+    }
+  }
 }

@@ -263,6 +263,7 @@ try {
 const routes = [
     // ===== SOVEREIGN SELF-HEALING SYSTEM =====
     { path: '/api/health', file: './api/health', name: '🩹 Self-Healing Health (Liveness/Readiness/Artifacts)' },
+    { path: '/api/bug-fixer', file: './api/bug-fixer', name: '🐛 Bug Fixer API (Report/List/Analyze/Auto-Fix)' },
     { path: '/bugfixer', file: './api/bugfixer/console', name: '🔧 Bug Fixer Console (Diagnostics/Remediation/Auto-Heal)' },
     { path: '/userfix/feedback', file: './api/userfix/feedback', name: '📝 User Feedback & Bug Reports' },
     { path: '/userfix/auto', file: './api/userfix/autonomousSuggestions', name: '🤖 Autonomous Suggestions (Auto-Apply)' },
