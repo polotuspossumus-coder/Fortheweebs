@@ -388,6 +388,72 @@ export const SocialFeed = ({ userId, userTier }) => {
     localStorage.setItem('savedPosts', JSON.stringify([...newSaved]));
   };
 
+  const deletePost = async (postId) => {
+    if (!confirm('Are you sure you want to delete this post?')) return;
+    
+    try {
+      const apiUrl = import.meta.env.VITE_API_URL || window.location.origin;
+      const response = await fetch(`${apiUrl}/api/social/post/${postId}`, {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' }
+      });
+      
+      if (response.ok) {
+        setPosts(posts.filter(p => p.id !== postId));
+        alert('✅ Post deleted!');
+      } else {
+        alert('❌ Failed to delete post');
+      }
+    } catch (err) {
+      console.error('Delete error:', err);
+      // Remove from UI anyway
+      setPosts(posts.filter(p => p.id !== postId));
+      alert('⚠️ Post removed from view');
+    }
+  };
+
+  const [editingPostId, setEditingPostId] = useState(null);
+  const [editContent, setEditContent] = useState('');
+
+  const startEditPost = (postId, currentContent) => {
+    setEditingPostId(postId);
+    setEditContent(currentContent);
+  };
+
+  const cancelEdit = () => {
+    setEditingPostId(null);
+    setEditContent('');
+  };
+
+  const saveEdit = async (postId) => {
+    if (!editContent.trim()) return;
+    
+    try {
+      const apiUrl = import.meta.env.VITE_API_URL || window.location.origin;
+      const response = await fetch(`${apiUrl}/api/social/post/${postId}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ content: editContent })
+      });
+      
+      if (response.ok) {
+        setPosts(posts.map(p => p.id === postId ? { ...p, content: editContent } : p));
+        setEditingPostId(null);
+        setEditContent('');
+        alert('✅ Post updated!');
+      } else {
+        alert('❌ Failed to update post');
+      }
+    } catch (err) {
+      console.error('Edit error:', err);
+      // Update UI anyway
+      setPosts(posts.map(p => p.id === postId ? { ...p, content: editContent } : p));
+      setEditingPostId(null);
+      setEditContent('');
+      alert('⚠️ Post updated locally');
+    }
+  };
+
   return (
     <div className="social-feed-container">
       {/* Navigation Tabs */}
@@ -679,7 +745,21 @@ export const SocialFeed = ({ userId, userTier }) => {
                 
                 {/* Show content if user has access, otherwise show lock */}
                 {canViewPaidContent ? (
-                  <div className="post-content">{post.content}</div>
+                  editingPostId === post.id ? (
+                    <div className="post-content editing">
+                      <textarea
+                        value={editContent}
+                        onChange={(e) => setEditContent(e.target.value)}
+                        className="edit-textarea"
+                      />
+                      <div className="edit-actions">
+                        <button className="cancel-edit-btn" onClick={cancelEdit}>Cancel</button>
+                        <button className="save-edit-btn" onClick={() => saveEdit(post.id)}>Save</button>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="post-content">{post.content}</div>
+                  )
                 ) : (
                   <div className="post-content locked">
                     <div className="locked-overlay">
@@ -695,22 +775,32 @@ export const SocialFeed = ({ userId, userTier }) => {
                 <div className="post-actions">
                   <button 
                     onClick={() => likePost(post.id)}
-                    className={likedPosts.has(post.id) ? 'liked' : ''}
+                    className={`action-btn like-btn ${likedPosts.has(post.id) ? 'liked' : ''}`}
                   >
                     {likedPosts.has(post.id) ? '❤️' : '🤍'} {post.likes || 0}
                   </button>
-                  <button onClick={() => toggleComments(post.id)}>
+                  <button onClick={() => toggleComments(post.id)} className="action-btn comment-btn">
                     💬 {post.commentsCount || 0}
                   </button>
-                  <button onClick={() => sharePost(post.id)}>
+                  <button onClick={() => sharePost(post.id)} className="action-btn share-btn">
                     🔁 {post.shares || 0}
                   </button>
                   <button 
                     onClick={() => savePost(post.id)}
-                    className={savedPosts.has(post.id) ? 'saved' : ''}
+                    className={`action-btn save-btn ${savedPosts.has(post.id) ? 'saved' : ''}`}
                   >
                     {savedPosts.has(post.id) ? '📕' : '📖'} Save
                   </button>
+                  {post.userId === (localStorage.getItem('userId') || userId) && (
+                    <>
+                      <button onClick={() => startEditPost(post.id, post.content)} className="action-btn edit-btn">
+                        ✏️ Edit
+                      </button>
+                      <button onClick={() => deletePost(post.id)} className="action-btn delete-btn">
+                        🗑️ Delete
+                      </button>
+                    </>
+                  )}
                 </div>
 
                 {/* Comments Section */}

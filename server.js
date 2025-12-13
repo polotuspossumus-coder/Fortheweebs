@@ -124,9 +124,29 @@ app.use(cookieParser());
 // Metrics collection middleware (must be early)
 app.use(metricsMiddleware);
 
+// CORS configuration - allow frontend origins
+const allowedOrigins = [
+    'http://localhost:3002',
+    'http://localhost:3003',
+    'http://localhost:5173',
+    'https://fortheweebs.vercel.app',
+    process.env.VITE_APP_URL
+].filter(Boolean);
+
 app.use(cors({
-    origin: true, // Allow all origins
-    credentials: true
+    origin: (origin, callback) => {
+        // Allow requests with no origin (like mobile apps or Postman)
+        if (!origin) return callback(null, true);
+        if (allowedOrigins.includes(origin)) {
+            callback(null, true);
+        } else {
+            callback(null, true); // Allow all for now during development
+        }
+    },
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
+    exposedHeaders: ['Content-Range', 'X-Content-Range']
 }));
 
 // CRITICAL: Raw body parsing for webhooks BEFORE JSON parsing

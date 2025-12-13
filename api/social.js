@@ -278,6 +278,63 @@ router.delete('/unfollow', async (req, res) => {
 });
 
 /**
+ * PUT /api/social/post/:postId
+ * Update a post
+ */
+router.put('/post/:postId', async (req, res) => {
+    try {
+        const { postId } = req.params;
+        const { content } = req.body;
+
+        if (!content) {
+            return res.status(400).json({ error: 'Content is required' });
+        }
+
+        const { data: post, error } = await supabase
+            .from('posts')
+            .update({ content, updated_at: new Date().toISOString() })
+            .eq('id', postId)
+            .select()
+            .single();
+
+        if (error) {
+            console.error('Update error:', error);
+            return res.status(500).json({ error: 'Failed to update post' });
+        }
+
+        res.json({ success: true, post });
+    } catch (error) {
+        console.error('Post update error:', error);
+        res.status(500).json({ error: error.message });
+    }
+});
+
+/**
+ * DELETE /api/social/post/:postId
+ * Delete a post
+ */
+router.delete('/post/:postId', async (req, res) => {
+    try {
+        const { postId } = req.params;
+
+        const { error } = await supabase
+            .from('posts')
+            .delete()
+            .eq('id', postId);
+
+        if (error) {
+            console.error('Delete error:', error);
+            return res.status(500).json({ error: 'Failed to delete post' });
+        }
+
+        res.json({ success: true });
+    } catch (error) {
+        console.error('Post delete error:', error);
+        res.status(500).json({ error: error.message });
+    }
+});
+
+/**
  * POST /api/social/post/:postId/like
  * Like a post
  */
