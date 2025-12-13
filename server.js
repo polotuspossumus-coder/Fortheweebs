@@ -601,10 +601,15 @@ async function startServer() {
         console.log('✅ Scheduler initialized');
         
         // Heartbeat to keep process alive
-        const timer = setInterval(() => {
+        const heartbeatTimer = setInterval(() => {
             const metrics = metricsCollector.getMetrics();
             console.log(`💓 Server alive | Requests: ${metrics.requests.total} | Errors: ${metrics.requests.errors} | Memory: ${metrics.memory.heapUsedMB}MB`);
         }, 60000); // Every minute
+        
+        // Cleanup on shutdown
+        process.on('SIGTERM', () => {
+            clearInterval(heartbeatTimer);
+        });
         
         console.log('✅ Heartbeat started');
         

@@ -1,7 +1,17 @@
 /* eslint-disable */
 // src/mobile/offlineQueue.ts - Offline request queue for Capacitor
-import { Capacitor } from '@capacitor/core';
-import { Network } from '@capacitor/network';
+// Optional Capacitor imports - gracefully degrade if not available
+let Capacitor: any = { isNativePlatform: () => false };
+let Network: any = { 
+  addListener: () => ({ remove: () => {} }), 
+  getStatus: async () => ({ connected: true }) 
+};
+
+// Try to import Capacitor if available (will be undefined in web builds)
+if (typeof window !== 'undefined' && (window as any).Capacitor) {
+  Capacitor = (window as any).Capacitor;
+  Network = (window as any).Network;
+}
 
 interface QueuedRequest {
   id: string;

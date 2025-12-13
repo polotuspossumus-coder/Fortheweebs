@@ -8,7 +8,7 @@ const BugFixerPanel: React.FC = () => {
   const [result, setResult] = useState<any>(null);
   const [loading, setLoading] = useState(false);
 
-  const apiUrl = (import.meta as any).env?.VITE_API_URL || 'http://localhost:3001';
+  const apiUrl = (window as any).__VITE_API_URL__ || 'http://localhost:3001';
 
   const generateHMAC = async (payload: any) => {
     const timestamp = Date.now().toString();

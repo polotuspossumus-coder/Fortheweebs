@@ -10,7 +10,7 @@ const ProposeFix: React.FC = () => {
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const apiUrl = (import.meta as any).env?.VITE_API_URL || 'http://localhost:3001';
+  const apiUrl = (window as any).__VITE_API_URL__ || 'http://localhost:3001';
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

@@ -77,6 +77,11 @@
   <!-- JSZip - Deferred loading (not critical for initial render) -->
   <script defer src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js" integrity="sha512-XMVd28F1oH/O71fzwBnV7HucLxVwtxf26XV8P4wPk26EDxuGZ91N8bsOttmnomcCD3CS5ZMRL50H0GgOHvegtg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
+  <!-- Inject environment variables for app -->
+  <script>
+    window.__VITE_API_URL__ = 'http://localhost:3001';
+  </script>
+
   <!-- Main app entry -->
   <script type="module" src="/src/index.jsx?v=1763318505"></script>
   <style>
