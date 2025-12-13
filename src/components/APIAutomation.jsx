@@ -3,7 +3,7 @@ import './APIAutomation.css';
 
 const APIAutomation = () => {
     const [activeTab, setActiveTab] = useState('overview');
-    const [apiKey, setApiKey] = useState('ftw_live_sk_7j9k2m4n6p8q1r3s5t7v9w0x');
+    const [apiKey, setApiKey] = useState(import.meta.env.VITE_FTW_API_KEY || '');
     const [showKey, setShowKey] = useState(false);
     const [selectedEndpoint, setSelectedEndpoint] = useState(null);
     const [requestLogs, setRequestLogs] = useState([]);
