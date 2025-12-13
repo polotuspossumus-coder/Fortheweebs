@@ -7,7 +7,7 @@
 (function() {
     'use strict';
 
-    const BUG_API = 'http://localhost:3000/api/bug-fixer/report';
+    const BUG_API = 'http://localhost:3001/api/bug-fixer/report';
     let reportedErrors = new Set();
 
     // Catch all global errors

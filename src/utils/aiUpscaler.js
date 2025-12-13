@@ -160,7 +160,7 @@ class AIUpscaler {
    * Cloud processing via API (fallback or for heavy loads)
    */
   async upscaleCloud(imageFile, scale, denoise, mode, userId) {
-    const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+    const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3001';
     
     const formData = new FormData();
     formData.append('image', imageFile);

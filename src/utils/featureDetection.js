@@ -5,7 +5,7 @@
 
 import React from 'react';
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001';
 
 class FeatureDetector {
   constructor() {
@@ -25,7 +25,7 @@ class FeatureDetector {
   async checkFeatures() {
     try {
       // Skip backend check if API not available (dev mode)
-      if (!API_BASE_URL || API_BASE_URL.includes('localhost:3000')) {
+      if (!API_BASE_URL || API_BASE_URL.includes('localhost:3001')) {
         console.log('⚠️ Feature detection: Backend not running, using defaults');
         this.features = {
           socialMedia: false,

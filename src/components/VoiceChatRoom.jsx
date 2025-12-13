@@ -91,7 +91,7 @@ export default function VoiceChatRoom({ user, roomId }) {
       setupAudioAnalysis(stream);
 
       // Connect to WebSocket
-      const ws = new WebSocket(`${import.meta.env.VITE_WS_URL || 'ws://localhost:3000'}/voice/${roomId}`);
+      const ws = new WebSocket(`${import.meta.env.VITE_WS_URL || 'ws://localhost:3001'}/voice/${roomId}`);
       wsRef.current = ws;
 
       ws.onopen = () => {

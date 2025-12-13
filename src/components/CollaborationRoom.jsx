@@ -23,7 +23,7 @@ export default function CollaborationRoom({ user }) {
   useEffect(() => {
     if (!joined) return;
 
-    const ws = new WebSocket(`${import.meta.env.VITE_WS_URL || 'ws://localhost:3000'}/collaboration`);
+    const ws = new WebSocket(`${import.meta.env.VITE_WS_URL || 'ws://localhost:3001'}/collaboration`);
     wsRef.current = ws;
 
     ws.onopen = () => {
