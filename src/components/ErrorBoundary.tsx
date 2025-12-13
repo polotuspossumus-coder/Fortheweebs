@@ -35,7 +35,7 @@ class ErrorBoundary extends Component<Props, State> {
 
   async reportCrash(error: Error, errorInfo: ErrorInfo) {
     try {
-      const apiUrl = import.meta.env.VITE_PUBLIC_API_URL || 'http://localhost:3002';
+      const apiUrl = (import.meta as any).env?.VITE_API_URL || 'http://localhost:3001';
       
       await fetch(`${apiUrl}/userfix/feedback/report`, {
         method: 'POST',

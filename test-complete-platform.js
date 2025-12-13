@@ -4,7 +4,7 @@
  * Tests EVERY critical endpoint to verify the platform is launch-ready
  */
 
-const API_URL = 'http://localhost:3000';
+const API_URL = process.env.API_URL || 'http://localhost:3001';
 
 const tests = [];
 let passed = 0;
