@@ -5,9 +5,10 @@
  * Embeds cryptographic face embeddings and detects unauthorized reuse
  */
 
-// @ts-ignore - No type definitions available for @tensorflow-models/face-landmarks-detection
-import * as faceLandmarksDetection from '@tensorflow-models/face-landmarks-detection';
-import * as tf from '@tensorflow/tfjs';
+// Lazy load TensorFlow - DO NOT import at top level (1MB+ bundle size)
+let faceLandmarksDetection: any = null;
+let tf: any = null;
+
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
 import CryptoJS from 'crypto-js';
 
@@ -62,7 +63,7 @@ export interface FaceEmbedding {
 
 export class DeepfakeProtectionEngine {
   private supabase: SupabaseClient;
-  private model?: faceLandmarksDetection.FaceLandmarksDetector;
+  private model?: any; // FaceLandmarksDetector
   private secretKey: string;
 
   constructor(supabaseUrl?: string, supabaseKey?: string, secretKey?: string) {
@@ -81,9 +82,20 @@ export class DeepfakeProtectionEngine {
 
     console.log('🛡️ Loading face landmarks detection model...');
 
+    // Lazy load TensorFlow modules (only when actually needed)
+    if (!faceLandmarksDetection || !tf) {
+      console.log('📦 Dynamically importing TensorFlow.js...');
+      const [tfModule, faceModule] = await Promise.all([
+        import('@tensorflow/tfjs'),
+        import('@tensorflow-models/face-landmarks-detection')
+      ]);
+      tf = tfModule;
+      faceLandmarksDetection = faceModule;
+    }
+
     // Use MediaPipe FaceMesh for high-quality landmarks
     const model = faceLandmarksDetection.SupportedModels.MediaPipeFaceMesh;
-    const detectorConfig: faceLandmarksDetection.MediaPipeFaceMeshMediaPipeModelConfig = {
+    const detectorConfig = {
       runtime: 'mediapipe',
       solutionPath: 'https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh',
       maxFaces: 1,

@@ -6,9 +6,11 @@
  * SOVEREIGNTY LAYER: Full session tracking + artifact immortalization
  */
 
-import * as bodyPix from '@tensorflow-models/body-pix';
+// Lazy load TensorFlow - DO NOT import at top level (1MB+ bundle size)
+let bodyPix: any = null;
+let tf: any = null;
+
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
-import * as tf from '@tensorflow/tfjs';
 import { GratitudeLogger } from './gratitudeLogger';
 
 // ============================================================================
@@ -62,7 +64,7 @@ export interface BackgroundOptions {
 export class VirtualStudioEngine {
   private supabase: SupabaseClient;
   private gratitude: GratitudeLogger;
-  private model?: bodyPix.BodyPix;
+  private model?: any; // bodyPix.BodyPix
   private sessionId?: string;
   private frameCount: number = 0;
   private isProcessing: boolean = false;
@@ -80,6 +82,17 @@ export class VirtualStudioEngine {
    */
   async loadModel(config?: Partial<SegmentationConfig>): Promise<void> {
     console.log('🎬 Loading BodyPix model...');
+
+    // Lazy load TensorFlow modules (only when actually needed)
+    if (!bodyPix || !tf) {
+      console.log('📦 Dynamically importing TensorFlow.js...');
+      const [tfModule, bodyPixModule] = await Promise.all([
+        import('@tensorflow/tfjs'),
+        import('@tensorflow-models/body-pix')
+      ]);
+      tf = tfModule;
+      bodyPix = bodyPixModule;
+    }
 
     const defaultConfig: SegmentationConfig = {
       architecture: 'MobileNetV1',
@@ -246,7 +259,7 @@ export class VirtualStudioEngine {
   private async applyBackground(
     sourceData: ImageData,
     resultData: ImageData,
-    segmentation: bodyPix.SemanticPersonSegmentation,
+    segmentation: any, // bodyPix.SemanticPersonSegmentation
     options: BackgroundOptions,
     edgeBlur: number
   ): Promise<void> {

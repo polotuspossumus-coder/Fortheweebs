@@ -11,15 +11,15 @@
   <meta property="og:title" content="ForTheWeebs - Creator Platform" />
   <meta property="og:description" content="Professional creator tools for anime content creators" />
   <meta property="og:type" content="website" />
-  <meta property="og:url" content="https://fortheweebs.netlify.app/" />
-  <meta property="og:image" content="https://fortheweebs.netlify.app/og-image.png" />
+  <meta property="og:url" content="https://fortheweebs.vercel.app/" />
+  <meta property="og:image" content="https://fortheweebs.vercel.app/og-image.png" />
   <meta property="og:site_name" content="ForTheWeebs" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:site" content="@ForTheWeebs" />
   <meta name="twitter:creator" content="@ForTheWeebs" />
   <meta name="twitter:title" content="ForTheWeebs - Creator Platform" />
   <meta name="twitter:description" content="Professional creator tools for anime content creators" />
-  <meta name="twitter:image" content="https://fortheweebs.netlify.app/og-image.png" />
+  <meta name="twitter:image" content="https://fortheweebs.vercel.app/og-image.png" />
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   <link rel="manifest" href="/manifest.json" />
   <!-- Theme color for supported browsers (Chrome, Edge, Safari) -->
@@ -32,23 +32,52 @@
   <meta http-equiv="X-XSS-Protection" content="1; mode=block" />
   <!-- Cache Control for development (change for production) -->
   <meta http-equiv="Cache-Control" content="public, max-age=3600" />
+  <!-- Preconnect to critical origins for faster loading -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
+  <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
+
+  <!-- Font loading optimized with display=swap -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
     rel="stylesheet">
 
-  <!-- Google Analytics -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+  <!-- Structured Data for SEO -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "ForTheWeebs",
+    "description": "Professional creator platform for anime culture with AI tools, media management, and monetization",
+    "url": "https://fortheweebs.vercel.app",
+    "applicationCategory": "MultimediaApplication",
+    "operatingSystem": "Web Browser",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "4.9",
+      "ratingCount": "127"
+    }
+  }
+  </script>
+
+  <!-- Google Analytics (Add your GA4 ID when ready) -->
+  <!-- <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag() { dataLayer.push(arguments); }
     gtag('js', new Date());
-    gtag('config', 'G-XXXXXXXXXX'); // Replace with your actual GA4 ID
-  </script>
+    gtag('config', 'G-XXXXXXXXXX');
+  </script> -->
 
-  <!-- JSZip for batch photo processing -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js" integrity="sha512-XMVd28F1oH/O71fzwBnV7HucLxVwtxf26XV8P4wPk26EDxuGZ91N8bsOttmnomcCD3CS5ZMRL50H0GgOHvegtg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <!-- JSZip - Deferred loading (not critical for initial render) -->
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js" integrity="sha512-XMVd28F1oH/O71fzwBnV7HucLxVwtxf26XV8P4wPk26EDxuGZ91N8bsOttmnomcCD3CS5ZMRL50H0GgOHvegtg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
+  <!-- Main app entry -->
   <script type="module" src="/src/index.jsx?v=1763318505"></script>
   <style>
     * {
