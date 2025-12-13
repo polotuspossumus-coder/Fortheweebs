@@ -443,16 +443,12 @@ routes.forEach(({ path, file, name, requirePhotoDNA: needsPhotoDNA }) => {
     try {
         const route = require(file);
 
-        // DEBUG: Log router details for /api/social
-        if (path === '/api/social') {
+        // Router verification for /api/social
+        if (path === '/api/social' && process.env.NODE_ENV === 'development') {
             console.log(`🔍 DEBUG /api/social:`, {
                 type: typeof route,
                 hasStack: !!route.stack,
-                stackLength: route.stack?.length,
-                routes: route.stack?.map(r => ({
-                    path: r.route?.path,
-                    methods: Object.keys(r.route?.methods || {})
-                }))
+                stackLength: route.stack?.length
             });
         }
 
