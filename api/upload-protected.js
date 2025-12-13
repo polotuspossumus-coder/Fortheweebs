@@ -128,7 +128,14 @@ router.post('/upload/video', upload.single('video'), async (req, res) => {
   try {
     const file = req.file;
     const userId = req.body.userId || req.user?.id;
-    const metadata = JSON.parse(req.body.metadata || '{}');
+
+    // Safely parse metadata with error handling
+    let metadata = {};
+    try {
+      metadata = JSON.parse(req.body.metadata || '{}');
+    } catch (parseError) {
+      return res.status(400).json({ error: 'Invalid metadata JSON format' });
+    }
     
     if (!file) {
       return res.status(400).json({ error: 'No video file provided' });
