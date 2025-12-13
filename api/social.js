@@ -12,23 +12,6 @@ const supabase = createClient(
     process.env.SUPABASE_SERVICE_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY || 'dummy-key'
 );
 
-// In-memory store for mock posts (shared across all users)
-global.mockPosts = global.mockPosts || [];
-
-// CORS middleware - applies to ALL social routes
-router.use((req, res, next) => {
-    res.header('Access-Control-Allow-Origin', '*');
-    res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-    res.header('Access-Control-Allow-Credentials', 'true');
-
-    // Handle preflight
-    if (req.method === 'OPTIONS') {
-        return res.sendStatus(200);
-    }
-    next();
-});
-
 /**
  * GET /api/social/feed
  * Get public feed posts
@@ -37,16 +20,20 @@ router.get('/feed', async (req, res) => {
     try {
         const { limit = 50, offset = 0 } = req.query;
 
-        // Get database posts
-        const { data: dbPosts, error } = await supabase
+        const { data: posts, error } = await supabase
             .from('posts')
             .select('id, author_id, content, visibility, media_urls, created_at, likes, comments_count, shares')
             .eq('visibility', 'PUBLIC')
             .order('created_at', { ascending: false })
             .range(offset, offset + limit - 1);
 
-        // Format database posts
-        const formattedDbPosts = (dbPosts || []).map(post => ({
+        if (error) {
+            // Return empty feed if table doesn't exist
+            return res.json({ posts: [], count: 0 });
+        }
+
+        // Format posts to match frontend expectations
+        const formattedPosts = posts.map(post => ({
             id: post.id,
             userId: post.author_id,
             userName: 'User',
@@ -60,21 +47,14 @@ router.get('/feed', async (req, res) => {
             sharesCount: post.shares
         }));
 
-        // Combine with mock posts and sort by timestamp
-        const allPosts = [...formattedDbPosts, ...global.mockPosts]
-            .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))
-            .slice(offset, offset + parseInt(limit));
-
         res.json({
-            posts: allPosts,
-            count: allPosts.length
+            posts: formattedPosts || [],
+            count: formattedPosts?.length || 0
         });
     } catch (error) {
         console.error('Feed error:', error);
-        // Return mock posts only on error
-        const mockFeed = global.mockPosts
-            .slice(offset, offset + parseInt(limit));
-        res.json({ posts: mockFeed, count: mockFeed.length });
+        // Return empty feed on error
+        res.json({ posts: [], count: 0 });
     }
 });
 
@@ -171,26 +151,6 @@ router.post('/post', async (req, res) => {
 
         if (!userId || !content) {
             return res.status(400).json({ error: 'Missing required fields: userId and content' });
-        }
-
-        // Validate UUID format
-        const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
-        if (!uuidRegex.test(userId)) {
-            // Return mock post for invalid UUIDs (temp users)
-            const mockPost = {
-                id: Date.now(),
-                userId: userId,
-                userName: 'User',
-                avatar: '👤',
-                content: content,
-                visibility: visibility.toUpperCase(),
-                mediaUrl: mediaUrl,
-                timestamp: new Date().toISOString(),
-                likesCount: 0,
-                commentsCount: 0,
-                sharesCount: 0
-            };
-            return res.json({ post: mockPost });
         }
 
         // Create post object matching actual database schema
@@ -497,10 +457,9 @@ router.post('/post/:postId/share', async (req, res) => {
 // Global error handler for all routes
 router.use((error, req, res, next) => {
     console.error('Social API Error:', error);
-    res.header('Access-Control-Allow-Origin', '*');
-    res.status(500).json({
+    res.status(500).json({ 
         error: 'Service temporarily unavailable. Some features require database setup.',
-        details: error.message
+        details: error.message 
     });
 });
 
