@@ -1,16 +1,18 @@
-# Railway/Nixpacks Configuration for ForTheWeebs
+# Railway/Nixpacks Configuration for ForTheWeebs Backend
+# This is a Node.js Express server, NOT a static site
 
 [phases.setup]
-nixPkgs = ["nodejs_20", "python3"]
+nixPkgs = ["nodejs_22", "python3"]
 
 [phases.install]
 cmds = ["npm ci --legacy-peer-deps --production=false"]
 
 [phases.build]
-cmds = ["npm run build"]
+cmds = ["echo 'Skipping frontend build - this is backend only'"]
 
 [start]
-cmd = "npm run server"
+cmd = "node server.js"
 
 [variables]
 NODE_ENV = "production"
+PORT = "3001"
