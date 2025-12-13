@@ -20,6 +20,13 @@ async function createCharge(name, description, amount, currency, metadata, idemp
     error: null,
   };
   
+  // Check if Coinbase API key is configured
+  if (!COINBASE_API_KEY) {
+    chargeReceipt.error = 'Coinbase Commerce not configured (missing API key)';
+    writeArtifact('coinbaseChargeSkipped', chargeReceipt);
+    throw new Error('Coinbase Commerce API key not configured');
+  }
+  
   try {
     const response = await axios.post(
       `${COINBASE_API_URL}/charges`,

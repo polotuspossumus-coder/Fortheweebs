@@ -1,7 +1,7 @@
 // utils/security.js - HMAC authentication and request signing
 const crypto = require('crypto');
 
-const ADMIN_SECRET = process.env.BUGFIXER_TOKEN;
+const ADMIN_SECRET = process.env.BUGFIXER_TOKEN || 'not_configured';
 const MAX_REQUEST_AGE_MS = 5 * 60 * 1000; // 5 minutes
 const nonceCache = new Set();
 

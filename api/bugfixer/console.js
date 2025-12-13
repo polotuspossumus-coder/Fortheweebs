@@ -9,6 +9,14 @@ const { writeArtifact } = require('../../utils/server-safety');
 
 // Token authentication middleware
 function requireToken(req, res, next) {
+  // If BUGFIXER_TOKEN not configured, disable bugfixer endpoints
+  if (!process.env.BUGFIXER_TOKEN) {
+    return res.status(503).json({ 
+      error: 'BugFixer service not configured', 
+      message: 'BUGFIXER_TOKEN environment variable not set' 
+    });
+  }
+  
   const token = req.headers['x-bugfixer-token'];
   
   if (!token || token !== process.env.BUGFIXER_TOKEN) {
