@@ -92,7 +92,5 @@ code.txt
 # Project archives
 *.zip
 .vercel
-
-# Local Netlify folder
-.netlify
 .env*.local
+artifacts/*.json
