@@ -89,7 +89,15 @@ router.post('/verify', async (req, res) => {
     }
 
     const jwt = require('jsonwebtoken');
-    const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key-change-in-production';
+    const JWT_SECRET = process.env.JWT_SECRET;
+
+    if (!JWT_SECRET) {
+      return res.status(500).json({
+        valid: false,
+        error: 'Server configuration error',
+        code: 'JWT_NOT_CONFIGURED',
+      });
+    }
 
     jwt.verify(token, JWT_SECRET, (err, user) => {
       if (err) {
