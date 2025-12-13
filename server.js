@@ -62,7 +62,12 @@ console.log('✅ Environment validation passed');
 
 const app = express();
 const server = http.createServer(app);
-const PORT = process.env.PORT || 3001;
+const PORT = parseInt(process.env.PORT || '3001', 10);
+
+// Debug PORT
+if (!process.env.PORT) {
+  console.warn('⚠️  PORT not set in environment, defaulting to 3001');
+}
 
 // Trust Railway/Vercel proxy for rate limiting
 app.set('trust proxy', true);
