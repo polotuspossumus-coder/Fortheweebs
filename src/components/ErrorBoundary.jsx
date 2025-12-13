@@ -1,64 +1,105 @@
-/* eslint-disable */
-import React from 'react';
+// src/components/ErrorBoundary.tsx - React error boundary with crash reporting
+import React, { Component, ErrorInfo, ReactNode } from 'react';
 
-export class ErrorBoundary extends React.Component {
-  constructor(props) {
+interface Props {
+  children: ReactNode;
+}
+
+interface State {
+  hasError: boolean;
+  error: Error | null;
+}
+
+class ErrorBoundary extends Component<Props, State> {
+  constructor(props: Props) {
     super(props);
-    this.state = { hasError: false, error: null };
+    this.state = {
+      hasError: false,
+      error: null,
+    };
   }
 
-  static getDerivedStateFromError(error) {
-    return { hasError: true, error };
+  static getDerivedStateFromError(error: Error): State {
+    return {
+      hasError: true,
+      error,
+    };
   }
 
-  componentDidCatch(error, errorInfo) {
-    console.error('Error caught by boundary:', error, errorInfo);
+  componentDidCatch(error: Error, errorInfo: ErrorInfo) {
+    console.error('[ErrorBoundary] Caught error:', error, errorInfo);
+    
+    // Report crash to backend
+    this.reportCrash(error, errorInfo);
+  }
 
-    // Log error to server for monitoring in production (only if API is available)
-    if (typeof window !== 'undefined' && window.location.hostname !== 'localhost') {
-      try {
-        fetch('/api/log-error', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            error: error?.toString(),
-            stack: error?.stack,
-            componentStack: errorInfo?.componentStack,
-            url: window.location.href,
+  async reportCrash(error: Error, errorInfo: ErrorInfo) {
+    try {
+      const apiUrl = (window as any).__VITE_API_URL__ || 'http://localhost:3001';
+      
+      await fetch(`${apiUrl}/userfix/feedback/report`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          report_type: 'crash',
+          message: `Frontend crash: ${error.message}`,
+          page_url: window.location.href,
+          severity: 'high',
+          metadata: {
+            stack: error.stack,
+            componentStack: errorInfo.componentStack,
             userAgent: navigator.userAgent,
-            timestamp: new Date().toISOString()
-          })
-        }).catch(err => {
-          // Silently fail if error logging endpoint doesn't exist
-          console.debug('Error logging endpoint not available');
-        });
-      } catch (err) {
-        // Silently fail
-        console.debug('Error logging failed');
-      }
+          },
+        }),
+      });
+    } catch (err) {
+      console.error('[ErrorBoundary] Failed to report crash:', err);
     }
   }
 
   render() {
     if (this.state.hasError) {
       return (
-        <div style={{ padding: '40px', textAlign: 'center', background: '#ff6b6b', color: 'white', minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column' }}>
-          <h1 style={{ fontSize: '3rem', marginBottom: '20px' }}>⚠️ Oops!</h1>
-          <p style={{ fontSize: '1.2rem', marginBottom: '30px' }}>Something went wrong. Don't worry, you can report this!</p>
-          <div style={{ background: 'rgba(0,0,0,0.3)', padding: '20px', borderRadius: '8px', marginBottom: '20px', maxWidth: '600px', textAlign: 'left' }}>
-            <strong>Error Details:</strong>
-            <pre style={{ fontSize: '0.9rem', marginTop: '10px', overflow: 'auto', maxHeight: '200px' }}>
-              {this.state.error?.toString()}
-              {'\n\n'}
-              {this.state.error?.stack}
-            </pre>
-          </div>
-          <button onClick={() => window.location.reload()} style={{ padding: '14px 32px', background: 'white', color: '#ff6b6b', border: 'none', borderRadius: '8px', fontSize: '1.1rem', cursor: 'pointer', fontWeight: '600' }}>
+        <div style={{
+          padding: '2rem',
+          textAlign: 'center',
+          maxWidth: '600px',
+          margin: '0 auto',
+        }}>
+          <h1>😔 Something went wrong</h1>
+          <p>We've been notified and are working on it.</p>
+          <button
+            onClick={() => window.location.reload()}
+            style={{
+              padding: '0.5rem 1rem',
+              backgroundColor: '#0066cc',
+              color: 'white',
+              border: 'none',
+              borderRadius: '4px',
+              cursor: 'pointer',
+            }}
+          >
             Reload Page
           </button>
+          {this.state.error && (
+            <details style={{ marginTop: '1rem', textAlign: 'left' }}>
+              <summary>Error details</summary>
+              <pre style={{
+                backgroundColor: '#f5f5f5',
+                padding: '1rem',
+                borderRadius: '4px',
+                overflow: 'auto',
+              }}>
+                {this.state.error.stack}
+              </pre>
+            </details>
+          )}
         </div>
       );
     }
+
     return this.props.children;
   }
 }
+
+export default ErrorBoundary;

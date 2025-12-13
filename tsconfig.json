@@ -47,7 +47,9 @@
   "resolveJsonModule": true,
   "esModuleInterop": true,
     "moduleDetection": "force",
-    "skipLibCheck": true,
+    "skipLibCheck": false,
+    "types": ["react", "react-dom"]
   },
-  "exclude": ["node_modules", "dist", "build", "**/*.spec.ts", "**/*.test.ts"]
+  "include": ["src/**/*.ts", "src/**/*.jsx", "src/**/*.js"],
+  "exclude": ["node_modules", "dist", "build", "**/*.spec.ts", "**/*.test.ts", "**/*.tsx", "api/**/*", "server/**/*"]
 }
