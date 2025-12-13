@@ -1,0 +1,25 @@
+{
+  "name": "ForTheWeebs Dev Environment",
+  "dockerFile": "Dockerfile",
+  "context": "..",
+  "runArgs": ["--init"],
+  "settings": {
+    "terminal.integrated.defaultProfile.linux": "bash",
+    "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": {
+      "source.fixAll.eslint": "explicit"
+    }
+  },
+  "extensions": [
+    "dbaeumer.vscode-eslint",
+    "esbenp.prettier-vscode",
+    "sonarsource.sonarlint-vscode",
+    "snyk-security.snyk-vulnerability-scanner",
+    "streetsidesoftware.code-spell-checker",
+    "eamodio.gitlens",
+    "ms-playwright.playwright"
+  ],
+  "postCreateCommand": "npm ci --legacy-peer-deps && npm run lint && npm test",
+  "forwardPorts": [3000, 3001, 3002],
+  "remoteUser": "node"
+}

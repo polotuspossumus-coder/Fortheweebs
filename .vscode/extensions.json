@@ -8,6 +8,19 @@
     "dbaeumer.vscode-eslint",
     "esbenp.prettier-vscode",
     "ms-vscode.vscode-typescript-next",
+    "streetsidesoftware.code-spell-checker",
+
+    // Security
+    "sonarsource.sonarlint-vscode",
+    "snyk-security.snyk-vulnerability-scanner",
+
+    // Testing
+    "ms-vscode.test-adapter-converter",
+    "ms-playwright.playwright",
+
+    // DevContainers
+    "ms-vscode-remote.remote-containers",
+    "ms-azuretools.vscode-docker",
 
     // Styling
     "bradlc.vscode-tailwindcss",

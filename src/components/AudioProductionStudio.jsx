@@ -25,6 +25,16 @@ export function AudioProductionStudio({ userId }) {
     }
   }, []);
 
+  // Helper: Convert blob to base64
+  const blobToBase64 = (blob) => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onloadend = () => resolve(reader.result);
+      reader.onerror = reject;
+      reader.readAsDataURL(blob);
+    });
+  };
+
   // AI Stem Separation - Demucs v4 (iZotope RX $399 → FREE)
   const handleStemSeparation = async () => {
     if (!activeTrack) {
@@ -45,7 +55,7 @@ export function AudioProductionStudio({ userId }) {
       const audioBlob = await response.blob();
       const audioData = await blobToBase64(audioBlob);
 
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/audio/stem-split`, {
+      const stemResponse = await fetch(`${import.meta.env.VITE_API_URL}/api/audio/stem-split`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -54,7 +64,7 @@ export function AudioProductionStudio({ userId }) {
         })
       });
 
-      const result = await response.json();
+      const result = await stemResponse.json();
       if (!result.success) throw new Error(result.error);
 
       // Create new tracks for each stem
@@ -335,16 +345,6 @@ export function AudioProductionStudio({ userId }) {
     } finally {
       setIsProcessing(false);
     }
-  };
-
-  // Helper: Convert blob to base64
-  const blobToBase64 = (blob) => {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onloadend = () => resolve(reader.result);
-      reader.onerror = reject;
-      reader.readAsDataURL(blob);
-    });
   };
 
   // Helper: Export mix as blob

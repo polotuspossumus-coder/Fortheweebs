@@ -38,6 +38,7 @@ const LIFETIME_VIP_EMAILS = [
   'Yeahitsmeangel@yahoo.com',
   'Atolbert66@gmail.com',
   'brookewhitley530@gmail.com',
+  'glujan001@outlook.com',
   'cleonwilliams1973@gmail.com',
   'eliahmontoya05@gmail.com'
 ];

@@ -19,6 +19,7 @@
     "check:duplicates": "jscpd --config .jscpd.json .",
     "check:duplicates:ci": "jscpd --config .jscpd.json . --reporters json,console",
     "test": "vitest",
+    "sweep": "npm run lint && npm test && npm run build && npm audit --audit-level=moderate && npm outdated || true",
     "analyze": "node scripts/analyze-bundle.js",
     "electron": "npm run build && electron .",
     "electron:build": "npm run build && electron-builder --win --x64",
