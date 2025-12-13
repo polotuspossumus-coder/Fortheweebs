@@ -115,14 +115,28 @@ export function AuthProvider({ children }) {
 
     // Create user profile in database
     if (data.user) {
+      // Check total user count for first 100 VIP promotion
+      const { count } = await supabase
+        .from('users')
+        .select('*', { count: 'exact', head: true });
+      
+      // First 100 users get VIP tier automatically
+      const tier = (count !== null && count < 100) ? 'vip' : 'free';
+      
       await supabase.from('users').insert([{
         id: data.user.id,
         email,
         display_name: displayName,
-        tier: 'free',
+        tier,
         balance: 0,
         created_at: new Date().toISOString()
       }]);
+
+      // If they got VIP, store it in localStorage
+      if (tier === 'vip') {
+        localStorage.setItem('userTier', 'VIP');
+        console.log(`🎉 User ${count + 1}/100 - VIP tier granted!`);
+      }
     }
 
     return data;
