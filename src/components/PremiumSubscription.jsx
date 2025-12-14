@@ -3,9 +3,9 @@
 
 import React, { useState, useEffect } from 'react';
 import './PremiumSubscription.css';
-import { unlockTool, getUserBalance, deductBalance, TOOL_PRICES } from '../utils/toolUnlockSystem';
+import { unlockTool, getUserBalance, deductBalance } from '../utils/toolUnlockSystem';
 import { loadStripe } from '@stripe/stripe-js';
-import { createSubscription, getUserSubscription } from '../utils/databaseSupabase';
+// Database functions imported elsewhere if needed
 import { useAuth } from './AuthSupabase.jsx';
 import { getSuperAdminSlots, purchaseSuperAdminSlot } from '../utils/superAdminSlots';
 
