@@ -162,21 +162,23 @@ function CGIVideoGeneratorComponent({ userId, onVideoGenerated }) {
             </div>
 
             <div className="input-group">
-              <label>Duration (seconds)</label>
+              <label htmlFor="cgi-duration">Duration (seconds)</label>
               <input
+                id="cgi-duration"
                 type="range"
                 min="3"
                 max="30"
                 value={duration}
-                onChange={(e) => setDuration(parseInt(e.target.value))}
+                onChange={(e) => setDuration(Number.parseInt(e.target.value, 10))}
                 disabled={generating}
               />
               <span className="range-value">{duration}s</span>
             </div>
 
             <div className="input-group">
-              <label>Resolution</label>
+              <label htmlFor="cgi-resolution">Resolution</label>
               <select
+                id="cgi-resolution"
                 value={resolution}
                 onChange={(e) => setResolution(e.target.value)}
                 disabled={generating}
@@ -188,10 +190,11 @@ function CGIVideoGeneratorComponent({ userId, onVideoGenerated }) {
             </div>
 
             <div className="input-group">
-              <label>Frame Rate (FPS)</label>
+              <label htmlFor="cgi-fps">Frame Rate (FPS)</label>
               <select
+                id="cgi-fps"
                 value={fps}
-                onChange={(e) => setFps(parseInt(e.target.value))}
+                onChange={(e) => setFps(Number.parseInt(e.target.value, 10))}
                 disabled={generating}
               >
                 {frameRates.map(rate => (
@@ -261,7 +264,9 @@ function CGIVideoGeneratorComponent({ userId, onVideoGenerated }) {
                 controls
                 autoPlay
                 loop
-              />
+              >
+                <track kind="captions" />
+              </video>
             </div>
 
             <div className="video-info">

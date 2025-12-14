@@ -530,4 +530,3 @@ export default function CollaborativeCanvas({ projectId, userId, userName }) {
             </div>
         </div>
     );
-}

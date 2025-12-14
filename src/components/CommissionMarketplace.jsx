@@ -3,7 +3,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { loadStripe } from '@stripe/stripe-js';
-import { createCommission, getAllCommissions, getUserCommissions } from '../utils/databaseSupabase';
+import { createCommission, getAllCommissions } from '../utils/databaseSupabase';
 import { useAuth } from './AuthSupabase.jsx';
 import './CommissionMarketplace.css';
 
@@ -13,7 +13,6 @@ function CommissionMarketplace({ userId, isCreator }) {
   const { user } = useAuth();
   const [activeTab, setActiveTab] = useState('browse'); // browse, my-commissions, create
   const [commissions, setCommissions] = useState([]);
-  const [loading, setLoading] = useState(true);
   const [processing, setProcessing] = useState(false);
   const [error, setError] = useState('');
 
@@ -388,5 +387,10 @@ function CommissionMarketplace({ userId, isCreator }) {
     </div>
   );
 }
+
+CommissionMarketplace.propTypes = {
+  userId: PropTypes.string,
+  isCreator: PropTypes.bool
+};
 
 export default CommissionMarketplace;

@@ -3,6 +3,8 @@ import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import FAQ from './FAQ';
 import CreatorPricing from './CreatorPricing';
+
+const FAQComponent = FAQ;
 import { isOwner } from '../utils/ownerAuth';
 
 /**
@@ -301,10 +303,10 @@ function CreatorOverview({ userId, userTier, isAdmin, isVip, creatorName, onNavi
                 ✕
               </button>
             </div>
-            <FAQ />
+            <FAQComponent />
           </div>
         </div>
-      )}
+      )}}
 
       {/* Top Stats Grid */}
       <div style={{
@@ -526,9 +528,9 @@ function CreatorOverview({ userId, userTier, isAdmin, isVip, creatorName, onNavi
             gridTemplateColumns: '1fr 1fr',
             gap: '15px'
           }}>
-            {quickLaunchTools.map((tool, i) => (
+            {quickLaunchTools.map((tool) => (
               <button
-                key={i}
+                key={tool.tab || tool.name}
                 onClick={() => {
                   if (onNavigate && tool.tab) {
                     onNavigate(tool.tab);
@@ -584,8 +586,8 @@ function CreatorOverview({ userId, userTier, isAdmin, isVip, creatorName, onNavi
             { name: 'AI Mod Royalties', amount: '0.00', split: '90% yours', icon: '🤖', color: '#2196F3' },
             { name: 'Crypto Tips', amount: '0.00', split: '95% yours', icon: '⚡', color: '#FF9800' },
             { name: 'Subscriptions', amount: '0.00', split: '80% yours', icon: '⭐', color: '#4CAF50' }
-          ].map((source, i) => (
-            <div key={i} style={{
+          ].map((source) => (
+            <div key={source.name} style={{
               background: `linear-gradient(135deg, ${source.color}22 0%, ${source.color}11 100%)`,
               borderRadius: '15px',
               padding: '25px',
