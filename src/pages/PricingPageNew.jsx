@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars, @typescript-eslint/no-explicit-any */
 import { useState, useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
-import { TIERS, getTierName, getTierPrice } from '../utils/tierAccess';
+import { TIERS } from '../utils/tierAccess';
 import { hasVIPAccess, isOwner } from '../utils/vipHelper';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001/api';
@@ -9,7 +9,7 @@ const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001/api';
 export default function PricingPage() {
   const { user } = useAuth();
   const [loading, setLoading] = useState(null);
-  const [ownerSpots, setOwnerSpots] = useState(null);
+  // Owner spots tracking removed - not currently used
   const [vipSpots, setVipSpots] = useState(null);
 
   useEffect(() => {
@@ -19,7 +19,7 @@ export default function PricingPage() {
         // Use setTimeout to prevent blocking render
         setTimeout(() => {
           alert('You already have lifetime VIP access! No payment needed. 👑');
-          window.location.href = '/';
+          globalThis.location.href = '/';
         }, 100);
         return;
       }
@@ -60,7 +60,7 @@ export default function PricingPage() {
         return;
       }
 
-      window.location.href = url;
+      globalThis.location.href = url;
     } catch (error) {
       console.error('Checkout failed:', error);
       alert('Failed to start checkout. Please try again.');

@@ -79,11 +79,11 @@ module.exports = async (req, res) => {
  * Determines if it's a tier unlock or subscription
  */
 async function handleCheckoutCompleted(session) {
-  const { customer, metadata, mode, amount_total, payment_intent } = session;
+  const { customer, metadata, mode, payment_intent } = session;
 
   // Check if this is a tier unlock purchase
   const tierName = metadata?.tier_name;
-  const tierAmount = parseInt(metadata?.tier_amount || '0');
+  const tierAmount = Number.parseInt(metadata?.tier_amount || '0', 10);
   const userId = metadata?.user_id;
 
   if (!userId) {
@@ -282,7 +282,7 @@ async function handleSubscriptionDeleted(subscription) {
  * Handle successful invoice payment
  */
 async function handleInvoicePayment(invoice) {
-  const { subscription, customer, status } = invoice;
+  const { subscription, status } = invoice;
 
   if (subscription) {
     await supabase

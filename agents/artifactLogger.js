@@ -19,7 +19,7 @@ class ArtifactLogger {
       const data = await fs.readFile(this.indexFile, 'utf8');
       this.artifacts = JSON.parse(data);
     } catch (err) {
-      // Index doesn't exist yet
+      console.log('Artifact index not found, creating new:', err.message);
       this.artifacts = [];
     }
   }

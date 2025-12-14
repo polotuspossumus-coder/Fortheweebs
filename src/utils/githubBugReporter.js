@@ -34,7 +34,7 @@ ${bugData.description}
 
 ### 📋 Context
 
-- **URL:** ${bugData.context?.url || window.location.href}
+- **URL:** ${bugData.context?.url || globalThis.location.href}
 - **Browser:** ${bugData.context?.browser || navigator.userAgent}
 - **Viewport:** ${bugData.context?.viewport || `${window.innerWidth}x${window.innerHeight}`}
 - **Timestamp:** ${new Date().toISOString()}
@@ -158,7 +158,7 @@ export async function reportBug(bugReport) {
  */
 export function getBugReportContext() {
   return {
-    url: window.location.href,
+    url: globalThis.location.href,
     browser: navigator.userAgent,
     viewport: `${window.innerWidth}x${window.innerHeight}`,
     timestamp: new Date().toISOString(),
@@ -169,7 +169,7 @@ export function getBugReportContext() {
       used: Math.round(performance.memory.usedJSHeapSize / 1048576),
       total: Math.round(performance.memory.totalJSHeapSize / 1048576)
     } : null,
-    errors: window.recentErrors || []
+    errors: globalThis.recentErrors || []
   };
 }
 

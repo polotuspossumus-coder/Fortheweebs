@@ -103,9 +103,9 @@ function validateSuggestion(payload, ip) {
 function sanitizeText(text) {
   if (!text) return '';
   return text
-    .replace(/<script[^>]*>.*?<\/script>/gi, '')
-    .replace(/javascript:/gi, '')
-    .replace(/on\w+\s*=/gi, '')
+    .replaceAll(/<script[^>]*>.*?<\/script>/gi, '')
+    .replaceAll(/javascript:/gi, '')
+    .replaceAll(/on\w+\s*=/gi, '')
     .trim();
 }
 

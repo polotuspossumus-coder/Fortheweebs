@@ -25,11 +25,11 @@ router.post('/stripe', express.raw({ type: 'application/json' }), async (req, re
       case 'transfer.created':
       case 'transfer.updated':
       case 'transfer.paid':
-
+        console.log(`Stripe ${event.type}:`, event.id);
         break;
         
       case 'account.updated':
-
+        console.log('Stripe account updated:', event.id);
         break;
         
       default:
@@ -63,15 +63,15 @@ router.post('/coinbase', express.raw({ type: 'application/json' }), async (req, 
     // Handle different event types
     switch (event.type) {
       case 'charge:confirmed':
-
+        console.log('Coinbase charge confirmed:', event.id);
         break;
         
       case 'charge:failed':
-
+        console.log('Coinbase charge failed:', event.id);
         break;
         
       case 'charge:pending':
-
+        console.log('Coinbase charge pending:', event.id);
         break;
         
       default:

@@ -62,4 +62,4 @@ async function applyRLSFixes() {
   console.log('4. Test the frontend - 406 errors should be gone!\n');
 }
 
-applyRLSFixes().catch(console.error);
+await applyRLSFixes();
