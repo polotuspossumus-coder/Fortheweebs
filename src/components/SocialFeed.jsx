@@ -424,23 +424,23 @@ export const SocialFeed = ({ userId, userTier }) => {
           <button className="sidebar-item" onClick={() => setActiveTab('discover')}>
             <span className="sidebar-icon">🔍</span>
             <span className="sidebar-text">Discover Creators</span>
-          </div>
-          <div className="sidebar-item" role="button" tabIndex={0} onClick={() => setActiveTab('friends')} onKeyPress={(e) => e.key === 'Enter' && setActiveTab('friends')}>
+          </button>
+          <button className="sidebar-item" onClick={() => setActiveTab('friends')}>
             <span className="sidebar-icon">👥</span>
             <span className="sidebar-text">Find Friends</span>
-          </div>
-          <div className="sidebar-item" role="button" tabIndex={0} onClick={() => setActiveTab('messages')} onKeyPress={(e) => e.key === 'Enter' && setActiveTab('messages')}>
+          </button>
+          <button className="sidebar-item" onClick={() => setActiveTab('messages')}>
             <span className="sidebar-icon">💬</span>
             <span className="sidebar-text">Messages</span>
-          </div>
-          <div className="sidebar-item" role="button" tabIndex={0} onClick={() => setActiveTab('subscriptions')} onKeyPress={(e) => e.key === 'Enter' && setActiveTab('subscriptions')}>
+          </button>
+          <button className="sidebar-item" onClick={() => setActiveTab('subscriptions')}>
             <span className="sidebar-icon">💎</span>
             <span className="sidebar-text">My Subscriptions</span>
-          </div>
-          <div className="sidebar-item" role="button" tabIndex={0} onClick={() => setActiveTab('saved')} onKeyPress={(e) => e.key === 'Enter' && setActiveTab('saved')}>
+          </button>
+          <button className="sidebar-item" onClick={() => setActiveTab('saved')}>
             <span className="sidebar-icon">📕</span>
             <span className="sidebar-text">Saved</span>
-          </div>
+          </button>
         </div>
       </div>
 
