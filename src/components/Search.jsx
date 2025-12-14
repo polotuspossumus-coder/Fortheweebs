@@ -211,8 +211,9 @@ function Search({ onSearch }) {
 
       <div className="search-filters">
         <div className="filter-group">
-          <label>Content:</label>
+          <label htmlFor="filter-content">Content:</label>
           <select
+            id="filter-content"
             value={filters.nsfw}
             onChange={(e) => handleFilterChange('nsfw', e.target.value)}
           >
@@ -223,8 +224,9 @@ function Search({ onSearch }) {
         </div>
 
         <div className="filter-group">
-          <label>Category:</label>
+          <label htmlFor="filter-category">Category:</label>
           <select
+            id="filter-category"
             value={filters.category}
             onChange={(e) => handleFilterChange('category', e.target.value)}
           >
@@ -238,8 +240,9 @@ function Search({ onSearch }) {
         </div>
 
         <div className="filter-group">
-          <label>Sort By:</label>
+          <label htmlFor="filter-sort">Sort By:</label>
           <select
+            id="filter-sort"
             value={filters.sortBy}
             onChange={(e) => handleFilterChange('sortBy', e.target.value)}
           >
@@ -261,7 +264,7 @@ function Search({ onSearch }) {
         <div className="search-results">
           <div className="results-header">
             <h2>
-              {totalResults} result{totalResults !== 1 ? 's' : ''}
+              {totalResults} result{totalResults === 1 ? '' : 's'}
               {searchQuery && ` for "${searchQuery}"`}
             </h2>
           </div>
