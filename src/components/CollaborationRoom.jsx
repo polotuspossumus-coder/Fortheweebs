@@ -473,12 +473,12 @@ export default function CollaborationRoom({ user }) {
         <div className="room-info">
           <h2>🤝 Room: {roomId}</h2>
           <div className="participants-count">
-            👥 {participants.length} participant{participants.length !== 1 ? 's' : ''}
+            👥 {participants.length} participant{participants.length === 1 ? '' : 's'}
           </div>
         </div>
         
         <div className="room-actions">
-          {!isSharing ? (
+          {isSharing === false ? (
             <button onClick={startScreenShare} className="share-btn">
               🖥️ Share Screen
             </button>

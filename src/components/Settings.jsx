@@ -48,7 +48,7 @@ export function Settings({ userId }) {
       return true;
     }
 
-    const { data, error } = await supabase
+    const { data } = await supabase
       .from('users')
       .select('username')
       .eq('username', newUsername)
@@ -82,7 +82,7 @@ export function Settings({ userId }) {
         return;
       }
 
-      const { data, error } = await supabase
+      const { error } = await supabase
         .from('users')
         .update({
           username: username.toLowerCase().trim(),

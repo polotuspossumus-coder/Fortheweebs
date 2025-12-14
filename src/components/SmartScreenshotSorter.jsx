@@ -39,7 +39,7 @@ export function SmartScreenshotSorter({ userId, onProcessComplete }) {
     });
 
     // Common IDE/Code editor indicators
-    const CODE_INDICATORS = [
+    const CODE_INDICATORS = [ // eslint-disable-line no-unused-vars
         'function', 'const', 'let', 'var', 'import', 'export', 'class',
         'public', 'private', 'protected', 'void', 'return', 'if', 'else',
         'for', 'while', 'switch', 'case', 'break', 'continue',
@@ -402,7 +402,7 @@ export function SmartScreenshotSorter({ userId, onProcessComplete }) {
                     }
                 }
 
-                const magnitude = Math.sqrt(gx * gx + gy * gy);
+                const magnitude = Math.hypot(gx, gy);
                 edges[y * width + x] = magnitude > threshold ? 255 : 0;
             }
         }
@@ -572,7 +572,7 @@ export function SmartScreenshotSorter({ userId, onProcessComplete }) {
                 </p>
             </div>
 
-            {!results ? (
+            {results === null ? (
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
                     {/* Left: Upload & Examples */}
                     <div style={{
@@ -707,7 +707,7 @@ export function SmartScreenshotSorter({ userId, onProcessComplete }) {
                                 <input
                                     type="number"
                                     value={settings.screenWidth}
-                                    onChange={(e) => setSettings({ ...settings, screenWidth: parseInt(e.target.value) })}
+                                    onChange={(e) => setSettings({ ...settings, screenWidth: Number.parseInt(e.target.value, 10) })}
                                     style={{
                                         flex: 1,
                                         padding: '8px',
@@ -722,7 +722,7 @@ export function SmartScreenshotSorter({ userId, onProcessComplete }) {
                                 <input
                                     type="number"
                                     value={settings.screenHeight}
-                                    onChange={(e) => setSettings({ ...settings, screenHeight: parseInt(e.target.value) })}
+                                    onChange={(e) => setSettings({ ...settings, screenHeight: Number.parseInt(e.target.value, 10) })}
                                     style={{
                                         flex: 1,
                                         padding: '8px',
@@ -777,7 +777,7 @@ export function SmartScreenshotSorter({ userId, onProcessComplete }) {
                                     min="0"
                                     max="100"
                                     value={settings.splitSensitivity}
-                                    onChange={(e) => setSettings({ ...settings, splitSensitivity: parseInt(e.target.value) })}
+                                    onChange={(e) => setSettings({ ...settings, splitSensitivity: Number.parseInt(e.target.value, 10) })}
                                     style={{ width: '100%' }}
                                 />
                             </div>
@@ -793,7 +793,7 @@ export function SmartScreenshotSorter({ userId, onProcessComplete }) {
                                     min="80"
                                     max="100"
                                     value={settings.duplicateThreshold}
-                                    onChange={(e) => setSettings({ ...settings, duplicateThreshold: parseInt(e.target.value) })}
+                                    onChange={(e) => setSettings({ ...settings, duplicateThreshold: Number.parseInt(e.target.value, 10) })}
                                     style={{ width: '100%' }}
                                 />
                             </div>

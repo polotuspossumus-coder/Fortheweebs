@@ -8,7 +8,7 @@ let Network: any = {
 };
 
 // Try to import Capacitor if available (will be undefined in web builds)
-if (typeof globalThis.window !== 'undefined' && (globalThis.window as any).Capacitor) {
+if (globalThis.window !== undefined && (globalThis.window as any).Capacitor) {
   Capacitor = (globalThis.window as any).Capacitor;
   Network = (globalThis.window as any).Network;
 }
