@@ -21,12 +21,7 @@ import { supabase } from '../lib/supabase';
  */
 
 export default function CollaborativeCanvas({ projectId, userId, userName }) {
-    const [collaborators, setCollaborators] = useState([]);
     const [elements, setElements] = useState([]);
-    const [comments, setComments] = useState([]);
-    const [selectedElement, setSelectedElement] = useState(null);
-    const [remoteCursors, setRemoteCursors] = useState({});
-    const [versionHistory, setVersionHistory] = useState([]);
     
     const canvasRef = useRef(null);
     const channelRef = useRef(null);
@@ -147,33 +142,10 @@ export default function CollaborativeCanvas({ projectId, userId, userName }) {
         }
     };
 
-    const handleMouseMove = (e) => {
-        if (!channelRef.current) return;
+    // Future: handleMouseMove for cursor tracking
 
-        const rect = canvasRef.current.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
-
-        // Throttle cursor broadcasts (send max once per 50ms)
-        if (cursorThrottleRef.current) return;
-        
-        cursorThrottleRef.current = setTimeout(() => {
-            channelRef.current.send({
-                type: 'broadcast',
-                event: 'cursor-move',
-                payload: {
-                    userId,
-                    userName,
-                    x,
-                    y,
-                    color: generateUserColor(userId)
-                }
-            });
-            cursorThrottleRef.current = null;
-        }, 50);
-    };
-
-    const updateElement = async (elementId, updates) => {
+    // Future: updateElement for element updates
+    const _updateElement = async (elementId, updates) => {
         // Optimistic update
         setElements(prev => {
             const idx = prev.findIndex(e => e.id === elementId);
@@ -225,9 +197,6 @@ export default function CollaborativeCanvas({ projectId, userId, userName }) {
                 payload: { comment }
             });
         }
-
-        // Save to database
-        await supabase.from('project_comments').insert(comment);
     };
 
     const createVersion = async (description) => {

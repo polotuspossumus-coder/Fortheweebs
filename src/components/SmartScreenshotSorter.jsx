@@ -240,9 +240,6 @@ export function SmartScreenshotSorter({ userId, onProcessComplete }) {
 
             // Auto-crop to screen resolution
             if (settings.autoCrop && !img.isSplit) { // Don't re-crop split images
-                const targetRatio = settings.screenWidth / settings.screenHeight;
-                const currentRatio = width / height;
-
                 // Resize to match screen dimensions
                 width = settings.screenWidth;
                 height = settings.screenHeight;
