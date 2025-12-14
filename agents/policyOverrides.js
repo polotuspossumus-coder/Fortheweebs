@@ -82,7 +82,7 @@ class PolicyOverrides {
       'max-concurrent-jobs': 5
     };
     
-    return policies[policyId] !== undefined ? policies[policyId] : null;
+    return policies[policyId] ?? null;
   }
 }
 

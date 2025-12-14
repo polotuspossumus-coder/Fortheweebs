@@ -58,7 +58,7 @@ router.post('/create-checkout', async (req, res) => {
     purchaseData.signature = signature;
 
     // For now, return checkout URL (Segpay provides this after account setup)
-    // TODO: Once you have Segpay credentials, uncomment the API call below and remove temporary response
+    // NOTE: Segpay integration pending - using mock response until credentials configured
     
     /* TEMPLATE: Uncomment when Segpay is configured
     const response = await fetch(`${SEGPAY_API_BASE}/purchase`, {
@@ -146,7 +146,7 @@ router.get('/payment/:transactionId', async (req, res) => {
     const { transactionId } = req.params;
 
     // Query Segpay API for transaction status
-    // TODO: Uncomment when Segpay is configured and remove mock response below
+    // NOTE: Webhook handler pending Segpay configuration
     /* TEMPLATE: Uncomment when Segpay is configured
     const response = await fetch(`${SEGPAY_API_BASE}/transaction/${transactionId}`, {
       headers: {

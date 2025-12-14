@@ -311,20 +311,12 @@ export function NotificationBell() {
               <p className="no-notifications">No notifications</p>
             ) : (
               notifications.map(notification => (
-                <div
+                <button
                   key={notification.id}
                   className={`notification-item ${notification.read ? 'read' : 'unread'}`}
-                  role="button"
-                  tabIndex={0}
                   onClick={() => {
                     markAsRead(notification.id);
                     globalThis.location.href = notification.link;
-                  }}
-                  onKeyPress={(e) => {
-                    if (e.key === 'Enter') {
-                      markAsRead(notification.id);
-                      globalThis.location.href = notification.link;
-                    }
                   }}
                 >
                   <div className="notification-icon">
@@ -339,7 +331,7 @@ export function NotificationBell() {
                   {!notification.read && (
                     <div className="unread-indicator"></div>
                   )}
-                </div>
+                </button>
               ))
             )}
           </div>

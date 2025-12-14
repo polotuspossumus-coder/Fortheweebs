@@ -89,7 +89,7 @@ router.post('/heal', requireToken, async (req, res) => {
     healReceipt.steps.push({ step: 'diagnostics', result: diagnostics });
     
     // Step 2: Restart if degraded or unhealthy
-    if (diagnostics.overall !== 'healthy') {
+    if (diagnostics.overall === 'unhealthy' || diagnostics.overall === 'degraded') {
       healReceipt.steps.push({
         step: 'remediation',
         action: 'restart-app',

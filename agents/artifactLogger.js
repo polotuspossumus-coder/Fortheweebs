@@ -1,7 +1,7 @@
 // Artifact Logger - Logs important artifacts and governance decisions with persistence
-const fs = require('fs').promises;
-const path = require('path');
-const crypto = require('crypto');
+const fs = require('node:fs').promises;
+const path = require('node:path');
+const crypto = require('node:crypto');
 
 class ArtifactLogger {
   constructor() {

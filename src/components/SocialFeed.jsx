@@ -417,11 +417,11 @@ export const SocialFeed = ({ userId, userTier }) => {
       {/* Left Sidebar - Quick Actions */}
       <div className="feed-sidebar-left">
         <div className="sidebar-section">
-          <div className="sidebar-item" role="button" tabIndex={0} onClick={() => setActiveTab('feed')} onKeyPress={(e) => e.key === 'Enter' && setActiveTab('feed')}>
+          <button className="sidebar-item" onClick={() => setActiveTab('feed')}>
             <span className="sidebar-icon">🏠</span>
             <span className="sidebar-text">Home</span>
-          </div>
-          <div className="sidebar-item" role="button" tabIndex={0} onClick={() => setActiveTab('discover')} onKeyPress={(e) => e.key === 'Enter' && setActiveTab('discover')}>
+          </button>
+          <button className="sidebar-item" onClick={() => setActiveTab('discover')}>
             <span className="sidebar-icon">🔍</span>
             <span className="sidebar-text">Discover Creators</span>
           </div>

@@ -7,8 +7,8 @@
 
 require('dotenv').config();
 const { createClient } = require('@supabase/supabase-js');
-const fs = require('fs');
-const path = require('path');
+const fs = require('node:fs');
+const path = require('node:path');
 
 const supabaseUrl = process.env.SUPABASE_URL;
 const supabaseServiceKey = process.env.SUPABASE_SERVICE_KEY;
@@ -40,7 +40,7 @@ async function applyRLSFixes() {
     
     try {
       // Use raw SQL execution
-      const { data, error } = await supabase.rpc('exec_sql', { 
+      const { error } = await supabase.rpc('exec_sql', { 
         sql_query: statement + ';' 
       });
 
