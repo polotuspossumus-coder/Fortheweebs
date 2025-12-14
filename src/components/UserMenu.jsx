@@ -152,7 +152,7 @@ export default function UserMenu() {
           {/* Menu Items */}
           <button style={styles.menuItem} onClick={() => {
             setIsOpen(false);
-            window.location.href = '/profile';
+            globalThis.location.href = '/profile';
           }}>
             <span style={styles.menuIcon}>👤</span>
             <span>Profile</span>
@@ -160,7 +160,7 @@ export default function UserMenu() {
 
           <button style={styles.menuItem} onClick={() => {
             setIsOpen(false);
-            window.location.href = '/settings';
+            globalThis.location.href = '/settings';
           }}>
             <span style={styles.menuIcon}>⚙️</span>
             <span>Settings</span>
@@ -169,7 +169,7 @@ export default function UserMenu() {
           {tierInfo?.isOwner && (
             <button style={styles.menuItem} onClick={() => {
               setIsOpen(false);
-              window.location.href = '/admin';
+              globalThis.location.href = '/admin';
             }}>
               <span style={styles.menuIcon}>🔧</span>
               <span>Admin Panel</span>

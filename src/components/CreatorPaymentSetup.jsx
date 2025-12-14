@@ -1,4 +1,4 @@
-/* eslint-disable */
+/* eslint-disable @typescript-eslint/no-explicit-any, no-console, sonarjs/cognitive-complexity */
 import React, { useState, useEffect } from 'react';
 import { useAuth } from './AuthSupabase.jsx';
 import './CreatorPaymentSetup.css';

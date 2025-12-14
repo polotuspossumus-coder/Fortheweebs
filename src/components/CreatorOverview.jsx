@@ -1,4 +1,4 @@
-/* eslint-disable */
+/* eslint-disable @typescript-eslint/no-explicit-any, no-console, sonarjs/cognitive-complexity */
 import React, { useState, useEffect } from 'react';
 import FAQ from './FAQ';
 import CreatorPricing from './CreatorPricing';

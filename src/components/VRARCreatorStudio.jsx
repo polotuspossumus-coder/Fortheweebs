@@ -431,8 +431,9 @@ export default function VRARCreatorStudio({ userId }) {
                     .map(obj => (
                       <div key={obj.id} className="property-groups">
                         <div className="property-group">
-                          <label>Name</label>
+                          <label htmlFor={`object-name-${obj.id}`}>Name</label>
                           <input
+                            id={`object-name-${obj.id}`}
                             type="text"
                             value={obj.name}
                             onChange={(e) => updateObject(obj.id, { name: e.target.value })}
@@ -440,9 +441,10 @@ export default function VRARCreatorStudio({ userId }) {
                         </div>
 
                         <div className="property-group">
-                          <label>Position</label>
+                          <label htmlFor={`object-position-${obj.id}`}>Position</label>
                           <div className="vector-inputs">
                             <input
+                              id={`object-position-${obj.id}`}
                               type="number"
                               value={obj.position.x}
                               onChange={(e) => updateObject(obj.id, { 
@@ -470,9 +472,10 @@ export default function VRARCreatorStudio({ userId }) {
                         </div>
 
                         <div className="property-group">
-                          <label>Scale</label>
+                          <label htmlFor={`object-scale-${obj.id}`}>Scale</label>
                           <div className="vector-inputs">
                             <input
+                              id={`object-scale-${obj.id}`}
                               type="number"
                               value={obj.scale.x}
                               onChange={(e) => updateObject(obj.id, { 
@@ -503,8 +506,9 @@ export default function VRARCreatorStudio({ userId }) {
                         </div>
 
                         <div className="property-group">
-                          <label>Color</label>
+                          <label htmlFor={`object-color-${obj.id}`}>Color</label>
                           <input
+                            id={`object-color-${obj.id}`}
                             type="color"
                             value={obj.color}
                             onChange={(e) => updateObject(obj.id, { color: e.target.value })}

@@ -71,8 +71,8 @@ export async function moderateText(
     // Check thresholds from database (with override support)
     const thresholds = await getThresholds(contentType);
 
-    // Check priority lanes
-    const priorityLane = await checkPriorityLane({
+    // Check priority lanes (future: prioritization logic)
+    const _priorityLane = await checkPriorityLane({
       flagType: undefined, // Will be set after detection
       confidence: 0,
     });

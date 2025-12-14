@@ -55,7 +55,7 @@ router.post('/calculate-pricing', (req, res) => {
         };
         
         const category = categoryMap[provider];
-        const pricing = calculatePricing(category, parseFloat(salePrice), parseFloat(printCost));
+        const pricing = calculatePricing(category, Number.parseFloat(salePrice), Number.parseFloat(printCost));
         
         res.json({
             productType,
