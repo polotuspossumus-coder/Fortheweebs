@@ -361,6 +361,9 @@ export default function CollaborativeCanvas({ projectId, userId, userName }) {
                     <div
                         key={version.id}
                         onClick={() => restoreVersion(version.id)}
+                        onKeyDown={(e) => e.key === 'Enter' && restoreVersion(version.id)}
+                        role="button"
+                        tabIndex={0}
                         style={{
                             padding: '6px',
                             background: 'rgba(255, 255, 255, 0.1)',
@@ -402,6 +405,8 @@ export default function CollaborativeCanvas({ projectId, userId, userName }) {
             <div
                 ref={canvasRef}
                 onMouseMove={handleMouseMove}
+                role="application"
+                aria-label="Collaborative canvas workspace"
                 style={{
                     width: '100%',
                     height: '100%',
@@ -414,6 +419,9 @@ export default function CollaborativeCanvas({ projectId, userId, userName }) {
                     <div
                         key={element.id}
                         onClick={() => setSelectedElement(element.id)}
+                        onKeyDown={(e) => e.key === 'Enter' && setSelectedElement(element.id)}
+                        role="button"
+                        tabIndex={0}
                         style={{
                             position: 'absolute',
                             left: element.x,
