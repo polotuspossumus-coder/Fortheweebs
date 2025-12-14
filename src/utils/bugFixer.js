@@ -147,7 +147,7 @@ export function initBugFixer() {
     if (errorMessage.includes('React') || errorMessage.includes('Warning')) {
       reportBug({
         errorMessage: errorMessage,
-        errorStack: new Error().stack,
+        errorStack: new Error('React error captured').stack,
         errorType: 'frontend',
         severity: 'medium',
         system: 'react',

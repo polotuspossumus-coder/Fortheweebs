@@ -1,4 +1,4 @@
-/* eslint-disable */
+/* eslint-disable @typescript-eslint/no-explicit-any, no-console, sonarjs/cognitive-complexity */
 // COMMISSION MARKETPLACE - Creators offer custom commissions, platform takes 15%
 
 import React, { useState, useEffect } from 'react';

@@ -216,7 +216,7 @@ export default function CollaborativeCanvas({ projectId, userId, userName }) {
         }
     };
 
-    const addComment = async (x, y, text) => { // eslint-disable-line no-unused-vars
+    const _addComment = async (x, y, text) => { // Future: commenting feature
         const comment = {
             id: Date.now(),
             project_id: projectId,

@@ -38,8 +38,8 @@ export function SmartScreenshotSorter({ userId, onProcessComplete }) {
         splitSensitivity: 50, // 0-100: How aggressive the splitting is
     });
 
-    // Common IDE/Code editor indicators
-    const CODE_INDICATORS = [ // eslint-disable-line no-unused-vars
+    // Common IDE/Code editor indicators (future: code detection)
+    const _CODE_INDICATORS = [
         'function', 'const', 'let', 'var', 'import', 'export', 'class',
         'public', 'private', 'protected', 'void', 'return', 'if', 'else',
         'for', 'while', 'switch', 'case', 'break', 'continue',

@@ -1,4 +1,4 @@
-/* eslint-disable */
+/* eslint-disable @typescript-eslint/no-explicit-any, no-console, sonarjs/cognitive-complexity */
 import React, { useState, useRef } from 'react';
 import './CGIVideoGenerator.css';
 
