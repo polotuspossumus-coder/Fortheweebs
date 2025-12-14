@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
 import './Search.css';
 
 function Search({ onSearch }) {
@@ -367,5 +368,9 @@ function Search({ onSearch }) {
     </div>
   );
 }
+
+Search.propTypes = {
+  onSearch: PropTypes.func.isRequired
+};
 
 export default Search;

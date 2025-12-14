@@ -169,8 +169,8 @@ const DockedConsolePro = () => {
       {/* Controls */}
       <div className="console-controls">
         <div className="filter-group">
-          <label>Filter:</label>
-          <select value={filter} onChange={(e) => setFilter(e.target.value)}>
+          <label htmlFor="console-filter">Filter:</label>
+          <select id="console-filter" value={filter} onChange={(e) => setFilter(e.target.value)}>
             <option value="ALL">ALL</option>
             <option value="OVERRIDE">OVERRIDE</option>
             <option value="SENTINEL">SENTINEL</option>
@@ -182,8 +182,9 @@ const DockedConsolePro = () => {
         </div>
 
         <div className="search-group">
-          <label>Search:</label>
+          <label htmlFor="console-search">Search:</label>
           <input
+            id="console-search"
             type="text"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
@@ -212,9 +213,9 @@ const DockedConsolePro = () => {
               : 'No artifacts match your filters'}
           </div>
         ) : (
-          filteredArtifacts.map((artifact, index) => (
+          filteredArtifacts.map((artifact) => (
             <div
-              key={index}
+              key={artifact.id || artifact.timestamp}
               className={`artifact-item severity-${artifact.severity || 'info'}`}
             >
               <div className="artifact-header">

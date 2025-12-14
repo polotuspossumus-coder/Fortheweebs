@@ -1,10 +1,10 @@
 /* eslint-disable react/prop-types */
 import React, { useEffect, useState } from 'react';
-import { useSearchParams, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import './SubscriptionSuccess.css';
 
 export const SubscriptionSuccess = () => {
-  // const [searchParams] = useSearchParams(); // Unused for now
+
   const navigate = useNavigate();
   const [countdown, setCountdown] = useState(5);
 
