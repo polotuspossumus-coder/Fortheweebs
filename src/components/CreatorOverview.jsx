@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any, no-console, sonarjs/cognitive-complexity */
 import React, { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
 import FAQ from './FAQ';
 import CreatorPricing from './CreatorPricing';
 import { isOwner } from '../utils/ownerAuth';
@@ -9,7 +10,7 @@ import { isOwner } from '../utils/ownerAuth';
  * Dashboard with personal stats, activity, quick launch
  * + Platform-wide analytics for owner
  */
-export default function CreatorOverview({ userId, userTier, isAdmin, isVip, creatorName, onNavigate }) {
+function CreatorOverview({ userId, userTier, isAdmin, isVip, creatorName, onNavigate }) {
   const [isOwnerUser, setIsOwnerUser] = useState(false);
   const [stats, setStats] = useState({
     totalCreations: 0,
@@ -20,7 +21,7 @@ export default function CreatorOverview({ userId, userTier, isAdmin, isVip, crea
     totalRevenue: 0
   });
 
-  const [platformStats, setPlatformStats] = useState({
+  const [platformStats] = useState({
     totalUsers: 1247,
     activeUsers: 892,
     newUsersToday: 23,
@@ -673,3 +674,14 @@ export default function CreatorOverview({ userId, userTier, isAdmin, isVip, crea
     </div>
   );
 }
+
+CreatorOverview.propTypes = {
+  userId: PropTypes.string.isRequired,
+  userTier: PropTypes.string,
+  isAdmin: PropTypes.bool,
+  isVip: PropTypes.bool,
+  creatorName: PropTypes.string,
+  onNavigate: PropTypes.func
+};
+
+export default CreatorOverview;

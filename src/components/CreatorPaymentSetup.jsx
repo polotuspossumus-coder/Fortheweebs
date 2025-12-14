@@ -11,7 +11,6 @@ import './CreatorPaymentSetup.css';
 export function CreatorPaymentSetup() {
   const { user } = useAuth();
   const [status, setStatus] = useState('loading');
-  const [accountInfo, setAccountInfo] = useState(null);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
@@ -26,10 +25,8 @@ export function CreatorPaymentSetup() {
 
       if (data.connected && data.status === 'active') {
         setStatus('active');
-        setAccountInfo(data);
       } else if (data.connected && data.status === 'pending') {
         setStatus('pending');
-        setAccountInfo(data);
       } else {
         setStatus('not_setup');
       }
@@ -57,11 +54,12 @@ export function CreatorPaymentSetup() {
 
       if (data.success) {
         // Redirect to Stripe onboarding
-        window.location.href = data.onboardingUrl;
+        globalThis.location.href = data.onboardingUrl;
       } else {
         setError(data.error || 'Failed to start setup');
       }
     } catch (err) {
+      console.error('Enable payments error:', err);
       setError('Network error. Please try again.');
     } finally {
       setLoading(false);
@@ -81,9 +79,10 @@ export function CreatorPaymentSetup() {
       const data = await response.json();
 
       if (data.success) {
-        window.open(data.url, '_blank');
+        globalThis.open(data.url, '_blank');
       }
     } catch (err) {
+      console.error('Dashboard access error:', err);
       setError('Could not open dashboard');
     } finally {
       setLoading(false);
