@@ -1,4 +1,4 @@
-/* eslint-disable */
+/* eslint-disable sonarjs/cognitive-complexity, max-lines-per-function */
 /**
  * AI Image Upscaling - "Zoom & Enhance" Signature Feature
  * Uses Waifu2x-style neural network for anime/photo upscaling
