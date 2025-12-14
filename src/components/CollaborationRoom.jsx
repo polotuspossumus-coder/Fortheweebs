@@ -569,8 +569,8 @@ export default function CollaborationRoom({ user }) {
           <div className="chat-panel">
             <h3>💬 Chat</h3>
             <div className="messages">
-              {messages.map((msg, idx) => (
-                <div key={idx} className={`message ${msg.type}`}>
+              {messages.map((msg) => (
+                <div key={`${msg.user?.username || 'system'}-${msg.timestamp || Date.now()}`} className={`message ${msg.type}`}>
                   {msg.type === 'system' ? (
                     <span className="system-message">{msg.text}</span>
                   ) : (

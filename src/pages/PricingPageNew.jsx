@@ -232,8 +232,8 @@ export default function PricingPage() {
             <div className="tier-price">{tier.price}</div>
             
             <ul className="tier-features">
-              {tier.features.map((feature, idx) => (
-                <li key={idx}>{feature}</li>
+              {tier.features.map((feature) => (
+                <li key={feature}>{feature}</li>
               ))}
             </ul>
 

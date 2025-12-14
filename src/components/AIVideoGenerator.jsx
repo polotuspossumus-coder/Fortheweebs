@@ -550,11 +550,11 @@ export const AIVideoGenerator = ({ userId, tier }) => {
                             padding: '20px',
                             fontSize: '18px',
                             fontWeight: 'bold',
-                            background: isGenerating
-                                ? 'rgba(128, 128, 128, 0.3)'
-                                : uploadedPhoto && contextDescription.trim()
-                                    ? 'linear-gradient(135deg, #00ff00, #00aa00)'
-                                    : 'rgba(128, 128, 128, 0.2)',
+                            background: (() => {
+                                if (isGenerating) return 'rgba(128, 128, 128, 0.3)';
+                                if (uploadedPhoto && contextDescription.trim()) return 'linear-gradient(135deg, #00ff00, #00aa00)';
+                                return 'rgba(128, 128, 128, 0.2)';
+                            })(),
                             border: 'none',
                             borderRadius: '12px',
                             color: '#fff',

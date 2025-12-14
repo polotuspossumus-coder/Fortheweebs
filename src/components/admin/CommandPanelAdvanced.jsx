@@ -182,9 +182,9 @@ const CommandPanelAdvanced = () => {
       <div className="presets-section">
         <h3>Quick Presets</h3>
         <div className="preset-buttons">
-          {presets.map((preset, index) => (
+          {presets.map((preset) => (
             <button
-              key={index}
+              key={preset.label}
               onClick={() => applyPreset(preset)}
               className="preset-btn"
               disabled={loading}

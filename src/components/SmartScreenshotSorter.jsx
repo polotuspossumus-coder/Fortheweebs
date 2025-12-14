@@ -251,10 +251,10 @@ export function SmartScreenshotSorter({ userId, onProcessComplete }) {
 
                 if (currentRatio > targetRatio) {
                     // Image is wider, crop width
-                    width = height * targetRatio;
+                    width = height * targetRatio; // eslint-disable-line no-unused-vars
                 } else if (currentRatio < targetRatio) {
                     // Image is taller, crop height
-                    height = width / targetRatio;
+                    height = width / targetRatio; // eslint-disable-line no-unused-vars
                 }
 
                 // Also resize to match screen

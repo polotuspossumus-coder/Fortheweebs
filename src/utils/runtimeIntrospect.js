@@ -33,9 +33,8 @@ export async function getCreatorLedger(userId) {
  */
 export const getRuntimeInfo = async () => {
   return {
-    platform: typeof navigator !== 'undefined' ? 
-      (navigator.userAgent.includes('Mobile') ? 'mobile' : 'web') : 
-      'web',
+    platform: typeof navigator === 'undefined' ? 'web' : 
+      (navigator.userAgent.includes('Mobile') ? 'mobile' : 'web'),
     version: '2.1.0',
     buildDate: '2025-12-13',
     environment: import.meta.env.MODE || 'production'
