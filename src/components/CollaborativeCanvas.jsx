@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types, complexity, max-lines-per-function */
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { supabase } from '../lib/supabase';
 
 /**

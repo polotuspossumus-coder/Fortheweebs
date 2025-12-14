@@ -66,7 +66,7 @@ const AuthContext = createContext({});
 export const useAuth = () => useContext(AuthContext);
 
 // Auth Provider Component
-export function AuthProvider({ children }) {
+function AuthProviderComponent({ children }) {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -162,7 +162,7 @@ export function AuthProvider({ children }) {
     const { data, error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {
-        redirectTo: `${window.location.origin}/auth/callback`
+        redirectTo: `${globalThis.location.origin}/auth/callback`
       }
     });
 
@@ -183,13 +183,13 @@ export function AuthProvider({ children }) {
 
   const resetPassword = async (email) => {
     const { error } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: `${window.location.origin}/reset-password`
+      redirectTo: `${globalThis.location.origin}/reset-password`
     });
 
     if (error) throw error;
   };
 
-  const value = {
+  const value = React.useMemo(() => ({
     user,
     loading,
     signup,
@@ -197,7 +197,7 @@ export function AuthProvider({ children }) {
     loginWithGoogle,
     logout,
     resetPassword
-  };
+  }), [user, loading]);
 
   return (
     <AuthContext.Provider value={value}>
@@ -206,8 +206,14 @@ export function AuthProvider({ children }) {
   );
 }
 
+AuthProviderComponent.propTypes = {
+  children: PropTypes.node
+};
+
+export const AuthProvider = AuthProviderComponent;
+
 // Login Form Component
-export function LoginForm({ onSuccess, onSwitchToSignup }) {
+function LoginFormComponent({ onSuccess, onSwitchToSignup }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -249,8 +255,9 @@ export function LoginForm({ onSuccess, onSwitchToSignup }) {
 
       <form onSubmit={handleSubmit}>
         <div className="form-group">
-          <label>Email</label>
+          <label htmlFor="login-email">Email</label>
           <input
+            id="login-email"
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
@@ -260,8 +267,9 @@ export function LoginForm({ onSuccess, onSwitchToSignup }) {
         </div>
 
         <div className="form-group">
-          <label>Password</label>
+          <label htmlFor="login-password">Password</label>
           <input
+            id="login-password"
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
@@ -300,8 +308,15 @@ export function LoginForm({ onSuccess, onSwitchToSignup }) {
   );
 }
 
+LoginFormComponent.propTypes = {
+  onSuccess: PropTypes.func,
+  onSwitchToSignup: PropTypes.func
+};
+
+export const LoginForm = LoginFormComponent;
+
 // Signup Form Component
-export function SignupForm({ onSuccess, onSwitchToLogin }) {
+function SignupFormComponent({ onSuccess, onSwitchToLogin }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [displayName, setDisplayName] = useState('');
@@ -489,6 +504,13 @@ export function ProtectedRoute({ children }) {
 
   return children;
 }
+
+SignupFormComponent.propTypes = {
+  onSuccess: PropTypes.func,
+  onSwitchToLogin: PropTypes.func
+};
+
+export const SignupForm = SignupFormComponent;
 
 export default {
   AuthProvider,

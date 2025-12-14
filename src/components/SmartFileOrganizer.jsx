@@ -1,4 +1,4 @@
-/* eslint-disable */
+/* eslint-disable sonarjs/cognitive-complexity, max-lines-per-function */
 import React, { useState, useRef } from 'react';
 
 /**
