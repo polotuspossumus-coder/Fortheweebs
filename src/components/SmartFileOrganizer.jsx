@@ -481,10 +481,17 @@ export function SmartFileOrganizer({ userId }) {
 
             {/* Drop Zone */}
             <div
+                role="button"
+                tabIndex={0}
                 onDragEnter={handleDragEnter}
                 onDragOver={handleDragOver}
                 onDragLeave={handleDragLeave}
                 onDrop={handleDrop}
+                onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        document.getElementById('file-input-organizer')?.click();
+                    }
+                }}
                 style={{
                     border: isDragging ? '3px dashed #00ffff' : '2px dashed rgba(255, 255, 255, 0.3)',
                     borderRadius: '12px',
