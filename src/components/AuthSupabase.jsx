@@ -396,8 +396,9 @@ function SignupFormComponent({ onSuccess, onSwitchToLogin }) {
         </div>
 
         <div className="form-group">
-          <label>Password</label>
+          <label htmlFor="signup-password">Password</label>
           <input
+            id="signup-password"
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
@@ -408,8 +409,9 @@ function SignupFormComponent({ onSuccess, onSwitchToLogin }) {
         </div>
 
         <div className="form-group">
-          <label>Confirm Password</label>
+          <label htmlFor="signup-confirm">Confirm Password</label>
           <input
+            id="signup-confirm"
             type="password"
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
@@ -449,7 +451,7 @@ function SignupFormComponent({ onSuccess, onSwitchToLogin }) {
 }
 
 // Auth Modal Component
-export function AuthModal({ isOpen, onClose, defaultView = 'login' }) {
+function AuthModalComponent({ isOpen, onClose, defaultView = 'login' }) {
   const [view, setView] = useState(defaultView);
 
   if (!isOpen) return null;
@@ -459,8 +461,8 @@ export function AuthModal({ isOpen, onClose, defaultView = 'login' }) {
   };
 
   return (
-    <div className="auth-modal-overlay" onClick={onClose}>
-      <div className="auth-modal-content" onClick={(e) => e.stopPropagation()}>
+    <div className="auth-modal-overlay" onClick={onClose} onKeyDown={(e) => e.key === 'Escape' && onClose()} role="button" tabIndex={0}>
+      <div className="auth-modal-content" onClick={(e) => e.stopPropagation()} onKeyDown={(e) => e.stopPropagation()} role="dialog" tabIndex={-1}>
         <button className="auth-modal-close" onClick={onClose}>
           ✕
         </button>
@@ -481,8 +483,16 @@ export function AuthModal({ isOpen, onClose, defaultView = 'login' }) {
   );
 }
 
+AuthModalComponent.propTypes = {
+  isOpen: PropTypes.bool,
+  onClose: PropTypes.func,
+  defaultView: PropTypes.string
+};
+
+export const AuthModal = AuthModalComponent;
+
 // Protected Route Component
-export function ProtectedRoute({ children }) {
+function ProtectedRouteComponent({ children }) {
   const { user, loading } = useAuth();
 
   if (loading) {
@@ -506,6 +516,12 @@ export function ProtectedRoute({ children }) {
 
   return children;
 }
+
+ProtectedRouteComponent.propTypes = {
+  children: PropTypes.node
+};
+
+export const ProtectedRoute = ProtectedRouteComponent;
 
 SignupFormComponent.propTypes = {
   onSuccess: PropTypes.func,
