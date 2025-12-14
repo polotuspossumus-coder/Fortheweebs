@@ -1,4 +1,4 @@
-/* eslint-disable */
+/* eslint-disable @typescript-eslint/no-explicit-any, no-console */
 import React from 'react';
 import './FeatureDisabledBanner.css';
 

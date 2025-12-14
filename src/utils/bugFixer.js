@@ -19,8 +19,8 @@ async function captureScreenshot() {
 function getBrowserInfo() {
   return {
     userAgent: navigator.userAgent,
-    viewport: `${window.innerWidth}x${window.innerHeight}`,
-    url: window.location.href,
+    viewport: `${globalThis.innerWidth}x${globalThis.innerHeight}`,
+    url: globalThis.location.href,
     timestamp: new Date().toISOString(),
     language: navigator.language,
     platform: navigator.platform,
@@ -47,8 +47,8 @@ export async function reportBug({
     let userId = null;
     let userEmail = null;
 
-    if (window.supabase) {
-      const { data: { user } } = await window.supabase.auth.getUser();
+    if (globalThis.supabase) {
+      const { data: { user } } = await globalThis.supabase.auth.getUser();
       if (user) {
         userId = user.id;
         userEmail = user.email;
