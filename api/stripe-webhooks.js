@@ -12,7 +12,8 @@ const SOVEREIGN_THRESHOLD = 5000; // $50.00 in cents
  * Stripe Webhook Handler - Sovereign Unlock Enforcement
  * Handles subscription cancellation when tier unlocks ≥ $50 are purchased
  */
-module.exports = async (req, res) => {
+async function stripeWebhookHandler(req, res) {
+module.exports = stripeWebhookHandler;
   const sig = req.headers['stripe-signature'];
   const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET;
 

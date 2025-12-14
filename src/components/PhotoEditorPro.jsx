@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars, @typescript-eslint/no-explicit-any */
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
 import './PhotoEditorPro.css';
 import { saveFileWithDialog, FILE_TYPES } from '../utils/fileSaveDialog';
 
@@ -158,7 +158,7 @@ export default function PhotoEditorPro() {
 
     const updateLayerOpacity = (layerId, opacity) => {
         setLayers(layers.map(l =>
-            l.id === layerId ? { ...l, opacity: parseInt(opacity) } : l
+            l.id === layerId ? { ...l, opacity: Number.parseInt(opacity, 10) } : l
         ));
     };
 
@@ -345,7 +345,7 @@ export default function PhotoEditorPro() {
                 {/* Canvas Area */}
                 <div className="canvas-area">
                     <div className="canvas-container">
-                        {!image ? (
+                        {image === null || image === undefined ? (
                             <div className="canvas-placeholder">
                                 <input
                                     ref={fileInputRef}

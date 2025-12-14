@@ -398,7 +398,7 @@ export const AIVideoGenerator = ({ userId, tier }) => {
                                     min="3"
                                     max="30"
                                     value={params.duration}
-                                    onChange={(e) => setParams({ ...params, duration: parseInt(e.target.value) })}
+                                    onChange={(e) => setParams({ ...params, duration: Number.parseInt(e.target.value, 10) })}
                                     style={{ width: '100%' }}
                                 />
                             </div>
@@ -435,7 +435,7 @@ export const AIVideoGenerator = ({ userId, tier }) => {
                                 </label>
                                 <select
                                     value={params.fps}
-                                    onChange={(e) => setParams({ ...params, fps: parseInt(e.target.value) })}
+                                    onChange={(e) => setParams({ ...params, fps: Number.parseInt(e.target.value, 10) })}
                                     style={{
                                         width: '100%',
                                         padding: '8px',
@@ -463,7 +463,7 @@ export const AIVideoGenerator = ({ userId, tier }) => {
                                     min="0"
                                     max="100"
                                     value={params.motionIntensity}
-                                    onChange={(e) => setParams({ ...params, motionIntensity: parseInt(e.target.value) })}
+                                    onChange={(e) => setParams({ ...params, motionIntensity: Number.parseInt(e.target.value, 10) })}
                                     style={{ width: '100%' }}
                                 />
                             </div>

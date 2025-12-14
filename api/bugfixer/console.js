@@ -194,7 +194,7 @@ router.post('/batch/full-heal', requireToken, async (req, res) => {
     batchReceipt.steps.push({ step: 'diagnostics', result: diagnostics });
     
     // 2. Pause risky flags if degraded
-    if (diagnostics.overall !== 'healthy' && req.body.flags) {
+    if (diagnostics.overall === 'degraded' && req.body.flags) {
       const { createClient } = require('@supabase/supabase-js');
       const supabase = createClient(
         process.env.SUPABASE_URL,
@@ -218,7 +218,7 @@ router.post('/batch/full-heal', requireToken, async (req, res) => {
     batchReceipt.steps.push({ step: 'selftest', result: selftest });
     
     // 5. Restart if still degraded
-    if (diagnostics.overall !== 'healthy') {
+    if (diagnostics.overall === 'unhealthy') {
       batchReceipt.steps.push({ step: 'restart-app', reason: 'System degraded after healing' });
       await writeArtifact('batchFullHeal', batchReceipt);
       await executeRemediation('restart-app');
