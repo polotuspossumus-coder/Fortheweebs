@@ -1,4 +1,4 @@
-/* eslint-disable */
+/* eslint-disable react/prop-types, complexity, max-lines-per-function */
 import React, { useState, useRef } from 'react';
 import { saveMultipleFilesWithDialog } from '../utils/fileSaveDialog';
 

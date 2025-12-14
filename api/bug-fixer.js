@@ -194,6 +194,7 @@ Provide:
       .single();
 
     if (updateError) {
+      console.error('Update error occurred but was suppressed:', updateError);
     }
 
     res.json({
@@ -223,7 +224,7 @@ async function listBugs(req, res) {
       .from('bug_reports')
       .select('*')
       .order('created_at', { ascending: false })
-      .limit(parseInt(limit));
+      .limit(Number.parseInt(limit, 10));
 
     if (status) {
       query = query.eq('status', status);

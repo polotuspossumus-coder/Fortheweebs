@@ -4,7 +4,7 @@
  */
 export async function getCreatorLedger(userId) {
   try {
-    const apiUrl = import.meta.env.VITE_API_URL || window.location.origin;
+    const apiUrl = import.meta.env.VITE_API_URL || globalThis.location.origin;
     const response = await fetch(`${apiUrl}/api/governance/creator-ledger/${userId}`);
     
     if (!response.ok) {

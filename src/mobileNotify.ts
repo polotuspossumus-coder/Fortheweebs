@@ -1,4 +1,4 @@
-/* eslint-disable */
+/* eslint-disable @typescript-eslint/no-explicit-any, @typescript-eslint/no-unused-vars */
 import { getConfirmedSlabs } from './slab-registry.js';
 import type { GraveyardEntry } from './graveyard-ledger.js';
 

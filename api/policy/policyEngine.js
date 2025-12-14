@@ -3,7 +3,7 @@
  * Allows updating system policies without code changes or redeployment
  */
 
-const EventEmitter = require('events');
+const EventEmitter = require('node:events');
 
 class PolicyEngine extends EventEmitter {
     constructor() {

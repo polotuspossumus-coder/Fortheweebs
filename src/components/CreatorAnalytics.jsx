@@ -1,4 +1,4 @@
-/* eslint-disable */
+/* eslint-disable react/prop-types, complexity, max-lines-per-function */
 import React, { useEffect, useState } from 'react';
 import './CreatorAnalytics.css';
 
