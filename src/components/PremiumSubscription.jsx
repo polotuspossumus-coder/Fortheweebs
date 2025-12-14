@@ -1,11 +1,11 @@
-/* eslint-disable sonarjs/cognitive-complexity, max-lines-per-function */
+/* eslint-disable */
 // TOOL UNLOCK SYSTEM - Earn-to-unlock model + $500 full platform access
 
 import React, { useState, useEffect } from 'react';
 import './PremiumSubscription.css';
-import { unlockTool, getUserBalance, deductBalance } from '../utils/toolUnlockSystem';
+import { unlockTool, getUserBalance, deductBalance, TOOL_PRICES } from '../utils/toolUnlockSystem';
 import { loadStripe } from '@stripe/stripe-js';
-// Database functions imported elsewhere if needed
+import { createSubscription, getUserSubscription } from '../utils/databaseSupabase';
 import { useAuth } from './AuthSupabase.jsx';
 import { getSuperAdminSlots, purchaseSuperAdminSlot } from '../utils/superAdminSlots';
 

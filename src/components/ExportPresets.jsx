@@ -360,7 +360,9 @@ const ExportPresets = ({ toolType, projectData, onExport }) => {
                 if (prev >= 100) {
                     clearInterval(progressInterval);
                     setIsExporting(false);
-                    onExport && onExport(preset, projectData);
+                    if (onExport) {
+                        onExport(preset, projectData);
+                    }
                     alert(`✅ Exported successfully!\n\n${preset.name} (${preset.settings.format || preset.settings.formats?.join(', ')})`);
                     return 100;
                 }

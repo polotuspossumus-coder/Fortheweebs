@@ -56,7 +56,7 @@ export function deployFortheweebsToSchool(schoolId: string, config: Record<strin
  * @param slabContent - The content of the slab
  * @returns Metadata about the queued sync
  */
-export function pushSlabToGitHub(slabName: string, slabContent: string): {
+export function pushSlabToGitHub(slabName: string): {
   repo: string;
   path: string;
   status: string;

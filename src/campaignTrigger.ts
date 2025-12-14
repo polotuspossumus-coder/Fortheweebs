@@ -16,7 +16,7 @@ export function getTriggersByCreator(creatorId: string): CampaignTrigger[] {
   return triggerLog.filter(t => t.creatorId === creatorId);
 }
 // campaignTrigger.ts
-// @ts-ignore
+// @ts-expect-error - CampaignConfig type may not be available
 import type { CampaignConfig } from './types/campaign.js';
 
 export function launchCampaign(campaign: CampaignConfig, userId: string) {

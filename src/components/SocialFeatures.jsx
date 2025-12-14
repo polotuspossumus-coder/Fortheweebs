@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import './SocialFeatures.css';
 
 // Comment Section Component
-export function CommentSection({ artworkId, comments: initialComments = [] }) {
+export function CommentSection({ comments: initialComments = [] }) {
   const [comments, setComments] = useState(initialComments);
   const [newComment, setNewComment] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -16,7 +16,7 @@ export function CommentSection({ artworkId, comments: initialComments = [] }) {
     //   setComments(commentsData);
     // };
     // fetchComments();
-  }, [artworkId]);
+  }, []);
 
   const handleSubmitComment = async (e) => {
     e.preventDefault();
@@ -118,7 +118,6 @@ export function CommentSection({ artworkId, comments: initialComments = [] }) {
 
 // Social Actions Component (Like, Share buttons)
 export function SocialActions({
-  artworkId,
   initialLikes = 0,
   initialLiked = false,
   onLike,
@@ -346,7 +345,7 @@ export function NotificationBell() {
 }
 
 // Follow Button Component
-export function FollowButton({ userId, initialFollowing = false, onFollowChange }) {
+export function FollowButton({ initialFollowing = false, onFollowChange }) {
   const [isFollowing, setIsFollowing] = useState(initialFollowing);
   const [isLoading, setIsLoading] = useState(false);
 

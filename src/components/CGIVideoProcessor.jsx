@@ -190,7 +190,9 @@ export default function CGIVideoProcessor({ onStreamReady, enableEffects = true 
   }, [addEffectById, clearAllEffects]);
 
   // Expose methods via ref
-  React.useImperativeHandle(React.forwardRef(() => {}), () => ({
+  const EmptyRef = React.forwardRef(() => {});
+  EmptyRef.displayName = 'EmptyRef';
+  React.useImperativeHandle(EmptyRef, () => ({
     addEffect,
     removeEffect,
     clearEffects,

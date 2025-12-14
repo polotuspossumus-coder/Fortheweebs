@@ -7,7 +7,7 @@ import './CGIVideoGenerator.css';
  * CGI Video Generator
  * AI-powered video generation using OpenAI API
  */
-function CGIVideoGeneratorComponent({ userId, onVideoGenerated }) {
+function CGIVideoGeneratorComponent({ onVideoGenerated }) {
   const [prompt, setPrompt] = useState('');
   const [style, setStyle] = useState('anime');
   const [duration, setDuration] = useState(5); // seconds
@@ -324,7 +324,6 @@ function CGIVideoGeneratorComponent({ userId, onVideoGenerated }) {
 }
 
 CGIVideoGeneratorComponent.propTypes = {
-  userId: PropTypes.string,
   onVideoGenerated: PropTypes.func
 };
 

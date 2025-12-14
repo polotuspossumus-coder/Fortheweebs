@@ -1,4 +1,4 @@
-/* eslint-disable no-unused-vars, @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 // src/mobile/offlineQueue.ts - Offline request queue for Capacitor
 // Optional Capacitor imports - gracefully degrade if not available
 let Capacitor: any = { isNativePlatform: () => false };
@@ -16,7 +16,7 @@ if (globalThis.window !== undefined && (globalThis.window as any).Capacitor) {
 interface QueuedRequest {
   id: string;
   url: string;
-  options: RequestInit;
+  options: Record<string, unknown>;
   timestamp: number;
 }
 
@@ -66,7 +66,7 @@ class OfflineQueue {
     }
   }
 
-  async enqueue(url: string, options: RequestInit = {}) {
+  async enqueue(url: string, options: Record<string, unknown> = {}) {
     const request: QueuedRequest = {
       id: `${Date.now()}_${Math.random().toString(36).substring(2, 11)}`,
       url,

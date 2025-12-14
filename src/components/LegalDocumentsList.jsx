@@ -13,18 +13,18 @@ async function fetchMarkdown(path) {
 
 
 export const LegalDocumentsList = () => {
-  // Owner bypass - if owner, always return null immediately
-  const isOwner = localStorage.getItem('userId') === 'owner' || 
-                  localStorage.getItem('ownerEmail') === 'polotuspossumus@gmail.com';
-  
-  if (isOwner) return null;
-
   const [accepted, setAccepted] = useState(() => {
     const stored = localStorage.getItem("legalAccepted");
     return stored ? JSON.parse(stored) : {};
   });
   const [docs, setDocs] = useState({});
   const [loading, setLoading] = useState(true);
+
+  // Owner bypass - if owner, always return null after hooks
+  const isOwner = localStorage.getItem('userId') === 'owner' ||
+                  localStorage.getItem('ownerEmail') === 'polotuspossumus@gmail.com';
+
+  if (isOwner) return null;
 
   useEffect(() => {
     (async () => {

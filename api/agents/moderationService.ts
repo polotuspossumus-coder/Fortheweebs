@@ -72,7 +72,7 @@ export async function moderateText(
     const thresholds = await getThresholds(contentType);
 
     // Check priority lanes (future: prioritization logic)
-    const _priorityLane = await checkPriorityLane({
+    await checkPriorityLane({
       flagType: undefined, // Will be set after detection
       confidence: 0,
     });
@@ -204,7 +204,7 @@ export async function moderateMedia(
 ): Promise<ModerationResult> {
   try {
     // Use existing imageContentScanner
-    // @ts-ignore - No type declarations available
+    // @ts-expect-error - No type declarations available
     const { detectCSAM } = await import('../utils/imageContentScanner.js');
     const csamResult = await detectCSAM(mediaUrl);
 
@@ -237,7 +237,7 @@ export async function moderateMedia(
       await executeAutoAction(contentId, contentType, autoAction);
 
       // Report to NCMEC
-      // @ts-ignore - No type declarations available
+      // @ts-expect-error - No type declarations available
       const { reportToNCMEC } = await import('../utils/ncmecReporting.js');
       await reportToNCMEC({
         contentId,

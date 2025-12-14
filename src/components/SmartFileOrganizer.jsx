@@ -1,6 +1,5 @@
 /* eslint-disable sonarjs/cognitive-complexity, max-lines-per-function */
-import React, { useState } from 'react';
-import PropTypes from 'prop-types';
+import React, { useState, useRef } from 'react';
 
 /**
  * SmartFileOrganizer - Drag in a folder of miscellaneous crap, it sorts everything
@@ -16,10 +15,10 @@ export function SmartFileOrganizer({ userId }) {
     const [progress, setProgress] = useState(0);
     const [results, setResults] = useState(null);
     const [isDragging, setIsDragging] = useState(false);
-    const screenResolution = {
-        width: globalThis.screen.width,
-        height: globalThis.screen.height,
-    };
+    const [screenResolution, setScreenResolution] = useState({
+        width: window.screen.width,
+        height: window.screen.height,
+    });
 
     // Organization settings
     const [settings, setSettings] = useState({
@@ -82,8 +81,8 @@ export function SmartFileOrganizer({ userId }) {
         const allFiles = [];
 
         // Process dropped items (folders and files)
-        for (const itemEntry of items) {
-            const item = itemEntry.webkitGetAsEntry();
+        for (let i = 0; i < items.length; i++) {
+            const item = items[i].webkitGetAsEntry();
             if (item) {
                 const filesFromItem = await traverseFileTree(item);
                 allFiles.push(...filesFromItem);
@@ -360,13 +359,12 @@ export function SmartFileOrganizer({ userId }) {
                         </label>
 
                         <div style={{ marginTop: '15px' }}>
-                            <label htmlFor="target-bitrate" style={{ fontSize: '14px', color: '#aaa' }}>
+                            <label style={{ fontSize: '14px', color: '#aaa' }}>
                                 Target Bitrate: <span style={{ color: '#0ff', fontFamily: 'monospace' }}>{settings.targetBitrate}kbps</span>
                             </label>
                             <select
-                                id="target-bitrate"
                                 value={settings.targetBitrate}
-                                onChange={(e) => setSettings({ ...settings, targetBitrate: Number.parseInt(e.target.value, 10) })}
+                                onChange={(e) => setSettings({ ...settings, targetBitrate: parseInt(e.target.value) })}
                                 style={{
                                     width: '100%',
                                     padding: '8px',
@@ -459,9 +457,9 @@ export function SmartFileOrganizer({ userId }) {
                         </label>
 
                         <div style={{ marginTop: '15px' }}>
-                            <div style={{ fontSize: '14px', color: '#aaa', marginBottom: '5px' }}>
+                            <label style={{ fontSize: '14px', color: '#aaa' }}>
                                 Junk Extensions:
-                            </div>
+                            </label>
                             <div style={{
                                 marginTop: '5px',
                                 padding: '8px',
@@ -481,17 +479,10 @@ export function SmartFileOrganizer({ userId }) {
 
             {/* Drop Zone */}
             <div
-                role="button"
-                tabIndex={0}
                 onDragEnter={handleDragEnter}
                 onDragOver={handleDragOver}
                 onDragLeave={handleDragLeave}
                 onDrop={handleDrop}
-                onKeyDown={(e) => {
-                    if (e.key === 'Enter' || e.key === ' ') {
-                        document.getElementById('file-input-organizer')?.click();
-                    }
-                }}
                 style={{
                     border: isDragging ? '3px dashed #00ffff' : '2px dashed rgba(255, 255, 255, 0.3)',
                     borderRadius: '12px',
@@ -675,7 +666,3 @@ export function SmartFileOrganizer({ userId }) {
         </div>
     );
 }
-
-SmartFileOrganizer.propTypes = {
-    userId: PropTypes.string
-};

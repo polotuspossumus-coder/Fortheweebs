@@ -1,5 +1,5 @@
 // campaignScheduler.ts
-// @ts-ignore
+// @ts-expect-error - CampaignConfig type may not be available
 import type { CampaignConfig } from './types/campaign.js';
 
 export async function scheduleCampaign(campaign: CampaignConfig, launchDate: string) {

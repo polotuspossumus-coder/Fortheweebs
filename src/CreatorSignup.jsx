@@ -122,7 +122,7 @@ const CreatorSignup = () => {
           <button type="submit" style={{ width: "100%", padding: 12, background: loading ? "#a5b4fc" : (acceptTerms ? "#667eea" : "#94a3b8"), color: "#fff", border: "none", borderRadius: 4, fontWeight: 600, fontSize: "1rem", cursor: loading ? "not-allowed" : (acceptTerms ? "pointer" : "not-allowed"), transition: "all 0.2s" }} disabled={loading || !acceptTerms}>{loading ? "Creating Account..." : "Sign Up"}</button>
           
           <div style={{ marginTop: 16, fontSize: "0.75rem", color: "#666", textAlign: "center" }}>
-            By clicking "Sign Up", you provide your electronic signature, which has the same legal force as a handwritten signature under the E-SIGN Act.
+            By clicking &ldquo;Sign Up&rdquo;, you provide your electronic signature, which has the same legal force as a handwritten signature under the E-SIGN Act.
           </div>
         </form>
       )}

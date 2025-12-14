@@ -1,5 +1,5 @@
 // Client-side API utility for /api/upgrade-tier
-// @ts-ignore
+// @ts-expect-error - tutorialSteps may not have type declarations
 import { tutorialSteps } from '../tutorial.js';
 export async function upgradeTier(userId) {
   const res = await fetch('/api/upgrade-tier', {

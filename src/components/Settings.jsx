@@ -1,5 +1,6 @@
 /* eslint-disable no-unused-vars, @typescript-eslint/no-explicit-any */
 import React, { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
 import { supabase } from '../lib/supabase';
 
 /**
@@ -118,7 +119,6 @@ export function Settings({ userId }) {
         <div style={styles.section}>
           <label htmlFor="username-input" style={styles.label}>
             Username (public identifier)
-          </label>
             <input
               id="username-input"
               type="text"
@@ -143,7 +143,6 @@ export function Settings({ userId }) {
         <div style={styles.section}>
           <label htmlFor="display-name-input2" style={styles.label}>
             Display Name (real name or nickname)
-          </label>
             <input
               id="display-name-input2"
               type="text"

@@ -1,0 +1,1630 @@
+{
+  "summary": {
+    "totalErrors": 34,
+    "totalWarnings": 93,
+    "totalProblems": 127,
+    "filesWithProblems": 31
+  },
+  "filesWithProblems": [
+    {
+      "path": "src\\components\\CollaborativeCanvas.jsx",
+      "errors": 2,
+      "warnings": 35,
+      "messages": [
+        {
+          "ruleId": "react/prop-types",
+          "message": "Definition for rule 'react/prop-types' was not found.",
+          "line": 1,
+          "column": 1,
+          "endLine": 1,
+          "endColumn": 74,
+          "severity": 2,
+          "nodeType": null
+        },
+        {
+          "ruleId": "no-undef",
+          "severity": 1,
+          "message": "'setCollaborators' is not defined.",
+          "line": 34,
+          "column": 17,
+          "nodeType": "Identifier",
+          "messageId": "undef",
+          "endLine": 34,
+          "endColumn": 33
+        },
+        {
+          "ruleId": "no-unused-vars",
+          "severity": 1,
+          "message": "'key' is defined but never used.",
+          "line": 36,
+          "column": 51,
+          "nodeType": "Identifier",
+          "messageId": "unusedVar",
+          "endLine": 36,
+          "endColumn": 54
+        },
+        {
+          "ruleId": "no-undef",
+          "severity": 1,
+          "message": "'setRemoteCursors' is not defined.",
+          "line": 42,
+          "column": 17,
+          "nodeType": "Identifier",
+          "messageId": "undef",
+          "endLine": 42,
+          "endColumn": 33
+        },
+        {
+          "ruleId": "no-undef",
+          "severity": 1,
+          "message": "'setRemoteCursors' is not defined.",
+          "line": 50,
+          "column": 21,
+          "nodeType": "Identifier",
+          "messageId": "undef",
+          "endLine": 50,
+          "endColumn": 37
+        },
+        {
+          "ruleId": "no-undef",
+          "severity": 1,
+          "message": "'setElements' is not defined.",
+          "line": 63,
+          "column": 21,
+          "nodeType": "Identifier",
+          "messageId": "undef",
+          "endLine": 63,
+          "endColumn": 32
+        },
+        {
+          "ruleId": "no-undef",
+          "severity": 1,
+          "message": "'setElements' is not defined.",
+          "line": 77,
+          "column": 21,
+          "nodeType": "Identifier",
+          "messageId": "undef",
+          "endLine": 77,
+          "endColumn": 32
+        },
+        {
+          "ruleId": "no-undef",
+          "severity": 1,
+          "message": "'setComments' is not defined.",
+          "line": 81,
+          "column": 17,
+          "nodeType": "Identifier",
+          "messageId": "undef",
+          "endLine": 81,
+          "endColumn": 28
+        },
+        {
+          "ruleId": "no-undef",
+          "severity": 1,
+          "message": "'setElements' is not defined.",
+          "line": 114,
+          "column": 13,
+          "nodeType": "Identifier",
+          "messageId": "undef",
+          "endLine": 114,
+          "endColumn": 24
+        },
+        {
+          "ruleId": "no-undef",
+          "severity": 1,
+          "message": "'setComments' is not defined.",
+          "line": 125,
+          "column": 13,
+          "nodeType": "Identifier",
+          "messageId": "undef",
+          "endLine": 125,
+          "endColumn": 24
+        },
+        {
+          "ruleId": "no-undef",
+          "severity": 1,
+          "message": "'setVersionHistory' is not defined.",
+          "line": 137,
+          "column": 13,
+          "nodeType": "Identifier",
+          "messageId": "undef",
+          "endLine": 137,
+          "endColumn": 30
+        },
+        {
+          "ruleId": "no-undef",
+          "severity": 1,
+          "message": "'comment' is not defined.",
+          "line": 150,
+          "column": 28,
+          "nodeType": "Identifier",
+          "messageId": "undef",
+          "endLine": 150,
+          "endColumn": 35
+        },
+        {
+          "ruleId": "no-extra-semi",
+          "severity": 2,
+          "message": "Unnecessary semicolon.",
+          "line": 153,
+          "column": 6,
+          "nodeType": "EmptyStatement",
+          "messageId": "unexpected",
+          "endLine": 153,
+          "endColumn": 7,
+          "fix": {
+            "range": [
+              5699,
+              5714
+            ],
+            "text": "}\r\n\r\n    const"
+          }
+        },
+        {
+          "ruleId": "no-undef",
+          "severity": 1,
+          "message": "'projectId' is not defined.",
+          "line": 157,
+          "column": 25,
+          "nodeType": "Identifier",
+          "messageId": "undef",
+          "endLine": 157,
+          "endColumn": 34
+        },
+        {
+          "ruleId": "no-undef",
+          "severity": 1,
+          "message": "'userId' is not defined.",
+          "line": 158,
+          "column": 22,
+          "nodeType": "Identifier",
+          "messageId": "undef",
+          "endLine": 158,
+          "endColumn": 28
+        },
+        {
+          "ruleId": "no-undef",
+          "severity": 1,
+          "message": "'elements' is not defined.",
+          "line": 160,
+          "column": 38,
+          "nodeType": "Identifier",
+          "messageId": "undef",
+          "endLine": 160,
+          "endColumn": 46
+        },
+        {
+          "ruleId": "no-undef",
+          "severity": 1,
+          "message": "'setVersionHistory' is not defined.",
+          "line": 171,
+          "column": 13,
+          "nodeType": "Identifier",
+          "messageId": "undef",
+          "endLine": 171,
+          "endColumn": 30
+        },
+        {
+          "ruleId": "no-undef",
+          "severity": 1,
+          "message": "'versionHistory' is not defined.",
+          "line": 176,
+          "column": 25,
+          "nodeType": "Identifier",
+          "messageId": "undef",
+          "endLine": 176,
+          "endColumn": 39
+        },
+        {
+          "ruleId": "no-undef",
+          "severity": 1,
+          "message": "'setElements' is not defined.",
+          "line": 180,
+          "column": 9,
+          "nodeType": "Identifier",
+          "messageId": "undef",
+          "endLine": 180,
+          "endColumn": 20
+        },
+        {
+          "ruleId": "no-undef",
+          "severity": 1,
+          "message": "'channelRef' is not defined.",
+          "line": 183,
+          "column": 13,
+          "nodeType": "Identifier",
+          "messageId": "undef",
+          "endLine": 183,
+          "endColumn": 23
+        },
+        {
+          "ruleId": "no-undef",
+          "severity": 1,
+          "message": "'channelRef' is not defined.",
+          "line": 185,
+          "column": 17,
+          "nodeType": "Identifier",
+          "messageId": "undef",
+          "endLine": 185,
+          "endColumn": 27
+        },
+        {
+          "ruleId": "no-undef",
+          "severity": 1,
+          "message": "'userId' is not defined.",
+          "line": 188,
+          "column": 32,
+          "nodeType": "Identifier",
+          "messageId": "undef",
+          "endLine": 188,
+          "endColumn": 38
+        },
+        {
+          "ruleId": "no-undef",
+          "severity": 1,
+          "message": "'collaborators' is not defined.",
+          "line": 226,
+          "column": 25,
+          "nodeType": "Identifier",
+          "messageId": "undef",
+          "endLine": 226,
+          "endColumn": 38
+        },
+        {
+          "ruleId": "no-undef",
+          "severity": 1,
+          "message": "'collaborators' is not defined.",
+          "line": 228,
+          "column": 18,
+          "nodeType": "Identifier",
+          "messageId": "undef",
+          "endLine": 228,
+          "endColumn": 31
+        },
+        {
+          "ruleId": "no-undef",
+          "severity": 1,
+          "message": "'userId' is not defined.",
+          "line": 242,
+          "column": 53,
+          "nodeType": "Identifier",
+          "messageId": "undef",
+          "endLine": 242,
+          "endColumn": 59
+        },
+        {
+          "ruleId": "no-undef",
+          "severity": 1,
+          "message": "'versionHistory' is not defined.",
+          "line": 267,
+          "column": 18,
+          "nodeType": "Identifier",
+          "messageId": "undef",
+          "endLine": 267,
+          "endColumn": 32
+        },
+        {
+          "ruleId": "no-undef",
+          "severity": 1,
+          "message": "'canvasRef' is not defined.",
+          "line": 313,
+          "column": 22,
+          "nodeType": "Identifier",
+          "messageId": "undef",
+          "endLine": 313,
+          "endColumn": 31
+        },
+        {
+          "ruleId": "no-undef",
+          "severity": 1,
+          "message": "'handleMouseMove' is not defined.",
+          "line": 314,
+          "column": 30,
+          "nodeType": "Identifier",
+          "messageId": "undef",
+          "endLine": 314,
+          "endColumn": 45
+        },
+        {
+          "ruleId": "no-undef",
+          "severity": 1,
+          "message": "'elements' is not defined.",
+          "line": 325,
+          "column": 18,
+          "nodeType": "Identifier",
+          "messageId": "undef",
+          "endLine": 325,
+          "endColumn": 26
+        },
+        {
+          "ruleId": "no-undef",
+          "severity": 1,
+          "message": "'setSelectedElement' is not defined.",
+          "line": 328,
+          "column": 40,
+          "nodeType": "Identifier",
+          "messageId": "undef",
+          "endLine": 328,
+          "endColumn": 58
+        },
+        {
+          "ruleId": "no-undef",
+          "severity": 1,
+          "message": "'setSelectedElement' is not defined.",
+          "line": 329,
+          "column": 64,
+          "nodeType": "Identifier",
+          "messageId": "undef",
+          "endLine": 329,
+          "endColumn": 82
+        },
+        {
+          "ruleId": "no-undef",
+          "severity": 1,
+          "message": "'selectedElement' is not defined.",
+          "line": 339,
+          "column": 37,
+          "nodeType": "Identifier",
+          "messageId": "undef",
+          "endLine": 339,
+          "endColumn": 52
+        },
+        {
+          "ruleId": "no-undef",
+          "severity": 1,
+          "message": "'canvasRef' is not defined.",
+          "line": 346,
+          "column": 42,
+          "nodeType": "Identifier",
+          "messageId": "undef",
+          "endLine": 346,
+          "endColumn": 51
+        },
+        {
+          "ruleId": "no-undef",
+          "severity": 1,
+          "message": "'updateElement' is not defined.",
+          "line": 347,
+          "column": 29,
+          "nodeType": "Identifier",
+          "messageId": "undef",
+          "endLine": 347,
+          "endColumn": 42
+        },
+        {
+          "ruleId": "no-undef",
+          "severity": 1,
+          "message": "'remoteCursors' is not defined.",
+          "line": 358,
+          "column": 33,
+          "nodeType": "Identifier",
+          "messageId": "undef",
+          "endLine": 358,
+          "endColumn": 46
+        },
+        {
+          "ruleId": "no-undef",
+          "severity": 1,
+          "message": "'comments' is not defined.",
+          "line": 387,
+          "column": 18,
+          "nodeType": "Identifier",
+          "messageId": "undef",
+          "endLine": 387,
+          "endColumn": 26
+        },
+        {
+          "ruleId": "no-undef",
+          "severity": 1,
+          "message": "'setComments' is not defined.",
+          "line": 411,
+          "column": 33,
+          "nodeType": "Identifier",
+          "messageId": "undef",
+          "endLine": 411,
+          "endColumn": 44
+        }
+      ]
+    },
+    {
+      "path": "src\\components\\CommissionMarketplace.jsx",
+      "errors": 2,
+      "warnings": 10,
+      "messages": [
+        {
+          "ruleId": "@typescript-eslint/no-explicit-any",
+          "message": "Definition for rule '@typescript-eslint/no-explicit-any' was not found.",
+          "line": 1,
+          "column": 1,
+          "endLine": 1,
+          "endColumn": 98,
+          "severity": 2,
+          "nodeType": null
+        },
+        {
+          "ruleId": "sonarjs/cognitive-complexity",
+          "message": "Definition for rule 'sonarjs/cognitive-complexity' was not found.",
+          "line": 1,
+          "column": 1,
+          "endLine": 1,
+          "endColumn": 98,
+          "severity": 2,
+          "nodeType": null
+        },
+        {
+          "ruleId": "no-undef",
+          "severity": 1,
+          "message": "'setLoading' is not defined.",
+          "line": 34,
+          "column": 7,
+          "nodeType": "Identifier",
+          "messageId": "undef",
+          "endLine": 34,
+          "endColumn": 17
+        },
+        {
+          "ruleId": "no-undef",
+          "severity": 1,
+          "message": "'setLoading' is not defined.",
+          "line": 41,
+          "column": 7,
+          "nodeType": "Identifier",
+          "messageId": "undef",
+          "endLine": 41,
+          "endColumn": 17
+        },
+        {
+          "ruleId": "no-undef",
+          "severity": 1,
+          "message": "'setError' is not defined.",
+          "line": 47,
+          "column": 7,
+          "nodeType": "Identifier",
+          "messageId": "undef",
+          "endLine": 47,
+          "endColumn": 15
+        },
+        {
+          "ruleId": "no-undef",
+          "severity": 1,
+          "message": "'setError' is not defined.",
+          "line": 52,
+          "column": 5,
+          "nodeType": "Identifier",
+          "messageId": "undef",
+          "endLine": 52,
+          "endColumn": 13
+        },
+        {
+          "ruleId": "no-undef",
+          "severity": 1,
+          "message": "'data' is not defined.",
+          "line": 61,
+          "column": 40,
+          "nodeType": "Identifier",
+          "messageId": "undef",
+          "endLine": 61,
+          "endColumn": 44
+        },
+        {
+          "ruleId": "no-undef",
+          "severity": 1,
+          "message": "'setError' is not defined.",
+          "line": 78,
+          "column": 7,
+          "nodeType": "Identifier",
+          "messageId": "undef",
+          "endLine": 78,
+          "endColumn": 15
+        },
+        {
+          "ruleId": "no-undef",
+          "severity": 1,
+          "message": "'setError' is not defined.",
+          "line": 90,
+          "column": 5,
+          "nodeType": "Identifier",
+          "messageId": "undef",
+          "endLine": 90,
+          "endColumn": 13
+        },
+        {
+          "ruleId": "no-undef",
+          "severity": 1,
+          "message": "'setError' is not defined.",
+          "line": 130,
+          "column": 7,
+          "nodeType": "Identifier",
+          "messageId": "undef",
+          "endLine": 130,
+          "endColumn": 15
+        },
+        {
+          "ruleId": "no-undef",
+          "severity": 1,
+          "message": "'PropTypes' is not defined.",
+          "line": 397,
+          "column": 11,
+          "nodeType": "Identifier",
+          "messageId": "undef",
+          "endLine": 397,
+          "endColumn": 20
+        },
+        {
+          "ruleId": "no-undef",
+          "severity": 1,
+          "message": "'PropTypes' is not defined.",
+          "line": 398,
+          "column": 14,
+          "nodeType": "Identifier",
+          "messageId": "undef",
+          "endLine": 398,
+          "endColumn": 23
+        }
+      ]
+    },
+    {
+      "path": "src\\components\\AuthSupabase.jsx",
+      "errors": 0,
+      "warnings": 9,
+      "messages": [
+        {
+          "ruleId": "no-undef",
+          "severity": 1,
+          "message": "'PropTypes' is not defined.",
+          "line": 210,
+          "column": 13,
+          "nodeType": "Identifier",
+          "messageId": "undef",
+          "endLine": 210,
+          "endColumn": 22
+        },
+        {
+          "ruleId": "no-undef",
+          "severity": 1,
+          "message": "'PropTypes' is not defined.",
+          "line": 311,
+          "column": 14,
+          "nodeType": "Identifier",
+          "messageId": "undef",
+          "endLine": 311,
+          "endColumn": 23
+        },
+        {
+          "ruleId": "no-undef",
+          "severity": 1,
+          "message": "'PropTypes' is not defined.",
+          "line": 312,
+          "column": 21,
+          "nodeType": "Identifier",
+          "messageId": "undef",
+          "endLine": 312,
+          "endColumn": 30
+        },
+        {
+          "ruleId": "no-undef",
+          "severity": 1,
+          "message": "'PropTypes' is not defined.",
+          "line": 485,
+          "column": 11,
+          "nodeType": "Identifier",
+          "messageId": "undef",
+          "endLine": 485,
+          "endColumn": 20
+        },
+        {
+          "ruleId": "no-undef",
+          "severity": 1,
+          "message": "'PropTypes' is not defined.",
+          "line": 486,
+          "column": 12,
+          "nodeType": "Identifier",
+          "messageId": "undef",
+          "endLine": 486,
+          "endColumn": 21
+        },
+        {
+          "ruleId": "no-undef",
+          "severity": 1,
+          "message": "'PropTypes' is not defined.",
+          "line": 487,
+          "column": 16,
+          "nodeType": "Identifier",
+          "messageId": "undef",
+          "endLine": 487,
+          "endColumn": 25
+        },
+        {
+          "ruleId": "no-undef",
+          "severity": 1,
+          "message": "'PropTypes' is not defined.",
+          "line": 519,
+          "column": 13,
+          "nodeType": "Identifier",
+          "messageId": "undef",
+          "endLine": 519,
+          "endColumn": 22
+        },
+        {
+          "ruleId": "no-undef",
+          "severity": 1,
+          "message": "'PropTypes' is not defined.",
+          "line": 525,
+          "column": 14,
+          "nodeType": "Identifier",
+          "messageId": "undef",
+          "endLine": 525,
+          "endColumn": 23
+        },
+        {
+          "ruleId": "no-undef",
+          "severity": 1,
+          "message": "'PropTypes' is not defined.",
+          "line": 526,
+          "column": 20,
+          "nodeType": "Identifier",
+          "messageId": "undef",
+          "endLine": 526,
+          "endColumn": 29
+        }
+      ]
+    },
+    {
+      "path": "src\\components\\SocialFeed.jsx",
+      "errors": 1,
+      "warnings": 7,
+      "messages": [
+        {
+          "ruleId": "react-hooks/exhaustive-deps",
+          "message": "Definition for rule 'react-hooks/exhaustive-deps' was not found.",
+          "line": 1,
+          "column": 1,
+          "endLine": 1,
+          "endColumn": 49,
+          "severity": 2,
+          "nodeType": null
+        },
+        {
+          "ruleId": "no-undef",
+          "severity": 1,
+          "message": "'followUser' is not defined.",
+          "line": 720,
+          "column": 67,
+          "nodeType": "Identifier",
+          "messageId": "undef",
+          "endLine": 720,
+          "endColumn": 77
+        },
+        {
+          "ruleId": "no-undef",
+          "severity": 1,
+          "message": "'addFriend' is not defined.",
+          "line": 723,
+          "column": 67,
+          "nodeType": "Identifier",
+          "messageId": "undef",
+          "endLine": 723,
+          "endColumn": 76
+        },
+        {
+          "ruleId": "no-undef",
+          "severity": 1,
+          "message": "'subscribeToUser' is not defined.",
+          "line": 727,
+          "column": 72,
+          "nodeType": "Identifier",
+          "messageId": "undef",
+          "endLine": 727,
+          "endColumn": 87
+        },
+        {
+          "ruleId": "no-undef",
+          "severity": 1,
+          "message": "'subscribeToUser' is not defined.",
+          "line": 742,
+          "column": 50,
+          "nodeType": "Identifier",
+          "messageId": "undef",
+          "endLine": 742,
+          "endColumn": 65
+        },
+        {
+          "ruleId": "no-undef",
+          "severity": 1,
+          "message": "'subscribeToUser' is not defined.",
+          "line": 848,
+          "column": 38,
+          "nodeType": "Identifier",
+          "messageId": "undef",
+          "endLine": 848,
+          "endColumn": 53
+        },
+        {
+          "ruleId": "no-undef",
+          "severity": 1,
+          "message": "'addFriend' is not defined.",
+          "line": 880,
+          "column": 27,
+          "nodeType": "Identifier",
+          "messageId": "undef",
+          "endLine": 880,
+          "endColumn": 36
+        },
+        {
+          "ruleId": "no-undef",
+          "severity": 1,
+          "message": "'addFriend' is not defined.",
+          "line": 1196,
+          "column": 21,
+          "nodeType": "Identifier",
+          "messageId": "undef",
+          "endLine": 1196,
+          "endColumn": 30
+        }
+      ]
+    },
+    {
+      "path": "src\\components\\CreatorOverview.jsx",
+      "errors": 2,
+      "warnings": 3,
+      "messages": [
+        {
+          "ruleId": "@typescript-eslint/no-explicit-any",
+          "message": "Definition for rule '@typescript-eslint/no-explicit-any' was not found.",
+          "line": 1,
+          "column": 1,
+          "endLine": 1,
+          "endColumn": 98,
+          "severity": 2,
+          "nodeType": null
+        },
+        {
+          "ruleId": "sonarjs/cognitive-complexity",
+          "message": "Definition for rule 'sonarjs/cognitive-complexity' was not found.",
+          "line": 1,
+          "column": 1,
+          "endLine": 1,
+          "endColumn": 98,
+          "severity": 2,
+          "nodeType": null
+        },
+        {
+          "ruleId": "no-unused-vars",
+          "severity": 1,
+          "message": "'userTier' is defined but never used.",
+          "line": 15,
+          "column": 36,
+          "nodeType": "Identifier",
+          "messageId": "unusedVar",
+          "endLine": 15,
+          "endColumn": 44
+        },
+        {
+          "ruleId": "no-unused-vars",
+          "severity": 1,
+          "message": "'isAdmin' is defined but never used.",
+          "line": 15,
+          "column": 46,
+          "nodeType": "Identifier",
+          "messageId": "unusedVar",
+          "endLine": 15,
+          "endColumn": 53
+        },
+        {
+          "ruleId": "no-unused-vars",
+          "severity": 1,
+          "message": "'isVip' is defined but never used.",
+          "line": 15,
+          "column": 55,
+          "nodeType": "Identifier",
+          "messageId": "unusedVar",
+          "endLine": 15,
+          "endColumn": 60
+        }
+      ]
+    },
+    {
+      "path": "src\\components\\FeatureDisabledBanner.jsx",
+      "errors": 1,
+      "warnings": 4,
+      "messages": [
+        {
+          "ruleId": "@typescript-eslint/no-explicit-any",
+          "message": "Definition for rule '@typescript-eslint/no-explicit-any' was not found.",
+          "line": 1,
+          "column": 1,
+          "endLine": 1,
+          "endColumn": 68,
+          "severity": 2,
+          "nodeType": null
+        },
+        {
+          "ruleId": "no-unused-vars",
+          "severity": 1,
+          "message": "'React' is defined but never used.",
+          "line": 2,
+          "column": 8,
+          "nodeType": "Identifier",
+          "messageId": "unusedVar",
+          "endLine": 2,
+          "endColumn": 13
+        },
+        {
+          "ruleId": "no-unused-vars",
+          "severity": 1,
+          "message": "'features' is defined but never used.",
+          "line": 9,
+          "column": 34,
+          "nodeType": "Identifier",
+          "messageId": "unusedVar",
+          "endLine": 9,
+          "endColumn": 42
+        },
+        {
+          "ruleId": "no-unused-vars",
+          "severity": 1,
+          "message": "'feature' is defined but never used.",
+          "line": 23,
+          "column": 34,
+          "nodeType": "Identifier",
+          "messageId": "unusedVar",
+          "endLine": 23,
+          "endColumn": 41
+        },
+        {
+          "ruleId": "no-unused-vars",
+          "severity": 1,
+          "message": "'features' is defined but never used.",
+          "line": 23,
+          "column": 43,
+          "nodeType": "Identifier",
+          "messageId": "unusedVar",
+          "endLine": 23,
+          "endColumn": 51
+        }
+      ]
+    },
+    {
+      "path": "src\\utils\\aiUpscaler.js",
+      "errors": 1,
+      "warnings": 4,
+      "messages": [
+        {
+          "ruleId": "sonarjs/cognitive-complexity",
+          "message": "Definition for rule 'sonarjs/cognitive-complexity' was not found.",
+          "line": 1,
+          "column": 1,
+          "endLine": 1,
+          "endColumn": 74,
+          "severity": 2,
+          "nodeType": null
+        },
+        {
+          "ruleId": "no-unused-vars",
+          "severity": 1,
+          "message": "'mode' is defined but never used.",
+          "line": 93,
+          "column": 49,
+          "nodeType": "Identifier",
+          "messageId": "unusedVar",
+          "endLine": 93,
+          "endColumn": 53
+        },
+        {
+          "ruleId": "no-unused-vars",
+          "severity": 1,
+          "message": "'batch' is assigned a value but never used.",
+          "line": 127,
+          "column": 12,
+          "nodeType": "Identifier",
+          "messageId": "unusedVar",
+          "endLine": 127,
+          "endColumn": 17
+        },
+        {
+          "ruleId": "no-unused-vars",
+          "severity": 1,
+          "message": "'channels' is assigned a value but never used.",
+          "line": 127,
+          "column": 34,
+          "nodeType": "Identifier",
+          "messageId": "unusedVar",
+          "endLine": 127,
+          "endColumn": 42
+        },
+        {
+          "ruleId": "no-unused-vars",
+          "severity": 1,
+          "message": "'strength' is assigned a value but never used.",
+          "line": 197,
+          "column": 11,
+          "nodeType": "Identifier",
+          "messageId": "unusedVar",
+          "endLine": 197,
+          "endColumn": 19
+        }
+      ]
+    },
+    {
+      "path": "src\\components\\CollaborationRoom.jsx",
+      "errors": 0,
+      "warnings": 4,
+      "messages": [
+        {
+          "ruleId": "no-undef",
+          "severity": 1,
+          "message": "'PropTypes' is not defined.",
+          "line": 606,
+          "column": 9,
+          "nodeType": "Identifier",
+          "messageId": "undef",
+          "endLine": 606,
+          "endColumn": 18
+        },
+        {
+          "ruleId": "no-undef",
+          "severity": 1,
+          "message": "'PropTypes' is not defined.",
+          "line": 607,
+          "column": 9,
+          "nodeType": "Identifier",
+          "messageId": "undef",
+          "endLine": 607,
+          "endColumn": 18
+        },
+        {
+          "ruleId": "no-undef",
+          "severity": 1,
+          "message": "'PropTypes' is not defined.",
+          "line": 608,
+          "column": 15,
+          "nodeType": "Identifier",
+          "messageId": "undef",
+          "endLine": 608,
+          "endColumn": 24
+        },
+        {
+          "ruleId": "no-undef",
+          "severity": 1,
+          "message": "'PropTypes' is not defined.",
+          "line": 609,
+          "column": 17,
+          "nodeType": "Identifier",
+          "messageId": "undef",
+          "endLine": 609,
+          "endColumn": 26
+        }
+      ]
+    },
+    {
+      "path": "src\\components\\AIVideoGenerator.jsx",
+      "errors": 1,
+      "warnings": 2,
+      "messages": [
+        {
+          "ruleId": "@typescript-eslint/no-explicit-any",
+          "message": "Definition for rule '@typescript-eslint/no-explicit-any' was not found.",
+          "line": 1,
+          "column": 1,
+          "endLine": 1,
+          "endColumn": 72,
+          "severity": 2,
+          "nodeType": null
+        },
+        {
+          "ruleId": "no-undef",
+          "severity": 1,
+          "message": "'PropTypes' is not defined.",
+          "line": 776,
+          "column": 11,
+          "nodeType": "Identifier",
+          "messageId": "undef",
+          "endLine": 776,
+          "endColumn": 20
+        },
+        {
+          "ruleId": "no-undef",
+          "severity": 1,
+          "message": "'PropTypes' is not defined.",
+          "line": 777,
+          "column": 9,
+          "nodeType": "Identifier",
+          "messageId": "undef",
+          "endLine": 777,
+          "endColumn": 18
+        }
+      ]
+    },
+    {
+      "path": "src\\components\\CGIVideoGenerator.jsx",
+      "errors": 2,
+      "warnings": 1,
+      "messages": [
+        {
+          "ruleId": "@typescript-eslint/no-explicit-any",
+          "message": "Definition for rule '@typescript-eslint/no-explicit-any' was not found.",
+          "line": 1,
+          "column": 1,
+          "endLine": 1,
+          "endColumn": 98,
+          "severity": 2,
+          "nodeType": null
+        },
+        {
+          "ruleId": "sonarjs/cognitive-complexity",
+          "message": "Definition for rule 'sonarjs/cognitive-complexity' was not found.",
+          "line": 1,
+          "column": 1,
+          "endLine": 1,
+          "endColumn": 98,
+          "severity": 2,
+          "nodeType": null
+        },
+        {
+          "ruleId": "no-unused-vars",
+          "severity": 1,
+          "message": "'userId' is defined but never used.",
+          "line": 10,
+          "column": 39,
+          "nodeType": "Identifier",
+          "messageId": "unusedVar",
+          "endLine": 10,
+          "endColumn": 45
+        }
+      ]
+    },
+    {
+      "path": "src\\components\\PremiumSubscription.jsx",
+      "errors": 1,
+      "warnings": 2,
+      "messages": [
+        {
+          "ruleId": "sonarjs/cognitive-complexity",
+          "message": "Definition for rule 'sonarjs/cognitive-complexity' was not found.",
+          "line": 1,
+          "column": 1,
+          "endLine": 1,
+          "endColumn": 74,
+          "severity": 2,
+          "nodeType": null
+        },
+        {
+          "ruleId": "no-unused-vars",
+          "severity": 1,
+          "message": "'useAuth' is defined but never used.",
+          "line": 9,
+          "column": 10,
+          "nodeType": "Identifier",
+          "messageId": "unusedVar",
+          "endLine": 9,
+          "endColumn": 17
+        },
+        {
+          "ruleId": "no-unused-vars",
+          "severity": 1,
+          "message": "'currentTier' is defined but never used.",
+          "line": 17,
+          "column": 47,
+          "nodeType": "Identifier",
+          "messageId": "unusedVar",
+          "endLine": 17,
+          "endColumn": 58
+        }
+      ]
+    },
+    {
+      "path": "src\\components\\SmartScreenshotSorter.jsx",
+      "errors": 1,
+      "warnings": 2,
+      "messages": [
+        {
+          "ruleId": "react/prop-types",
+          "message": "Definition for rule 'react/prop-types' was not found.",
+          "line": 1,
+          "column": 1,
+          "endLine": 1,
+          "endColumn": 74,
+          "severity": 2,
+          "nodeType": null
+        },
+        {
+          "ruleId": "no-unused-vars",
+          "severity": 1,
+          "message": "'userId' is defined but never used.",
+          "line": 15,
+          "column": 41,
+          "nodeType": "Identifier",
+          "messageId": "unusedVar",
+          "endLine": 15,
+          "endColumn": 47
+        },
+        {
+          "ruleId": "no-unused-vars",
+          "severity": 1,
+          "message": "'index' is defined but never used.",
+          "line": 1001,
+          "column": 54,
+          "nodeType": "Identifier",
+          "messageId": "unusedVar",
+          "endLine": 1001,
+          "endColumn": 59
+        }
+      ]
+    },
+    {
+      "path": "src\\components\\SocialFeatures.jsx",
+      "errors": 1,
+      "warnings": 2,
+      "messages": [
+        {
+          "ruleId": "react-hooks/exhaustive-deps",
+          "message": "Definition for rule 'react-hooks/exhaustive-deps' was not found.",
+          "line": 1,
+          "column": 1,
+          "endLine": 1,
+          "endColumn": 49,
+          "severity": 2,
+          "nodeType": null
+        },
+        {
+          "ruleId": "no-unused-vars",
+          "severity": 1,
+          "message": "'artworkId' is defined but never used.",
+          "line": 121,
+          "column": 3,
+          "nodeType": "Identifier",
+          "messageId": "unusedVar",
+          "endLine": 121,
+          "endColumn": 12
+        },
+        {
+          "ruleId": "no-unused-vars",
+          "severity": 1,
+          "message": "'userId' is defined but never used.",
+          "line": 349,
+          "column": 32,
+          "nodeType": "Identifier",
+          "messageId": "unusedVar",
+          "endLine": 349,
+          "endColumn": 38
+        }
+      ]
+    },
+    {
+      "path": "src\\mobileNotify.ts",
+      "errors": 2,
+      "warnings": 1,
+      "messages": [
+        {
+          "ruleId": "@typescript-eslint/no-explicit-any",
+          "message": "Definition for rule '@typescript-eslint/no-explicit-any' was not found.",
+          "line": 1,
+          "column": 1,
+          "endLine": 1,
+          "endColumn": 91,
+          "severity": 2,
+          "nodeType": null
+        },
+        {
+          "ruleId": "@typescript-eslint/no-unused-vars",
+          "message": "Definition for rule '@typescript-eslint/no-unused-vars' was not found.",
+          "line": 1,
+          "column": 1,
+          "endLine": 1,
+          "endColumn": 91,
+          "severity": 2,
+          "nodeType": null
+        },
+        {
+          "ruleId": "no-unused-vars",
+          "severity": 1,
+          "message": "'slabContent' is defined but never used.",
+          "line": 59,
+          "column": 52,
+          "nodeType": "Identifier",
+          "messageId": "unusedVar",
+          "endLine": 59,
+          "endColumn": 71
+        }
+      ]
+    },
+    {
+      "path": "src\\mobile\\offlineQueue.ts",
+      "errors": 1,
+      "warnings": 2,
+      "messages": [
+        {
+          "ruleId": "@typescript-eslint/no-explicit-any",
+          "message": "Definition for rule '@typescript-eslint/no-explicit-any' was not found.",
+          "line": 1,
+          "column": 1,
+          "endLine": 1,
+          "endColumn": 72,
+          "severity": 2,
+          "nodeType": null
+        },
+        {
+          "ruleId": "no-undef",
+          "severity": 1,
+          "message": "'RequestInit' is not defined.",
+          "line": 19,
+          "column": 12,
+          "nodeType": "Identifier",
+          "messageId": "undef",
+          "endLine": 19,
+          "endColumn": 23
+        },
+        {
+          "ruleId": "no-undef",
+          "severity": 1,
+          "message": "'RequestInit' is not defined.",
+          "line": 69,
+          "column": 39,
+          "nodeType": "Identifier",
+          "messageId": "undef",
+          "endLine": 69,
+          "endColumn": 50
+        }
+      ]
+    },
+    {
+      "path": "api\\agents\\moderationService.ts",
+      "errors": 1,
+      "warnings": 1,
+      "messages": [
+        {
+          "ruleId": "@typescript-eslint/no-explicit-any",
+          "message": "Definition for rule '@typescript-eslint/no-explicit-any' was not found.",
+          "line": 1,
+          "column": 1,
+          "endLine": 1,
+          "endColumn": 68,
+          "severity": 2,
+          "nodeType": null
+        },
+        {
+          "ruleId": "no-unused-vars",
+          "severity": 1,
+          "message": "'_priorityLane' is assigned a value but never used.",
+          "line": 75,
+          "column": 11,
+          "nodeType": "Identifier",
+          "messageId": "unusedVar",
+          "endLine": 75,
+          "endColumn": 24
+        }
+      ]
+    },
+    {
+      "path": "src\\components\\CreatorAnalytics.jsx",
+      "errors": 1,
+      "warnings": 1,
+      "messages": [
+        {
+          "ruleId": "react/prop-types",
+          "message": "Definition for rule 'react/prop-types' was not found.",
+          "line": 1,
+          "column": 1,
+          "endLine": 1,
+          "endColumn": 74,
+          "severity": 2,
+          "nodeType": null
+        },
+        {
+          "ruleId": "no-undef",
+          "severity": 1,
+          "message": "'setTopPosts' is not defined.",
+          "line": 42,
+          "column": 9,
+          "nodeType": "Identifier",
+          "messageId": "undef",
+          "endLine": 42,
+          "endColumn": 20
+        }
+      ]
+    },
+    {
+      "path": "src\\components\\CreatorPaymentSetup.jsx",
+      "errors": 2,
+      "warnings": 0,
+      "messages": [
+        {
+          "ruleId": "@typescript-eslint/no-explicit-any",
+          "message": "Definition for rule '@typescript-eslint/no-explicit-any' was not found.",
+          "line": 1,
+          "column": 1,
+          "endLine": 1,
+          "endColumn": 98,
+          "severity": 2,
+          "nodeType": null
+        },
+        {
+          "ruleId": "sonarjs/cognitive-complexity",
+          "message": "Definition for rule 'sonarjs/cognitive-complexity' was not found.",
+          "line": 1,
+          "column": 1,
+          "endLine": 1,
+          "endColumn": 98,
+          "severity": 2,
+          "nodeType": null
+        }
+      ]
+    },
+    {
+      "path": "src\\components\\SmartFileOrganizer.jsx",
+      "errors": 1,
+      "warnings": 1,
+      "messages": [
+        {
+          "ruleId": "sonarjs/cognitive-complexity",
+          "message": "Definition for rule 'sonarjs/cognitive-complexity' was not found.",
+          "line": 1,
+          "column": 1,
+          "endLine": 1,
+          "endColumn": 74,
+          "severity": 2,
+          "nodeType": null
+        },
+        {
+          "ruleId": "no-unused-vars",
+          "severity": 1,
+          "message": "'userId' is defined but never used.",
+          "line": 13,
+          "column": 38,
+          "nodeType": "Identifier",
+          "messageId": "unusedVar",
+          "endLine": 13,
+          "endColumn": 44
+        }
+      ]
+    },
+    {
+      "path": "src\\utils\\aiContentReviewer.js",
+      "errors": 1,
+      "warnings": 1,
+      "messages": [
+        {
+          "ruleId": "sonarjs/cognitive-complexity",
+          "message": "Definition for rule 'sonarjs/cognitive-complexity' was not found.",
+          "line": 1,
+          "column": 1,
+          "endLine": 1,
+          "endColumn": 74,
+          "severity": 2,
+          "nodeType": null
+        },
+        {
+          "ruleId": "no-unused-vars",
+          "severity": 1,
+          "message": "'ANTHROPIC_API_KEY' is assigned a value but never used.",
+          "line": 13,
+          "column": 7,
+          "nodeType": "Identifier",
+          "messageId": "unusedVar",
+          "endLine": 13,
+          "endColumn": 24
+        }
+      ]
+    },
+    {
+      "path": "agents\\policyOverrides.js",
+      "errors": 1,
+      "warnings": 0,
+      "messages": [
+        {
+          "ruleId": "@typescript-eslint/no-explicit-any",
+          "message": "Definition for rule '@typescript-eslint/no-explicit-any' was not found.",
+          "line": 1,
+          "column": 1,
+          "endLine": 1,
+          "endColumn": 72,
+          "severity": 2,
+          "nodeType": null
+        }
+      ]
+    },
+    {
+      "path": "scripts\\apply-rls-fixes.js",
+      "errors": 1,
+      "warnings": 0,
+      "messages": [
+        {
+          "ruleId": "@typescript-eslint/no-explicit-any",
+          "message": "Definition for rule '@typescript-eslint/no-explicit-any' was not found.",
+          "line": 2,
+          "column": 1,
+          "endLine": 2,
+          "endColumn": 72,
+          "severity": 2,
+          "nodeType": null
+        }
+      ]
+    },
+    {
+      "path": "src\\api\\api\\storefront\\tier.js",
+      "errors": 1,
+      "warnings": 0,
+      "messages": [
+        {
+          "ruleId": "@typescript-eslint/no-explicit-any",
+          "message": "Definition for rule '@typescript-eslint/no-explicit-any' was not found.",
+          "line": 1,
+          "column": 1,
+          "endLine": 1,
+          "endColumn": 68,
+          "severity": 2,
+          "nodeType": null
+        }
+      ]
+    },
+    {
+      "path": "src\\components\\PhotoEditorPro.jsx",
+      "errors": 1,
+      "warnings": 0,
+      "messages": [
+        {
+          "ruleId": "@typescript-eslint/no-explicit-any",
+          "message": "Definition for rule '@typescript-eslint/no-explicit-any' was not found.",
+          "line": 1,
+          "column": 1,
+          "endLine": 1,
+          "endColumn": 72,
+          "severity": 2,
+          "nodeType": null
+        }
+      ]
+    },
+    {
+      "path": "src\\components\\ReportBug.jsx",
+      "errors": 1,
+      "warnings": 0,
+      "messages": [
+        {
+          "ruleId": null,
+          "fatal": true,
+          "severity": 2,
+          "message": "Parsing error: Expected corresponding JSX closing tag for 'div'.",
+          "line": 71,
+          "column": 12,
+          "nodeType": null
+        }
+      ]
+    },
+    {
+      "path": "src\\components\\Settings.jsx",
+      "errors": 1,
+      "warnings": 0,
+      "messages": [
+        {
+          "ruleId": null,
+          "fatal": true,
+          "severity": 2,
+          "message": "Parsing error: Expected corresponding JSX closing tag for 'div'.",
+          "line": 140,
+          "column": 12,
+          "nodeType": null
+        }
+      ]
+    },
+    {
+      "path": "src\\components\\SubscriptionSuccess.jsx",
+      "errors": 1,
+      "warnings": 0,
+      "messages": [
+        {
+          "ruleId": "react/prop-types",
+          "message": "Definition for rule 'react/prop-types' was not found.",
+          "line": 1,
+          "column": 1,
+          "endLine": 1,
+          "endColumn": 38,
+          "severity": 2,
+          "nodeType": null
+        }
+      ]
+    },
+    {
+      "path": "src\\components\\VRARCreatorStudio.jsx",
+      "errors": 1,
+      "warnings": 0,
+      "messages": [
+        {
+          "ruleId": "react/prop-types",
+          "message": "Definition for rule 'react/prop-types' was not found.",
+          "line": 1,
+          "column": 1,
+          "endLine": 1,
+          "endColumn": 50,
+          "severity": 2,
+          "nodeType": null
+        }
+      ]
+    },
+    {
+      "path": "src\\pages\\PricingPageNew.jsx",
+      "errors": 1,
+      "warnings": 0,
+      "messages": [
+        {
+          "ruleId": "@typescript-eslint/no-explicit-any",
+          "message": "Definition for rule '@typescript-eslint/no-explicit-any' was not found.",
+          "line": 1,
+          "column": 1,
+          "endLine": 1,
+          "endColumn": 72,
+          "severity": 2,
+          "nodeType": null
+        }
+      ]
+    },
+    {
+      "path": "src\\routes\\api\\tips\\create.js",
+      "errors": 0,
+      "warnings": 1,
+      "messages": [
+        {
+          "ruleId": "no-undef",
+          "severity": 1,
+          "message": "'userId' is not defined.",
+          "line": 52,
+          "column": 23,
+          "nodeType": "Identifier",
+          "messageId": "undef",
+          "endLine": 52,
+          "endColumn": 29
+        }
+      ]
+    },
+    {
+      "path": "src\\utils\\githubBugReporter.js",
+      "errors": 1,
+      "warnings": 0,
+      "messages": [
+        {
+          "ruleId": "@typescript-eslint/no-explicit-any",
+          "message": "Definition for rule '@typescript-eslint/no-explicit-any' was not found.",
+          "line": 1,
+          "column": 1,
+          "endLine": 1,
+          "endColumn": 72,
+          "severity": 2,
+          "nodeType": null
+        }
+      ]
+    }
+  ],
+  "commonIssues": [
+    [
+      "no-undef",
+      70
+    ],
+    [
+      "no-unused-vars",
+      23
+    ],
+    [
+      "@typescript-eslint/no-explicit-any",
+      15
+    ],
+    [
+      "sonarjs/cognitive-complexity",
+      8
+    ],
+    [
+      "react/prop-types",
+      5
+    ],
+    [
+      "react-hooks/exhaustive-deps",
+      2
+    ],
+    [
+      "no-extra-semi",
+      1
+    ],
+    [
+      "@typescript-eslint/no-unused-vars",
+      1
+    ]
+  ]
+}

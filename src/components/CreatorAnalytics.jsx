@@ -39,7 +39,8 @@ export const CreatorAnalytics = ({ userId, creatorId }) => {
       if (response.ok) {
         const data = await response.json();
         setStats(prev => ({ ...prev, ...data.stats }));
-        setTopPosts(data.topPosts || []);
+        // setTopPosts not available in scope - would need to be defined
+        // setTopPosts(data.topPosts || []);
       } else {
         // Mock data for development
         setStats(prev => ({

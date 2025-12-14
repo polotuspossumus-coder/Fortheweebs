@@ -2,6 +2,7 @@
 // COMMISSION MARKETPLACE - Creators offer custom commissions, platform takes 15%
 
 import React, { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
 import { loadStripe } from '@stripe/stripe-js';
 import { createCommission, getAllCommissions } from '../utils/databaseSupabase';
 import { useAuth } from './AuthSupabase.jsx';
@@ -14,6 +15,10 @@ function CommissionMarketplace({ userId, isCreator }) {
   const [activeTab, setActiveTab] = useState('browse'); // browse, my-commissions, create
   const [commissions, setCommissions] = useState([]);
   const [processing, setProcessing] = useState(false);
+  // eslint-disable-next-line no-unused-vars
+  const [loading, setLoading] = useState(false);
+  // eslint-disable-next-line no-unused-vars
+  const [error, setError] = useState('');
 
   const [newCommission, setNewCommission] = useState({
     title: '',
@@ -52,13 +57,15 @@ function CommissionMarketplace({ userId, isCreator }) {
     setError('');
 
     try {
-      await createCommission({
+      const data = await createCommission({
         creatorId: user?.id || userId,
         ...newCommission
       });
 
       // Add to local list
-      setCommissions(prev => [...prev, data.commission]);
+      if (data?.commission) {
+        setCommissions(prev => [...prev, data.commission]);
+      }
 
       // Reset form
       setNewCommission({

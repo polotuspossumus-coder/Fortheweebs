@@ -15,12 +15,14 @@ export default function MicoTriageDashboard() {
 
   const tierAccess = checkTierAccess(user?.id, user?.tier, user?.email);
 
+  useEffect(() => {
+    if (tierAccess.isOwner) {
+      loadBugReports();
+    }
+  }, [filter, tierAccess.isOwner]);
+
   // Only owner can see this
   if (!tierAccess.isOwner) return null;
-
-  useEffect(() => {
-    loadBugReports();
-  }, [filter]);
 
   const loadBugReports = async () => {
     setLoading(true);

@@ -1,6 +1,6 @@
 export const revalidate = 0;
 import React, { useState } from "react";
-import ReactDOM from "react-dom";
+import ReactDOM from "react-dom/client";
 import { LegalDocumentsList } from "../src/components/LegalDocumentsList.jsx";
 import CreatorSignup from "../src/CreatorSignup.jsx";
 import PaymentModule from "../src/PaymentModule.jsx";
@@ -36,7 +36,5 @@ function AppFlow() {
   );
 }
 
-ReactDOM.render(
-  <AppFlow />,
-  document.getElementById("root")
-);
+const root = ReactDOM.createRoot(document.getElementById("root"));
+root.render(<AppFlow />);

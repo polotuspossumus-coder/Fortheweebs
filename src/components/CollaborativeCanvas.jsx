@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types, complexity, max-lines-per-function */
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { supabase } from '../lib/supabase';
 
 /**
@@ -22,6 +22,13 @@ import { supabase } from '../lib/supabase';
 
 export default function CollaborativeCanvas({ projectId, userId, userName }) {
     const channelRef = useRef(null);
+    const canvasRef = useRef(null);
+    const [collaborators, setCollaborators] = useState([]);
+    const [remoteCursors, setRemoteCursors] = useState({});
+    const [elements, setElements] = useState([]);
+    const [comments, setComments] = useState([]);
+    const [versionHistory, setVersionHistory] = useState([]);
+    const [selectedElement, setSelectedElement] = useState(null);
 
     useEffect(() => {
         if (!projectId) return;
@@ -138,18 +145,46 @@ export default function CollaborativeCanvas({ projectId, userId, userName }) {
         }
     };
 
-    // Future: handleMouseMove for cursor tracking
-    // Future: updateElement for element updates
+    const handleMouseMove = (e) => {
+        if (!channelRef.current) return;
 
-    // Future: _addComment function for collaborative commenting
-    // Broadcast
-        if (channelRef.current) {
-            channelRef.current.send({
-                type: 'broadcast',
-                event: 'comment-add',
-                payload: { comment }
-            });
-        }
+        const rect = canvasRef.current?.getBoundingClientRect();
+        if (!rect) return;
+
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+
+        channelRef.current.send({
+            type: 'broadcast',
+            event: 'cursor-move',
+            payload: {
+                userId,
+                userName,
+                x,
+                y,
+                color: generateUserColor(userId)
+            }
+        });
+    };
+
+    const updateElement = (elementId, updates) => {
+        setElements(prev => {
+            const updated = prev.map(el =>
+                el.id === elementId ? { ...el, ...updates } : el
+            );
+
+            // Broadcast update
+            if (channelRef.current) {
+                const element = updated.find(e => e.id === elementId);
+                channelRef.current.send({
+                    type: 'broadcast',
+                    event: 'element-update',
+                    payload: { userId, element }
+                });
+            }
+
+            return updated;
+        });
     };
 
     const createVersion = async (description) => {
@@ -452,3 +487,4 @@ export default function CollaborativeCanvas({ projectId, userId, userName }) {
             </div>
         </div>
     );
+}

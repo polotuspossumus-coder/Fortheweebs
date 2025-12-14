@@ -59,7 +59,6 @@ const ReportBug = () => {
         <div style={{ marginBottom: '1rem' }}>
           <label htmlFor="bug-description">
             Describe the issue:
-          </label>
             <textarea
               id="bug-description"
               value={message}

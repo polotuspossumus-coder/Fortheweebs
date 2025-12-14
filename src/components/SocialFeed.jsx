@@ -333,7 +333,7 @@ export const SocialFeed = ({ userId, userTier }) => {
   const savePost = (postId) => {
     const wasSaved = savedPosts.has(postId);
     const newSaved = new Set(savedPosts);
-    
+
     if (wasSaved) {
       newSaved.delete(postId);
       alert('🗑️ Removed from saved');
@@ -341,9 +341,55 @@ export const SocialFeed = ({ userId, userTier }) => {
       newSaved.add(postId);
       alert('💾 Post saved!');
     }
-    
+
     setSavedPosts(newSaved);
     localStorage.setItem('savedPosts', JSON.stringify([...newSaved]));
+  };
+
+  // Social interaction functions
+  const followUser = async (targetUserId, targetUsername) => {
+    try {
+      const apiUrl = import.meta.env.VITE_API_URL || globalThis.location.origin;
+      await fetch(`${apiUrl}/api/social/follow/${targetUserId}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userId: localStorage.getItem('userId') || userId })
+      });
+      alert(`✅ Now following @${targetUsername}!`);
+    } catch (err) {
+      console.error('Follow error:', err);
+      alert('⚠️ Follow action recorded locally');
+    }
+  };
+
+  const addFriend = async (targetUserId, targetUsername) => {
+    try {
+      const apiUrl = import.meta.env.VITE_API_URL || globalThis.location.origin;
+      await fetch(`${apiUrl}/api/social/friend/${targetUserId}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userId: localStorage.getItem('userId') || userId })
+      });
+      alert(`✅ Friend request sent to @${targetUsername}!`);
+    } catch (err) {
+      console.error('Add friend error:', err);
+      alert('⚠️ Friend request recorded locally');
+    }
+  };
+
+  const subscribeToUser = async (targetUserId, targetUsername) => {
+    try {
+      const apiUrl = import.meta.env.VITE_API_URL || globalThis.location.origin;
+      await fetch(`${apiUrl}/api/social/subscribe/${targetUserId}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userId: localStorage.getItem('userId') || userId })
+      });
+      alert(`✅ Subscribed to @${targetUsername}!`);
+    } catch (err) {
+      console.error('Subscribe error:', err);
+      alert('⚠️ Subscription recorded locally');
+    }
   };
 
   const deletePost = async (postId) => {

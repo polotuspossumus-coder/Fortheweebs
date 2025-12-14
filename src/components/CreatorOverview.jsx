@@ -12,7 +12,7 @@ import { isOwner } from '../utils/ownerAuth';
  * Dashboard with personal stats, activity, quick launch
  * + Platform-wide analytics for owner
  */
-function CreatorOverview({ userId, userTier, isAdmin, isVip, creatorName, onNavigate }) {
+function CreatorOverview({ userId, creatorName, onNavigate }) {
   const [isOwnerUser, setIsOwnerUser] = useState(false);
   const [stats, setStats] = useState({
     totalCreations: 0,

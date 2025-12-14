@@ -5,7 +5,16 @@
     "node": true
   },
   "extends": [
-    "eslint:recommended"
+    "eslint:recommended",
+    "plugin:react/recommended",
+    "plugin:react-hooks/recommended",
+    "plugin:@typescript-eslint/recommended"
+  ],
+  "plugins": [
+    "react",
+    "react-hooks",
+    "@typescript-eslint",
+    "sonarjs"
   ],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
@@ -16,10 +25,29 @@
     },
     "project": null
   },
+  "settings": {
+    "react": {
+      "version": "detect"
+    }
+  },
   "rules": {
-    "no-unused-vars": "warn",
+    "no-unused-vars": "off",
+    "@typescript-eslint/no-unused-vars": "warn",
+    "@typescript-eslint/no-explicit-any": "warn",
     "no-console": "off",
-    "no-undef": "warn"
+    "no-undef": "warn",
+    "react/prop-types": "warn",
+    "react/react-in-jsx-scope": "off",
+    "react/no-unescaped-entities": "off",
+    "react/no-unknown-property": ["error", { "ignore": ["jsx"] }],
+    "react-hooks/exhaustive-deps": "warn",
+    "react-hooks/immutability": "off",
+    "react-hooks/purity": "off",
+    "react-hooks/set-state-in-effect": "off",
+    "sonarjs/cognitive-complexity": ["warn", 20],
+    "sonarjs/no-duplicate-string": "warn",
+    "sonarjs/no-identical-functions": "warn",
+    "sonarjs/no-unused-expressions": "off"
   },
   "overrides": [
     {
@@ -27,6 +55,15 @@
       "parser": "@typescript-eslint/parser",
       "parserOptions": {
         "project": null
+      }
+    },
+    {
+      "files": ["*.js", "*.jsx"],
+      "rules": {
+        "@typescript-eslint/no-unused-vars": "off",
+        "@typescript-eslint/no-explicit-any": "off",
+        "@typescript-eslint/no-require-imports": "off",
+        "no-unused-vars": "warn"
       }
     }
   ],

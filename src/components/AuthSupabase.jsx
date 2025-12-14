@@ -292,7 +292,8 @@ function LoginFormComponent({ onSuccess, onSwitchToSignup }) {
         onClick={handleGoogleLogin}
         disabled={loading}
       >
-        <span className="google-icon">🔐</span>Continue with Google
+        <span className="google-icon">🔐</span>
+        Continue with Google
       </button>
 
       <div className="auth-footer">
@@ -371,9 +372,8 @@ function SignupFormComponent({ onSuccess, onSwitchToLogin }) {
 
       <form onSubmit={handleSubmit}>
         <div className="form-group">
-          <label htmlFor="signup-displayname">Display Name</label>
+          <label>Display Name</label>
           <input
-            id="signup-displayname"
             type="text"
             value={displayName}
             onChange={(e) => setDisplayName(e.target.value)}
@@ -383,9 +383,8 @@ function SignupFormComponent({ onSuccess, onSwitchToLogin }) {
         </div>
 
         <div className="form-group">
-          <label htmlFor="signup-email">Email</label>
+          <label>Email</label>
           <input
-            id="signup-email"
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
@@ -395,9 +394,8 @@ function SignupFormComponent({ onSuccess, onSwitchToLogin }) {
         </div>
 
         <div className="form-group">
-          <label htmlFor="signup-password">Password</label>
+          <label>Password</label>
           <input
-            id="signup-password"
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
@@ -408,9 +406,8 @@ function SignupFormComponent({ onSuccess, onSwitchToLogin }) {
         </div>
 
         <div className="form-group">
-          <label htmlFor="signup-confirm">Confirm Password</label>
+          <label>Confirm Password</label>
           <input
-            id="signup-confirm"
             type="password"
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
@@ -433,7 +430,8 @@ function SignupFormComponent({ onSuccess, onSwitchToLogin }) {
         onClick={handleGoogleSignup}
         disabled={loading}
       >
-        <span className="google-icon">🔐</span>Continue with Google
+        <span className="google-icon">🔐</span>
+        Continue with Google
       </button>
 
       <div className="auth-footer">
@@ -449,7 +447,7 @@ function SignupFormComponent({ onSuccess, onSwitchToLogin }) {
 }
 
 // Auth Modal Component
-function AuthModalComponent({ isOpen, onClose, defaultView = 'login' }) {
+export function AuthModal({ isOpen, onClose, defaultView = 'login' }) {
   const [view, setView] = useState(defaultView);
 
   if (!isOpen) return null;
@@ -459,8 +457,8 @@ function AuthModalComponent({ isOpen, onClose, defaultView = 'login' }) {
   };
 
   return (
-    <div className="auth-modal-overlay" onClick={onClose} onKeyDown={(e) => e.key === 'Escape' && onClose()} role="button" tabIndex={0}>
-      <div className="auth-modal-content" onClick={(e) => e.stopPropagation()} onKeyDown={(e) => e.stopPropagation()} role="dialog" tabIndex={-1}>
+    <div className="auth-modal-overlay" onClick={onClose}>
+      <div className="auth-modal-content" onClick={(e) => e.stopPropagation()}>
         <button className="auth-modal-close" onClick={onClose}>
           ✕
         </button>
@@ -481,16 +479,8 @@ function AuthModalComponent({ isOpen, onClose, defaultView = 'login' }) {
   );
 }
 
-AuthModalComponent.propTypes = {
-  isOpen: PropTypes.bool,
-  onClose: PropTypes.func,
-  defaultView: PropTypes.string
-};
-
-export const AuthModal = AuthModalComponent;
-
 // Protected Route Component
-function ProtectedRouteComponent({ children }) {
+export function ProtectedRoute({ children }) {
   const { user, loading } = useAuth();
 
   if (loading) {
@@ -514,12 +504,6 @@ function ProtectedRouteComponent({ children }) {
 
   return children;
 }
-
-ProtectedRouteComponent.propTypes = {
-  children: PropTypes.node
-};
-
-export const ProtectedRoute = ProtectedRouteComponent;
 
 SignupFormComponent.propTypes = {
   onSuccess: PropTypes.func,

@@ -17,12 +17,12 @@ const supabase = createClient(
 
 export async function POST(request) {
   try {
-    const { creatorId, amount, message, currency = 'usd' } = await request.json();
+    const { userId, creatorId, amount, message, currency = 'usd' } = await request.json();
 
     // Validation
-    if (!creatorId || !amount) {
+    if (!userId || !creatorId || !amount) {
       return new Response(JSON.stringify({
-        error: 'Missing required fields: creatorId, amount'
+        error: 'Missing required fields: userId, creatorId, amount'
       }), { status: 400, headers: { 'Content-Type': 'application/json' } });
     }
 

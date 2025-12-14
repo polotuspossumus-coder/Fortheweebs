@@ -1,5 +1,6 @@
 /* eslint-disable no-unused-vars, @typescript-eslint/no-explicit-any */
 import React, { useState, useRef } from 'react';
+import PropTypes from 'prop-types';
 
 export const AIVideoGenerator = ({ userId, tier }) => {
     const [uploadedPhoto, setUploadedPhoto] = useState(null);

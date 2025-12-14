@@ -12,7 +12,7 @@ import { saveMultipleFilesWithDialog } from '../utils/fileSaveDialog';
  * - Save locally or upload
  * - Chain with other editing tools
  */
-export function SmartScreenshotSorter({ userId, onProcessComplete }) {
+export function SmartScreenshotSorter({ onProcessComplete }) {
     const [images, setImages] = useState([]);
     const [unwantedExamples, setUnwantedExamples] = useState([]);
     const [processing, setProcessing] = useState(false);
@@ -998,7 +998,7 @@ export function SmartScreenshotSorter({ userId, onProcessComplete }) {
                         gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
                         gap: '15px',
                     }}>
-                        {results.processed.map((img, index) => (
+                        {results.processed.map((img) => (
                             <div key={img.id} style={{
                                 background: 'rgba(0, 0, 0, 0.3)',
                                 borderRadius: '12px',
