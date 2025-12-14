@@ -11,7 +11,7 @@ let artifactLogger;
 try {
   artifactLogger = require('../../agents/artifactLogger');
 } catch (error) {
-  // Use stub fallback silently
+  console.warn('artifactLogger unavailable, using stub fallback');
   artifactLogger = {
     log: () => ({ id: 'stub', timestamp: new Date().toISOString() }),
     getAll: () => []
