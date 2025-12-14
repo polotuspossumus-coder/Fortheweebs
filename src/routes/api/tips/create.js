@@ -1,4 +1,4 @@
-/* eslint-disable */
+/* eslint-disable no-console, consistent-return */
 /**
  * TIPS PAYMENT API
  * Creates Stripe Payment Intent for creator tips

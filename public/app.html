@@ -219,7 +219,7 @@
         localStorage.setItem('userId', userId);
 
         // Load posts on page load
-        window.addEventListener('DOMContentLoaded', loadPosts);
+        globalThis.addEventListener('DOMContentLoaded', loadPosts);
 
         async function loadPosts() {
             const postsDiv = document.getElementById('posts');
@@ -349,7 +349,7 @@
         }
 
         function getTimeAgo(date) {
-            const seconds = Math.floor((new Date() - date) / 1000);
+            const seconds = Math.floor((Date.now() - date) / 1000);
 
             if (seconds < 60) return 'Just now';
             if (seconds < 3600) return `${Math.floor(seconds / 60)}m ago`;
