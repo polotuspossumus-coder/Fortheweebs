@@ -372,8 +372,9 @@ function SignupFormComponent({ onSuccess, onSwitchToLogin }) {
 
       <form onSubmit={handleSubmit}>
         <div className="form-group">
-          <label>Display Name</label>
+          <label htmlFor="signup-displayname">Display Name</label>
           <input
+            id="signup-displayname"
             type="text"
             value={displayName}
             onChange={(e) => setDisplayName(e.target.value)}
@@ -383,8 +384,9 @@ function SignupFormComponent({ onSuccess, onSwitchToLogin }) {
         </div>
 
         <div className="form-group">
-          <label>Email</label>
+          <label htmlFor="signup-email">Email</label>
           <input
+            id="signup-email"
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
