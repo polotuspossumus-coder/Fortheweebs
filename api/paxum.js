@@ -113,9 +113,8 @@ router.post('/create-checkout', async (req, res) => {
 router.post('/webhook', express.urlencoded({ extended: true }), async (req, res) => {
   try {
     const {
-      // transaction_id, transaction_amount, transaction_currency - available for logging
+      // transaction_id, transaction_amount, transaction_currency, item_id - available for logging
       transaction_status,
-      item_id: _item_id, // Unused, reserved for future
       variables,
       security_hash
     } = req.body;

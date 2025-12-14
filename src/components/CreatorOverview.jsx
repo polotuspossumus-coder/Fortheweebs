@@ -208,7 +208,7 @@ function CreatorOverview({ userId, userTier, isAdmin, isVip, creatorName, onNavi
           alignItems: 'center',
           justifyContent: 'center',
           padding: '20px'
-        }} onClick={() => setShowPricing(false)}>
+        }} onClick={() => setShowPricing(false)} onKeyDown={(e) => e.key === 'Escape' && setShowPricing(false)} role="button" tabIndex={0}>
           <div style={{
             maxWidth: '700px',
             maxHeight: '90vh',
@@ -216,7 +216,7 @@ function CreatorOverview({ userId, userTier, isAdmin, isVip, creatorName, onNavi
             background: '#1a1a2e',
             borderRadius: '16px',
             padding: '0'
-          }} onClick={(e) => e.stopPropagation()}>
+          }} onClick={(e) => e.stopPropagation()} onKeyDown={(e) => e.stopPropagation()} role="dialog" tabIndex={-1}>
             <div style={{
               position: 'sticky',
               top: 0,
@@ -268,7 +268,7 @@ function CreatorOverview({ userId, userTier, isAdmin, isVip, creatorName, onNavi
           alignItems: 'center',
           justifyContent: 'center',
           padding: '20px'
-        }} onClick={() => setShowFAQ(false)}>
+        }} onClick={() => setShowFAQ(false)} onKeyDown={(e) => e.key === 'Escape' && setShowFAQ(false)} role="button" tabIndex={0}>
           <div style={{
             maxWidth: '800px',
             maxHeight: '90vh',
@@ -276,7 +276,7 @@ function CreatorOverview({ userId, userTier, isAdmin, isVip, creatorName, onNavi
             background: '#1a1a2e',
             borderRadius: '16px',
             padding: '0'
-          }} onClick={(e) => e.stopPropagation()}>
+          }} onClick={(e) => e.stopPropagation()} onKeyDown={(e) => e.stopPropagation()} role="dialog" tabIndex={-1}>
             <div style={{
               position: 'sticky',
               top: 0,
@@ -448,9 +448,17 @@ function CreatorOverview({ userId, userTier, isAdmin, isVip, creatorName, onNavi
               onClick={() => {
                 if (onNavigate && activity.tab) {
                   onNavigate(activity.tab);
-                  window.scrollTo({ top: 0, behavior: 'smooth' });
+                  globalThis.scrollTo({ top: 0, behavior: 'smooth' });
                 }
               }}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' && onNavigate && activity.tab) {
+                  onNavigate(activity.tab);
+                  globalThis.scrollTo({ top: 0, behavior: 'smooth' });
+                }
+              }}
+              role="button"
+              tabIndex={0}
               style={{
               background: 'rgba(255,255,255,0.05)',
               borderRadius: '15px',
