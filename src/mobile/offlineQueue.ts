@@ -8,9 +8,9 @@ let Network: any = {
 };
 
 // Try to import Capacitor if available (will be undefined in web builds)
-if (typeof window !== 'undefined' && (window as any).Capacitor) {
-  Capacitor = (window as any).Capacitor;
-  Network = (window as any).Network;
+if (typeof globalThis.window !== 'undefined' && (globalThis.window as any).Capacitor) {
+  Capacitor = (globalThis.window as any).Capacitor;
+  Network = (globalThis.window as any).Network;
 }
 
 interface QueuedRequest {
