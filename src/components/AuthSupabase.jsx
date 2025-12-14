@@ -292,8 +292,7 @@ function LoginFormComponent({ onSuccess, onSwitchToSignup }) {
         onClick={handleGoogleLogin}
         disabled={loading}
       >
-        <span className="google-icon">🔐</span>
-        Continue with Google
+        <span className="google-icon">🔐</span>Continue with Google
       </button>
 
       <div className="auth-footer">
@@ -434,8 +433,7 @@ function SignupFormComponent({ onSuccess, onSwitchToLogin }) {
         onClick={handleGoogleSignup}
         disabled={loading}
       >
-        <span className="google-icon">🔐</span>
-        Continue with Google
+        <span className="google-icon">🔐</span>Continue with Google
       </button>
 
       <div className="auth-footer">
