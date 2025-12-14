@@ -38,13 +38,7 @@ export function SmartScreenshotSorter({ userId, onProcessComplete }) {
         splitSensitivity: 50, // 0-100: How aggressive the splitting is
     });
 
-    // Common IDE/Code editor indicators (future: code detection)
-    const _CODE_INDICATORS = [
-        'function', 'const', 'let', 'var', 'import', 'export', 'class',
-        'public', 'private', 'protected', 'void', 'return', 'if', 'else',
-        'for', 'while', 'switch', 'case', 'break', 'continue',
-        '{ }', '[ ]', '( )', '=>', '===', '!==', '&&', '||',
-    ];
+    // Future: CODE_INDICATORS for automatic code screenshot detection
 
     const handleFolderDrop = (e) => {
         e.preventDefault();

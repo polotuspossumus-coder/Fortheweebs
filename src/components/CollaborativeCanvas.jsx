@@ -216,23 +216,8 @@ export default function CollaborativeCanvas({ projectId, userId, userName }) {
         }
     };
 
-    const _addComment = async (x, y, text) => { // Future: commenting feature
-        const comment = {
-            id: Date.now(),
-            project_id: projectId,
-            user_id: userId,
-            user_name: userName,
-            x,
-            y,
-            text,
-            created_at: new Date().toISOString(),
-            resolved: false
-        };
-
-        // Optimistic update
-        setComments(prev => [...prev, comment]);
-
-        // Broadcast
+    // Future: _addComment function for collaborative commenting
+    // Broadcast
         if (channelRef.current) {
             channelRef.current.send({
                 type: 'broadcast',

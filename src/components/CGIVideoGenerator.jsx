@@ -1,12 +1,13 @@
 /* eslint-disable @typescript-eslint/no-explicit-any, no-console, sonarjs/cognitive-complexity */
 import React, { useState, useRef } from 'react';
+import PropTypes from 'prop-types';
 import './CGIVideoGenerator.css';
 
 /**
  * CGI Video Generator
  * AI-powered video generation using OpenAI API
  */
-export const CGIVideoGenerator = ({ userId, onVideoGenerated }) => {
+function CGIVideoGeneratorComponent({ userId, onVideoGenerated }) {
   const [prompt, setPrompt] = useState('');
   const [style, setStyle] = useState('anime');
   const [duration, setDuration] = useState(5); // seconds
@@ -131,8 +132,9 @@ export const CGIVideoGenerator = ({ userId, onVideoGenerated }) => {
       <div className="generator-content">
         <div className="input-section">
           <div className="input-group">
-            <label>Video Description *</label>
+            <label htmlFor="video-prompt">Video Description *</label>
             <textarea
+              id="video-prompt"
               value={prompt}
               onChange={(e) => setPrompt(e.target.value)}
               placeholder="Describe your video scene... (e.g., 'A dragon flying over a fantasy castle at sunset')"
@@ -143,8 +145,8 @@ export const CGIVideoGenerator = ({ userId, onVideoGenerated }) => {
 
           <div className="settings-grid">
             <div className="input-group">
-              <label>Art Style</label>
-              <div className="style-selector">
+              <label htmlFor="art-style">Art Style</label>
+              <div id="art-style" className="style-selector">
                 {styles.map(s => (
                   <button
                     key={s.id}
@@ -314,6 +316,12 @@ export const CGIVideoGenerator = ({ userId, onVideoGenerated }) => {
       </div>
     </div>
   );
+}
+
+CGIVideoGeneratorComponent.propTypes = {
+  userId: PropTypes.string,
+  onVideoGenerated: PropTypes.func
 };
 
+export const CGIVideoGenerator = CGIVideoGeneratorComponent;
 export default CGIVideoGenerator;
