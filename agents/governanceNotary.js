@@ -1,7 +1,7 @@
 // Governance Notary - Immutable audit trail for governance decisions
-const crypto = require('crypto');
-const fs = require('fs').promises;
-const path = require('path');
+const crypto = require('node:crypto');
+const fs = require('node:fs').promises;
+const path = require('node:path');
 
 class GovernanceNotary {
   constructor() {
