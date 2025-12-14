@@ -21,8 +21,6 @@ import { supabase } from '../lib/supabase';
  */
 
 export default function CollaborativeCanvas({ projectId, userId, userName }) {
-    const [elements, setElements] = useState([]);
-    
     const channelRef = useRef(null);
 
     useEffect(() => {

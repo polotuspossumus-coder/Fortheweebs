@@ -19,7 +19,7 @@ router.post('/', async (req, res) => {
     }
 
     // Update user tier in database
-    const { data, error } = await supabase
+    const { error } = await supabase
       .from('profiles')
       .update({ tier: newTier, updated_at: new Date().toISOString() })
       .eq('user_id', userId)

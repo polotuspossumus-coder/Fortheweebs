@@ -281,10 +281,11 @@ function CommissionMarketplace({ userId, isCreator }) {
               </div>
 
               <div className="form-group">
-                <label>Turnaround Time</label>
+                <label htmlFor="turnaround-time">Turnaround Time</label>
                 <select
+                  id="turnaround-time"
                   value={newCommission.turnaroundDays}
-                  onChange={e => setNewCommission({ ...newCommission, turnaroundDays: parseInt(e.target.value) })}
+                  onChange={e => setNewCommission({ ...newCommission, turnaroundDays: Number.parseInt(e.target.value, 10) })}
                 >
                   <option value={3}>3 days</option>
                   <option value={7}>7 days</option>
@@ -294,21 +295,22 @@ function CommissionMarketplace({ userId, isCreator }) {
               </div>
 
               <div className="form-group">
-                <label>Available Slots</label>
+                <label htmlFor="commission-slots">Available Slots</label>
                 <input
+                  id="commission-slots"
                   type="number"
                   placeholder="3"
                   min="1"
                   max="10"
                   value={newCommission.slots}
-                  onChange={e => setNewCommission({ ...newCommission, slots: parseInt(e.target.value) })}
+                  onChange={e => setNewCommission({ ...newCommission, slots: Number.parseInt(e.target.value, 10) })}
                 />
                 <small>How many clients you can take</small>
               </div>
             </div>
 
             <div className="form-group">
-              <label>Upload Examples</label>
+              <label htmlFor="examples-upload">Upload Examples</label>
               <div className="upload-area">
                 <input type="file" accept="image/*" multiple style={{ display: 'none' }} id="examples-upload" />
                 <label htmlFor="examples-upload" className="upload-btn">
@@ -319,8 +321,9 @@ function CommissionMarketplace({ userId, isCreator }) {
             </div>
 
             <div className="form-group">
-              <label>Tags (comma-separated)</label>
+              <label htmlFor="commission-tags">Tags (comma-separated)</label>
               <input
+                id="commission-tags"
                 type="text"
                 placeholder="anime, character, fullbody, color"
                 onChange={e => setNewCommission({ ...newCommission, tags: e.target.value.split(',').map(t => t.trim()) })}
@@ -339,11 +342,11 @@ function CommissionMarketplace({ userId, isCreator }) {
               </div>
               <div className="breakdown-row">
                 <span>Payment processing (Stripe 2.9% + $0.30):</span>
-                <span className="fee">-${(((newCommission.price || 0) * 0.029) + 0.30).toFixed(2)}</span>
+                <span className="fee">-${(((newCommission.price || 0) * 0.029) + 0.3).toFixed(2)}</span>
               </div>
               <div className="breakdown-row total">
                 <span>You receive:</span>
-                <span className="amount">${((newCommission.price || 0) * 0.85 - ((newCommission.price || 0) * 0.029) - 0.30).toFixed(2)}</span>
+                <span className="amount">${((newCommission.price || 0) * 0.85 - ((newCommission.price || 0) * 0.029) - 0.3).toFixed(2)}</span>
               </div>
             </div>
 
@@ -359,7 +362,7 @@ function CommissionMarketplace({ userId, isCreator }) {
         <div className="my-commissions-section">
           <h2>My Commission Listings</h2>
           <div className="commissions-grid">
-            {commissions.filter(c => c.creatorId === userId).length > 0 ? (
+            {commissions.some(c => c.creatorId === userId) ? (
               commissions.filter(c => c.creatorId === userId).map(comm => (
                 <div key={comm.id} className="commission-card my-card">
                   <div className="card-status">
