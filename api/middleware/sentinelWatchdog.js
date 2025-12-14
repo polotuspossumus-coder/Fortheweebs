@@ -135,8 +135,8 @@ function validateOverrideCommand(body) {
 
   // Validate threshold commands
   if (command.startsWith('moderation_threshold_')) {
-    const threshold = parseFloat(value);
-    if (isNaN(threshold) || threshold < 0 || threshold > 1) {
+    const threshold = Number.parseFloat(value);
+    if (Number.isNaN(threshold) || threshold < 0 || threshold > 1) {
       return { valid: false, error: 'Threshold must be between 0 and 1' };
     }
   }

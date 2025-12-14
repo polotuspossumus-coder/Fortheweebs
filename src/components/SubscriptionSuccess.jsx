@@ -4,7 +4,7 @@ import { useSearchParams, useNavigate } from 'react-router-dom';
 import './SubscriptionSuccess.css';
 
 export const SubscriptionSuccess = () => {
-  const [searchParams] = useSearchParams();
+  // const [searchParams] = useSearchParams(); // Unused for now
   const navigate = useNavigate();
   const [countdown, setCountdown] = useState(5);
 

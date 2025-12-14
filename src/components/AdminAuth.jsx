@@ -190,7 +190,7 @@ export function checkAdminAuth() {
 
   // Session expires after 24 hours
   const twentyFourHours = 24 * 60 * 60 * 1000;
-  const isExpired = loginTime && (Date.now() - parseInt(loginTime)) > twentyFourHours;
+  const isExpired = loginTime && (Date.now() - Number.parseInt(loginTime, 10)) > twentyFourHours;
 
   if (isExpired) {
     localStorage.removeItem("adminToken");
@@ -208,7 +208,7 @@ export function logoutAdmin() {
   localStorage.removeItem("adminEmail");
   localStorage.removeItem("adminRole");
   localStorage.removeItem("adminLoginTime");
-  window.location.href = "/";
+  globalThis.location.href = "/";
 }
 
 export function getAdminToken() {

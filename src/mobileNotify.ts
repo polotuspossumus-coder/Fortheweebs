@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any, @typescript-eslint/no-unused-vars */
 import { getConfirmedSlabs } from './slab-registry.js';
-// import type { GraveyardEntry } from './graveyard-ledger.js'; // Unused
 
 /**
  * Initiate a recovery ritual, returning emotional validation and confirmed slabs.

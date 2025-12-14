@@ -8,7 +8,7 @@ const ReportBug = () => {
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const apiUrl = window.__VITE_API_URL__ || 'http://localhost:3001';
+  const apiUrl = globalThis.window?.__VITE_API_URL__ || 'http://localhost:3001';
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -21,7 +21,7 @@ const ReportBug = () => {
         body: JSON.stringify({
           report_type: 'bug',
           message,
-          page_url: window.location.href,
+          page_url: globalThis.location.href,
           severity,
           metadata: {
             userAgent: navigator.userAgent,

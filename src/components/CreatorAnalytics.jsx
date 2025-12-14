@@ -22,7 +22,7 @@ export const CreatorAnalytics = ({ userId, creatorId }) => {
     remixSessions: 0
   });
 
-  const [topPosts] = useState([]); // eslint-disable-line no-unused-vars
+  // const [topPosts, setTopPosts] = useState([]); // Future feature
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
