@@ -193,8 +193,9 @@ const DockedConsolePro = () => {
         </div>
 
         <div className="auto-scroll-group">
-          <label>
+          <label htmlFor="auto-scroll-check">
             <input
+              id="auto-scroll-check"
               type="checkbox"
               checked={autoScroll}
               onChange={(e) => setAutoScroll(e.target.checked)}
