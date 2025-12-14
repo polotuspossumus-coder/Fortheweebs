@@ -254,7 +254,7 @@ export default function PricingPage() {
         ))}
       </div>
 
-      <style jsx>{`
+      <style>{`
         .pricing-page {
           min-height: 100vh;
           background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
