@@ -77,7 +77,7 @@ export async function reportBug({
         severity,
         userId,
         userEmail,
-        pageUrl: window.location.href,
+        pageUrl: globalThis.location.href,
         userAgent: navigator.userAgent,
         browserInfo,
         screenshotData,
@@ -109,7 +109,7 @@ export function initBugFixer() {
   console.log('🐛 Bug Fixer: Initializing automatic error tracking...');
 
   // Handle uncaught errors
-  window.addEventListener('error', (event) => {
+  globalThis.addEventListener('error', (event) => {
     reportBug({
       errorMessage: event.message,
       errorStack: event.error?.stack,
@@ -124,7 +124,7 @@ export function initBugFixer() {
   });
 
   // Handle unhandled promise rejections
-  window.addEventListener('unhandledrejection', (event) => {
+  globalThis.addEventListener('unhandledrejection', (event) => {
     reportBug({
       errorMessage: event.reason?.message || 'Unhandled Promise Rejection',
       errorStack: event.reason?.stack,
