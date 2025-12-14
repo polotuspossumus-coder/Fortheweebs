@@ -200,8 +200,8 @@ const CommandPanelAdvanced = () => {
         <h3>Manual Command</h3>
 
         <div className="form-row">
-          <label>Command:</label>
-          <select value={command} onChange={(e) => setCommand(e.target.value)}>
+          <label htmlFor="command-select">Command:</label>
+          <select id="command-select" value={command} onChange={(e) => setCommand(e.target.value)}>
             <option value="setThreshold">setThreshold</option>
             <option value="setCap">setCap</option>
             <option value="setToggle">setToggle</option>
@@ -209,8 +209,9 @@ const CommandPanelAdvanced = () => {
         </div>
 
         <div className="form-row">
-          <label>Key:</label>
+          <label htmlFor="key-input">Key:</label>
           <input
+            id="key-input"
             type="text"
             value={key}
             onChange={(e) => setKey(e.target.value)}
@@ -219,8 +220,9 @@ const CommandPanelAdvanced = () => {
         </div>
 
         <div className="form-row">
-          <label>Value:</label>
+          <label htmlFor="value-input">Value:</label>
           <input
+            id="value-input"
             type="text"
             value={value}
             onChange={(e) => setValue(e.target.value)}
@@ -229,8 +231,9 @@ const CommandPanelAdvanced = () => {
         </div>
 
         <div className="form-row">
-          <label>Justification:</label>
+          <label htmlFor="justification-textarea">Justification:</label>
           <textarea
+            id="justification-textarea"
             value={justification}
             onChange={(e) => setJustification(e.target.value)}
             placeholder="Reason for this policy change..."
