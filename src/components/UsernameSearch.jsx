@@ -6,6 +6,25 @@ import { supabase } from '../lib/supabase';
  * Username Search - Find creators by @username
  * Autocomplete search with profile preview
  */
+
+function getDisplayName(user) {
+  if (user.use_real_name) {
+    return user.display_name || user.username;
+  }
+  return `@${user.username}`;
+}
+
+function getTierBadge(tier) {
+  const badges = {
+    OWNER: '👑',
+    VIP: '⭐',
+    PRO: '💎',
+    CREATOR: '✨',
+    FREE: ''
+  };
+  return badges[tier] || '';
+}
+
 export function UsernameSearch({ onSelect }) {
   const [query, setQuery] = useState('');
   const [results, setResults] = useState([]);
@@ -53,24 +72,6 @@ export function UsernameSearch({ onSelect }) {
     setQuery('');
     setShowResults(false);
     setResults([]);
-  }
-
-  function getDisplayName(user) {
-    if (user.use_real_name) {
-      return user.display_name || user.username;
-    }
-    return `@${user.username}`;
-  }
-
-  function getTierBadge(tier) {
-    const badges = {
-      OWNER: '👑',
-      VIP: '⭐',
-      PRO: '💎',
-      CREATOR: '✨',
-      FREE: ''
-    };
-    return badges[tier] || '';
   }
 
   return (
