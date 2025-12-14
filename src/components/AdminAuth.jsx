@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import PropTypes from 'prop-types';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001';
 
@@ -215,3 +216,7 @@ export function logoutAdmin() {
 export function getAdminToken() {
   return localStorage.getItem("adminToken");
 }
+
+AdminLogin.propTypes = {
+  onLoginSuccess: PropTypes.func.isRequired
+};
