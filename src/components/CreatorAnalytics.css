@@ -57,7 +57,7 @@
 
 .metric-card.primary {
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
+  color: #ffffff;
 }
 
 .metric-icon {
@@ -95,12 +95,12 @@
 
 .metric-trend.positive {
   background: rgba(76, 175, 80, 0.15);
-  color: #4caf50;
+  color: #5cb85c;
 }
 
 .metric-card.primary .metric-trend.positive {
   background: rgba(255, 255, 255, 0.2);
-  color: white;
+  color: #ffffff;
 }
 
 .metric-detail {
@@ -127,7 +127,7 @@
 /* Revenue Forecast */
 .forecast-card {
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
+  color: #ffffff;
   border-radius: 12px;
   padding: 20px;
 }
@@ -284,7 +284,7 @@
 
 .action-btn.primary {
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
+  color: #ffffff;
   border-color: transparent;
 }
 
@@ -343,7 +343,7 @@
   margin-top: 16px;
   padding: 16px;
   background: linear-gradient(135deg, #4caf50 0%, #8bc34a 100%);
-  color: white;
+  color: #ffffff;
   border-radius: 8px;
   text-align: center;
   font-size: 16px;
