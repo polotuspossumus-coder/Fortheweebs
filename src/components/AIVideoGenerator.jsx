@@ -408,10 +408,11 @@ export const AIVideoGenerator = ({ userId, tier }) => {
 
                             {/* Resolution */}
                             <div style={{ marginBottom: '15px' }}>
-                                <label style={{ display: 'block', fontSize: '14px', marginBottom: '5px', color: '#aaa' }}>
+                                <label htmlFor="resolution-select" style={{ display: 'block', fontSize: '14px', marginBottom: '5px', color: '#aaa' }}>
                                     Resolution
                                 </label>
                                 <select
+                                    id="resolution-select"
                                     value={params.resolution}
                                     onChange={(e) => setParams({ ...params, resolution: e.target.value })}
                                     style={{
@@ -473,10 +474,11 @@ export const AIVideoGenerator = ({ userId, tier }) => {
 
                             {/* Camera Motion */}
                             <div style={{ marginBottom: '15px' }}>
-                                <label style={{ display: 'block', fontSize: '14px', marginBottom: '5px', color: '#aaa' }}>
+                                <label htmlFor="camera-motion-select" style={{ display: 'block', fontSize: '14px', marginBottom: '5px', color: '#aaa' }}>
                                     Camera Motion
                                 </label>
                                 <select
+                                    id="camera-motion-select"
                                     value={params.cameraMotion}
                                     onChange={(e) => setParams({ ...params, cameraMotion: e.target.value })}
                                     style={{

@@ -155,8 +155,9 @@ export function Settings({ userId }) {
         </div>
 
         <div style={styles.section}>
-          <label style={styles.checkboxLabel}>
+          <label htmlFor="use-real-name-checkbox" style={styles.checkboxLabel}>
             <input
+              id="use-real-name-checkbox"
               type="checkbox"
               checked={useRealName}
               onChange={(e) => setUseRealName(e.target.checked)}
