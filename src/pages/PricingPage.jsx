@@ -17,7 +17,7 @@ export default function PricingPage() {
         // Use setTimeout to prevent blocking render
         setTimeout(() => {
           alert('You already have lifetime VIP access! No payment needed. 👑');
-          window.location.href = '/';
+          globalThis.location.href = '/';
         }, 100);
         return;
       }
@@ -32,7 +32,7 @@ export default function PricingPage() {
   const handleCheckout = async (tier, oneTime = false) => {
     if (!user) {
       alert('Please log in to subscribe');
-      window.location.href = '/login';
+      globalThis.location.href = '/login';
       return;
     }
 
@@ -59,7 +59,7 @@ export default function PricingPage() {
       }
 
       // Redirect to Stripe Checkout
-      window.location.href = url;
+      globalThis.location.href = url;
 
     } catch (error) {
       console.error('Checkout failed:', error);
@@ -112,8 +112,11 @@ export default function PricingPage() {
             disabled={loading === 'elite' || eliteSpots === 0}
             className="btn-subscribe elite"
           >
-            {loading === 'elite' ? 'Processing...' :
-             eliteSpots === 0 ? 'SOLD OUT' : 'Get Elite Access'}
+            {(() => {
+              if (loading === 'elite') return 'Processing...';
+              if (eliteSpots === 0) return 'SOLD OUT';
+              return 'Get Elite Access';
+            })()}
           </button>
         </div>
 
