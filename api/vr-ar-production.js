@@ -29,7 +29,7 @@ router.post('/generate-3d', async (req, res) => {
       version: 'openai/shap-e', // or 'cjwbw/point-e'
       input: {
         prompt: prompt,
-        guidance_scale: 15.0,
+        guidance_scale: 15,
         num_inference_steps: 64,
         render_mode: 'nerf' // or 'stf' for point cloud
       }
@@ -142,10 +142,9 @@ router.post('/optimize-mesh', async (req, res) => {
 // Generate VR environment from description
 router.post('/generate-environment', async (req, res) => {
   try {
-    const { description, skybox, lighting } = req.body;
-    // description: "cyberpunk city street at night"
-    // skybox: 'hdri', 'procedural', 'solid'
-    // lighting: 'realistic', 'stylized', 'dramatic'
+    const { description } = req.body;
+    // Future: skybox: 'hdri', 'procedural', 'solid'
+    // Future: lighting: 'realistic', 'stylized', 'dramatic'
 
     if (!description) {
       return res.status(400).json({ error: 'Missing description' });
@@ -206,9 +205,8 @@ router.post('/generate-environment', async (req, res) => {
 // Export VR scene for different platforms
 router.post('/export-scene', async (req, res) => {
   try {
-    const { sceneData, targetPlatform, format } = req.body;
-    // targetPlatform: 'webxr', 'quest', 'vive', 'visionpro'
-    // format: 'gltf', 'glb', 'usdz', 'fbx'
+    const { sceneData, targetPlatform } = req.body;
+    // Future: format: 'gltf', 'glb', 'usdz', 'fbx'
 
     if (!sceneData) {
       return res.status(400).json({ error: 'Missing sceneData' });
@@ -255,7 +253,7 @@ router.post('/export-scene', async (req, res) => {
 // 360° Video Editor (VR video)
 router.post('/edit-360-video', async (req, res) => {
   try {
-    const { videoUrl, cuts, overlays, spatialAudio } = req.body;
+    const { videoUrl, overlays, spatialAudio } = req.body;
 
     if (!videoUrl) {
       return res.status(400).json({ error: 'Missing videoUrl' });
