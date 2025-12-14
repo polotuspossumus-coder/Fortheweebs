@@ -1,4 +1,4 @@
-/* eslint-disable */
+/* eslint-disable @typescript-eslint/no-explicit-any, no-console */
 /**
  * Moderation Sentinel: Real-time content flagging and review
  * Powered by OpenAI Moderation API + custom rules

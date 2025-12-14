@@ -8,6 +8,12 @@ import { useAuth } from './AuthSupabase.jsx';
 import { checkTierAccess } from '../utils/tierAccess';
 import { supabase } from '../lib/supabase';
 
+function getTierIcon(tierInfo) {
+  if (tierInfo?.isOwner) return '👑';
+  if (tierInfo?.isVIP) return '⭐';
+  return '👤';
+}
+
 export default function UserMenu() {
   const { user, logout } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
@@ -66,17 +72,17 @@ export default function UserMenu() {
       await logout();
       
       // Clear all localStorage items
-      const itemsToKeep = ['theme', 'language', 'cookieConsent'];
+      const itemsToKeep = new Set(['theme', 'language', 'cookieConsent']);
       const allItems = Object.keys(localStorage);
       
       allItems.forEach(key => {
-        if (!itemsToKeep.includes(key)) {
+        if (!itemsToKeep.has(key)) {
           localStorage.removeItem(key);
         }
       });
 
       // Reload page to login screen
-      window.location.href = '/';
+      globalThis.location.href = '/';
     } catch (error) {
       console.error('Logout error:', error);
       alert('Failed to logout. Please try again.');
@@ -112,7 +118,7 @@ export default function UserMenu() {
         title="User Menu"
       >
         <div style={styles.avatar}>
-          {tierInfo?.isOwner ? '👑' : tierInfo?.isVIP ? '⭐' : '👤'}
+          {getTierIcon(tierInfo)}
         </div>
         <span style={styles.displayName}>{displayName}</span>
         <span style={styles.chevron}>{isOpen ? '▲' : '▼'}</span>
@@ -124,7 +130,7 @@ export default function UserMenu() {
           {/* User Info Section */}
           <div style={styles.userInfo}>
             <div style={styles.userAvatar}>
-              {tierInfo?.isOwner ? '👑' : tierInfo?.isVIP ? '⭐' : '👤'}
+              {getTierIcon(tierInfo)}
             </div>
             <div style={styles.userDetails}>
               <div style={styles.userName}>{displayName}</div>

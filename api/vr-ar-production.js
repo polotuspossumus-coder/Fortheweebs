@@ -253,7 +253,8 @@ router.post('/export-scene', async (req, res) => {
 // 360° Video Editor (VR video)
 router.post('/edit-360-video', async (req, res) => {
   try {
-    const { videoUrl, overlays, spatialAudio } = req.body;
+    const { videoUrl } = req.body;
+    // Future: overlays, spatialAudio
 
     if (!videoUrl) {
       return res.status(400).json({ error: 'Missing videoUrl' });
