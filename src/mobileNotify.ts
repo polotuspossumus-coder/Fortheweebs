@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any, @typescript-eslint/no-unused-vars */
 import { getConfirmedSlabs } from './slab-registry.js';
-import type { GraveyardEntry } from './graveyard-ledger.js';
+// import type { GraveyardEntry } from './graveyard-ledger.js'; // Unused
 
 /**
  * Initiate a recovery ritual, returning emotional validation and confirmed slabs.
@@ -84,13 +84,13 @@ import type { Tier } from './tierAccess.js';
  */
 export function calculateRevenueSplit(tier: Tier, totalRevenue: number): { creator: number; platform: number } {
   const splits: Record<Tier, number> = {
-    Mythic: 1.0,
-    Standard: 1.0,
+    Mythic: 1,
+    Standard: 1,
     Supporter: 0.85,
-    General: 0.80,
+    General: 0.8,
   };
 
-  const creatorShare = splits[tier] ?? 0.80;
+  const creatorShare = splits[tier] ?? 0.8;
   const platformShare = 1 - creatorShare;
 
   return {

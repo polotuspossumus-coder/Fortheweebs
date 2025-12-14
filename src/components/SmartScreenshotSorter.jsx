@@ -816,7 +816,7 @@ export function SmartScreenshotSorter({ userId, onProcessComplete }) {
                                         min="0"
                                         max="50"
                                         value={settings.brightnessBoost}
-                                        onChange={(e) => setSettings({ ...settings, brightnessBoost: parseInt(e.target.value) })}
+                                        onChange={(e) => setSettings({ ...settings, brightnessBoost: Number.parseInt(e.target.value, 10) })}
                                         style={{ width: '100%' }}
                                     />
                                 </div>
@@ -830,7 +830,7 @@ export function SmartScreenshotSorter({ userId, onProcessComplete }) {
                                         min="0"
                                         max="50"
                                         value={settings.contrastBoost}
-                                        onChange={(e) => setSettings({ ...settings, contrastBoost: parseInt(e.target.value) })}
+                                        onChange={(e) => setSettings({ ...settings, contrastBoost: Number.parseInt(e.target.value, 10) })}
                                         style={{ width: '100%' }}
                                     />
                                 </div>
@@ -844,7 +844,7 @@ export function SmartScreenshotSorter({ userId, onProcessComplete }) {
                                         min="0"
                                         max="100"
                                         value={settings.sharpenAmount}
-                                        onChange={(e) => setSettings({ ...settings, sharpenAmount: parseInt(e.target.value) })}
+                                        onChange={(e) => setSettings({ ...settings, sharpenAmount: Number.parseInt(e.target.value, 10) })}
                                         style={{ width: '100%' }}
                                     />
                                 </div>

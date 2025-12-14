@@ -169,9 +169,9 @@ export default function PhotoEditorPro() {
 
     // Future feature: GIF creation
     // const createGIF = () => {
-        setGifMode(true);
-        alert('GIF Mode: Import multiple images or create animation frames!');
-    };
+    //    setGifMode(true);
+    //    alert('GIF Mode: Import multiple images or create animation frames!');
+    // };
 
     const addGIFFrame = () => {
         if (image) {

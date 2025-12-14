@@ -290,7 +290,7 @@ export default function CollaborativeCanvas({ projectId, userId, userName }) {
     const generateUserColor = (userId) => {
         // Generate consistent color per user
         const colors = ['#FF6B6B', '#4ECDC4', '#45B7D1', '#FFA07A', '#98D8C8', '#F7DC6F', '#BB8FCE'];
-        const hash = userId.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
+        const hash = userId.split('').reduce((acc, char) => acc + (char.codePointAt(0) || 0), 0);
         return colors[hash % colors.length];
     };
 
