@@ -223,6 +223,7 @@ export const AIVideoGenerator = ({ userId, tier }) => {
                         onClick={() => fileInputRef.current?.click()}
                         onKeyDown={(e) => e.key === 'Enter' && fileInputRef.current?.click()}
                         role="button"
+                        aria-label="Upload video content"
                         tabIndex={0}
                         style={{
                             border: isDragging ? '3px dashed #00ffff' : '2px dashed rgba(255, 255, 255, 0.3)',

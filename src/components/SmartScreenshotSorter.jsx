@@ -594,6 +594,7 @@ export function SmartScreenshotSorter({ userId, onProcessComplete }) {
                             onClick={() => fileInputRef.current?.click()}
                             onKeyDown={(e) => e.key === 'Enter' && fileInputRef.current?.click()}
                             role="button"
+                            aria-label="Upload screenshots"
                             tabIndex={0}
                             style={{
                                 border: isDragging ? '3px dashed #00ffff' : '2px dashed rgba(255, 255, 255, 0.3)',
@@ -646,6 +647,7 @@ export function SmartScreenshotSorter({ userId, onProcessComplete }) {
                                             onClick={() => img.isMarkedForDeletion ? unmarkImage(img.id) : markAsUnwanted(img.id)}
                                             onKeyDown={(e) => e.key === 'Enter' && (img.isMarkedForDeletion ? unmarkImage(img.id) : markAsUnwanted(img.id))}
                                             role="button"
+                                            aria-label={img.isMarkedForDeletion ? 'Unmark image' : 'Mark image for deletion'}
                                             tabIndex={0}
                                             style={{
                                                 position: 'relative',

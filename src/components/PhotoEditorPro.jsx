@@ -397,6 +397,7 @@ export default function PhotoEditorPro() {
                                 onClick={() => setSelectedLayer(layer.id)}
                                 onKeyDown={(e) => e.key === 'Enter' && setSelectedLayer(layer.id)}
                                 role="button"
+                                aria-label={`Select ${layer.name} layer`}
                                 tabIndex={0}
                             >
                                 <input
