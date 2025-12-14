@@ -32,9 +32,13 @@ export async function getCreatorLedger(userId) {
  * Get runtime platform and version info
  */
 export const getRuntimeInfo = async () => {
+  const getPlatform = () => {
+    if (typeof navigator === 'undefined') return 'web';
+    return navigator.userAgent.includes('Mobile') ? 'mobile' : 'web';
+  };
+  
   return {
-    platform: typeof navigator === 'undefined' ? 'web' : 
-      (navigator.userAgent.includes('Mobile') ? 'mobile' : 'web'),
+    platform: getPlatform(),
     version: '2.1.0',
     buildDate: '2025-12-13',
     environment: import.meta.env.MODE || 'production'
