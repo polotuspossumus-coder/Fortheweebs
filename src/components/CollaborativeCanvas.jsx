@@ -318,9 +318,9 @@ export default function CollaborativeCanvas({ projectId, userId, userName }) {
                 <span style={{ color: '#ccc', fontSize: '14px', marginRight: '8px' }}>
                     👥 {collaborators.length} online
                 </span>
-                {collaborators.map((user, idx) => (
+                {collaborators.map((user) => (
                     <div
-                        key={idx}
+                        key={user.userId}
                         style={{
                             width: '32px',
                             height: '32px',

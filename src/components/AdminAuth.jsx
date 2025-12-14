@@ -70,10 +70,11 @@ export function AdminLogin({ onLoginSuccess }) {
 
         <form onSubmit={handleLogin}>
           <div style={{ marginBottom: '20px' }}>
-            <label style={{ display: 'block', marginBottom: '8px', color: '#FFD700', fontWeight: 600 }}>
+            <label htmlFor="admin-email" style={{ display: 'block', marginBottom: '8px', color: '#FFD700', fontWeight: 600 }}>
               Email
             </label>
             <input
+              id="admin-email"
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}

@@ -57,9 +57,11 @@ const ReportBug = () => {
       <h2>🐛 Report a Bug</h2>
       <form onSubmit={handleSubmit}>
         <div style={{ marginBottom: '1rem' }}>
-          <label>
+          <label htmlFor="bug-description">
             Describe the issue:
+          </label>
             <textarea
+              id="bug-description"
               value={message}
               onChange={(e) => setMessage(e.target.value)}
               required
