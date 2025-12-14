@@ -221,6 +221,9 @@ export const AIVideoGenerator = ({ userId, tier }) => {
                         onDragLeave={handleDragLeave}
                         onDrop={handleDrop}
                         onClick={() => fileInputRef.current?.click()}
+                        onKeyDown={(e) => e.key === 'Enter' && fileInputRef.current?.click()}
+                        role="button"
+                        tabIndex={0}
                         style={{
                             border: isDragging ? '3px dashed #00ffff' : '2px dashed rgba(255, 255, 255, 0.3)',
                             borderRadius: '12px',

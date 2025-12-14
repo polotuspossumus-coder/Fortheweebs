@@ -395,6 +395,9 @@ export default function PhotoEditorPro() {
                                 key={layer.id}
                                 className={`layer-item ${selectedLayer === layer.id ? 'selected' : ''}`}
                                 onClick={() => setSelectedLayer(layer.id)}
+                                onKeyDown={(e) => e.key === 'Enter' && setSelectedLayer(layer.id)}
+                                role="button"
+                                tabIndex={0}
                             >
                                 <input
                                     type="checkbox"

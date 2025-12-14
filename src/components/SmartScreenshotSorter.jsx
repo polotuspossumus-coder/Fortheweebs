@@ -592,6 +592,9 @@ export function SmartScreenshotSorter({ userId, onProcessComplete }) {
                             onDragLeave={(e) => { e.preventDefault(); setIsDragging(false); }}
                             onDrop={handleFolderDrop}
                             onClick={() => fileInputRef.current?.click()}
+                            onKeyDown={(e) => e.key === 'Enter' && fileInputRef.current?.click()}
+                            role="button"
+                            tabIndex={0}
                             style={{
                                 border: isDragging ? '3px dashed #00ffff' : '2px dashed rgba(255, 255, 255, 0.3)',
                                 borderRadius: '12px',
@@ -641,6 +644,9 @@ export function SmartScreenshotSorter({ userId, onProcessComplete }) {
                                         <div
                                             key={img.id}
                                             onClick={() => img.isMarkedForDeletion ? unmarkImage(img.id) : markAsUnwanted(img.id)}
+                                            onKeyDown={(e) => e.key === 'Enter' && (img.isMarkedForDeletion ? unmarkImage(img.id) : markAsUnwanted(img.id))}
+                                            role="button"
+                                            tabIndex={0}
                                             style={{
                                                 position: 'relative',
                                                 cursor: 'pointer',
