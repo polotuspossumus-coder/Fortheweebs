@@ -141,9 +141,11 @@ export function Settings({ userId }) {
         </div>
 
         <div style={styles.section}>
-          <label style={styles.label}>
+          <label htmlFor="display-name-input2" style={styles.label}>
             Display Name (real name or nickname)
+          </label>
             <input
+              id="display-name-input2"
               type="text"
               value={displayName}
               onChange={(e) => setDisplayName(e.target.value)}
