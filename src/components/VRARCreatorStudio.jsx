@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types, no-console */
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 import WebXRExperience from './WebXRExperience';
 import './VRARCreatorStudio.css';
 
