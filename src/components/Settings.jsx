@@ -116,9 +116,11 @@ export function Settings({ userId }) {
         <h2 style={styles.cardTitle}>Profile Display</h2>
         
         <div style={styles.section}>
-          <label style={styles.label}>
+          <label htmlFor="username-input" style={styles.label}>
             Username (public identifier)
+          </label>
             <input
+              id="username-input"
               type="text"
               value={username}
               onChange={(e) => {
