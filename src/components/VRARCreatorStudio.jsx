@@ -168,7 +168,7 @@ export default function VRARCreatorStudio({ userId }) {
           </div>
 
           <div className="mode-cards">
-            <div className="mode-card vr-card" onClick={() => setMode('vr-templates')}>
+            <div className="mode-card vr-card" onClick={() => setMode('vr-templates')} onKeyDown={(e) => e.key === 'Enter' && setMode('vr-templates')} role="button" tabIndex={0}>
               <div className="mode-icon">🥽</div>
               <h2>VR World Builder</h2>
               <p>Create immersive virtual reality environments</p>
@@ -185,7 +185,7 @@ export default function VRARCreatorStudio({ userId }) {
               </div>
             </div>
 
-            <div className="mode-card ar-card" onClick={() => setMode('ar-templates')}>
+            <div className="mode-card ar-card" onClick={() => setMode('ar-templates')} onKeyDown={(e) => e.key === 'Enter' && setMode('ar-templates')} role="button" tabIndex={0}>
               <div className="mode-icon">📱</div>
               <h2>AR Object Placement</h2>
               <p>Place 3D content in the real world</p>
@@ -202,7 +202,7 @@ export default function VRARCreatorStudio({ userId }) {
               </div>
             </div>
 
-            <div className="mode-card model-card" onClick={() => setMode('3d-modeling')}>
+            <div className="mode-card model-card" onClick={() => setMode('3d-modeling')} onKeyDown={(e) => e.key === 'Enter' && setMode('3d-modeling')} role="button" tabIndex={0}>
               <div className="mode-icon">🧊</div>
               <h2>3D Model Viewer</h2>
               <p>View and edit 3D models</p>
@@ -269,6 +269,9 @@ export default function VRARCreatorStudio({ userId }) {
                 key={template.id} 
                 className="template-card"
                 onClick={() => createProject(template, projectMode)}
+                onKeyDown={(e) => e.key === 'Enter' && createProject(template, projectMode)}
+                role="button"
+                tabIndex={0}
               >
                 <div className="template-preview">
                   <span className="template-icon">{projectMode === 'vr' ? '🥽' : '📱'}</span>
@@ -286,7 +289,7 @@ export default function VRARCreatorStudio({ userId }) {
               </div>
             ))}
 
-            <div className="template-card blank-card" onClick={() => createProject({ name: 'Blank Project' }, projectMode)}>
+            <div className="template-card blank-card" onClick={() => createProject({ name: 'Blank Project' }, projectMode)} onKeyDown={(e) => e.key === 'Enter' && createProject({ name: 'Blank Project' }, projectMode)} role="button" tabIndex={0}>
               <div className="template-preview">
                 <span className="template-icon">➕</span>
               </div>
@@ -380,9 +383,11 @@ export default function VRARCreatorStudio({ userId }) {
                   <div className="grid-overlay"></div>
                   <p>3D Viewport</p>
                   <p className="hint">
-                    {objects.length === 0 
-                      ? 'Add objects from the left panel' 
-                      : `${objects.length} object${objects.length > 1 ? 's' : ''} in scene`}
+                    {(() => {
+                      if (objects.length === 0) return 'Add objects from the left panel';
+                      const plural = objects.length > 1 ? 's' : '';
+                      return `${objects.length} object${plural} in scene`;
+                    })()}
                   </p>
                   
                   {/* Object List */}
@@ -393,6 +398,9 @@ export default function VRARCreatorStudio({ userId }) {
                           key={obj.id}
                           className={`object-item ${selectedObject === obj.id ? 'selected' : ''}`}
                           onClick={() => setSelectedObject(obj.id)}
+                          onKeyDown={(e) => e.key === 'Enter' && setSelectedObject(obj.id)}
+                          role="button"
+                          tabIndex={0}
                         >
                           {obj.name}
                         </div>
@@ -438,7 +446,7 @@ export default function VRARCreatorStudio({ userId }) {
                               type="number"
                               value={obj.position.x}
                               onChange={(e) => updateObject(obj.id, { 
-                                position: { ...obj.position, x: parseFloat(e.target.value) }
+                                position: { ...obj.position, x: Number.parseFloat(e.target.value) }
                               })}
                               placeholder="X"
                             />
@@ -446,7 +454,7 @@ export default function VRARCreatorStudio({ userId }) {
                               type="number"
                               value={obj.position.y}
                               onChange={(e) => updateObject(obj.id, { 
-                                position: { ...obj.position, y: parseFloat(e.target.value) }
+                                position: { ...obj.position, y: Number.parseFloat(e.target.value) }
                               })}
                               placeholder="Y"
                             />
@@ -454,7 +462,7 @@ export default function VRARCreatorStudio({ userId }) {
                               type="number"
                               value={obj.position.z}
                               onChange={(e) => updateObject(obj.id, { 
-                                position: { ...obj.position, z: parseFloat(e.target.value) }
+                                position: { ...obj.position, z: Number.parseFloat(e.target.value) }
                               })}
                               placeholder="Z"
                             />
@@ -468,7 +476,7 @@ export default function VRARCreatorStudio({ userId }) {
                               type="number"
                               value={obj.scale.x}
                               onChange={(e) => updateObject(obj.id, { 
-                                scale: { ...obj.scale, x: parseFloat(e.target.value) }
+                                scale: { ...obj.scale, x: Number.parseFloat(e.target.value) }
                               })}
                               step="0.1"
                               placeholder="X"
@@ -477,7 +485,7 @@ export default function VRARCreatorStudio({ userId }) {
                               type="number"
                               value={obj.scale.y}
                               onChange={(e) => updateObject(obj.id, { 
-                                scale: { ...obj.scale, y: parseFloat(e.target.value) }
+                                scale: { ...obj.scale, y: Number.parseFloat(e.target.value) }
                               })}
                               step="0.1"
                               placeholder="Y"
@@ -486,7 +494,7 @@ export default function VRARCreatorStudio({ userId }) {
                               type="number"
                               value={obj.scale.z}
                               onChange={(e) => updateObject(obj.id, { 
-                                scale: { ...obj.scale, z: parseFloat(e.target.value) }
+                                scale: { ...obj.scale, z: Number.parseFloat(e.target.value) }
                               })}
                               step="0.1"
                               placeholder="Z"
