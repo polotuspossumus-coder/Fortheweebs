@@ -23,9 +23,7 @@ import { supabase } from '../lib/supabase';
 export default function CollaborativeCanvas({ projectId, userId, userName }) {
     const [elements, setElements] = useState([]);
     
-    const canvasRef = useRef(null);
     const channelRef = useRef(null);
-    const cursorThrottleRef = useRef(null);
 
     useEffect(() => {
         if (!projectId) return;
@@ -143,50 +141,7 @@ export default function CollaborativeCanvas({ projectId, userId, userName }) {
     };
 
     // Future: handleMouseMove for cursor tracking
-
     // Future: updateElement for element updates
-    const _updateElement = async (elementId, updates) => {
-        // Optimistic update
-        setElements(prev => {
-            const idx = prev.findIndex(e => e.id === elementId);
-            if (idx >= 0) {
-                const updated = [...prev];
-                updated[idx] = { ...updated[idx], ...updates };
-                return updated;
-            }
-            return prev;
-        });
-
-        // Broadcast to other users
-        const element = elements.find(e => e.id === elementId);
-        if (element && channelRef.current) {
-            channelRef.current.send({
-                type: 'broadcast',
-                event: 'element-update',
-                payload: {
-                    userId,
-                    element: { ...element, ...updates }
-                }
-            });
-        }
-
-        // Save to database (with conflict resolution)
-        const { error } = await supabase
-            .from('project_elements')
-            .update({
-                ...updates,
-                updated_at: new Date().toISOString(),
-                updated_by: userId
-            })
-            .eq('id', elementId)
-            .eq('project_id', projectId);
-
-        if (error) {
-            console.error('Failed to update element:', error);
-            // Reload from server if conflict
-            loadProjectData();
-        }
-    };
 
     // Future: _addComment function for collaborative commenting
     // Broadcast

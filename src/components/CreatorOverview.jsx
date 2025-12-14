@@ -306,7 +306,7 @@ function CreatorOverview({ userId, userTier, isAdmin, isVip, creatorName, onNavi
             <FAQComponent />
           </div>
         </div>
-      )}}
+      )}
 
       {/* Top Stats Grid */}
       <div style={{

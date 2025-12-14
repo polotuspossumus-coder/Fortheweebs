@@ -14,7 +14,6 @@ function CommissionMarketplace({ userId, isCreator }) {
   const [activeTab, setActiveTab] = useState('browse'); // browse, my-commissions, create
   const [commissions, setCommissions] = useState([]);
   const [processing, setProcessing] = useState(false);
-  const [error, setError] = useState('');
 
   const [newCommission, setNewCommission] = useState({
     title: '',
@@ -83,7 +82,7 @@ function CommissionMarketplace({ userId, isCreator }) {
   };
 
   const handlePurchaseCommission = async (commission) => {
-    if (!window.confirm(`Purchase "${commission.title}" for $${commission.price}?`)) {
+    if (!globalThis.confirm(`Purchase "${commission.title}" for $${commission.price}?`)) {
       return;
     }
 
@@ -247,8 +246,9 @@ function CommissionMarketplace({ userId, isCreator }) {
             <h2>Create Commission Listing</h2>
 
             <div className="form-group">
-              <label>Commission Title *</label>
+              <label htmlFor="commission-title">Commission Title *</label>
               <input
+                id="commission-title"
                 type="text"
                 placeholder="e.g., Character Illustration, Portrait, Comic Page"
                 value={newCommission.title}
@@ -257,8 +257,9 @@ function CommissionMarketplace({ userId, isCreator }) {
             </div>
 
             <div className="form-group">
-              <label>Description *</label>
+              <label htmlFor="commission-description">Description *</label>
               <textarea
+                id="commission-description"
                 placeholder="Describe what you'll create, your style, any limitations..."
                 value={newCommission.description}
                 onChange={e => setNewCommission({ ...newCommission, description: e.target.value })}
@@ -268,14 +269,15 @@ function CommissionMarketplace({ userId, isCreator }) {
 
             <div className="form-row">
               <div className="form-group">
-                <label>Price (USD) *</label>
+                <label htmlFor="commission-price">Price (USD) *</label>
                 <input
+                  id="commission-price"
                   type="number"
                   placeholder="150"
                   value={newCommission.price}
                   onChange={e => setNewCommission({ ...newCommission, price: e.target.value })}
                 />
-                <small>You receive 100% (${parseFloat(newCommission.price || 0).toFixed(2)}) - Stripe takes ~2.9%</small>
+                <small>You receive 100% (${Number.parseFloat(newCommission.price || 0).toFixed(2)}) - Stripe takes ~2.9%</small>
               </div>
 
               <div className="form-group">
