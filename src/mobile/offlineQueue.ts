@@ -68,7 +68,7 @@ class OfflineQueue {
 
   async enqueue(url: string, options: RequestInit = {}) {
     const request: QueuedRequest = {
-      id: `${Date.now()}_${Math.random().toString(36).substring(2, 11)},`
+      id: `${Date.now()}_${Math.random().toString(36).substring(2, 11)}`,
       url,
       options,
       timestamp: Date.now(),

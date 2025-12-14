@@ -246,7 +246,7 @@ router.post('/create', async (req, res) => {
     const s3Info = await uploadReceiptToS3(metadata, pdfBuffer);
 
     // Store metadata in Postgres (dual evidence)
-    const dbRecord = await storeReceiptInDatabase(metadata, s3Info);
+    await storeReceiptInDatabase(metadata, s3Info);
 
     res.status(201).json({
       success: true,

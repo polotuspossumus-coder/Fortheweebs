@@ -601,3 +601,11 @@ export default function CollaborationRoom({ user }) {
     </div>
   );
 }
+
+CollaborationRoom.propTypes = {
+  user: PropTypes.shape({
+    id: PropTypes.string.isRequired,
+    username: PropTypes.string.isRequired,
+    avatar_url: PropTypes.string
+  }).isRequired
+};

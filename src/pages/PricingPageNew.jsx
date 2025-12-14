@@ -35,7 +35,7 @@ export default function PricingPage() {
   const handleCheckout = async (tierKey) => {
     if (!user) {
       alert('Please log in to upgrade');
-      window.location.href = '/login';
+      globalThis.location.href = '/login';
       return;
     }
 

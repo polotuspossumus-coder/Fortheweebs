@@ -343,4 +343,8 @@ const styles = {
   }
 };
 
+Settings.propTypes = {
+  userId: PropTypes.string.isRequired
+};
+
 export default Settings;

@@ -167,7 +167,7 @@ export default function PhotoEditorPro() {
         alert(`Meme template ${templateId} loaded! Add your text and export!`);
     };
 
-    const createGIF = () => {
+    const createGIF = () => { // eslint-disable-line no-unused-vars
         setGifMode(true);
         alert('GIF Mode: Import multiple images or create animation frames!');
     };

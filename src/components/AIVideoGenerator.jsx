@@ -766,3 +766,7 @@ export const AIVideoGenerator = ({ userId, tier }) => {
         </div>
     );
 };
+AIVideoGenerator.propTypes = {
+  userId: PropTypes.string.isRequired,
+  tier: PropTypes.string.isRequired
+};
