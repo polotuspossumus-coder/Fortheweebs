@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import { supabase } from '../lib/supabase';
 
 /**
@@ -95,6 +96,9 @@ export function UsernameSearch({ onSelect }) {
               key={user.id}
               style={styles.resultItem}
               onClick={() => handleSelect(user)}
+              onKeyDown={(e) => e.key === 'Enter' && handleSelect(user)}
+              role="button"
+              tabIndex={0}
             >
               <div style={styles.userInfo}>
                 <span style={styles.tier}>{getTierBadge(user.payment_tier)}</span>
@@ -212,6 +216,10 @@ const styles = {
     color: '#999',
     fontSize: '0.9rem'
   }
+};
+
+UsernameSearch.propTypes = {
+  onSelect: PropTypes.func.isRequired
 };
 
 export default UsernameSearch;

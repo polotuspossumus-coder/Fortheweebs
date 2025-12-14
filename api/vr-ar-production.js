@@ -16,9 +16,9 @@ const axios = require('axios');
 // Text-to-3D Model Generation
 router.post('/generate-3d', async (req, res) => {
   try {
-    const { prompt, style, complexity } = req.body;
-    // style: 'realistic', 'lowpoly', 'stylized', 'anime'
-    // complexity: 'low' (mobile VR), 'medium', 'high' (PC VR)
+    const { prompt } = req.body;
+    // Future: style: 'realistic', 'lowpoly', 'stylized', 'anime'
+    // Future: complexity: 'low' (mobile VR), 'medium', 'high' (PC VR)
 
     if (!prompt) {
       return res.status(400).json({ error: 'Missing prompt' });
